@@ -1,0 +1,199 @@
+{
+  "version": "4.3.0",
+  "updated": "2026-03-05",
+  "legal_note": "© King's Printer for Ontario – Supplementary use only. Official: dcp.edu.gov.on.ca",
+  "courses": {
+    "MTH1W": {
+      "name": "Mathematics, Grade 9 (De-streamed)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/mathematics/grade9",
+      "strands": {
+        "A_Number": [
+          {"id":"MTH1W-A1","expectation":"Perform operations on integers and rational numbers, including order of operations.","irt_b":-0.8,"irt_a":1.1,"irt_c":0.2,"tags":["math","eqao"]},
+          {"id":"MTH1W-A2","expectation":"Apply rates, ratios, percentages, and proportional reasoning to solve problems in various contexts.","irt_b":-0.3,"irt_a":1.2,"irt_c":0.2,"tags":["math","eqao"]},
+          {"id":"MTH1W-A3","expectation":"Represent very large and very small numbers using scientific notation and perform operations with them.","irt_b":0.5,"irt_a":1.0,"irt_c":0.2,"tags":["math"]}
+        ],
+        "B_Algebra": [
+          {"id":"MTH1W-B1","expectation":"Create, evaluate, and simplify algebraic expressions involving integer and rational exponents.","irt_b":-0.1,"irt_a":1.3,"irt_c":0.2,"tags":["math","eqao"]},
+          {"id":"MTH1W-B2","expectation":"Solve linear equations and inequalities algebraically and represent solutions on a number line.","irt_b":0.4,"irt_a":1.4,"irt_c":0.2,"tags":["math","eqao"]},
+          {"id":"MTH1W-B3","expectation":"Represent linear and non-linear relations using tables, graphs, and equations; compare their properties.","irt_b":0.9,"irt_a":1.3,"irt_c":0.2,"tags":["math","eqao","graphing"]},
+          {"id":"MTH1W-B4","expectation":"Determine the equation of a line given slope and y-intercept, or two points.","irt_b":1.1,"irt_a":1.4,"irt_c":0.2,"tags":["math","eqao"]}
+        ],
+        "C_Data": [
+          {"id":"MTH1W-C1","expectation":"Collect, display, and analyse one-variable data to make convincing arguments and informed decisions.","irt_b":-0.4,"irt_a":1.0,"irt_c":0.2,"tags":["math","data"]},
+          {"id":"MTH1W-C2","expectation":"Determine and describe the impact of bias on data collection and the conclusions drawn.","irt_b":0.6,"irt_a":1.1,"irt_c":0.2,"tags":["math","critical_thinking"]}
+        ],
+        "D_Geometry": [
+          {"id":"MTH1W-D1","expectation":"Determine the properties of triangles and quadrilaterals using geometric reasoning.","irt_b":0.1,"irt_a":1.1,"irt_c":0.2,"tags":["math","geometry"]},
+          {"id":"MTH1W-D2","expectation":"Solve problems involving the surface area and volume of composite 3D figures.","irt_b":0.8,"irt_a":1.2,"irt_c":0.2,"tags":["math","geometry","eqao"]}
+        ]
+      }
+    },
+    "MFM2P": {
+      "name": "Foundations of Mathematics, Grade 10 (Applied)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/mathematics/grade10",
+      "strands": {
+        "A_Similar_Triangles": [
+          {"id":"MFM2P-A1","expectation":"Solve problems involving similar triangles and proportional reasoning using the properties of similar figures.","irt_b":0.7,"irt_a":1.2,"irt_c":0.2,"tags":["math","geometry"]},
+          {"id":"MFM2P-A2","expectation":"Solve problems involving the primary trigonometric ratios (sine, cosine, tangent) in right triangles.","irt_b":1.0,"irt_a":1.3,"irt_c":0.25,"tags":["math","trigonometry","eqao"]}
+        ],
+        "B_Linear_Systems": [
+          {"id":"MFM2P-B1","expectation":"Solve systems of two linear equations using graphing, substitution, and elimination methods.","irt_b":1.2,"irt_a":1.3,"irt_c":0.2,"tags":["math","algebra","eqao"]},
+          {"id":"MFM2P-B2","expectation":"Model and solve problems arising from realistic situations using linear systems.","irt_b":1.4,"irt_a":1.2,"irt_c":0.2,"tags":["math","modelling"]}
+        ],
+        "C_Quadratics": [
+          {"id":"MFM2P-C1","expectation":"Identify, through investigation, the properties of quadratic relations.","irt_b":1.1,"irt_a":1.3,"irt_c":0.2,"tags":["math","functions"]},
+          {"id":"MFM2P-C2","expectation":"Interpret graphs of quadratic relations and relate the vertex form to the key features.","irt_b":1.5,"irt_a":1.4,"irt_c":0.2,"tags":["math","functions","eqao"]}
+        ]
+      }
+    },
+    "ENL1W": {
+      "name": "English, Grade 9 (De-streamed)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/english/grade9",
+      "strands": {
+        "A_Oral": [
+          {"id":"ENL1W-A1","expectation":"Listen actively and use a variety of strategies to construct meaning from oral texts.","irt_b":-0.8,"irt_a":0.9,"irt_c":0.2,"tags":["reading","oral"]},
+          {"id":"ENL1W-A2","expectation":"Communicate ideas clearly and effectively in a variety of formal and informal speaking contexts.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["oral","writing"]}
+        ],
+        "B_Reading": [
+          {"id":"ENL1W-B1","expectation":"Read a variety of texts from different contexts, cultures, and historical periods for a range of purposes.","irt_b":-0.5,"irt_a":1.0,"irt_c":0.2,"tags":["reading"]},
+          {"id":"ENL1W-B2","expectation":"Identify and analyse the main idea and supporting details, both stated and implied.","irt_b":-0.2,"irt_a":1.1,"irt_c":0.2,"tags":["reading","eqao"]},
+          {"id":"ENL1W-B3","expectation":"Evaluate the credibility, reliability, and purpose of sources, including digital and multimedia texts.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["reading","critical_thinking","media"]},
+          {"id":"ENL1W-B4","expectation":"Analyse an author's use of literary devices (metaphor, irony, imagery) to create meaning and effect.","irt_b":1.1,"irt_a":1.4,"irt_c":0.2,"tags":["reading","literature","eqao"]}
+        ],
+        "C_Writing": [
+          {"id":"ENL1W-C1","expectation":"Write for a range of purposes and audiences using appropriate forms including narrative, expository, and persuasive.","irt_b":0.3,"irt_a":1.2,"irt_c":0.2,"tags":["writing","stylus"]},
+          {"id":"ENL1W-C2","expectation":"Develop and organise ideas using a clear thesis supported by relevant evidence and examples.","irt_b":0.7,"irt_a":1.3,"irt_c":0.2,"tags":["writing","eqao","stylus"]},
+          {"id":"ENL1W-C3","expectation":"Revise and edit writing for clarity, coherence, style, grammar, and conventions.","irt_b":0.5,"irt_a":1.1,"irt_c":0.2,"tags":["writing","stylus"]}
+        ]
+      }
+    },
+    "ENG2D": {
+      "name": "English, Grade 10 (Academic)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/english/grade10",
+      "strands": {
+        "B_Reading": [
+          {"id":"ENG2D-B1","expectation":"Analyse how literary devices contribute to the overall meaning of a text.","irt_b":1.0,"irt_a":1.3,"irt_c":0.2,"tags":["reading","literature"]},
+          {"id":"ENG2D-B2","expectation":"Compare and synthesise information from multiple texts on related topics.","irt_b":1.3,"irt_a":1.4,"irt_c":0.2,"tags":["reading","osslt"]},
+          {"id":"ENG2D-B3","expectation":"Evaluate the effectiveness of the author's craft choices in achieving specific purposes.","irt_b":1.5,"irt_a":1.4,"irt_c":0.2,"tags":["reading","critical_thinking"]}
+        ],
+        "C_Writing": [
+          {"id":"ENG2D-C1","expectation":"Write a well-structured literary essay that analyses a text and supports a thesis with evidence.","irt_b":1.2,"irt_a":1.4,"irt_c":0.2,"tags":["writing","osslt","stylus"]},
+          {"id":"ENG2D-C2","expectation":"Write a news report or opinion piece that follows conventions of journalism.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["writing","media","stylus"]}
+        ]
+      }
+    },
+    "SNC1W": {
+      "name": "Science, Grade 9 (De-streamed)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/science/grade9",
+      "strands": {
+        "A_STEM": [
+          {"id":"SNC1W-A1","expectation":"Use STEM skills and the scientific investigation process to design, conduct, and analyse investigations.","irt_b":-0.3,"irt_a":1.0,"irt_c":0.2,"tags":["science","inquiry"]}
+        ],
+        "B_Biology": [
+          {"id":"SNC1W-B1","expectation":"Describe cell theory and explain the structure and function of plant and animal cells, including organelles.","irt_b":-0.1,"irt_a":1.1,"irt_c":0.2,"tags":["science","biology"]},
+          {"id":"SNC1W-B2","expectation":"Explain the processes of mitosis and meiosis and their roles in growth, repair, and reproduction.","irt_b":0.7,"irt_a":1.3,"irt_c":0.2,"tags":["science","biology"]}
+        ],
+        "C_Chemistry": [
+          {"id":"SNC1W-C1","expectation":"Classify matter as pure substances or mixtures; distinguish between elements, compounds, and solutions.","irt_b":0.2,"irt_a":1.1,"irt_c":0.2,"tags":["science","chemistry"]},
+          {"id":"SNC1W-C2","expectation":"Describe atomic structure and explain the organisation of the periodic table by period and group.","irt_b":0.6,"irt_a":1.2,"irt_c":0.2,"tags":["science","chemistry"]}
+        ],
+        "D_Physics": [
+          {"id":"SNC1W-D1","expectation":"Apply Ohm's Law (V = IR) to solve problems involving simple electric circuits.","irt_b":0.9,"irt_a":1.4,"irt_c":0.2,"tags":["science","physics","math"]},
+          {"id":"SNC1W-D2","expectation":"Describe forms of energy and transformations; apply the law of conservation of energy.","irt_b":0.4,"irt_a":1.1,"irt_c":0.2,"tags":["science","physics"]}
+        ]
+      }
+    },
+    "CGC1W": {
+      "name": "Issues in Canadian Geography, Grade 9",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade9",
+      "strands": {
+        "A_Geographic_Inquiry": [
+          {"id":"CGC1W-A1","expectation":"Use the geographic inquiry process to investigate issues related to Canada's human and physical geography.","irt_b":0.0,"irt_a":1.0,"irt_c":0.2,"tags":["geography","writing","stylus"]},
+          {"id":"CGC1W-A2","expectation":"Apply geographic tools including maps, GIS, and statistical data to analyse geographic issues.","irt_b":0.4,"irt_a":1.1,"irt_c":0.2,"tags":["geography","data"]}
+        ],
+        "B_Interactions": [
+          {"id":"CGC1W-B1","expectation":"Analyse the interactions between humans and the natural environment in the context of Canadian geography.","irt_b":0.3,"irt_a":1.0,"irt_c":0.2,"tags":["geography","critical_thinking"]},
+          {"id":"CGC1W-B2","expectation":"Describe the causes and consequences of climate change in Canada and propose evidence-based responses.","irt_b":0.7,"irt_a":1.2,"irt_c":0.2,"tags":["geography","science","writing"]}
+        ]
+      }
+    },
+    "CHC2D": {
+      "name": "Canadian History Since World War I, Grade 10 (Academic)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade10",
+      "strands": {
+        "A_Historical_Thinking": [
+          {"id":"CHC2D-A1","expectation":"Apply historical thinking concepts including continuity/change, cause/consequence, and historical perspective to analyse events.","irt_b":0.3,"irt_a":1.2,"irt_c":0.2,"tags":["history","critical_thinking","writing"]},
+          {"id":"CHC2D-A2","expectation":"Evaluate the significance of key events in Canadian history using primary and secondary sources.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["history","reading","writing"]}
+        ],
+        "B_Communities": [
+          {"id":"CHC2D-B1","expectation":"Explain the factors — including Indigenous history, immigration, and global events — that shaped Canadian identity.","irt_b":0.5,"irt_a":1.1,"irt_c":0.2,"tags":["history","social_studies"]},
+          {"id":"CHC2D-B2","expectation":"Describe Canada's evolving role in international relations from WWI to the post-Cold War era.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["history","critical_thinking"]}
+        ]
+      }
+    },
+    "CHV2O": {
+      "name": "Civics and Citizenship, Grade 10 (Open, 0.5 credit)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade10",
+      "strands": {
+        "A_Civic_Engagement": [
+          {"id":"CHV2O-A1","expectation":"Explain the rights and responsibilities of Canadian citizens under the Charter of Rights and Freedoms.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["civics","reading"]},
+          {"id":"CHV2O-A2","expectation":"Analyse the role of civil society organisations and community action in a democratic society.","irt_b":0.5,"irt_a":1.0,"irt_c":0.2,"tags":["civics","writing"]}
+        ]
+      }
+    },
+    "BEM1O": {
+      "name": "Exploring Business, Grade 9 (Open)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/business-studies/grade9",
+      "strands": {
+        "A_Leadership": [
+          {"id":"BEM1O-A1","expectation":"Describe leadership styles and evaluate their effectiveness in different business and community contexts.","irt_b":-0.2,"irt_a":0.9,"irt_c":0.2,"tags":["business","writing","stylus"]}
+        ],
+        "B_Entrepreneurship": [
+          {"id":"BEM1O-B1","expectation":"Identify characteristics of successful entrepreneurs and apply entrepreneurial thinking to solve problems.","irt_b":0.1,"irt_a":1.0,"irt_c":0.2,"tags":["business","critical_thinking"]},
+          {"id":"BEM1O-B2","expectation":"Develop and present a basic business plan including mission, target market, and simple financial projections.","irt_b":0.9,"irt_a":1.2,"irt_c":0.2,"tags":["business","math","writing","stylus"]}
+        ]
+      }
+    },
+    "GLC2O": {
+      "name": "Career Studies, Grade 10 (Open, 0.5 credit)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/guidance-and-career-education",
+      "strands": {
+        "A_Personal_Management": [
+          {"id":"GLC2O-A1","expectation":"Apply personal management skills including goal-setting, time management, and self-advocacy.","irt_b":-0.4,"irt_a":1.0,"irt_c":0.2,"tags":["careers","writing","stylus"]},
+          {"id":"GLC2O-A2","expectation":"Develop strategies for managing stress and maintaining well-being in academic and future workplace settings.","irt_b":-0.1,"irt_a":0.9,"irt_c":0.2,"tags":["careers","health"]}
+        ],
+        "B_Career_Exploration": [
+          {"id":"GLC2O-B1","expectation":"Investigate a range of postsecondary pathways (university, college, apprenticeship, workplace) relevant to personal interests.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["careers","reading"]}
+        ]
+      }
+    },
+    "ICS3U": {
+      "name": "Introduction to Computer Science, Grade 11 (University)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/computer-studies/grade11",
+      "strands": {
+        "A_Programming": [
+          {"id":"ICS3U-A1","expectation":"Write programs using variables, control structures, functions, and arrays to solve well-defined problems.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["cs","math","logic"]},
+          {"id":"ICS3U-A2","expectation":"Apply modular design principles by creating and calling subprograms in a structured program.","irt_b":1.2,"irt_a":1.4,"irt_c":0.2,"tags":["cs","logic"]},
+          {"id":"ICS3U-A3","expectation":"Implement basic searching and sorting algorithms and evaluate their efficiency.","irt_b":1.6,"irt_a":1.5,"irt_c":0.2,"tags":["cs","math","logic"]}
+        ],
+        "B_Design": [
+          {"id":"ICS3U-B1","expectation":"Use an iterative software development process including planning, coding, testing, and debugging.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["cs","design"]},
+          {"id":"ICS3U-B2","expectation":"Create technical documentation including flowcharts and pseudocode for programs.","irt_b":0.7,"irt_a":1.1,"irt_c":0.2,"tags":["cs","writing"]}
+        ]
+      }
+    },
+    "GLS1O": {
+      "name": "Learning Strategies 1, Grade 9 (Open)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/guidance-and-career-education",
+      "strands": {
+        "A_Study_Skills": [
+          {"id":"GLS1O-A1","expectation":"Apply a variety of study strategies including note-taking, concept mapping, and spaced practice to improve retention.","irt_b":-0.6,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","writing","stylus"]},
+          {"id":"GLS1O-A2","expectation":"Identify personal learning strengths and challenges and develop strategies to address them.","irt_b":-0.3,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","udl"]}
+        ],
+        "B_Self_Management": [
+          {"id":"GLS1O-B1","expectation":"Create and use organisational tools including agendas, checklists, and digital planners to manage time and tasks.","irt_b":-0.5,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","stylus","writing"]}
+        ]
+      }
+    }
+  }
+}
