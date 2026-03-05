@@ -8,23 +8,134 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/mathematics/grade9",
       "strands": {
         "A_Number": [
-          {"id":"MTH1W-A1","expectation":"Perform operations on integers and rational numbers, including order of operations.","irt_b":-0.8,"irt_a":1.1,"irt_c":0.2,"tags":["math","eqao"]},
-          {"id":"MTH1W-A2","expectation":"Apply rates, ratios, percentages, and proportional reasoning to solve problems in various contexts.","irt_b":-0.3,"irt_a":1.2,"irt_c":0.2,"tags":["math","eqao"]},
-          {"id":"MTH1W-A3","expectation":"Represent very large and very small numbers using scientific notation and perform operations with them.","irt_b":0.5,"irt_a":1.0,"irt_c":0.2,"tags":["math"]}
+          {
+            "id": "MTH1W-A1",
+            "expectation": "Perform operations on integers and rational numbers, including order of operations.",
+            "irt_b": -0.8,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-A2",
+            "expectation": "Apply rates, ratios, percentages, and proportional reasoning to solve problems in various contexts.",
+            "irt_b": -0.3,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-A3",
+            "expectation": "Represent very large and very small numbers using scientific notation and perform operations with them.",
+            "irt_b": 0.5,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "math"
+            ]
+          }
         ],
         "B_Algebra": [
-          {"id":"MTH1W-B1","expectation":"Create, evaluate, and simplify algebraic expressions involving integer and rational exponents.","irt_b":-0.1,"irt_a":1.3,"irt_c":0.2,"tags":["math","eqao"]},
-          {"id":"MTH1W-B2","expectation":"Solve linear equations and inequalities algebraically and represent solutions on a number line.","irt_b":0.4,"irt_a":1.4,"irt_c":0.2,"tags":["math","eqao"]},
-          {"id":"MTH1W-B3","expectation":"Represent linear and non-linear relations using tables, graphs, and equations; compare their properties.","irt_b":0.9,"irt_a":1.3,"irt_c":0.2,"tags":["math","eqao","graphing"]},
-          {"id":"MTH1W-B4","expectation":"Determine the equation of a line given slope and y-intercept, or two points.","irt_b":1.1,"irt_a":1.4,"irt_c":0.2,"tags":["math","eqao"]}
+          {
+            "id": "MTH1W-B1",
+            "expectation": "Create, evaluate, and simplify algebraic expressions involving integer and rational exponents.",
+            "irt_b": -0.1,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-B2",
+            "expectation": "Solve linear equations and inequalities algebraically and represent solutions on a number line.",
+            "irt_b": 0.4,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-B3",
+            "expectation": "Represent linear and non-linear relations using tables, graphs, and equations; compare their properties.",
+            "irt_b": 0.9,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao",
+              "graphing"
+            ]
+          },
+          {
+            "id": "MTH1W-B4",
+            "expectation": "Determine the equation of a line given slope and y-intercept, or two points.",
+            "irt_b": 1.1,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          }
         ],
         "C_Data": [
-          {"id":"MTH1W-C1","expectation":"Collect, display, and analyse one-variable data to make convincing arguments and informed decisions.","irt_b":-0.4,"irt_a":1.0,"irt_c":0.2,"tags":["math","data"]},
-          {"id":"MTH1W-C2","expectation":"Determine and describe the impact of bias on data collection and the conclusions drawn.","irt_b":0.6,"irt_a":1.1,"irt_c":0.2,"tags":["math","critical_thinking"]}
+          {
+            "id": "MTH1W-C1",
+            "expectation": "Collect, display, and analyse one-variable data to make convincing arguments and informed decisions.",
+            "irt_b": -0.4,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "data"
+            ]
+          },
+          {
+            "id": "MTH1W-C2",
+            "expectation": "Determine and describe the impact of bias on data collection and the conclusions drawn.",
+            "irt_b": 0.6,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "critical_thinking"
+            ]
+          }
         ],
         "D_Geometry": [
-          {"id":"MTH1W-D1","expectation":"Determine the properties of triangles and quadrilaterals using geometric reasoning.","irt_b":0.1,"irt_a":1.1,"irt_c":0.2,"tags":["math","geometry"]},
-          {"id":"MTH1W-D2","expectation":"Solve problems involving the surface area and volume of composite 3D figures.","irt_b":0.8,"irt_a":1.2,"irt_c":0.2,"tags":["math","geometry","eqao"]}
+          {
+            "id": "MTH1W-D1",
+            "expectation": "Determine the properties of triangles and quadrilaterals using geometric reasoning.",
+            "irt_b": 0.1,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "geometry"
+            ]
+          },
+          {
+            "id": "MTH1W-D2",
+            "expectation": "Solve problems involving the surface area and volume of composite 3D figures.",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "geometry",
+              "eqao"
+            ]
+          }
         ]
       }
     },
@@ -33,16 +144,79 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/mathematics/grade10",
       "strands": {
         "A_Similar_Triangles": [
-          {"id":"MFM2P-A1","expectation":"Solve problems involving similar triangles and proportional reasoning using the properties of similar figures.","irt_b":0.7,"irt_a":1.2,"irt_c":0.2,"tags":["math","geometry"]},
-          {"id":"MFM2P-A2","expectation":"Solve problems involving the primary trigonometric ratios (sine, cosine, tangent) in right triangles.","irt_b":1.0,"irt_a":1.3,"irt_c":0.25,"tags":["math","trigonometry","eqao"]}
+          {
+            "id": "MFM2P-A1",
+            "expectation": "Solve problems involving similar triangles and proportional reasoning using the properties of similar figures.",
+            "irt_b": 0.7,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "geometry"
+            ]
+          },
+          {
+            "id": "MFM2P-A2",
+            "expectation": "Solve problems involving the primary trigonometric ratios (sine, cosine, tangent) in right triangles.",
+            "irt_b": 1.0,
+            "irt_a": 1.3,
+            "irt_c": 0.25,
+            "tags": [
+              "math",
+              "trigonometry",
+              "eqao"
+            ]
+          }
         ],
         "B_Linear_Systems": [
-          {"id":"MFM2P-B1","expectation":"Solve systems of two linear equations using graphing, substitution, and elimination methods.","irt_b":1.2,"irt_a":1.3,"irt_c":0.2,"tags":["math","algebra","eqao"]},
-          {"id":"MFM2P-B2","expectation":"Model and solve problems arising from realistic situations using linear systems.","irt_b":1.4,"irt_a":1.2,"irt_c":0.2,"tags":["math","modelling"]}
+          {
+            "id": "MFM2P-B1",
+            "expectation": "Solve systems of two linear equations using graphing, substitution, and elimination methods.",
+            "irt_b": 1.2,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "algebra",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MFM2P-B2",
+            "expectation": "Model and solve problems arising from realistic situations using linear systems.",
+            "irt_b": 1.4,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "modelling"
+            ]
+          }
         ],
         "C_Quadratics": [
-          {"id":"MFM2P-C1","expectation":"Identify, through investigation, the properties of quadratic relations.","irt_b":1.1,"irt_a":1.3,"irt_c":0.2,"tags":["math","functions"]},
-          {"id":"MFM2P-C2","expectation":"Interpret graphs of quadratic relations and relate the vertex form to the key features.","irt_b":1.5,"irt_a":1.4,"irt_c":0.2,"tags":["math","functions","eqao"]}
+          {
+            "id": "MFM2P-C1",
+            "expectation": "Identify, through investigation, the properties of quadratic relations.",
+            "irt_b": 1.1,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "functions"
+            ]
+          },
+          {
+            "id": "MFM2P-C2",
+            "expectation": "Interpret graphs of quadratic relations and relate the vertex form to the key features.",
+            "irt_b": 1.5,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "functions",
+              "eqao"
+            ]
+          }
         ]
       }
     },
@@ -51,19 +225,111 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/english/grade9",
       "strands": {
         "A_Oral": [
-          {"id":"ENL1W-A1","expectation":"Listen actively and use a variety of strategies to construct meaning from oral texts.","irt_b":-0.8,"irt_a":0.9,"irt_c":0.2,"tags":["reading","oral"]},
-          {"id":"ENL1W-A2","expectation":"Communicate ideas clearly and effectively in a variety of formal and informal speaking contexts.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["oral","writing"]}
+          {
+            "id": "ENL1W-A1",
+            "expectation": "Listen actively and use a variety of strategies to construct meaning from oral texts.",
+            "irt_b": -0.8,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "oral"
+            ]
+          },
+          {
+            "id": "ENL1W-A2",
+            "expectation": "Communicate ideas clearly and effectively in a variety of formal and informal speaking contexts.",
+            "irt_b": 0.2,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "oral",
+              "writing"
+            ]
+          }
         ],
         "B_Reading": [
-          {"id":"ENL1W-B1","expectation":"Read a variety of texts from different contexts, cultures, and historical periods for a range of purposes.","irt_b":-0.5,"irt_a":1.0,"irt_c":0.2,"tags":["reading"]},
-          {"id":"ENL1W-B2","expectation":"Identify and analyse the main idea and supporting details, both stated and implied.","irt_b":-0.2,"irt_a":1.1,"irt_c":0.2,"tags":["reading","eqao"]},
-          {"id":"ENL1W-B3","expectation":"Evaluate the credibility, reliability, and purpose of sources, including digital and multimedia texts.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["reading","critical_thinking","media"]},
-          {"id":"ENL1W-B4","expectation":"Analyse an author's use of literary devices (metaphor, irony, imagery) to create meaning and effect.","irt_b":1.1,"irt_a":1.4,"irt_c":0.2,"tags":["reading","literature","eqao"]}
+          {
+            "id": "ENL1W-B1",
+            "expectation": "Read a variety of texts from different contexts, cultures, and historical periods for a range of purposes.",
+            "irt_b": -0.5,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENL1W-B2",
+            "expectation": "Identify and analyse the main idea and supporting details, both stated and implied.",
+            "irt_b": -0.2,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "eqao"
+            ]
+          },
+          {
+            "id": "ENL1W-B3",
+            "expectation": "Evaluate the credibility, reliability, and purpose of sources, including digital and multimedia texts.",
+            "irt_b": 0.8,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "critical_thinking",
+              "media"
+            ]
+          },
+          {
+            "id": "ENL1W-B4",
+            "expectation": "Analyse an author's use of literary devices (metaphor, irony, imagery) to create meaning and effect.",
+            "irt_b": 1.1,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "literature",
+              "eqao"
+            ]
+          }
         ],
         "C_Writing": [
-          {"id":"ENL1W-C1","expectation":"Write for a range of purposes and audiences using appropriate forms including narrative, expository, and persuasive.","irt_b":0.3,"irt_a":1.2,"irt_c":0.2,"tags":["writing","stylus"]},
-          {"id":"ENL1W-C2","expectation":"Develop and organise ideas using a clear thesis supported by relevant evidence and examples.","irt_b":0.7,"irt_a":1.3,"irt_c":0.2,"tags":["writing","eqao","stylus"]},
-          {"id":"ENL1W-C3","expectation":"Revise and edit writing for clarity, coherence, style, grammar, and conventions.","irt_b":0.5,"irt_a":1.1,"irt_c":0.2,"tags":["writing","stylus"]}
+          {
+            "id": "ENL1W-C1",
+            "expectation": "Write for a range of purposes and audiences using appropriate forms including narrative, expository, and persuasive.",
+            "irt_b": 0.3,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ENL1W-C2",
+            "expectation": "Develop and organise ideas using a clear thesis supported by relevant evidence and examples.",
+            "irt_b": 0.7,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "eqao",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ENL1W-C3",
+            "expectation": "Revise and edit writing for clarity, coherence, style, grammar, and conventions.",
+            "irt_b": 0.5,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          }
         ]
       }
     },
@@ -72,13 +338,65 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/english/grade10",
       "strands": {
         "B_Reading": [
-          {"id":"ENG2D-B1","expectation":"Analyse how literary devices contribute to the overall meaning of a text.","irt_b":1.0,"irt_a":1.3,"irt_c":0.2,"tags":["reading","literature"]},
-          {"id":"ENG2D-B2","expectation":"Compare and synthesise information from multiple texts on related topics.","irt_b":1.3,"irt_a":1.4,"irt_c":0.2,"tags":["reading","osslt"]},
-          {"id":"ENG2D-B3","expectation":"Evaluate the effectiveness of the author's craft choices in achieving specific purposes.","irt_b":1.5,"irt_a":1.4,"irt_c":0.2,"tags":["reading","critical_thinking"]}
+          {
+            "id": "ENG2D-B1",
+            "expectation": "Analyse how literary devices contribute to the overall meaning of a text.",
+            "irt_b": 1.0,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "literature"
+            ]
+          },
+          {
+            "id": "ENG2D-B2",
+            "expectation": "Compare and synthesise information from multiple texts on related topics.",
+            "irt_b": 1.3,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "osslt"
+            ]
+          },
+          {
+            "id": "ENG2D-B3",
+            "expectation": "Evaluate the effectiveness of the author's craft choices in achieving specific purposes.",
+            "irt_b": 1.5,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "reading",
+              "critical_thinking"
+            ]
+          }
         ],
         "C_Writing": [
-          {"id":"ENG2D-C1","expectation":"Write a well-structured literary essay that analyses a text and supports a thesis with evidence.","irt_b":1.2,"irt_a":1.4,"irt_c":0.2,"tags":["writing","osslt","stylus"]},
-          {"id":"ENG2D-C2","expectation":"Write a news report or opinion piece that follows conventions of journalism.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["writing","media","stylus"]}
+          {
+            "id": "ENG2D-C1",
+            "expectation": "Write a well-structured literary essay that analyses a text and supports a thesis with evidence.",
+            "irt_b": 1.2,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "osslt",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ENG2D-C2",
+            "expectation": "Write a news report or opinion piece that follows conventions of journalism.",
+            "irt_b": 1.0,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "media",
+              "stylus"
+            ]
+          }
         ]
       }
     },
@@ -87,19 +405,90 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/science/grade9",
       "strands": {
         "A_STEM": [
-          {"id":"SNC1W-A1","expectation":"Use STEM skills and the scientific investigation process to design, conduct, and analyse investigations.","irt_b":-0.3,"irt_a":1.0,"irt_c":0.2,"tags":["science","inquiry"]}
+          {
+            "id": "SNC1W-A1",
+            "expectation": "Use STEM skills and the scientific investigation process to design, conduct, and analyse investigations.",
+            "irt_b": -0.3,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "inquiry"
+            ]
+          }
         ],
         "B_Biology": [
-          {"id":"SNC1W-B1","expectation":"Describe cell theory and explain the structure and function of plant and animal cells, including organelles.","irt_b":-0.1,"irt_a":1.1,"irt_c":0.2,"tags":["science","biology"]},
-          {"id":"SNC1W-B2","expectation":"Explain the processes of mitosis and meiosis and their roles in growth, repair, and reproduction.","irt_b":0.7,"irt_a":1.3,"irt_c":0.2,"tags":["science","biology"]}
+          {
+            "id": "SNC1W-B1",
+            "expectation": "Describe cell theory and explain the structure and function of plant and animal cells, including organelles.",
+            "irt_b": -0.1,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "biology"
+            ]
+          },
+          {
+            "id": "SNC1W-B2",
+            "expectation": "Explain the processes of mitosis and meiosis and their roles in growth, repair, and reproduction.",
+            "irt_b": 0.7,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "biology"
+            ]
+          }
         ],
         "C_Chemistry": [
-          {"id":"SNC1W-C1","expectation":"Classify matter as pure substances or mixtures; distinguish between elements, compounds, and solutions.","irt_b":0.2,"irt_a":1.1,"irt_c":0.2,"tags":["science","chemistry"]},
-          {"id":"SNC1W-C2","expectation":"Describe atomic structure and explain the organisation of the periodic table by period and group.","irt_b":0.6,"irt_a":1.2,"irt_c":0.2,"tags":["science","chemistry"]}
+          {
+            "id": "SNC1W-C1",
+            "expectation": "Classify matter as pure substances or mixtures; distinguish between elements, compounds, and solutions.",
+            "irt_b": 0.2,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "chemistry"
+            ]
+          },
+          {
+            "id": "SNC1W-C2",
+            "expectation": "Describe atomic structure and explain the organisation of the periodic table by period and group.",
+            "irt_b": 0.6,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "chemistry"
+            ]
+          }
         ],
         "D_Physics": [
-          {"id":"SNC1W-D1","expectation":"Apply Ohm's Law (V = IR) to solve problems involving simple electric circuits.","irt_b":0.9,"irt_a":1.4,"irt_c":0.2,"tags":["science","physics","math"]},
-          {"id":"SNC1W-D2","expectation":"Describe forms of energy and transformations; apply the law of conservation of energy.","irt_b":0.4,"irt_a":1.1,"irt_c":0.2,"tags":["science","physics"]}
+          {
+            "id": "SNC1W-D1",
+            "expectation": "Apply Ohm's Law (V = IR) to solve problems involving simple electric circuits.",
+            "irt_b": 0.9,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "physics",
+              "math"
+            ]
+          },
+          {
+            "id": "SNC1W-D2",
+            "expectation": "Describe forms of energy and transformations; apply the law of conservation of energy.",
+            "irt_b": 0.4,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "science",
+              "physics"
+            ]
+          }
         ]
       }
     },
@@ -108,12 +497,54 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade9",
       "strands": {
         "A_Geographic_Inquiry": [
-          {"id":"CGC1W-A1","expectation":"Use the geographic inquiry process to investigate issues related to Canada's human and physical geography.","irt_b":0.0,"irt_a":1.0,"irt_c":0.2,"tags":["geography","writing","stylus"]},
-          {"id":"CGC1W-A2","expectation":"Apply geographic tools including maps, GIS, and statistical data to analyse geographic issues.","irt_b":0.4,"irt_a":1.1,"irt_c":0.2,"tags":["geography","data"]}
+          {
+            "id": "CGC1W-A1",
+            "expectation": "Use the geographic inquiry process to investigate issues related to Canada's human and physical geography.",
+            "irt_b": 0.0,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "geography",
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "CGC1W-A2",
+            "expectation": "Apply geographic tools including maps, GIS, and statistical data to analyse geographic issues.",
+            "irt_b": 0.4,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "geography",
+              "data"
+            ]
+          }
         ],
         "B_Interactions": [
-          {"id":"CGC1W-B1","expectation":"Analyse the interactions between humans and the natural environment in the context of Canadian geography.","irt_b":0.3,"irt_a":1.0,"irt_c":0.2,"tags":["geography","critical_thinking"]},
-          {"id":"CGC1W-B2","expectation":"Describe the causes and consequences of climate change in Canada and propose evidence-based responses.","irt_b":0.7,"irt_a":1.2,"irt_c":0.2,"tags":["geography","science","writing"]}
+          {
+            "id": "CGC1W-B1",
+            "expectation": "Analyse the interactions between humans and the natural environment in the context of Canadian geography.",
+            "irt_b": 0.3,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "geography",
+              "critical_thinking"
+            ]
+          },
+          {
+            "id": "CGC1W-B2",
+            "expectation": "Describe the causes and consequences of climate change in Canada and propose evidence-based responses.",
+            "irt_b": 0.7,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "geography",
+              "science",
+              "writing"
+            ]
+          }
         ]
       }
     },
@@ -122,12 +553,54 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade10",
       "strands": {
         "A_Historical_Thinking": [
-          {"id":"CHC2D-A1","expectation":"Apply historical thinking concepts including continuity/change, cause/consequence, and historical perspective to analyse events.","irt_b":0.3,"irt_a":1.2,"irt_c":0.2,"tags":["history","critical_thinking","writing"]},
-          {"id":"CHC2D-A2","expectation":"Evaluate the significance of key events in Canadian history using primary and secondary sources.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["history","reading","writing"]}
+          {
+            "id": "CHC2D-A1",
+            "expectation": "Apply historical thinking concepts including continuity/change, cause/consequence, and historical perspective to analyse events.",
+            "irt_b": 0.3,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "history",
+              "critical_thinking",
+              "writing"
+            ]
+          },
+          {
+            "id": "CHC2D-A2",
+            "expectation": "Evaluate the significance of key events in Canadian history using primary and secondary sources.",
+            "irt_b": 0.8,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "history",
+              "reading",
+              "writing"
+            ]
+          }
         ],
         "B_Communities": [
-          {"id":"CHC2D-B1","expectation":"Explain the factors — including Indigenous history, immigration, and global events — that shaped Canadian identity.","irt_b":0.5,"irt_a":1.1,"irt_c":0.2,"tags":["history","social_studies"]},
-          {"id":"CHC2D-B2","expectation":"Describe Canada's evolving role in international relations from WWI to the post-Cold War era.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["history","critical_thinking"]}
+          {
+            "id": "CHC2D-B1",
+            "expectation": "Explain the factors — including Indigenous history, immigration, and global events — that shaped Canadian identity.",
+            "irt_b": 0.5,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "history",
+              "social_studies"
+            ]
+          },
+          {
+            "id": "CHC2D-B2",
+            "expectation": "Describe Canada's evolving role in international relations from WWI to the post-Cold War era.",
+            "irt_b": 1.0,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "history",
+              "critical_thinking"
+            ]
+          }
         ]
       }
     },
@@ -136,8 +609,28 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/canadian-world-studies/grade10",
       "strands": {
         "A_Civic_Engagement": [
-          {"id":"CHV2O-A1","expectation":"Explain the rights and responsibilities of Canadian citizens under the Charter of Rights and Freedoms.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["civics","reading"]},
-          {"id":"CHV2O-A2","expectation":"Analyse the role of civil society organisations and community action in a democratic society.","irt_b":0.5,"irt_a":1.0,"irt_c":0.2,"tags":["civics","writing"]}
+          {
+            "id": "CHV2O-A1",
+            "expectation": "Explain the rights and responsibilities of Canadian citizens under the Charter of Rights and Freedoms.",
+            "irt_b": 0.2,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "civics",
+              "reading"
+            ]
+          },
+          {
+            "id": "CHV2O-A2",
+            "expectation": "Analyse the role of civil society organisations and community action in a democratic society.",
+            "irt_b": 0.5,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "civics",
+              "writing"
+            ]
+          }
         ]
       }
     },
@@ -146,11 +639,44 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/business-studies/grade9",
       "strands": {
         "A_Leadership": [
-          {"id":"BEM1O-A1","expectation":"Describe leadership styles and evaluate their effectiveness in different business and community contexts.","irt_b":-0.2,"irt_a":0.9,"irt_c":0.2,"tags":["business","writing","stylus"]}
+          {
+            "id": "BEM1O-A1",
+            "expectation": "Describe leadership styles and evaluate their effectiveness in different business and community contexts.",
+            "irt_b": -0.2,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "business",
+              "writing",
+              "stylus"
+            ]
+          }
         ],
         "B_Entrepreneurship": [
-          {"id":"BEM1O-B1","expectation":"Identify characteristics of successful entrepreneurs and apply entrepreneurial thinking to solve problems.","irt_b":0.1,"irt_a":1.0,"irt_c":0.2,"tags":["business","critical_thinking"]},
-          {"id":"BEM1O-B2","expectation":"Develop and present a basic business plan including mission, target market, and simple financial projections.","irt_b":0.9,"irt_a":1.2,"irt_c":0.2,"tags":["business","math","writing","stylus"]}
+          {
+            "id": "BEM1O-B1",
+            "expectation": "Identify characteristics of successful entrepreneurs and apply entrepreneurial thinking to solve problems.",
+            "irt_b": 0.1,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "business",
+              "critical_thinking"
+            ]
+          },
+          {
+            "id": "BEM1O-B2",
+            "expectation": "Develop and present a basic business plan including mission, target market, and simple financial projections.",
+            "irt_b": 0.9,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "business",
+              "math",
+              "writing",
+              "stylus"
+            ]
+          }
         ]
       }
     },
@@ -159,11 +685,42 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/guidance-and-career-education",
       "strands": {
         "A_Personal_Management": [
-          {"id":"GLC2O-A1","expectation":"Apply personal management skills including goal-setting, time management, and self-advocacy.","irt_b":-0.4,"irt_a":1.0,"irt_c":0.2,"tags":["careers","writing","stylus"]},
-          {"id":"GLC2O-A2","expectation":"Develop strategies for managing stress and maintaining well-being in academic and future workplace settings.","irt_b":-0.1,"irt_a":0.9,"irt_c":0.2,"tags":["careers","health"]}
+          {
+            "id": "GLC2O-A1",
+            "expectation": "Apply personal management skills including goal-setting, time management, and self-advocacy.",
+            "irt_b": -0.4,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "careers",
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "GLC2O-A2",
+            "expectation": "Develop strategies for managing stress and maintaining well-being in academic and future workplace settings.",
+            "irt_b": -0.1,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "careers",
+              "health"
+            ]
+          }
         ],
         "B_Career_Exploration": [
-          {"id":"GLC2O-B1","expectation":"Investigate a range of postsecondary pathways (university, college, apprenticeship, workplace) relevant to personal interests.","irt_b":0.2,"irt_a":1.0,"irt_c":0.2,"tags":["careers","reading"]}
+          {
+            "id": "GLC2O-B1",
+            "expectation": "Investigate a range of postsecondary pathways (university, college, apprenticeship, workplace) relevant to personal interests.",
+            "irt_b": 0.2,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "careers",
+              "reading"
+            ]
+          }
         ]
       }
     },
@@ -172,13 +729,65 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/computer-studies/grade11",
       "strands": {
         "A_Programming": [
-          {"id":"ICS3U-A1","expectation":"Write programs using variables, control structures, functions, and arrays to solve well-defined problems.","irt_b":0.8,"irt_a":1.3,"irt_c":0.2,"tags":["cs","math","logic"]},
-          {"id":"ICS3U-A2","expectation":"Apply modular design principles by creating and calling subprograms in a structured program.","irt_b":1.2,"irt_a":1.4,"irt_c":0.2,"tags":["cs","logic"]},
-          {"id":"ICS3U-A3","expectation":"Implement basic searching and sorting algorithms and evaluate their efficiency.","irt_b":1.6,"irt_a":1.5,"irt_c":0.2,"tags":["cs","math","logic"]}
+          {
+            "id": "ICS3U-A1",
+            "expectation": "Write programs using variables, control structures, functions, and arrays to solve well-defined problems.",
+            "irt_b": 0.8,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "cs",
+              "math",
+              "logic"
+            ]
+          },
+          {
+            "id": "ICS3U-A2",
+            "expectation": "Apply modular design principles by creating and calling subprograms in a structured program.",
+            "irt_b": 1.2,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "cs",
+              "logic"
+            ]
+          },
+          {
+            "id": "ICS3U-A3",
+            "expectation": "Implement basic searching and sorting algorithms and evaluate their efficiency.",
+            "irt_b": 1.6,
+            "irt_a": 1.5,
+            "irt_c": 0.2,
+            "tags": [
+              "cs",
+              "math",
+              "logic"
+            ]
+          }
         ],
         "B_Design": [
-          {"id":"ICS3U-B1","expectation":"Use an iterative software development process including planning, coding, testing, and debugging.","irt_b":1.0,"irt_a":1.2,"irt_c":0.2,"tags":["cs","design"]},
-          {"id":"ICS3U-B2","expectation":"Create technical documentation including flowcharts and pseudocode for programs.","irt_b":0.7,"irt_a":1.1,"irt_c":0.2,"tags":["cs","writing"]}
+          {
+            "id": "ICS3U-B1",
+            "expectation": "Use an iterative software development process including planning, coding, testing, and debugging.",
+            "irt_b": 1.0,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "cs",
+              "design"
+            ]
+          },
+          {
+            "id": "ICS3U-B2",
+            "expectation": "Create technical documentation including flowcharts and pseudocode for programs.",
+            "irt_b": 0.7,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "cs",
+              "writing"
+            ]
+          }
         ]
       }
     },
@@ -187,11 +796,2081 @@
       "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/guidance-and-career-education",
       "strands": {
         "A_Study_Skills": [
-          {"id":"GLS1O-A1","expectation":"Apply a variety of study strategies including note-taking, concept mapping, and spaced practice to improve retention.","irt_b":-0.6,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","writing","stylus"]},
-          {"id":"GLS1O-A2","expectation":"Identify personal learning strengths and challenges and develop strategies to address them.","irt_b":-0.3,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","udl"]}
+          {
+            "id": "GLS1O-A1",
+            "expectation": "Apply a variety of study strategies including note-taking, concept mapping, and spaced practice to improve retention.",
+            "irt_b": -0.6,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "metacognition",
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "GLS1O-A2",
+            "expectation": "Identify personal learning strengths and challenges and develop strategies to address them.",
+            "irt_b": -0.3,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "metacognition",
+              "udl"
+            ]
+          }
         ],
         "B_Self_Management": [
-          {"id":"GLS1O-B1","expectation":"Create and use organisational tools including agendas, checklists, and digital planners to manage time and tasks.","irt_b":-0.5,"irt_a":0.9,"irt_c":0.2,"tags":["metacognition","stylus","writing"]}
+          {
+            "id": "GLS1O-B1",
+            "expectation": "Create and use organisational tools including agendas, checklists, and digital planners to manage time and tasks.",
+            "irt_b": -0.5,
+            "irt_a": 0.9,
+            "irt_c": 0.2,
+            "tags": [
+              "metacognition",
+              "stylus",
+              "writing"
+            ]
+          }
+        ]
+      }
+    },
+    "BEP2O": {
+      "name": "Launching and Leading a Business, Grade 10, Open",
+      "description": "This course introduces students to the world of business and the concepts, strategies, and skills needed to launch and lead a business...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/BEP2O",
+      "strands": {
+        "A_Business_Leadership": [
+          {
+            "id": "BEP2O-A1.1",
+            "expectation": "compare various business leadership styles and explain why it might be appropriate to use a particular style",
+            "irt_b": 0.75,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A1.2",
+            "expectation": "use a project management process to manage the main aspects of a business project",
+            "irt_b": 0.61,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A1.3",
+            "expectation": "evaluate tasks and projects on a regular basis in terms of goals, key performance indicators, and outcomes",
+            "irt_b": 0.71,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A2.1",
+            "expectation": "identify a variety of existing and emerging digital technologies, tools, and applications",
+            "irt_b": 0.99,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A2.2",
+            "expectation": "analyse and compare the benefits, limitations, costs, and risks associated with various digital technologies",
+            "irt_b": 1.05,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-A2.3",
+            "expectation": "select and use the most appropriate digital technologies, tools, and applications to complete a variety of business-related tasks",
+            "irt_b": 0.92,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A3.1",
+            "expectation": "describe ways in which problem solving and creative and critical thinking can be applied to address challenges",
+            "irt_b": 0.71,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A3.2",
+            "expectation": "analyse and explain how business skills and knowledge, including financial literacy, can support learning",
+            "irt_b": 0.94,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-A3.3",
+            "expectation": "describe how their learning in this course can be applied in a variety of careers",
+            "irt_b": 0.54,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A3.4",
+            "expectation": "create and maintain a portfolio that illustrates their business competencies",
+            "irt_b": 1.06,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A4.1",
+            "expectation": "describe ways in which different entrepreneurial ventures have addressed social, economic, environmental issues",
+            "irt_b": 1.24,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A4.2",
+            "expectation": "describe the contributions and impacts of successful entrepreneurs from diverse local communities",
+            "irt_b": 1.11,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-A4.3",
+            "expectation": "analyse challenges faced by entrepreneurs from various communities",
+            "irt_b": 1.21,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "B_Economic_Foundations": [
+          {
+            "id": "BEP2O-B1.1",
+            "expectation": "explain how market forces affect the supply, demand, and price of goods and services",
+            "irt_b": 0.6,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B1.2",
+            "expectation": "describe how the needs and wants of consumers and the scarcity and choice of goods impact consumer behaviour",
+            "irt_b": 0.64,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B1.3",
+            "expectation": "describe how various groups in Canada have been affected by current and past market forces",
+            "irt_b": 0.66,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B2.1",
+            "expectation": "analyse how different competitive market structures affect business activities in Canada",
+            "irt_b": 1.13,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-B2.2",
+            "expectation": "describe how trade relationships Canada has with other countries have an impact on Canadian markets",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B2.3",
+            "expectation": "explain how different levels of government in Canada may intervene to correct market failures",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B3.1",
+            "expectation": "describe the different types of businesses in Canada and their role in economies",
+            "irt_b": 0.72,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B3.2",
+            "expectation": "compare the actions taken and innovations made by various Canadian businesses to become socially responsible",
+            "irt_b": 0.99,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-B3.3",
+            "expectation": "analyse the ways in which various Canadian businesses are working with Indigenous entrepreneurs",
+            "irt_b": 0.98,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "C_Entrepreneurship_Mindset": [
+          {
+            "id": "BEP2O-C1.1",
+            "expectation": "describe what constitutes an entrepreneurial mindset, and how their own lived experiences can help",
+            "irt_b": 0.87,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C1.2",
+            "expectation": "use a design process to identify how to meet a market need or opportunity",
+            "irt_b": 0.5,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C1.3",
+            "expectation": "use a problem solving process to assess and refine their entrepreneurial idea and prototype",
+            "irt_b": 0.79,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C1.4",
+            "expectation": "use a pitch process to effectively communicate their entrepreneurial idea to various audiences",
+            "irt_b": 1.03,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C2.1",
+            "expectation": "identify key performance indicators for their venture to measure its progress",
+            "irt_b": 0.89,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C2.2",
+            "expectation": "consider the target market and competition for their venture, and create a brand",
+            "irt_b": 0.68,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C2.3",
+            "expectation": "identify the logistics, resources, and requirements needed for their entrepreneurial venture",
+            "irt_b": 1.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-C2.4",
+            "expectation": "calculate their venture’s start-up budget and conduct a break-even analysis",
+            "irt_b": 0.97,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math"
+            ]
+          },
+          {
+            "id": "BEP2O-C3.1",
+            "expectation": "identify and compare various supports, including funding opportunities, available for entrepreneurs",
+            "irt_b": 1.35,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C3.2",
+            "expectation": "launch an entrepreneurial venture and lead it towards achieving their identified goals",
+            "irt_b": 0.97,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-C3.3",
+            "expectation": "analyse ethical sales strategies and respectful, accessible customer service approaches",
+            "irt_b": 1.27,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "D_Business_Functions": [
+          {
+            "id": "BEP2O-D1.1",
+            "expectation": "describe the processes involved in the production of a product or the delivery of a service",
+            "irt_b": 0.59,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D1.2",
+            "expectation": "examine and evaluate how various businesses have enhanced the efficiency, health and safety practices",
+            "irt_b": 0.97,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D1.3",
+            "expectation": "outline a process for producing their product or delivering their service in an efficient way",
+            "irt_b": 0.72,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D2.1",
+            "expectation": "analyse how various businesses have successfully used different marketing strategies",
+            "irt_b": 1.21,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-D2.2",
+            "expectation": "create a mission statement based on the unique selling proposition and brand values",
+            "irt_b": 0.78,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D2.3",
+            "expectation": "explain how their venture is best suited for their target customer and distinguishes itself",
+            "irt_b": 0.76,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D2.4",
+            "expectation": "describe the four Ps of marketing, including how they complement each other",
+            "irt_b": 0.68,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D3.1",
+            "expectation": "explain the role and importance of both financial and management accounting for a business",
+            "irt_b": 0.77,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D3.2",
+            "expectation": "demonstrate an understanding of tracking cash inflows and outflows for a small business",
+            "irt_b": 0.75,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BEP2O-D3.3",
+            "expectation": "analyse basic financial statements for a small business to determine its financial position",
+            "irt_b": 0.9,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BEP2O-D3.4",
+            "expectation": "demonstrate an understanding of the role and importance of non-financial reporting",
+            "irt_b": 0.97,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ]
+      }
+    },
+    "TAS2O": {
+      "name": "Technology and the Skilled Trades, Grade 10, Open",
+      "description": "This hands-on course enables students to apply the engineering design process...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/TAS2O",
+      "strands": {
+        "A_Design_Processes": [
+          {
+            "id": "TAS2O-A1.1",
+            "expectation": "apply an understanding of fundamental technological concepts, and evaluate their significance",
+            "irt_b": 1.2,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.2",
+            "expectation": "apply an understanding of fundamental technological concepts, design considerations, and science",
+            "irt_b": 1.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.3",
+            "expectation": "investigate design considerations, including accessibility requirements",
+            "irt_b": 2.02,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.4",
+            "expectation": "communicate design ideas for various purposes and audiences",
+            "irt_b": 1.08,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.5",
+            "expectation": "establish and justify evaluation criteria for products and/or services being developed",
+            "irt_b": 1.08,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.6",
+            "expectation": "investigate and describe project management skills and approaches",
+            "irt_b": 1.11,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A1.7",
+            "expectation": "collect and synthesize information from a variety of sources",
+            "irt_b": 0.81,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "TAS2O-A2.1",
+            "expectation": "use project management skills to develop a process to create a product",
+            "irt_b": 0.62,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A2.2",
+            "expectation": "identify factors that could impact the development of their projects",
+            "irt_b": 0.79,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A2.3",
+            "expectation": "select materials and other resources based on their properties or characteristics",
+            "irt_b": 0.98,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "TAS2O-A2.4",
+            "expectation": "select, use, and maintain tools and equipment appropriately",
+            "irt_b": 1.0,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A2.5",
+            "expectation": "use a variety of industry-related documents to guide the creation of products",
+            "irt_b": 0.77,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A2.6",
+            "expectation": "create products and/or deliver services, documenting their development process",
+            "irt_b": 1.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A2.7",
+            "expectation": "select appropriate units of measure and tools to make accurate measurements",
+            "irt_b": 0.91,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A3.1",
+            "expectation": "identify challenges they encounter in the process of developing their projects",
+            "irt_b": 0.86,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A3.2",
+            "expectation": "identify various industry-relevant performance standards and quality control methods",
+            "irt_b": 1.34,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A3.3",
+            "expectation": "analyze the performance of products and/or service delivery using quality control methods",
+            "irt_b": 0.94,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A3.4",
+            "expectation": "refine the design of products and/or services based on an analysis of data",
+            "irt_b": 0.58,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A3.5",
+            "expectation": "communicate project-related challenges, performance analyses, and refinements",
+            "irt_b": 1.74,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "TAS2O-A4.1",
+            "expectation": "describe relevant health and safety regulations for a variety of settings",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A4.2",
+            "expectation": "identify hazards in their environment, and apply strategies to minimize risks",
+            "irt_b": 0.85,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A4.3",
+            "expectation": "use tools and equipment safely, including using personal protective equipment",
+            "irt_b": 1.06,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A4.4",
+            "expectation": "follow practices that support physical and mental health and well-being",
+            "irt_b": 0.81,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A4.5",
+            "expectation": "follow proper procedures for the safe handling, storage, and disposal of materials",
+            "irt_b": 0.82,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-A4.6",
+            "expectation": "demonstrate a safety mindset by making safety a priority at all times",
+            "irt_b": 0.59,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Technological_Development": [
+          {
+            "id": "TAS2O-B1.1",
+            "expectation": "assess interrelationships between user needs and the development of various technological solutions",
+            "irt_b": 1.2,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B1.2",
+            "expectation": "analyze how the development and application of technologies are impacted by legal, ethical considerations",
+            "irt_b": 1.03,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B1.3",
+            "expectation": "investigate and describe contributions to technological innovations made by Canadians",
+            "irt_b": 1.28,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B1.4",
+            "expectation": "describe ways in which diverse communities have drawn on various knowledge systems",
+            "irt_b": 0.82,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B2.1",
+            "expectation": "assess short-term and long-term impacts of various technological innovations on individuals and society",
+            "irt_b": 1.07,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B2.2",
+            "expectation": "assess local and global impacts of various technological innovations on the environment",
+            "irt_b": 0.95,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B2.3",
+            "expectation": "evaluate how positive and negative impacts of various technologies can influence technological evolution",
+            "irt_b": 1.21,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B3.1",
+            "expectation": "explore a variety of roles, responsibilities, and opportunities related to current and emerging careers",
+            "irt_b": 0.99,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B3.2",
+            "expectation": "research and identify programs related to pathways and careers in technological fields",
+            "irt_b": 0.89,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B3.3",
+            "expectation": "compare a variety of pathways leading to careers in technological fields and the skilled trades",
+            "irt_b": 0.72,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "TAS2O-B3.4",
+            "expectation": "evaluate the transferable skills they are developing, identifying areas of strength and growth",
+            "irt_b": 0.89,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ]
+      }
+    },
+    "ICD2O": {
+      "name": "Digital Technology and Innovations in the Changing World, Grade 10, Open",
+      "description": "This course helps students develop cutting-edge digital technology and computer programming skills...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/ICD2O",
+      "strands": {
+        "A_Computational_Thinking": [
+          {
+            "id": "ICD2O-A1.1",
+            "expectation": "apply computational thinking concepts and practices when planning and designing computational artifacts",
+            "irt_b": 1.17,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A1.2",
+            "expectation": "use a variety of tools and processes to plan, design, and share algorithms",
+            "irt_b": 0.57,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A1.3",
+            "expectation": "develop computational artifacts for a variety of contexts and purposes that support diverse users",
+            "irt_b": 0.86,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ICD2O-A2.1",
+            "expectation": "investigate current social, cultural, economic, environmental, and ethical issues related to digital technology",
+            "irt_b": 1.24,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A2.2",
+            "expectation": "analyze personal and societal safety and cybersecurity issues related to digital technology",
+            "irt_b": 1.02,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A2.3",
+            "expectation": "investigate contributions to innovations in digital technology and computing by people from diverse communities",
+            "irt_b": 1.12,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A2.4",
+            "expectation": "investigate how to identify and address bias involving digital technology",
+            "irt_b": 0.94,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A2.5",
+            "expectation": "analyze accessibility issues involving digital technology",
+            "irt_b": 1.47,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A3.1",
+            "expectation": "investigate how digital technology and programming skills can be used within a variety of disciplines",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A3.2",
+            "expectation": "investigate ways in which various industries are changing as a result of digital technology",
+            "irt_b": 0.78,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-A3.3",
+            "expectation": "investigate various career options related to digital technology and programming",
+            "irt_b": 1.15,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Hardware_Software": [
+          {
+            "id": "ICD2O-B1.1",
+            "expectation": "describe the functions and features of various core components of hardware",
+            "irt_b": 0.85,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B1.2",
+            "expectation": "describe the functions and features of various connected devices",
+            "irt_b": 0.94,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B1.3",
+            "expectation": "describe the functions of various types of software",
+            "irt_b": 0.75,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B2.1",
+            "expectation": "use file management techniques to organize, edit, and share files",
+            "irt_b": 0.82,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B2.2",
+            "expectation": "identify and use effective research practices and supports when learning new hardware",
+            "irt_b": 0.88,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B2.3",
+            "expectation": "assess the hardware and software requirements for various users, contexts, and purposes",
+            "irt_b": 0.92,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ICD2O-B3.1",
+            "expectation": "apply safe and effective data practices when using digital technology",
+            "irt_b": 0.84,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B3.2",
+            "expectation": "apply safe and effective security practices, including practices to protect their privacy",
+            "irt_b": 0.93,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B4.1",
+            "expectation": "investigate current and emerging innovations in digital technology, including automation",
+            "irt_b": 1.33,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-B4.2",
+            "expectation": "analyze the impact of various technological innovations on everyday life",
+            "irt_b": 0.98,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "C_Programming": [
+          {
+            "id": "ICD2O-C1.1",
+            "expectation": "use appropriate terminology to describe programming concepts and algorithms",
+            "irt_b": 1.15,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C1.2",
+            "expectation": "describe simple algorithms that are encountered in everyday situations",
+            "irt_b": 1.09,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C1.3",
+            "expectation": "identify various types of data and explain how they are used within programs",
+            "irt_b": 0.62,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C1.4",
+            "expectation": "determine the appropriate expressions and instructions to use in a programming statement",
+            "irt_b": 0.96,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C1.5",
+            "expectation": "identify and explain situations in which conditional and repeating structures are required",
+            "irt_b": 1.04,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C2.1",
+            "expectation": "use variables, constants, expressions, and assignment statements to store and manipulate numbers",
+            "irt_b": 1.06,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C2.2",
+            "expectation": "write programs that use and generate data involving various sources and formats",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "reading",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C2.3",
+            "expectation": "write programs that include single and nested conditional statements",
+            "irt_b": 0.97,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C2.4",
+            "expectation": "write programs that include sequential, selection, and repeating events",
+            "irt_b": 1.08,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C2.5",
+            "expectation": "write programs that include the use of Boolean operators, comparison operators",
+            "irt_b": 0.94,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C2.6",
+            "expectation": "interpret program errors and implement strategies to resolve them",
+            "irt_b": 0.89,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math"
+            ]
+          },
+          {
+            "id": "ICD2O-C2.7",
+            "expectation": "write clear internal documentation and use coding standards to improve code readability",
+            "irt_b": 0.97,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "reading",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C3.1",
+            "expectation": "analyze existing code to understand the components and outcomes of the code",
+            "irt_b": 0.72,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C3.2",
+            "expectation": "modify an existing program to enable it to complete a different task",
+            "irt_b": 0.58,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ICD2O-C3.3",
+            "expectation": "write subprograms, and use existing subprograms, to complete program components",
+            "irt_b": 1.01,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C3.4",
+            "expectation": "write programs that make use of external or add-on modules or libraries",
+            "irt_b": 0.65,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ICD2O-C3.5",
+            "expectation": "explain the components of a computational artifact they have created",
+            "irt_b": 0.86,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ]
+      }
+    },
+    "ENG3U": {
+      "name": "English, Grade 11, University Preparation",
+      "description": "This course emphasizes the development of literacy, critical thinking, and communication skills.",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/ENG3U",
+      "strands": {
+        "A_Oral_Communication": [
+          {
+            "id": "ENG3U-A1.1",
+            "expectation": "identify the purpose of a variety of listening tasks and set goals for specific tasks",
+            "irt_b": 1.06,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A1.2",
+            "expectation": "select and use appropriate listening strategies to understand meaning",
+            "irt_b": 1.55,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A1.3",
+            "expectation": "identify and analyse the elements of effective oral communication",
+            "irt_b": 1.48,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-A2.1",
+            "expectation": "identify the purpose and audience for a variety of speaking tasks and adapt",
+            "irt_b": 1.13,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A2.2",
+            "expectation": "use appropriate speaking techniques to communicate ideas effectively",
+            "irt_b": 1.82,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A2.3",
+            "expectation": "use appropriate organizational patterns and stylistic devices to suit purpose and audience",
+            "irt_b": 1.55,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A3.1",
+            "expectation": "explain which strategies they found most helpful before, during, and after listening and speaking",
+            "irt_b": 1.31,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-A3.2",
+            "expectation": "identify their strengths and areas for improvement as listeners and speakers",
+            "irt_b": 1.32,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Reading_Literature": [
+          {
+            "id": "ENG3U-B1.1",
+            "expectation": "read a variety of complex texts with understanding",
+            "irt_b": 1.18,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-B1.2",
+            "expectation": "identify and explain the effect of literary devices and techniques",
+            "irt_b": 1.29,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-B1.3",
+            "expectation": "analyse the influence of cultural, historical, and social contexts on texts",
+            "irt_b": 1.32,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-B2.1",
+            "expectation": "explain how form, structure, and style contribute to meaning",
+            "irt_b": 1.27,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-B2.2",
+            "expectation": "analyse the use of rhetorical devices and persuasive techniques",
+            "irt_b": 1.45,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-B2.3",
+            "expectation": "compare texts from different periods and cultures",
+            "irt_b": 1.35,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "C_Writing": [
+          {
+            "id": "ENG3U-C1.1",
+            "expectation": "identify the purpose and audience for a variety of writing tasks",
+            "irt_b": 1.14,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-C1.2",
+            "expectation": "use research and critical thinking to gather and organize ideas",
+            "irt_b": 1.25,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-C1.3",
+            "expectation": "produce written work that demonstrates effective organization and coherence",
+            "irt_b": 1.69,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing"
+            ]
+          },
+          {
+            "id": "ENG3U-C2.1",
+            "expectation": "use appropriate literary and rhetorical devices",
+            "irt_b": 1.65,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-C2.2",
+            "expectation": "adapt style and voice for purpose and audience",
+            "irt_b": 1.16,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-C3.1",
+            "expectation": "apply spelling, grammar, and punctuation conventions",
+            "irt_b": 1.67,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG3U-C3.2",
+            "expectation": "use the conventions continuum (SCHhw) to edit and revise",
+            "irt_b": 1.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "D_Media_Studies": [
+          {
+            "id": "ENG3U-D1.1",
+            "expectation": "interpret a variety of media texts",
+            "irt_b": 1.12,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-D1.2",
+            "expectation": "identify and explain the purpose and audience for media texts",
+            "irt_b": 1.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-D2.1",
+            "expectation": "analyse how media forms, conventions, and techniques influence meaning",
+            "irt_b": 1.57,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-D2.2",
+            "expectation": "analyse bias, perspective, and stereotyping in media",
+            "irt_b": 1.5,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-D3.1",
+            "expectation": "create media texts using appropriate forms and techniques",
+            "irt_b": 1.44,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG3U-D3.2",
+            "expectation": "use digital tools to enhance media production",
+            "irt_b": 1.35,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ]
+      }
+    },
+    "ENG4U": {
+      "name": "English, Grade 12, University Preparation",
+      "description": "This course emphasizes the consolidation of literacy, critical thinking, and communication skills.",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/ENG4U",
+      "strands": {
+        "A_Oral_Communication": [
+          {
+            "id": "ENG4U-A1.1",
+            "expectation": "identify the purpose of a variety of complex listening tasks and set goals",
+            "irt_b": 1.57,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-A1.2",
+            "expectation": "use advanced listening strategies to analyse and evaluate meaning",
+            "irt_b": 2.01,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-A1.3",
+            "expectation": "analyse the elements of effective academic and professional oral communication",
+            "irt_b": 2.13,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-A2.1",
+            "expectation": "adapt speaking techniques for university-level and professional audiences",
+            "irt_b": 2.41,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-A2.2",
+            "expectation": "use sophisticated organizational patterns and stylistic devices in presentations",
+            "irt_b": 2.32,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-A2.3",
+            "expectation": "deliver oral presentations with confidence and coherence",
+            "irt_b": 2.14,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-A3.1",
+            "expectation": "evaluate the effectiveness of listening and speaking strategies used",
+            "irt_b": 2.06,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-A3.2",
+            "expectation": "set personal goals for continued improvement in academic oral communication",
+            "irt_b": 2.05,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Reading_Literature": [
+          {
+            "id": "ENG4U-B1.1",
+            "expectation": "read and interpret complex literary and informational texts with insight",
+            "irt_b": 1.88,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-B1.2",
+            "expectation": "analyse how cultural, historical, and social contexts shape meaning in texts",
+            "irt_b": 1.84,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-B1.3",
+            "expectation": "evaluate the influence of literary theories on interpretation",
+            "irt_b": 2.14,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-B2.1",
+            "expectation": "analyse sophisticated literary devices, rhetorical strategies, and stylistic elements",
+            "irt_b": 2.41,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-B2.2",
+            "expectation": "compare and contrast texts across periods, cultures, and genres",
+            "irt_b": 1.82,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-B2.3",
+            "expectation": "explain how form and structure create meaning in challenging texts",
+            "irt_b": 1.75,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "C_Writing": [
+          {
+            "id": "ENG4U-C1.1",
+            "expectation": "use scholarly research methods to gather and synthesize information",
+            "irt_b": 1.95,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-C1.2",
+            "expectation": "produce coherent, well-organized academic essays and research papers",
+            "irt_b": 2.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing"
+            ]
+          },
+          {
+            "id": "ENG4U-C2.1",
+            "expectation": "write with an academic voice and sophisticated stylistic devices",
+            "irt_b": 1.92,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "writing",
+              "stylus"
+            ]
+          },
+          {
+            "id": "ENG4U-C2.2",
+            "expectation": "adapt style for university-level and professional audiences",
+            "irt_b": 2.24,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-C3.1",
+            "expectation": "apply advanced grammar, punctuation, and citation conventions",
+            "irt_b": 2.25,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-C3.2",
+            "expectation": "use the conventions continuum to edit and revise at a university-ready level",
+            "irt_b": 1.78,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "D_Media_Studies": [
+          {
+            "id": "ENG4U-D1.1",
+            "expectation": "interpret and evaluate complex media texts with critical insight",
+            "irt_b": 1.9,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-D2.1",
+            "expectation": "analyse media forms, conventions, and techniques in depth",
+            "irt_b": 1.89,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-D2.2",
+            "expectation": "evaluate bias, ideology, and representation in media",
+            "irt_b": 2.11,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "ENG4U-D3.1",
+            "expectation": "create advanced media texts using digital tools and professional techniques",
+            "irt_b": 2.03,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "ENG4U-D3.2",
+            "expectation": "produce media that demonstrates academic rigour and ethical considerations",
+            "irt_b": 2.22,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ]
+      }
+    },
+    "BOH4M": {
+      "name": "Business Leadership: Management Fundamentals, Grade 12",
+      "description": "This course focuses on the development of leadership skills used in managing a successful business...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/BOH4M",
+      "strands": {
+        "A_Foundations": [
+          {
+            "id": "BOH4M-A1.1",
+            "expectation": "explain the role of management in the operation of a business",
+            "irt_b": 1.61,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-A1.2",
+            "expectation": "describe the functions of management",
+            "irt_b": 1.94,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-A1.3",
+            "expectation": "analyse how the functions of management are interrelated",
+            "irt_b": 1.92,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BOH4M-A2.1",
+            "expectation": "explain the importance of ethical behaviour in business",
+            "irt_b": 1.92,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-A2.2",
+            "expectation": "evaluate the impact of corporate social responsibility on a business",
+            "irt_b": 1.91,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-A3.1",
+            "expectation": "describe the impact of business decisions on stakeholders",
+            "irt_b": 1.91,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-A3.2",
+            "expectation": "analyse the economic impact of business activity on society",
+            "irt_b": 1.82,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "B_Leading": [
+          {
+            "id": "BOH4M-B1.1",
+            "expectation": "explain the importance of effective leadership in achieving business goals",
+            "irt_b": 2.02,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-B1.2",
+            "expectation": "compare various leadership styles and their effectiveness",
+            "irt_b": 2.16,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-B1.3",
+            "expectation": "demonstrate the ability to apply leadership skills in group settings",
+            "irt_b": 1.79,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-B2.1",
+            "expectation": "use effective communication skills in business contexts",
+            "irt_b": 2.09,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BOH4M-B2.2",
+            "expectation": "analyse the role of communication in motivating employees",
+            "irt_b": 1.99,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BOH4M-B2.3",
+            "expectation": "resolve conflict using appropriate strategies",
+            "irt_b": 2.37,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math"
+            ]
+          }
+        ],
+        "C_Management_Challenges": [
+          {
+            "id": "BOH4M-C1.1",
+            "expectation": "identify and analyse major challenges facing managers",
+            "irt_b": 1.99,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BOH4M-C1.2",
+            "expectation": "evaluate strategies for managing change effectively",
+            "irt_b": 2.28,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-C1.3",
+            "expectation": "describe the impact of technology on management practices",
+            "irt_b": 1.89,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-C2.1",
+            "expectation": "analyse the effects of workplace stress and conflict on productivity",
+            "irt_b": 1.77,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "BOH4M-C2.2",
+            "expectation": "develop strategies for motivating employees and managing diversity",
+            "irt_b": 2.18,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "BOH4M-C2.3",
+            "expectation": "assess the role of human resources management",
+            "irt_b": 1.79,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ]
+      }
+    },
+    "PPL1O": {
+      "name": "Health and Physical Education, Grade 9, Open",
+      "description": "This course equips students with the knowledge and skills they need to make healthy choices...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/PPL1O",
+      "strands": {
+        "A_Active_Living": [
+          {
+            "id": "PPL1O-A1.1",
+            "expectation": "participate regularly in a wide variety of physical activities",
+            "irt_b": 0.41,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A1.2",
+            "expectation": "demonstrate an understanding of the factors that contribute to personal enjoyment of physical activity",
+            "irt_b": 0.4,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A1.3",
+            "expectation": "demonstrate an understanding of the factors that contribute to personal fitness levels",
+            "irt_b": 0.37,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A2.1",
+            "expectation": "explain the benefits of regular participation in physical activity",
+            "irt_b": 0.48,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A2.2",
+            "expectation": "describe the factors that contribute to the development of physical fitness",
+            "irt_b": 0.29,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A3.1",
+            "expectation": "demonstrate safe practices when participating in physical activities",
+            "irt_b": 0.72,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-A3.2",
+            "expectation": "demonstrate an understanding of the importance of proper warm-up and cool-down",
+            "irt_b": 0.36,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Movement_Competence": [
+          {
+            "id": "PPL1O-B1.1",
+            "expectation": "demonstrate the ability to perform a variety of movement skills",
+            "irt_b": 0.21,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-B1.2",
+            "expectation": "demonstrate an understanding of the principles of movement",
+            "irt_b": 0.41,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-B1.3",
+            "expectation": "demonstrate the ability to use movement concepts to improve performance",
+            "irt_b": 0.41,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-B2.1",
+            "expectation": "apply movement strategies in a variety of physical activities",
+            "irt_b": 0.35,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-B2.2",
+            "expectation": "demonstrate an understanding of the factors that influence the choice of movement strategies",
+            "irt_b": 0.38,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "C_Healthy_Living": [
+          {
+            "id": "PPL1O-C1.1",
+            "expectation": "identify factors that contribute to healthy development",
+            "irt_b": 0.54,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-C1.2",
+            "expectation": "demonstrate an understanding of the impact of healthy choices on health",
+            "irt_b": 0.23,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-C2.1",
+            "expectation": "make healthy choices related to nutrition, substance use, and sexual health",
+            "irt_b": 0.36,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-C2.2",
+            "expectation": "demonstrate an understanding of the importance of mental health",
+            "irt_b": 0.36,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-C3.1",
+            "expectation": "explain the connections between healthy living and overall well-being",
+            "irt_b": 0.51,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL1O-C3.2",
+            "expectation": "analyse how healthy living contributes to personal growth",
+            "irt_b": 0.36,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ]
+      }
+    },
+    "PPL2O": {
+      "name": "Health and Physical Education, Grade 10, Open",
+      "description": "This course enables students to further develop the knowledge and skills they need...",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/PPL2O",
+      "strands": {
+        "A_Active_Living": [
+          {
+            "id": "PPL2O-A1.1",
+            "expectation": "participate regularly in a wide variety of physical activities that develop health-related fitness",
+            "irt_b": 1.02,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-A1.2",
+            "expectation": "demonstrate an understanding of how personal interests and preferences influence choices",
+            "irt_b": 1.09,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-A1.3",
+            "expectation": "develop and implement a personal fitness plan",
+            "irt_b": 0.74,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-A2.1",
+            "expectation": "explain the long-term benefits of regular physical activity for physical and mental health",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-A2.2",
+            "expectation": "analyse factors that affect personal fitness levels and how to improve them",
+            "irt_b": 0.67,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "PPL2O-A3.1",
+            "expectation": "demonstrate safe practices and proper etiquette in a variety of physical activities",
+            "irt_b": 0.9,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-A3.2",
+            "expectation": "apply warm-up and cool-down routines effectively",
+            "irt_b": 1.08,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          }
+        ],
+        "B_Movement_Competence": [
+          {
+            "id": "PPL2O-B1.1",
+            "expectation": "refine and combine movement skills in a variety of physical activities",
+            "irt_b": 0.75,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-B1.2",
+            "expectation": "demonstrate an understanding of movement principles and how to apply them",
+            "irt_b": 0.74,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-B1.3",
+            "expectation": "use movement concepts and strategies to enhance participation and performance",
+            "irt_b": 1.06,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-B2.1",
+            "expectation": "apply tactical and strategic thinking in a variety of physical activities",
+            "irt_b": 0.78,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-B2.2",
+            "expectation": "adapt movement strategies to different activity contexts",
+            "irt_b": 1.09,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          }
+        ],
+        "C_Healthy_Living": [
+          {
+            "id": "PPL2O-C1.1",
+            "expectation": "analyse how healthy choices in nutrition, activity, and stress management affect health",
+            "irt_b": 0.9,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "PPL2O-C1.2",
+            "expectation": "explain the impact of substance use and sexual health decisions on well-being",
+            "irt_b": 0.76,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-C2.1",
+            "expectation": "apply decision-making skills to real-life health scenarios",
+            "irt_b": 1.16,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-C2.2",
+            "expectation": "develop strategies for managing mental health and building resilience",
+            "irt_b": 1.05,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": []
+          },
+          {
+            "id": "PPL2O-C3.1",
+            "expectation": "analyse the connections between healthy living and community well-being",
+            "irt_b": 1.04,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "reading"
+            ]
+          },
+          {
+            "id": "PPL2O-C3.2",
+            "expectation": "evaluate how personal choices influence lifelong health",
+            "irt_b": 1.15,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": []
+          }
         ]
       }
     }

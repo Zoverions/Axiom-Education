@@ -1,41 +1,162 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// ── Raw JSON load (cached: loads once, never re-reads asset) ──────────────────
-final _rawCurriculumProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final json = await rootBundle.loadString(
-      'assets/curriculum/ontario_curriculum_full.json');
-  return jsonDecode(json) as Map<String, dynamic>;
+class DatabaseService {
+  static Database? _database;
+
+  static Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB();
+    return _database!;
+  }
+
+  static Future<Database> _initDB() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'ontario_curriculum.sqlite');
+
+    // Always copy the pre-populated sqlite db from assets to the device's db directory
+    // If we only wanted to do this once we could check if it exists, but for dev we copy.
+    final exists = await databaseExists(path);
+
+    if (!exists) {
+      try {
+        await Directory(dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      ByteData data = await rootBundle.load("assets/curriculum/ontario_curriculum.sqlite");
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      await File(path).writeAsBytes(bytes, flush: true);
+    }
+
+    return await openDatabase(path, version: 1);
+  }
+}
+
+// ── Provide db instance ───────────────────────────────────────────────────────
+final databaseProvider = FutureProvider<Database>((ref) async {
+  return await DatabaseService.database;
 });
 
-// ── Flat item bank: every expectation as an IRT-ready map ─────────────────────
-final curriculumBankProvider =
-    FutureProvider<List<CurriculumItem>>((ref) async {
-  final raw = await ref.watch(_rawCurriculumProvider.future);
-  final courses = raw['courses'] as Map<String, dynamic>;
-  final items = <CurriculumItem>[];
-  for (final entry in courses.entries) {
-    final code = entry.key;
-    final course = entry.value as Map<String, dynamic>;
-    final strands = course['strands'] as Map<String, dynamic>;
-    for (final strandEntry in strands.entries) {
-      final expectations = strandEntry.value as List<dynamic>;
-      for (final e in expectations) {
-        final map = e as Map<String, dynamic>;
-        items.add(CurriculumItem(
-          id: map['id'] as String,
-          courseCode: code,
-          strand: strandEntry.key,
-          expectation: map['expectation'] as String,
-          irtB: (map['irt_b'] as num).toDouble(),
-          irtA: (map['irt_a'] as num? ?? 1.2).toDouble(),
-          irtC: (map['irt_c'] as num? ?? 0.2).toDouble(),
-          tags: List<String>.from(map['tags'] as List? ?? []),
-        ));
-      }
+// ── Course Overview provider ──────────────────────────────────────────────────
+class CourseOverview {
+  final String id;
+  final String name;
+  final int expectationCount;
+
+  CourseOverview(this.id, this.name, this.expectationCount);
+}
+
+final courseOverviewProvider = FutureProvider<List<CourseOverview>>((ref) async {
+  final db = await ref.watch(databaseProvider.future);
+  final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    SELECT c.id, c.name, COUNT(e.id) as count
+    FROM Course c
+    LEFT JOIN Expectation e ON c.id = e.course_id
+    GROUP BY c.id
+    ORDER BY c.id ASC
+  ''');
+
+  return maps.map((e) => CourseOverview(
+    e['id'] as String,
+    e['name'] as String,
+    e['count'] as int,
+  )).toList();
+});
+
+// ── Course Details Provider ───────────────────────────────────────────────────
+class CourseDetail {
+    final String id;
+    final String name;
+    final List<StrandDetail> strands;
+
+    CourseDetail(this.id, this.name, this.strands);
+}
+
+class StrandDetail {
+    final String name;
+    final List<ExpectationDetail> expectations;
+
+    StrandDetail(this.name, this.expectations);
+}
+
+class ExpectationDetail {
+    final String text;
+    final List<String> tags;
+
+    ExpectationDetail(this.text, this.tags);
+}
+
+final courseDetailProvider = FutureProvider.family<CourseDetail, String>((ref, courseId) async {
+    final db = await ref.watch(databaseProvider.future);
+
+    // Get course info
+    final courseRes = await db.query('Course', where: 'id = ?', whereArgs: [courseId]);
+    if (courseRes.isEmpty) return CourseDetail(courseId, 'Unknown', []);
+    final courseName = courseRes.first['name'] as String;
+
+    // Get strands
+    final strandRes = await db.query('Strand', where: 'course_id = ?', whereArgs: [courseId]);
+
+    List<StrandDetail> strands = [];
+    for (var sRow in strandRes) {
+        final strandId = sRow['id'] as String;
+        final strandName = sRow['name'] as String;
+
+        // Get expectations for strand
+        final expRes = await db.query('Expectation', where: 'strand_id = ?', whereArgs: [strandId]);
+        List<ExpectationDetail> expectations = [];
+
+        for (var eRow in expRes) {
+            final expId = eRow['id'] as String;
+            final text = eRow['text'] as String;
+
+            // Get tags
+            final tagRes = await db.query('Tag', where: 'expectation_id = ?', whereArgs: [expId]);
+            final tags = tagRes.map((t) => t['tag'] as String).toList();
+
+            expectations.add(ExpectationDetail(text, tags));
+        }
+
+        strands.add(StrandDetail(strandName, expectations));
     }
+
+    return CourseDetail(courseId, courseName, strands);
+});
+
+
+// ── Flat item bank: every expectation as an IRT-ready map ─────────────────────
+// Retaining original backwards compatibility for AdaptiveLessonScreen
+final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async {
+  final db = await ref.watch(databaseProvider.future);
+
+  final List<Map<String, dynamic>> expRows = await db.rawQuery('''
+      SELECT e.id, e.course_id, s.name as strand_name, e.text, e.irt_b, e.irt_a, e.irt_c
+      FROM Expectation e
+      JOIN Strand s ON e.strand_id = s.id
+  ''');
+
+  final items = <CurriculumItem>[];
+  for (final row in expRows) {
+      final expId = row['id'] as String;
+      final tagRows = await db.query('Tag', columns: ['tag'], where: 'expectation_id = ?', whereArgs: [expId]);
+      final tags = tagRows.map((t) => t['tag'] as String).toList();
+
+      items.add(CurriculumItem(
+          id: expId,
+          courseCode: row['course_id'] as String,
+          strand: row['strand_name'] as String,
+          expectation: row['text'] as String,
+          irtB: (row['irt_b'] as num?)?.toDouble() ?? 0.0,
+          irtA: (row['irt_a'] as num?)?.toDouble() ?? 1.2,
+          irtC: (row['irt_c'] as num?)?.toDouble() ?? 0.2,
+          tags: tags,
+      ));
   }
+
   return items;
 });
 
