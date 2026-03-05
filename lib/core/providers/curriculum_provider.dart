@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DatabaseService {
@@ -14,7 +15,14 @@ class DatabaseService {
   }
 
   static Future<Database> _initDB() async {
-    final dbPath = await getDatabasesPath();
+    String dbPath;
+    if (Platform.isWindows || Platform.isLinux) {
+      final docDir = await getApplicationSupportDirectory();
+      dbPath = docDir.path;
+    } else {
+      dbPath = await getDatabasesPath();
+    }
+
     final path = join(dbPath, 'ontario_curriculum.sqlite');
 
     // Always copy the pre-populated sqlite db from assets to the device's db directory
@@ -133,31 +141,37 @@ final courseDetailProvider = FutureProvider.family<CourseDetail, String>((ref, c
 final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async {
   final db = await ref.watch(databaseProvider.future);
 
-  final List<Map<String, dynamic>> expRows = await db.rawQuery('''
-      SELECT e.id, e.course_id, s.name as strand_name, e.text, e.irt_b, e.irt_a, e.irt_c
+  // Optimize N+1 query: Fetch all expectations and tags with a JOIN, then group in memory
+  final List<Map<String, dynamic>> rows = await db.rawQuery('''
+      SELECT e.id, e.course_id, s.name as strand_name, e.text, e.irt_b, e.irt_a, e.irt_c, t.tag
       FROM Expectation e
       JOIN Strand s ON e.strand_id = s.id
+      LEFT JOIN Tag t ON e.id = t.expectation_id
   ''');
 
-  final items = <CurriculumItem>[];
-  for (final row in expRows) {
-      final expId = row['id'] as String;
-      final tagRows = await db.query('Tag', columns: ['tag'], where: 'expectation_id = ?', whereArgs: [expId]);
-      final tags = tagRows.map((t) => t['tag'] as String).toList();
+  final Map<String, CurriculumItem> itemsMap = {};
 
-      items.add(CurriculumItem(
-          id: expId,
-          courseCode: row['course_id'] as String,
-          strand: row['strand_name'] as String,
-          expectation: row['text'] as String,
-          irtB: (row['irt_b'] as num?)?.toDouble() ?? 0.0,
-          irtA: (row['irt_a'] as num?)?.toDouble() ?? 1.2,
-          irtC: (row['irt_c'] as num?)?.toDouble() ?? 0.2,
-          tags: tags,
-      ));
+  for (final row in rows) {
+      final expId = row['id'] as String;
+      final tag = row['tag'] as String?;
+
+      if (!itemsMap.containsKey(expId)) {
+          itemsMap[expId] = CurriculumItem(
+              id: expId,
+              courseCode: row['course_id'] as String,
+              strand: row['strand_name'] as String,
+              expectation: row['text'] as String,
+              irtB: (row['irt_b'] as num?)?.toDouble() ?? 0.0,
+              irtA: (row['irt_a'] as num?)?.toDouble() ?? 1.2,
+              irtC: (row['irt_c'] as num?)?.toDouble() ?? 0.2,
+              tags: tag != null ? [tag] : [],
+          );
+      } else if (tag != null) {
+          itemsMap[expId]!.tags.add(tag);
+      }
   }
 
-  return items;
+  return itemsMap.values.toList();
 });
 
 // ── Search index: filter by grade, subject, band ──────────────────────────────

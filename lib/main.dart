@@ -1,9 +1,17 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'features/diagnostic/diagnostic_screen.dart';
 
 void main() {
+  if (Platform.isWindows || Platform.isLinux) {
+    // Initialize FFI
+    sqfliteFfiInit();
+    // Change the default factory for unit testing and desktop platforms
+    databaseFactory = databaseFactoryFfi;
+  }
   runApp(
     const ProviderScope(
       child: MyApp(),
