@@ -1,4 +1,4 @@
-package com.example.ontarioedai
+package com.zoverions.ontarioedai
 
 import io.flutter.embedding.android.FlutterActivity
 
