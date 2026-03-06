@@ -112,39 +112,70 @@ class ExpectationDetail {
 final courseDetailProvider = FutureProvider.family<CourseDetail, String>((ref, courseId) async {
     final db = await ref.watch(databaseProvider.future);
 
-    // Get course info
-    final courseRes = await db.query('Course', where: 'id = ?', whereArgs: [courseId]);
-    if (courseRes.isEmpty) return CourseDetail(courseId, 'Unknown', []);
-    final courseName = courseRes.first['name'] as String;
+    // Optimize N+1 query: Fetch course, strands, expectations, and tags with a JOIN
+    final List<Map<String, dynamic>> rows = await db.rawQuery('''
+      SELECT
+        c.name as course_name,
+        s.id as strand_id, s.name as strand_name,
+        e.id as exp_id, e.text as exp_text,
+        t.tag
+      FROM Course c
+      LEFT JOIN Strand s ON c.id = s.course_id
+      LEFT JOIN Expectation e ON s.id = e.strand_id
+      LEFT JOIN Tag t ON e.id = t.expectation_id
+      WHERE c.id = ?
+    ''', [courseId]);
 
-    // Get strands
-    final strandRes = await db.query('Strand', where: 'course_id = ?', whereArgs: [courseId]);
-
-    List<StrandDetail> strands = [];
-    for (var sRow in strandRes) {
-        final strandId = sRow['id'] as String;
-        final strandName = sRow['name'] as String;
-
-        // Get expectations for strand
-        final expRes = await db.query('Expectation', where: 'strand_id = ?', whereArgs: [strandId]);
-        List<ExpectationDetail> expectations = [];
-
-        for (var eRow in expRes) {
-            final expId = eRow['id'] as String;
-            final text = eRow['text'] as String;
-
-            // Get tags
-            final tagRes = await db.query('Tag', where: 'expectation_id = ?', whereArgs: [expId]);
-            final tags = tagRes.map((t) => t['tag'] as String).toList();
-
-            expectations.add(ExpectationDetail(text, tags));
-        }
-
-        strands.add(StrandDetail(strandName, expectations));
+    if (rows.isEmpty) {
+        return CourseDetail(courseId, 'Unknown', []);
     }
+
+    final courseName = rows.first['course_name'] as String;
+
+    // Use linked maps to preserve insertion order (which is typically the DB return order)
+    final Map<String, _StrandBuilder> strandBuilders = {};
+
+    for (final row in rows) {
+        final strandId = row['strand_id'] as String?;
+        if (strandId == null) continue; // No strands for this course
+
+        final strandBuilder = strandBuilders.putIfAbsent(
+            strandId, () => _StrandBuilder(row['strand_name'] as String));
+
+        final expId = row['exp_id'] as String?;
+        if (expId == null) continue; // No expectations for this strand
+
+        final expBuilder = strandBuilder.expectations.putIfAbsent(
+            expId, () => _ExpectationBuilder(row['exp_text'] as String));
+
+        final tag = row['tag'] as String?;
+        if (tag != null) {
+            expBuilder.tags.add(tag);
+        }
+    }
+
+    // Build the final detail object
+    final List<StrandDetail> strands = strandBuilders.values.map((sBuilder) {
+        final expectations = sBuilder.expectations.values.map((eBuilder) {
+            return ExpectationDetail(eBuilder.text, eBuilder.tags.toList());
+        }).toList();
+        return StrandDetail(sBuilder.name, expectations);
+    }).toList();
 
     return CourseDetail(courseId, courseName, strands);
 });
+
+class _StrandBuilder {
+    final String name;
+    final Map<String, _ExpectationBuilder> expectations = {};
+    _StrandBuilder(this.name);
+}
+
+class _ExpectationBuilder {
+    final String text;
+    final Set<String> tags = {}; // Use Set to avoid duplicate tags if any
+    _ExpectationBuilder(this.text);
+}
 
 
 // ── Flat item bank: every expectation as an IRT-ready map ─────────────────────
