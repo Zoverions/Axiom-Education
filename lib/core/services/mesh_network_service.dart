@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:meta/meta.dart';
 
+import 'package:encrypt/encrypt.dart' as encrypt;
+
 /// Defines the roles in the P2P Mesh
 enum MeshRole {
   teacherNode,
@@ -77,6 +79,18 @@ class MeshNetworkService {
       return false;
     }
   }
+  // A shared key for the classroom mesh. In a real environment,
+  // this would be provisioned dynamically via Diffie-Hellman or MDM.
+  // For the scope of this offline MVP, we use a key derived from an environmental
+  // variable. If no variable is provided, we generate a secure random key to prevent
+  // hardcoded secrets from being committed, meaning nodes must be configured with
+  // the same MESH_SECRET_KEY at build/run time to communicate.
+  static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
+      ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY').padRight(32, '0').substring(0, 32))
+      : encrypt.Key.fromSecureRandom(32);
+  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
+
+  MeshNetworkService({this.role = MeshRole.studentNode});
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
   /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
@@ -182,27 +196,43 @@ class MeshNetworkService {
     socket.listen(
       (List<int> data) {
         try {
-          String message = utf8.decode(data).trim();
-          if (message.isEmpty) return;
+          String rawData = utf8.decode(data, allowMalformed: true);
+          List<String> messages = rawData.split('\n');
 
-          print('Received raw mesh data: $message');
-          Map<String, dynamic> payload = jsonDecode(message);
+          for (String message in messages) {
+            message = message.trim();
+            if (message.isEmpty) continue;
 
-          if (payload.containsKey('type')) {
-            String msgType = payload['type'];
-            switch (msgType) {
-              case 'CANVAS_SYNC':
-                print('Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
-                break;
-              case 'CREDENTIAL_GOSSIP':
-                print('Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
-                break;
-              default:
-                print('Unknown message type: $msgType');
+            try {
+              print('Received encrypted mesh data: $message');
+
+              final parts = message.split(':');
+              if (parts.length != 2) throw Exception('Invalid encrypted payload format');
+
+              final iv = encrypt.IV.fromBase64(parts[0]);
+              final decryptedStr = _encrypter.decrypt64(parts[1], iv: iv);
+
+              Map<String, dynamic> payload = jsonDecode(decryptedStr);
+
+              if (payload.containsKey('type')) {
+                String msgType = payload['type'];
+                switch (msgType) {
+                  case 'CANVAS_SYNC':
+                    print('Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
+                    break;
+                  case 'CREDENTIAL_GOSSIP':
+                    print('Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
+                    break;
+                  default:
+                    print('Unknown message type: $msgType');
+                }
+              }
+            } catch (e) {
+              print('Failed to parse/decrypt incoming data: $e');
             }
           }
         } catch (e) {
-          print('Failed to parse incoming data: $e');
+          print('Failed to decode incoming data: $e');
         }
       },
       onError: (error) {
@@ -217,14 +247,18 @@ class MeshNetworkService {
   }
 
   void _sendOverTcp(Map<String, dynamic> payload) {
+    final iv = encrypt.IV.fromSecureRandom(16);
+    final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
+    final messageStr = '${iv.base64}:${encrypted.base64}\n';
+
     if (role == MeshRole.studentNode) {
       if (_teacherTcpSocket != null) {
-        _teacherTcpSocket!.write(jsonEncode(payload) + '\n');
+        _teacherTcpSocket!.write(messageStr);
       }
     } else {
       for (var socket in _studentSockets) {
         try {
-          socket.write(jsonEncode(payload) + '\n');
+          socket.write(messageStr);
         } catch (_) {}
       }
     }
