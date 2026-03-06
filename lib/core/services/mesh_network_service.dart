@@ -128,9 +128,29 @@ class MeshNetworkService {
   void _handleIncomingData(Socket socket) {
     socket.listen(
       (List<int> data) {
-        String message = utf8.decode(data);
-        print('Received mesh data: $message');
-        // Placeholder: Parse JSON and route to specific Riverpod providers/handlers
+        try {
+          String message = utf8.decode(data).trim();
+          if (message.isEmpty) return;
+
+          print('Received raw mesh data: $message');
+          Map<String, dynamic> payload = jsonDecode(message);
+
+          if (payload.containsKey('type')) {
+            String msgType = payload['type'];
+            switch (msgType) {
+              case 'CANVAS_SYNC':
+                print('Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
+                break;
+              case 'CREDENTIAL_GOSSIP':
+                print('Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
+                break;
+              default:
+                print('Unknown message type: $msgType');
+            }
+          }
+        } catch (e) {
+          print('Failed to parse incoming data: $e');
+        }
       },
       onError: (error) {
         print('Socket error: $error');

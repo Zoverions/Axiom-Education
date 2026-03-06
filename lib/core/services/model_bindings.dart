@@ -59,8 +59,11 @@ class Phi3MiniModel {
         element?.release();
       }
 
-      // Placeholder decoding
-      return "Response generated based on ${logits.length} output logits.";
+      // Note: A full implementation requires a Dart port of the BPE tokenizer
+      // and the vocabulary file (`tokenizer.json` or `vocab.json`) associated with
+      // the model. Without the vocabulary mapping, we cannot decode logits into
+      // meaningful text strings. For demonstration, we simulate decoding based on logits size.
+      return "Simulated response generated. Logits shape length: ${logits.length}";
     } catch (e) {
       print('Inference error: $e');
       return "Error during model inference.";
@@ -179,16 +182,20 @@ class WatcherModel {
       // 3. Run inference
       _interpreter!.run(inputTensor, outputTensor);
 
-      // 4. Post-process (Placeholder: find max probability index)
+      // 4. Post-process: Find the argmax (index with highest probability)
+      // This assumes the output is a 1D vector of probabilities from a Softmax layer.
       double maxProb = 0.0;
       int maxIdx = -1;
-      for (int i = 0; i < 1000; i++) {
+      final int numClasses = outputTensor[0].length;
+
+      for (int i = 0; i < numClasses; i++) {
         if (outputTensor[0][i] > maxProb) {
           maxProb = outputTensor[0][i];
           maxIdx = i;
         }
       }
 
+      // In a real scenario, maxIdx would be mapped to a label map (e.g. {0: '+', 1: '-', ...})
       return "Parsed symbol ID: $maxIdx with probability ${maxProb.toStringAsFixed(2)}";
     } catch (e) {
       print('Watcher inference error: $e');

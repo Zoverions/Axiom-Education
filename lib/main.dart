@@ -4,14 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'features/diagnostic/diagnostic_screen.dart';
+import 'core/services/hive_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   if (Platform.isWindows || Platform.isLinux) {
     // Initialize FFI
     sqfliteFfiInit();
     // Change the default factory for unit testing and desktop platforms
     databaseFactory = databaseFactoryFfi;
   }
+
+  await HiveService.init();
+
   runApp(
     const ProviderScope(
       child: MyApp(),
