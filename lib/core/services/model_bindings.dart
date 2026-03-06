@@ -1,7 +1,8 @@
-import 'dart:typed_data';
 import 'package:onnxruntime/onnxruntime.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 /// ONNX model binding for Phi-3-mini
 class Phi3MiniModel {
@@ -15,8 +16,9 @@ class Phi3MiniModel {
       final sessionOptions = OrtSessionOptions();
       // Use NNAPI for NPU on Android, CoreML on iOS if applicable
       // sessionOptions.appendExecutionProvider_Nnapi();
-      _session = OrtSession.fromAsset(
-          'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+      final rawAssetFile = await rootBundle.load('assets/models/phi3-mini-4k-instruct-q4.onnx');
+      final bytes = rawAssetFile.buffer.asUint8List();
+      _session = OrtSession.fromBuffer(bytes, sessionOptions);
       _isInitialized = true;
       print('Phi3 model initialized successfully.');
     } catch (e) {
@@ -49,8 +51,8 @@ class Phi3MiniModel {
       // 3. Extract output tokens and decode
       // Assuming output is logits: shape [batch, seq_len, vocab_size]
       // This is a simplified extraction. Real LLM inference requires auto-regressive decoding (looping).
-      final OrtValueTensor? logitsTensor = outputs[0];
-      final List<dynamic> logits = logitsTensor?.value as List<dynamic>;
+      final OrtValue? logitsTensor = outputs[0];
+      final List<dynamic> logits = (logitsTensor?.value as List<dynamic>?) ?? [];
 
       inputIdsTensor.release();
       attentionMaskTensor.release();
@@ -94,6 +96,22 @@ class HandwritingScorer {
     }
   }
 
+  @visibleForTesting
+  List<List<List<double>>> preprocessStrokes(List<Map<String, dynamic>> strokes) {
+    const int maxStrokes = 100;
+    var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
+
+    int strokeIdx = 0;
+    for (var stroke in strokes) {
+      if (strokeIdx >= maxStrokes) break;
+      inputTensor[0][strokeIdx][0] = (stroke['x'] as double?) ?? 0.0;
+      inputTensor[0][strokeIdx][1] = (stroke['y'] as double?) ?? 0.0;
+      inputTensor[0][strokeIdx][2] = (stroke['pressure'] as double?) ?? 0.5;
+      strokeIdx++;
+    }
+    return inputTensor;
+  }
+
   /// Evaluates stylus pressure and stroke consistency.
   /// Returns a record: (pressure_score, consistency_score)
   Future<(double, double)> scoreHandwriting(List<Map<String, dynamic>> strokes) async {
@@ -101,17 +119,7 @@ class HandwritingScorer {
 
     try {
       // 1. Preprocess strokes into tensor shape [1, MAX_STROKES, 3] (x, y, pressure)
-      const int maxStrokes = 100;
-      var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
-
-      int strokeIdx = 0;
-      for (var stroke in strokes) {
-        if (strokeIdx >= maxStrokes) break;
-        inputTensor[0][strokeIdx][0] = (stroke['x'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][1] = (stroke['y'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][2] = (stroke['pressure'] as double?) ?? 0.5;
-        strokeIdx++;
-      }
+      var inputTensor = preprocessStrokes(strokes);
 
       // 2. Output tensor shape [1, 2] for pressure and consistency scores
       var outputTensor = List.generate(1, (_) => List.filled(2, 0.0));
