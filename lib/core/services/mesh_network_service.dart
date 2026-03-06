@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:meta/meta.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 /// Defines the roles in the P2P Mesh
@@ -20,6 +21,8 @@ class MeshNetworkService {
   final MeshRole role;
   final String classroomPin;
   bool _isConnected = false;
+  @visibleForTesting
+  bool isConnected = false;
 
   // Networking properties
   RawDatagramSocket? _udpSocket;
@@ -102,7 +105,7 @@ class MeshNetworkService {
       } else {
         await _startStudentNode();
       }
-      _isConnected = true;
+      isConnected = true;
     } catch (e) {
       print('Failed to start mesh network: $e');
       print('Attempting Easy Connection Discovery fallback...');
@@ -125,7 +128,7 @@ class MeshNetworkService {
     print('Connected to Global Educational Network via LEO Satellite.');
     print('Zero-rated lifelong learning access granted.');
 
-    _isConnected = true;
+    isConnected = true;
 
     // In this mode, the node connects to regional master nodes rather than a local classroom swarm.
   }
@@ -144,7 +147,7 @@ class MeshNetworkService {
     _udpSocket!.broadcastEnabled = true;
 
     Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (!_isConnected) {
+      if (!isConnected) {
         timer.cancel();
         return;
       }
@@ -191,6 +194,9 @@ class MeshNetworkService {
       print('Failed to connect to teacher TCP: $e');
     }
   }
+
+  /// Visible for testing socket lifecycle handling
+  void handleIncomingDataForTest(Socket socket) => _handleIncomingData(socket);
 
   void _handleIncomingData(Socket socket) {
     socket.listen(
@@ -246,6 +252,8 @@ class MeshNetworkService {
     );
   }
 
+  @visibleForTesting
+  void sendOverTcp(Map<String, dynamic> payload) {
   void _sendOverTcp(Map<String, dynamic> payload) {
     final iv = encrypt.IV.fromSecureRandom(16);
     final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
@@ -266,10 +274,10 @@ class MeshNetworkService {
 
   /// Broadcasts a locally verified credential (VC) to the teacher's node.
   Future<void> gossipCredential(String credentialId, Map<String, dynamic> data) async {
-    if (!_isConnected) throw Exception("Not connected to mesh.");
+    if (!isConnected) throw Exception("Not connected to mesh.");
     print('Gossiping credential $credentialId...');
 
-    _sendOverTcp({
+    sendOverTcp({
       'type': 'CREDENTIAL_GOSSIP',
       'id': credentialId,
       'payload': data
@@ -278,17 +286,17 @@ class MeshNetworkService {
 
   /// Syncs the dynamic workbook state via WebRTC/TCP for real-time offline collaboration.
   Future<void> syncCanvasState(List<Map<String, dynamic>> strokes) async {
-     if (!_isConnected) return;
+     if (!isConnected) return;
      print('Syncing canvas state: ${strokes.length} strokes');
 
-     _sendOverTcp({
+     sendOverTcp({
        'type': 'CANVAS_SYNC',
        'strokes': strokes
      });
   }
 
   void disconnect() {
-    _isConnected = false;
+    isConnected = false;
     _udpSocket?.close();
     _tcpServerSocket?.close();
     _teacherTcpSocket?.destroy();
