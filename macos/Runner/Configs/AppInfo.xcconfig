@@ -8,7 +8,7 @@
 PRODUCT_NAME = ontarioedai
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.ontarioedai
+PRODUCT_BUNDLE_IDENTIFIER = com.zoverions.ontarioedai
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.

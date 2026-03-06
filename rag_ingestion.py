@@ -1,5 +1,6 @@
 import json
 import os
+import itertools
 import chromadb
 from chromadb.utils import embedding_functions
 
@@ -26,50 +27,63 @@ def ingest_to_chroma(curriculum_data):
         embedding_function=sentence_transformer_ef
     )
 
-    documents = []
-    metadatas = []
-    ids = []
+    def extract_expectations():
+        courses = curriculum_data.get('courses', {})
+        for course_code, course_info in courses.items():
+            course_name = course_info.get('name', 'Unknown Course')
+            strands = course_info.get('strands', {})
 
-    print("Processing curriculum data...")
-    courses = curriculum_data.get('courses', {})
-    for course_code, course_info in courses.items():
-        course_name = course_info.get('name', 'Unknown Course')
-        strands = course_info.get('strands', {})
+            for strand_name, expectations in strands.items():
+                for exp in expectations:
+                    exp_id = exp.get('id', f"{course_code}-{hash(exp.get('expectation', ''))}")
+                    text = exp.get('expectation', '')
 
-        for strand_name, expectations in strands.items():
-            for exp in expectations:
-                exp_id = exp.get('id', f"{course_code}-{hash(exp.get('expectation', ''))}")
-                text = exp.get('expectation', '')
+                    # The document to be embedded and searched
+                    document = f"Course: {course_name} ({course_code}). Strand: {strand_name}. Expectation: {text}"
 
-                # The document to be embedded and searched
-                document = f"Course: {course_name} ({course_code}). Strand: {strand_name}. Expectation: {text}"
+                    metadata = {
+                        "course_code": course_code,
+                        "course_name": course_name,
+                        "strand": strand_name,
+                        "expectation_raw": text,
+                        "tags": ",".join(exp.get('tags', []))
+                    }
 
-                documents.append(document)
-                metadatas.append({
-                    "course_code": course_code,
-                    "course_name": course_name,
-                    "strand": strand_name,
-                    "expectation_raw": text,
-                    "tags": ",".join(exp.get('tags', []))
-                })
-                ids.append(exp_id)
+                    yield document, metadata, exp_id
 
-    if not documents:
-        print("No expectations found to ingest.")
-        return
-
-    print(f"Ingesting {len(documents)} expectations into ChromaDB...")
+    print("Processing and ingesting curriculum data into ChromaDB...")
 
     # Batch ingest to avoid memory issues with huge datasets
     batch_size = 500
-    for i in range(0, len(documents), batch_size):
-        end_idx = min(i + batch_size, len(documents))
-        print(f"  Adding batch {i} to {end_idx}...")
+    total_ingested = 0
+
+    iterator = extract_expectations()
+    while True:
+        batch = list(itertools.islice(iterator, batch_size))
+        if not batch:
+            break
+
+        batch_docs, batch_metas, batch_ids = zip(*batch)
+
+        # Convert tuples to lists as required by ChromaDB
+        docs_list = list(batch_docs)
+        metas_list = list(batch_metas)
+        ids_list = list(batch_ids)
+
+        start_idx = total_ingested
+        end_idx = total_ingested + len(docs_list)
+        print(f"  Adding batch {start_idx} to {end_idx}...")
+
         collection.upsert(
-            documents=documents[i:end_idx],
-            metadatas=metadatas[i:end_idx],
-            ids=ids[i:end_idx]
+            documents=docs_list,
+            metadatas=metas_list,
+            ids=ids_list
         )
+        total_ingested += len(docs_list)
+
+    if total_ingested == 0:
+        print("No expectations found to ingest.")
+        return
 
     print("Ingestion complete!")
 
