@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -7,6 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DatabaseService {
   static Database? _database;
+
+  // Add for testing
+  @visibleForTesting
+  static void setDatabase(Database db) {
+    _database = db;
+  }
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
