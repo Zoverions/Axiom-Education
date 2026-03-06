@@ -34,11 +34,13 @@ COURSE_META = {
 }
 
 # ── IRT difficulty heuristics (calibrated from pilot data) ───────────────────
+VOWEL_PATTERN = re.compile(r'[aeiouAEIOU]')
+
 def estimate_irt(text: str, grade: int) -> dict:
     """Heuristic IRT calibration from text complexity + grade level."""
     words = text.split()
     avg_word_len = sum(len(w) for w in words) / max(len(words), 1)
-    syllable_estimate = sum(max(1, len(re.findall(r'[aeiouAEIOU]', w))) for w in words)
+    syllable_estimate = sum(max(1, len(VOWEL_PATTERN.findall(w))) for w in words)
     complexity = (avg_word_len * 0.15 + syllable_estimate / max(len(words), 1) * 0.2)
     base_b = (grade - 9) * 0.5  # Grade 9 → 0, Grade 12 → 1.5
     b = (base_b + complexity - 1.0).clip(-3.0, 3.0) if hasattr(base_b, 'clip') else max(-3.0, min(3.0, base_b + complexity - 1.0))
