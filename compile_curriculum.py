@@ -48,11 +48,16 @@ def estimate_irt(text: str, grade: int) -> dict:
 def extract_tags(text: str) -> list:
     tags = []
     low = text.lower()
-    if any(w in low for w in ['write', 'written', 'paragraph', 'essay']): tags.append('writing')
-    if any(w in low for w in ['read', 'text', 'source', 'analyse']): tags.append('reading')
-    if any(w in low for w in ['solve', 'calculate', 'equation', 'graph']): tags.append('math')
-    if any(w in low for w in ['eqao', 'provincial', 'standardized']): tags.append('eqao')
-    if any(w in low for w in ['write', 'note', 'diagram', 'label']): tags.append('stylus')
+    if 'write' in low or 'written' in low or 'paragraph' in low or 'essay' in low:
+        tags.append('writing')
+    if 'read' in low or 'text' in low or 'source' in low or 'analyse' in low:
+        tags.append('reading')
+    if 'solve' in low or 'calculate' in low or 'equation' in low or 'graph' in low:
+        tags.append('math')
+    if 'eqao' in low or 'provincial' in low or 'standardized' in low:
+        tags.append('eqao')
+    if 'write' in low or 'note' in low or 'diagram' in low or 'label' in low:
+        tags.append('stylus')
     return tags
 
 # ── Strand pattern: "A. Strand Title" or "Strand A:" ─────────────────────────
