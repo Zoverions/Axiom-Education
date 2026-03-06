@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:crypto/crypto.dart';
+import 'package:meta/meta.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -17,6 +19,8 @@ enum MeshRole {
 /// leveraging UDP multicast for discovery and TCP for data sync.
 class MeshNetworkService {
   final MeshRole role;
+  final String classroomPin;
+  bool _isConnected = false;
   @visibleForTesting
   bool isConnected = false;
 
@@ -30,6 +34,54 @@ class MeshNetworkService {
   static const int _dataPort = 4546;
   static const String _multicastGroup = '224.0.0.1'; // Standard local multicast
 
+  MeshNetworkService({
+    this.role = MeshRole.studentNode,
+    this.classroomPin = 'default_pin',
+  });
+
+  @visibleForTesting
+  String generateDiscoveryPayload() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final message = 'TEACHER_NODE_HERE';
+    final dataToSign = '${timestamp}_$message';
+    final hmac = Hmac(sha256, utf8.encode(classroomPin));
+    final signature = hmac.convert(utf8.encode(dataToSign)).toString();
+
+    final payload = {
+      'msg': message,
+      'timestamp': timestamp,
+      'signature': signature,
+    };
+    return jsonEncode(payload);
+  }
+
+  @visibleForTesting
+  bool verifyDiscoveryPayload(String jsonPayload) {
+    try {
+      final payload = jsonDecode(jsonPayload) as Map<String, dynamic>;
+      final msg = payload['msg'] as String?;
+      final timestamp = payload['timestamp'] as int?;
+      final signature = payload['signature'] as String?;
+
+      if (msg != 'TEACHER_NODE_HERE' || timestamp == null || signature == null) {
+        return false;
+      }
+
+      final now = DateTime.now().millisecondsSinceEpoch;
+      // Allow a 30-second window
+      if ((now - timestamp).abs() > 30000) {
+        return false;
+      }
+
+      final dataToSign = '${timestamp}_$msg';
+      final hmac = Hmac(sha256, utf8.encode(classroomPin));
+      final expectedSignature = hmac.convert(utf8.encode(dataToSign)).toString();
+
+      return expectedSignature == signature;
+    } catch (e) {
+      return false;
+    }
+  }
   // A shared key for the classroom mesh. In a real environment,
   // this would be provisioned dynamically via Diffie-Hellman or MDM.
   // For the scope of this offline MVP, we use a key derived from an environmental
@@ -99,7 +151,8 @@ class MeshNetworkService {
         timer.cancel();
         return;
       }
-      final msg = utf8.encode('TEACHER_NODE_HERE');
+      final discoveryJson = generateDiscoveryPayload();
+      final msg = utf8.encode(discoveryJson);
       _udpSocket!.send(msg, InternetAddress(_multicastGroup), _discoveryPort);
     });
 
@@ -119,11 +172,13 @@ class MeshNetworkService {
         Datagram? datagram = _udpSocket!.receive();
         if (datagram != null) {
           String msg = utf8.decode(datagram.data);
-          if (msg == 'TEACHER_NODE_HERE') {
+          if (verifyDiscoveryPayload(msg)) {
             print('Teacher node discovered at ${datagram.address.address}');
             // 2. Connect via TCP
             await _connectToTeacher(datagram.address.address);
             break; // Stop listening once connected
+          } else {
+            print('Ignored unauthenticated or malformed teacher broadcast.');
           }
         }
       }
