@@ -41,10 +41,14 @@ class DatabaseService {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
 
-      ByteData data = await rootBundle.load("assets/curriculum/ontario_curriculum.sqlite");
-      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-
-      await File(path).writeAsBytes(bytes, flush: true);
+      try {
+        ByteData data = await rootBundle.load("assets/curriculum/ontario_curriculum.sqlite");
+        List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+        await File(path).writeAsBytes(bytes, flush: true);
+      } catch (_) {
+        // Fallback or ignore if we cannot write the initial database
+        // openDatabase will either create a new blank db or fail gracefully
+      }
     }
 
     return await openDatabase(path, version: 1);
