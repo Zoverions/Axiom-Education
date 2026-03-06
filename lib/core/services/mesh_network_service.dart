@@ -125,6 +125,9 @@ class MeshNetworkService {
     }
   }
 
+  /// Visible for testing socket lifecycle handling
+  void handleIncomingDataForTest(Socket socket) => _handleIncomingData(socket);
+
   void _handleIncomingData(Socket socket) {
     socket.listen(
       (List<int> data) {
