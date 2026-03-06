@@ -152,13 +152,24 @@ class WatcherModel {
     }
   }
 
+  // For testing purposes
+  void setInterpreterForTest(Interpreter interpreter) {
+    _interpreter = interpreter;
+    _isInitialized = true;
+  }
+
   /// Parses the canvas visual input (or stroke history)
   Future<String> parseCanvas(Uint8List imageBytes) async {
     if (!_isInitialized || _interpreter == null) return "Mock parsed equation: y = mx + b";
 
     try {
       // 1. Decode and preprocess the image
-      img.Image? decodedImage = img.decodeImage(imageBytes);
+      img.Image? decodedImage;
+      try {
+        decodedImage = img.decodeImage(imageBytes);
+      } catch (e) {
+        return "Failed to decode image";
+      }
       if (decodedImage == null) return "Failed to decode image";
 
       // Resize to model's expected input size, e.g., 224x224
