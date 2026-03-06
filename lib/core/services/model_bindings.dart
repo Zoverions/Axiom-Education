@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:onnxruntime/onnxruntime.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
@@ -15,8 +16,10 @@ class Phi3MiniModel {
       final sessionOptions = OrtSessionOptions();
       // Use NNAPI for NPU on Android, CoreML on iOS if applicable
       // sessionOptions.appendExecutionProvider_Nnapi();
-      _session = OrtSession.fromAsset(
-          'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+
+      final rawAssetFile = await rootBundle.load('assets/models/phi3-mini-4k-instruct-q4.onnx');
+      final bytes = rawAssetFile.buffer.asUint8List();
+      _session = OrtSession.fromBuffer(bytes, sessionOptions);
       _isInitialized = true;
       print('Phi3 model initialized successfully.');
     } catch (e) {
@@ -49,8 +52,8 @@ class Phi3MiniModel {
       // 3. Extract output tokens and decode
       // Assuming output is logits: shape [batch, seq_len, vocab_size]
       // This is a simplified extraction. Real LLM inference requires auto-regressive decoding (looping).
-      final OrtValueTensor? logitsTensor = outputs[0];
-      final List<dynamic> logits = logitsTensor?.value as List<dynamic>;
+      final OrtValueTensor? logitsTensor = outputs.isNotEmpty ? outputs[0] as OrtValueTensor? : null;
+      final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
 
       inputIdsTensor.release();
       attentionMaskTensor.release();
@@ -82,15 +85,24 @@ class HandwritingScorer {
   Interpreter? _interpreter;
   bool _isInitialized = false;
 
-  Future<void> initModel() async {
+  // Add getter for testing
+  bool get isInitialized => _isInitialized;
+
+  // Dependency injection for testing: inject an explicit asset path or mock loader
+  Future<void> initModel({Future<Interpreter> Function()? interpreterLoader}) async {
     if (_isInitialized) return;
     try {
-      final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+      if (interpreterLoader != null) {
+          _interpreter = await interpreterLoader();
+      } else {
+          final options = InterpreterOptions()..threads = 4;
+          _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+      }
       _isInitialized = true;
       print('Handwriting Scorer initialized successfully.');
     } catch (e) {
       print('Failed to initialize handwriting scorer: $e');
+      _isInitialized = false; // ensure state is maintained
     }
   }
 
