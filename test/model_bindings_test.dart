@@ -24,6 +24,19 @@ void main() {
       final result = await model.parseCanvas(invalidImage);
 
       expect(result, "Failed to decode image");
+
+void main() {
+  group('WatcherModel Tests', () {
+    test('parseCanvas should return fallback mock equation when uninitialized', () async {
+      // Arrange
+      final watcherModel = WatcherModel();
+      final emptyBytes = Uint8List(0);
+
+      // Act
+      final result = await watcherModel.parseCanvas(emptyBytes);
+
+      // Assert
+      expect(result, "Mock parsed equation: y = mx + b");
     });
   });
 }
