@@ -8,15 +8,21 @@ class Phi3MiniModel {
   OrtSession? _session;
   bool _isInitialized = false;
 
-  Future<void> initModel() async {
+  Future<void> initModel({Future<OrtSession> Function(String path, OrtSessionOptions options)? mockSessionLoader}) async {
     if (_isInitialized) return;
     try {
       OrtEnv.instance.init();
       final sessionOptions = OrtSessionOptions();
       // Use NNAPI for NPU on Android, CoreML on iOS if applicable
       // sessionOptions.appendExecutionProvider_Nnapi();
-      _session = OrtSession.fromAsset(
-          'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+
+      if (mockSessionLoader != null) {
+        _session = await mockSessionLoader('assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+      } else {
+        _session = OrtSession.fromAsset(
+            'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+      }
+
       _isInitialized = true;
       print('Phi3 model initialized successfully.');
     } catch (e) {
@@ -49,8 +55,8 @@ class Phi3MiniModel {
       // 3. Extract output tokens and decode
       // Assuming output is logits: shape [batch, seq_len, vocab_size]
       // This is a simplified extraction. Real LLM inference requires auto-regressive decoding (looping).
-      final OrtValueTensor? logitsTensor = outputs[0];
-      final List<dynamic> logits = logitsTensor?.value as List<dynamic>;
+      final OrtValueTensor? logitsTensor = outputs[0] as OrtValueTensor?;
+      final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
 
       inputIdsTensor.release();
       attentionMaskTensor.release();
