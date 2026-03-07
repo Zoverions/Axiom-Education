@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:onnxruntime/onnxruntime.dart';
+
+export 'handwriting_scorer.dart';
+export 'watcher_model.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/foundation.dart';
