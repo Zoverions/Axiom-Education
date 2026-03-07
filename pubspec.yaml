@@ -16,7 +16,7 @@ dependencies:
   hive_flutter: ^1.1.0
   path_provider: ^2.1.4
   onnxruntime: ^1.4.0
-  tflite_flutter: ^0.10.4
+  tflite_flutter: ^0.11.0
   camera: ^0.11.0
   google_mlkit_pose_detection: ^0.9.0
   pdf: ^3.11.1
@@ -29,6 +29,9 @@ dependencies:
   path: ^1.8.3
   sqflite_common_ffi: ^2.4.0+2
   image: ^4.5.4
+  crypto: ^3.0.7
+  meta: ^1.17.0
+  encrypt: ^5.0.3
 
 dev_dependencies:
   hive_generator: ^2.0.1
