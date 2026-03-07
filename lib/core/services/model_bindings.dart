@@ -1,7 +1,10 @@
 import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:onnxruntime/onnxruntime.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 /// ONNX model binding for Phi-3-mini
 class Phi3MiniModel {
@@ -23,6 +26,9 @@ class Phi3MiniModel {
             'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
       }
 
+      final rawAssetFile = await rootBundle.load('assets/models/phi3-mini-4k-instruct-q4.onnx');
+      final bytes = rawAssetFile.buffer.asUint8List();
+      _session = OrtSession.fromBuffer(bytes, sessionOptions);
       _isInitialized = true;
       print('Phi3 model initialized successfully.');
     } catch (e) {
@@ -57,6 +63,10 @@ class Phi3MiniModel {
       // This is a simplified extraction. Real LLM inference requires auto-regressive decoding (looping).
       final OrtValueTensor? logitsTensor = outputs[0] as OrtValueTensor?;
       final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
+      final OrtValueTensor? logitsTensor = outputs.isNotEmpty ? outputs[0] as OrtValueTensor? : null;
+      final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
+      final OrtValue? logitsTensor = outputs[0];
+      final List<dynamic> logits = (logitsTensor?.value as List<dynamic>?) ?? [];
 
       inputIdsTensor.release();
       attentionMaskTensor.release();
@@ -88,16 +98,41 @@ class HandwritingScorer {
   Interpreter? _interpreter;
   bool _isInitialized = false;
 
-  Future<void> initModel() async {
+  // Add getter for testing
+  bool get isInitialized => _isInitialized;
+
+  // Dependency injection for testing: inject an explicit asset path or mock loader
+  Future<void> initModel({Future<Interpreter> Function()? interpreterLoader}) async {
     if (_isInitialized) return;
     try {
-      final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+      if (interpreterLoader != null) {
+          _interpreter = await interpreterLoader();
+      } else {
+          final options = InterpreterOptions()..threads = 4;
+          _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+      }
       _isInitialized = true;
       print('Handwriting Scorer initialized successfully.');
     } catch (e) {
       print('Failed to initialize handwriting scorer: $e');
+      _isInitialized = false; // ensure state is maintained
     }
+  }
+
+  @visibleForTesting
+  List<List<List<double>>> preprocessStrokes(List<Map<String, dynamic>> strokes) {
+    const int maxStrokes = 100;
+    var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
+
+    int strokeIdx = 0;
+    for (var stroke in strokes) {
+      if (strokeIdx >= maxStrokes) break;
+      inputTensor[0][strokeIdx][0] = (stroke['x'] as double?) ?? 0.0;
+      inputTensor[0][strokeIdx][1] = (stroke['y'] as double?) ?? 0.0;
+      inputTensor[0][strokeIdx][2] = (stroke['pressure'] as double?) ?? 0.5;
+      strokeIdx++;
+    }
+    return inputTensor;
   }
 
   /// Evaluates stylus pressure and stroke consistency.
@@ -107,17 +142,7 @@ class HandwritingScorer {
 
     try {
       // 1. Preprocess strokes into tensor shape [1, MAX_STROKES, 3] (x, y, pressure)
-      const int maxStrokes = 100;
-      var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
-
-      int strokeIdx = 0;
-      for (var stroke in strokes) {
-        if (strokeIdx >= maxStrokes) break;
-        inputTensor[0][strokeIdx][0] = (stroke['x'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][1] = (stroke['y'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][2] = (stroke['pressure'] as double?) ?? 0.5;
-        strokeIdx++;
-      }
+      var inputTensor = preprocessStrokes(strokes);
 
       // 2. Output tensor shape [1, 2] for pressure and consistency scores
       var outputTensor = List.generate(1, (_) => List.filled(2, 0.0));
@@ -158,13 +183,24 @@ class WatcherModel {
     }
   }
 
+  // For testing purposes
+  void setInterpreterForTest(Interpreter interpreter) {
+    _interpreter = interpreter;
+    _isInitialized = true;
+  }
+
   /// Parses the canvas visual input (or stroke history)
   Future<String> parseCanvas(Uint8List imageBytes) async {
     if (!_isInitialized || _interpreter == null) return "Mock parsed equation: y = mx + b";
 
     try {
       // 1. Decode and preprocess the image
-      img.Image? decodedImage = img.decodeImage(imageBytes);
+      img.Image? decodedImage;
+      try {
+        decodedImage = img.decodeImage(imageBytes);
+      } catch (e) {
+        return "Failed to decode image";
+      }
       if (decodedImage == null) return "Failed to decode image";
 
       // Resize to model's expected input size, e.g., 224x224
