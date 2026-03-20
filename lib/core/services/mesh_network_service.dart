@@ -35,8 +35,8 @@ class MeshNetworkService {
   static const String _multicastGroup = '224.0.0.1'; // Standard local multicast
 
   MeshNetworkService({
+    required this.classroomPin,
     this.role = MeshRole.studentNode,
-    this.classroomPin = 'default_pin',
   });
 
   @visibleForTesting
@@ -92,8 +92,6 @@ class MeshNetworkService {
       ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY').padRight(32, '0').substring(0, 32))
       : encrypt.Key.fromSecureRandom(32);
   static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
-
-  MeshNetworkService({this.role = MeshRole.studentNode});
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
   /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
@@ -254,7 +252,6 @@ class MeshNetworkService {
 
   @visibleForTesting
   void sendOverTcp(Map<String, dynamic> payload) {
-  void _sendOverTcp(Map<String, dynamic> payload) {
     final iv = encrypt.IV.fromSecureRandom(16);
     final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
     final messageStr = '${iv.base64}:${encrypted.base64}\n';
