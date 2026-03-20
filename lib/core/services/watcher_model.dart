@@ -11,17 +11,20 @@ class WatcherModel {
     if (_isInitialized) return;
     try {
       final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset('assets/models/watcher_vision.tflite', options: options);
+      _interpreter = await Interpreter.fromAsset(
+        'assets/models/watcher_vision.tflite',
+        options: options,
+      );
       _isInitialized = true;
-      print('Watcher Vision Model initialized successfully.');
     } catch (e) {
-      print('Failed to initialize Watcher model: $e');
+      // Error is caught but not printed
     }
   }
 
   /// Parses the canvas visual input (or stroke history)
   Future<String> parseCanvas(Uint8List imageBytes) async {
-    if (!_isInitialized || _interpreter == null) return "Mock parsed equation: y = mx + b";
+    if (!_isInitialized || _interpreter == null)
+      return "Mock parsed equation: y = mx + b";
 
     try {
       // 1. Decode and preprocess the image
@@ -29,10 +32,20 @@ class WatcherModel {
       if (decodedImage == null) return "Failed to decode image";
 
       // Resize to model's expected input size, e.g., 224x224
-      img.Image resizedImage = img.copyResize(decodedImage, width: 224, height: 224);
+      img.Image resizedImage = img.copyResize(
+        decodedImage,
+        width: 224,
+        height: 224,
+      );
 
       // Convert to a 4D tensor: [1, 224, 224, 3] float32 array
-      var inputTensor = List.generate(1, (_) => List.generate(224, (_) => List.generate(224, (_) => List.filled(3, 0.0))));
+      var inputTensor = List.generate(
+        1,
+        (_) => List.generate(
+          224,
+          (_) => List.generate(224, (_) => List.filled(3, 0.0)),
+        ),
+      );
       for (int y = 0; y < 224; y++) {
         for (int x = 0; x < 224; x++) {
           img.Pixel pixel = resizedImage.getPixel(x, y);
@@ -65,7 +78,6 @@ class WatcherModel {
       // In a real scenario, maxIdx would be mapped to a label map (e.g. {0: '+', 1: '-', ...})
       return "Parsed symbol ID: $maxIdx with probability ${maxProb.toStringAsFixed(2)}";
     } catch (e) {
-      print('Watcher inference error: $e');
       return "Error parsing canvas image.";
     }
   }

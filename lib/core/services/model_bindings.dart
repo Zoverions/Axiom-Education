@@ -14,7 +14,10 @@ class Phi3MiniModel {
   OrtSession? _session;
   bool _isInitialized = false;
 
-  Future<void> initModel({Future<OrtSession> Function(String path, OrtSessionOptions options)? mockSessionLoader}) async {
+  Future<void> initModel({
+    Future<OrtSession> Function(String path, OrtSessionOptions options)?
+    mockSessionLoader,
+  }) async {
     if (_isInitialized) return;
     try {
       OrtEnv.instance.init();
@@ -23,19 +26,25 @@ class Phi3MiniModel {
       // sessionOptions.appendExecutionProvider_Nnapi();
 
       if (mockSessionLoader != null) {
-        _session = await mockSessionLoader('assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+        _session = await mockSessionLoader(
+          'assets/models/phi3-mini-4k-instruct-q4.onnx',
+          sessionOptions,
+        );
       } else {
         _session = OrtSession.fromAsset(
-            'assets/models/phi3-mini-4k-instruct-q4.onnx', sessionOptions);
+          'assets/models/phi3-mini-4k-instruct-q4.onnx',
+          sessionOptions,
+        );
       }
 
-      final rawAssetFile = await rootBundle.load('assets/models/phi3-mini-4k-instruct-q4.onnx');
+      final rawAssetFile = await rootBundle.load(
+        'assets/models/phi3-mini-4k-instruct-q4.onnx',
+      );
       final bytes = rawAssetFile.buffer.asUint8List();
       _session = OrtSession.fromBuffer(bytes, sessionOptions);
       _isInitialized = true;
-      print('Phi3 model initialized successfully.');
     } catch (e) {
-      print('Failed to initialize Phi3 model: $e');
+      // Error is caught but not printed to console in production
     }
   }
 
@@ -46,11 +55,23 @@ class Phi3MiniModel {
       // 1. Tokenize prompt (Placeholder for actual BPE tokenization)
       // In a real production app, you would use a Dart port of the transformers tokenizer
       // or interface with a native tokenizer library.
-      final List<Int64List> inputIds = [Int64List.fromList(prompt.codeUnits.map((c) => BigInt.from(c).toInt()).toList())];
-      final List<Int64List> attentionMask = [Int64List.fromList(List.filled(prompt.codeUnits.length, 1))];
+      final List<Int64List> inputIds = [
+        Int64List.fromList(
+          prompt.codeUnits.map((c) => BigInt.from(c).toInt()).toList(),
+        ),
+      ];
+      final List<Int64List> attentionMask = [
+        Int64List.fromList(List.filled(prompt.codeUnits.length, 1)),
+      ];
 
-      final inputIdsTensor = OrtValueTensor.createTensorWithDataList(inputIds, [1, prompt.codeUnits.length]);
-      final attentionMaskTensor = OrtValueTensor.createTensorWithDataList(attentionMask, [1, prompt.codeUnits.length]);
+      final inputIdsTensor = OrtValueTensor.createTensorWithDataList(inputIds, [
+        1,
+        prompt.codeUnits.length,
+      ]);
+      final attentionMaskTensor = OrtValueTensor.createTensorWithDataList(
+        attentionMask,
+        [1, prompt.codeUnits.length],
+      );
 
       final runOptions = OrtRunOptions();
       final inputs = {
@@ -64,12 +85,9 @@ class Phi3MiniModel {
       // 3. Extract output tokens and decode
       // Assuming output is logits: shape [batch, seq_len, vocab_size]
       // This is a simplified extraction. Real LLM inference requires auto-regressive decoding (looping).
-      final OrtValueTensor? logitsTensor = outputs[0] as OrtValueTensor?;
-      final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
-      final OrtValueTensor? logitsTensor = outputs.isNotEmpty ? outputs[0] as OrtValueTensor? : null;
-      final List<dynamic> logits = logitsTensor?.value as List<dynamic>? ?? [];
       final OrtValue? logitsTensor = outputs[0];
-      final List<dynamic> logits = (logitsTensor?.value as List<dynamic>?) ?? [];
+      final List<dynamic> logits =
+          (logitsTensor?.value as List<dynamic>?) ?? [];
 
       inputIdsTensor.release();
       attentionMaskTensor.release();
@@ -84,7 +102,6 @@ class Phi3MiniModel {
       // meaningful text strings. For demonstration, we simulate decoding based on logits size.
       return "Simulated response generated. Logits shape length: ${logits.length}";
     } catch (e) {
-      print('Inference error: $e');
       return "Error during model inference.";
     }
   }
@@ -105,27 +122,35 @@ class HandwritingScorer {
   bool get isInitialized => _isInitialized;
 
   // Dependency injection for testing: inject an explicit asset path or mock loader
-  Future<void> initModel({Future<Interpreter> Function()? interpreterLoader}) async {
+  Future<void> initModel({
+    Future<Interpreter> Function()? interpreterLoader,
+  }) async {
     if (_isInitialized) return;
     try {
       if (interpreterLoader != null) {
-          _interpreter = await interpreterLoader();
+        _interpreter = await interpreterLoader();
       } else {
-          final options = InterpreterOptions()..threads = 4;
-          _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+        final options = InterpreterOptions()..threads = 4;
+        _interpreter = await Interpreter.fromAsset(
+          'assets/models/handwriting_scorer.tflite',
+          options: options,
+        );
       }
       _isInitialized = true;
-      print('Handwriting Scorer initialized successfully.');
     } catch (e) {
-      print('Failed to initialize handwriting scorer: $e');
       _isInitialized = false; // ensure state is maintained
     }
   }
 
   @visibleForTesting
-  List<List<List<double>>> preprocessStrokes(List<Map<String, dynamic>> strokes) {
+  List<List<List<double>>> preprocessStrokes(
+    List<Map<String, dynamic>> strokes,
+  ) {
     const int maxStrokes = 100;
-    var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
+    var inputTensor = List.generate(
+      1,
+      (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)),
+    );
 
     int strokeIdx = 0;
     for (var stroke in strokes) {
@@ -140,8 +165,11 @@ class HandwritingScorer {
 
   /// Evaluates stylus pressure and stroke consistency.
   /// Returns a record: (pressure_score, consistency_score)
-  Future<(double, double)> scoreHandwriting(List<Map<String, dynamic>> strokes) async {
-    if (!_isInitialized || _interpreter == null) return (0.8, 0.85); // fallback mock scores
+  Future<(double, double)> scoreHandwriting(
+    List<Map<String, dynamic>> strokes,
+  ) async {
+    if (!_isInitialized || _interpreter == null)
+      return (0.8, 0.85); // fallback mock scores
 
     try {
       // 1. Preprocess strokes into tensor shape [1, MAX_STROKES, 3] (x, y, pressure)
@@ -158,7 +186,6 @@ class HandwritingScorer {
 
       return (pressureScore.clamp(0.0, 1.0), consistencyScore.clamp(0.0, 1.0));
     } catch (e) {
-      print('Scorer inference error: $e');
       return (0.8, 0.85);
     }
   }
@@ -178,11 +205,13 @@ class WatcherModel {
     if (_isInitialized) return;
     try {
       final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset('assets/models/watcher_vision.tflite', options: options);
+      _interpreter = await Interpreter.fromAsset(
+        'assets/models/watcher_vision.tflite',
+        options: options,
+      );
       _isInitialized = true;
-      print('Watcher Vision Model initialized successfully.');
     } catch (e) {
-      print('Failed to initialize Watcher model: $e');
+      // Error is caught but not printed to console
     }
   }
 
@@ -194,7 +223,8 @@ class WatcherModel {
 
   /// Parses the canvas visual input (or stroke history)
   Future<String> parseCanvas(Uint8List imageBytes) async {
-    if (!_isInitialized || _interpreter == null) return "Mock parsed equation: y = mx + b";
+    if (!_isInitialized || _interpreter == null)
+      return "Mock parsed equation: y = mx + b";
 
     try {
       // 1. Decode and preprocess the image
@@ -207,10 +237,20 @@ class WatcherModel {
       if (decodedImage == null) return "Failed to decode image";
 
       // Resize to model's expected input size, e.g., 224x224
-      img.Image resizedImage = img.copyResize(decodedImage, width: 224, height: 224);
+      img.Image resizedImage = img.copyResize(
+        decodedImage,
+        width: 224,
+        height: 224,
+      );
 
       // Convert to a 4D tensor: [1, 224, 224, 3] float32 array
-      var inputTensor = List.generate(1, (_) => List.generate(224, (_) => List.generate(224, (_) => List.filled(3, 0.0))));
+      var inputTensor = List.generate(
+        1,
+        (_) => List.generate(
+          224,
+          (_) => List.generate(224, (_) => List.filled(3, 0.0)),
+        ),
+      );
       for (int y = 0; y < 224; y++) {
         for (int x = 0; x < 224; x++) {
           img.Pixel pixel = resizedImage.getPixel(x, y);
@@ -243,7 +283,6 @@ class WatcherModel {
       // In a real scenario, maxIdx would be mapped to a label map (e.g. {0: '+', 1: '-', ...})
       return "Parsed symbol ID: $maxIdx with probability ${maxProb.toStringAsFixed(2)}";
     } catch (e) {
-      print('Watcher inference error: $e');
       return "Error parsing canvas image.";
     }
   }
