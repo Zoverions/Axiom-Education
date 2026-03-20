@@ -12,6 +12,30 @@ def load_curriculum():
     with open(filepath, 'r', encoding='utf-8') as f:
         return json.load(f)
 
+def extract_expectations(curriculum_data):
+    courses = curriculum_data.get('courses', {})
+    for course_code, course_info in courses.items():
+        course_name = course_info.get('name', 'Unknown Course')
+        strands = course_info.get('strands', {})
+
+        for strand_name, expectations in strands.items():
+            for exp in expectations:
+                exp_id = exp.get('id', f"{course_code}-{hash(exp.get('expectation', ''))}")
+                text = exp.get('expectation', '')
+
+                # The document to be embedded and searched
+                document = f"Course: {course_name} ({course_code}). Strand: {strand_name}. Expectation: {text}"
+
+                metadata = {
+                    "course_code": course_code,
+                    "course_name": course_name,
+                    "strand": strand_name,
+                    "expectation_raw": text,
+                    "tags": ",".join(exp.get('tags', []))
+                }
+
+                yield document, metadata, exp_id
+
 def ingest_to_chroma(curriculum_data):
     print("Initializing ChromaDB...")
     # Initialize a local persistent Chroma client
@@ -27,37 +51,13 @@ def ingest_to_chroma(curriculum_data):
         embedding_function=sentence_transformer_ef
     )
 
-    def extract_expectations():
-        courses = curriculum_data.get('courses', {})
-        for course_code, course_info in courses.items():
-            course_name = course_info.get('name', 'Unknown Course')
-            strands = course_info.get('strands', {})
-
-            for strand_name, expectations in strands.items():
-                for exp in expectations:
-                    exp_id = exp.get('id', f"{course_code}-{hash(exp.get('expectation', ''))}")
-                    text = exp.get('expectation', '')
-
-                    # The document to be embedded and searched
-                    document = f"Course: {course_name} ({course_code}). Strand: {strand_name}. Expectation: {text}"
-
-                    metadata = {
-                        "course_code": course_code,
-                        "course_name": course_name,
-                        "strand": strand_name,
-                        "expectation_raw": text,
-                        "tags": ",".join(exp.get('tags', []))
-                    }
-
-                    yield document, metadata, exp_id
-
     print("Processing and ingesting curriculum data into ChromaDB...")
 
     # Batch ingest to avoid memory issues with huge datasets
     batch_size = 500
     total_ingested = 0
 
-    iterator = extract_expectations()
+    iterator = extract_expectations(curriculum_data)
     while True:
         batch = list(itertools.islice(iterator, batch_size))
         if not batch:
