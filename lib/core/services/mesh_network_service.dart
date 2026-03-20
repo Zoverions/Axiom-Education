@@ -20,7 +20,6 @@ enum MeshRole {
 class MeshNetworkService {
   final MeshRole role;
   final String classroomPin;
-  bool _isConnected = false;
   @visibleForTesting
   bool isConnected = false;
 
@@ -36,7 +35,7 @@ class MeshNetworkService {
 
   MeshNetworkService({
     this.role = MeshRole.studentNode,
-    this.classroomPin = 'default_pin',
+    required this.classroomPin,
   });
 
   @visibleForTesting
@@ -93,7 +92,6 @@ class MeshNetworkService {
       : encrypt.Key.fromSecureRandom(32);
   static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
 
-  MeshNetworkService({this.role = MeshRole.studentNode});
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
   /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
@@ -253,7 +251,8 @@ class MeshNetworkService {
   }
 
   @visibleForTesting
-  void sendOverTcp(Map<String, dynamic> payload) {
+  void sendOverTcp(Map<String, dynamic> payload) => _sendOverTcp(payload);
+
   void _sendOverTcp(Map<String, dynamic> payload) {
     final iv = encrypt.IV.fromSecureRandom(16);
     final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
