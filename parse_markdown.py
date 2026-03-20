@@ -1,13 +1,17 @@
 import json
 import re
 
+GRADE_RE = re.compile(r'Grade\s+(\d+)')
+VOWEL_RE = re.compile(r'[aeiouAEIOU]')
+EXPECTATION_RE = re.compile(r'^([A-Z]\d\.\d+)\s*(.*)')
+
 def create_mock_irt(course_name, text):
-    grade_match = re.search(r'Grade\s+(\d+)', course_name)
+    grade_match = GRADE_RE.search(course_name)
     grade = int(grade_match.group(1)) if grade_match else 9
 
     words = text.split()
     avg_word_len = sum(len(w) for w in words) / max(len(words), 1)
-    syllable_estimate = sum(max(1, len(re.findall(r'[aeiouAEIOU]', w))) for w in words)
+    syllable_estimate = sum(max(1, len(VOWEL_RE.findall(w))) for w in words)
     complexity = (avg_word_len * 0.15 + syllable_estimate / max(len(words), 1) * 0.2)
     base_b = (grade - 9) * 0.5
     b = max(-3.0, min(3.0, base_b + complexity - 1.0))
@@ -483,7 +487,7 @@ def main():
                 expectations = []
                 for text in texts:
                     # extract 'B1.1 ' prefix if exists, or generate a unique id
-                    match = re.match(r'^([A-Z]\d\.\d+)\s*(.*)', text)
+                    match = EXPECTATION_RE.match(text)
                     if match:
                         exp_id = f"{code}-{match.group(1)}"
                         exp_text = match.group(2)
