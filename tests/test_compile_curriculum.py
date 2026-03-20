@@ -56,6 +56,7 @@ def test_extract_tags_substring_match():
 def test_estimate_irt_empty_text():
     # Handle division by zero via max(len(words), 1)
     result = estimate_irt("", 9)
+    assert result["irt_b"] == -1.0
     assert result["irt_c"] == 0.2
     assert result["irt_a"] == 1.2
 
@@ -103,3 +104,14 @@ def test_estimate_irt_bounds():
     # base_b = 1.5
     # b = 1.5 + 8.3 - 1.0 = 8.8. Clipped to 3.0.
     assert res_high["irt_b"] == 3.0
+
+def test_estimate_irt_long_words():
+    # Test with a single extremely long word
+    long_word = "a" * 1000
+    result = estimate_irt(long_word, 9)
+    assert result["irt_b"] == 3.0
+
+    # Test with many long words
+    many_long_words = ("vowel" * 20 + " ") * 100
+    result = estimate_irt(many_long_words, 12)
+    assert result["irt_b"] == 3.0
