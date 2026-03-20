@@ -9,23 +9,31 @@ class HandwritingScorer {
     if (_isInitialized) return;
     try {
       final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset('assets/models/handwriting_scorer.tflite', options: options);
+      _interpreter = await Interpreter.fromAsset(
+        'assets/models/handwriting_scorer.tflite',
+        options: options,
+      );
       _isInitialized = true;
-      print('Handwriting Scorer initialized successfully.');
     } catch (e) {
-      print('Failed to initialize handwriting scorer: $e');
+      // Error is caught but not printed
     }
   }
 
   /// Evaluates stylus pressure and stroke consistency.
   /// Returns a record: (pressure_score, consistency_score)
-  Future<(double, double)> scoreHandwriting(List<Map<String, dynamic>> strokes) async {
-    if (!_isInitialized || _interpreter == null) return (0.8, 0.85); // fallback mock scores
+  Future<(double, double)> scoreHandwriting(
+    List<Map<String, dynamic>> strokes,
+  ) async {
+    if (!_isInitialized || _interpreter == null)
+      return (0.8, 0.85); // fallback mock scores
 
     try {
       // 1. Preprocess strokes into tensor shape [1, MAX_STROKES, 3] (x, y, pressure)
       const int maxStrokes = 100;
-      var inputTensor = List.generate(1, (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)));
+      var inputTensor = List.generate(
+        1,
+        (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)),
+      );
 
       int strokeIdx = 0;
       for (var stroke in strokes) {
@@ -47,7 +55,6 @@ class HandwritingScorer {
 
       return (pressureScore.clamp(0.0, 1.0), consistencyScore.clamp(0.0, 1.0));
     } catch (e) {
-      print('Scorer inference error: $e');
       return (0.8, 0.85);
     }
   }
