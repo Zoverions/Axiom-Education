@@ -22,10 +22,17 @@ class CurriculumLoader {
     for (var row in maps) {
       final id = row['id'] as String;
       if (!resultsMap.containsKey(id)) {
-        var newRow = Map<String, dynamic>.from(row);
-        newRow.remove('tag');
-        newRow['tags'] = <String>[];
-        resultsMap[id] = newRow;
+        // Optimization: Initialize with specific keys to avoid Map.from cloning + remove
+        // These keys must match the SELECT statement above for robustness
+        resultsMap[id] = {
+          'id': id,
+          'expectation': row['expectation'],
+          'irt_b': row['irt_b'],
+          'irt_a': row['irt_a'],
+          'irt_c': row['irt_c'],
+          'strand': row['strand'],
+          'tags': <String>[],
+        };
       }
 
       if (row['tag'] != null) {
