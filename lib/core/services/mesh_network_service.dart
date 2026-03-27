@@ -90,7 +90,7 @@ class MeshNetworkService {
   static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
       ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY').padRight(32, '0').substring(0, 32))
       : encrypt.Key.fromSecureRandom(32);
-  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
+  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey, mode: encrypt.AESMode.gcm));
 
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
