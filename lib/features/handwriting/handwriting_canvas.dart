@@ -43,7 +43,6 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
     });
 
     try {
-      // 1. Convert strokes to data structure for the Scorer
       List<Map<String, dynamic>> mockStrokeData = [];
       for (var stroke in _strokes) {
         for (var point in stroke) {
@@ -57,7 +56,6 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
 
       final (pressure, consistency) = await _scorer.scoreHandwriting(mockStrokeData);
 
-      // 2. Render canvas to image for the Watcher
       final imageBytes = await _captureCanvasAsImage();
       String parsedContent = "No drawing detected.";
       if (imageBytes != null) {
@@ -159,9 +157,6 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
               });
             },
             onPanEnd: (details) {
-              // Optionally trigger evaluation on every stroke end,
-              // or rely on a manual submit button.
-              // _evaluateDrawing();
             },
             child: CustomPaint(
               painter: _HandwritingPainter(_strokes),
