@@ -6,61 +6,23 @@ def test_create_mock_irt_grade_10():
     text = "Analyse the impact of human activities on the environment."
     result = create_mock_irt(course_name, text)
 
+    # Calculation breakdown:
     # words = ['Analyse', 'the', 'impact', 'of', 'human', 'activities', 'on', 'the', 'environment.'] (9 words)
-    # len: [7, 3, 6, 2, 5, 10, 2, 3, 12] (environment. has 12 chars)
-    # total len = 50. avg = 50/9 = 5.5555...
-    # syllables:
-    # Analyse: 3 (A, a, e)
-    # the: 1 (e)
-    # impact: 2 (i, a)
-    # of: 1 (o)
-    # human: 2 (u, a)
-    # activities: 4 (a, i, i, e)
-    # on: 1 (o)
-    # the: 1 (e)
-    # environment.: 5 (e, i, o, e, .) wait, . is not a vowel.
-    # e, i, o, e -> 4. Oh, VOWEL_RE is [aeiouAEIOU].
-    # environment.: e, i, o, e -> 4.
-    # Wait, my debug script said 20.
-    # Analyse: 3
-    # the: 1
-    # impact: 2
-    # of: 1
-    # human: 2
-    # activities: 4
-    # on: 1
-    # the: 1
-    # environment.: 5 ? Let's see: e, i, o, e, e? Yes, environment has two 'e' at the end? No.
-    # e-n-v-i-r-o-n-m-e-n-t -> e, i, o, e. 4.
-    # Wait: A-n-a-l-y-s-e -> A, a, e. 3.
-    # a-c-t-i-v-i-t-i-e-s -> a, i, i, e. 4.
-    # 3+1+2+1+2+4+1+1+4 = 19.
-    # Where did 20 come from?
-    # Maybe 'y' is considered a vowel in some regex? No, VOWEL_RE is [aeiouAEIOU].
-    # 'Analyse' -> A, a, e.
-    # 'activities' -> a, i, i, e.
-    # 'environment.' -> e, i, o, e.
-    # Let's check environment again. e-n-v-i-r-o-n-m-e-n-t.
-    # 1: e, 2: i, 3: o, 4: e.
-    # Wait, 'activities'. a-c-t-i-v-i-t-i-e-s. 1: a, 2: i, 3: i, 4: e.
-    # 3+1+2+1+2+4+1+1+4 = 19.
-    # Debug script:
-    # syllable_estimate = sum(max(1, len(VOWEL_RE.findall(w))) for w in words)
-    # environment.: e, i, o, e -> 4.
-    # activities: a, i, i, e -> 4.
-    # human: u, a -> 2.
-    # of: o -> 1.
-    # impact: i, a -> 2.
-    # the: e -> 1.
-    # Analyse: A, a, e -> 3.
-    # on: o -> 1.
-    # the: e -> 1.
-    # 3+1+2+1+2+4+1+1+4 = 19.
-    # Still 19. Why did debug script say 20?
-    # Oh! environment. split?
-    # env-ir-on-ment.
-    # Maybe it's the 'y' in Analyse? No.
-    # Let's run a small script to see findall results.
+    # lengths: [7, 3, 6, 2, 5, 10, 2, 3, 12] -> total = 50. avg_word_len = 50/9 = 5.555...
+    # syllables (vowels):
+    # - Analyse: 3 (A, a, e)
+    # - the: 1 (e)
+    # - impact: 2 (i, a)
+    # - of: 1 (o)
+    # - human: 2 (u, a)
+    # - activities: 5 (a, i, i, i, e)
+    # - on: 1 (o)
+    # - the: 1 (e)
+    # - environment.: 4 (e, i, o, e)
+    # Total syllable_estimate = 3+1+2+1+2+5+1+1+4 = 20.
+    # complexity = (5.555... * 0.15 + 20 / 9 * 0.2) = (0.8333... + 0.4444...) = 1.2777...
+    # base_b = (10 - 9) * 0.5 = 0.5
+    # b = 0.5 + 1.2777... - 1.0 = 0.7777... -> rounded to 0.78
 
     assert result["irt_b"] == 0.78
     assert result["irt_a"] == 1.3
