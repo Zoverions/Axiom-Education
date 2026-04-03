@@ -1,8 +1,8 @@
 import sqlite3
 import json
 
-def setup_database():
-    conn = sqlite3.connect('assets/curriculum/ontario_curriculum.sqlite')
+def setup_database(db_path='assets/curriculum/ontario_curriculum.sqlite'):
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Create tables
@@ -49,10 +49,10 @@ def setup_database():
     conn.commit()
     return conn, cursor
 
-def migrate_data():
-    conn, cursor = setup_database()
+def migrate_data(db_path='assets/curriculum/ontario_curriculum.sqlite', json_path='assets/curriculum/ontario_curriculum_full.json'):
+    conn, cursor = setup_database(db_path)
 
-    with open('assets/curriculum/ontario_curriculum_full.json', 'r', encoding='utf-8') as f:
+    with open(json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
     courses_to_insert = []
