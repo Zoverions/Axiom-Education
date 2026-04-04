@@ -79,3 +79,12 @@ To rebuild the curriculum databases:
 1. `python3 parse_markdown.py` (Appends new courses to the master JSON).
 2. `python3 migrate_to_sqlite.py` (Builds the relational SQL DB for the Flutter app).
 3. `python3 rag_ingestion.py` (Builds the ChromaDB vector index for the AI Tutor).
+---
+
+## Security & Privacy
+
+OntarioEdAI is built on a privacy-first, zero-trust architecture. Student data is encrypted at rest (AES-256) and never leaves the device without explicit user authorization.
+
+- **Vulnerability Reporting:** Refer to our [Security Policy](.github/SECURITY.md) for reporting guidelines.
+- **Dependency Management:** Dependabot is enabled to ensure all Flutter and Python dependencies are up-to-date.
+- **CI/CD:** Automated security scans (Secret scanning, Trivy, CodeQL) are performed on every push to the main branch.
