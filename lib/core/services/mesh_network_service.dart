@@ -90,7 +90,7 @@ class MeshNetworkService {
   static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
       ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY').padRight(32, '0').substring(0, 32))
       : encrypt.Key.fromSecureRandom(32);
-  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
+  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey, mode: encrypt.AESMode.gcm));
 
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
@@ -254,7 +254,7 @@ class MeshNetworkService {
   void sendOverTcp(Map<String, dynamic> payload) => _sendOverTcp(payload);
 
   void _sendOverTcp(Map<String, dynamic> payload) {
-    final iv = encrypt.IV.fromSecureRandom(16);
+    final iv = encrypt.IV.fromSecureRandom(12);
     final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
     final messageStr = '${iv.base64}:${encrypted.base64}\n';
 
