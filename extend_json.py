@@ -1,6 +1,5 @@
 import json
 import re
-import os
 
 def load_json(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -69,9 +68,9 @@ def process_course_data(course_id, name, url, raw_strands):
 def extend_curriculum():
     filepath = 'assets/curriculum/ontario_curriculum_full.json'
 
-    if os.path.exists(filepath):
+    try:
         curriculum = load_json(filepath)
-    else:
+    except FileNotFoundError:
         curriculum = {
             "version": "4.3.0",
             "updated": "2026-03-05",
