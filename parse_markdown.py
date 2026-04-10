@@ -33,7 +33,7 @@ def create_mock_irt(course_name, text):
         "tags": tags
     }
 
-def main():
+def main(filepath='assets/curriculum/ontario_curriculum_full.json'):
     # Because there are so many courses, I'll extract from a hardcoded list of the user's schemas.
     # Since I don't have direct access to the entire prompt string directly in python,
     # I'll create a mapping based on the provided schemas from the instructions.
@@ -466,7 +466,6 @@ def main():
       }
     }
 
-    filepath = 'assets/curriculum/ontario_curriculum_full.json'
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             curriculum = json.load(f)

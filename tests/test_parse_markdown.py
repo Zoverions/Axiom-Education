@@ -1,5 +1,37 @@
+import json
 import pytest
-from parse_markdown import create_mock_irt
+from parse_markdown import create_mock_irt, main
+
+def test_main_function(tmp_path, capsys):
+    temp_filepath = tmp_path / 'test_curriculum.json'
+
+    # First run: should create file and add courses
+    main(filepath=str(temp_filepath))
+
+    # Verify file contents
+    assert temp_filepath.exists()
+    with open(temp_filepath, 'r', encoding='utf-8') as f:
+        curriculum = json.load(f)
+
+    assert "courses" in curriculum
+    assert "CGC1W" in curriculum["courses"]
+    assert "PPL1O" in curriculum["courses"]
+    assert "strands" in curriculum["courses"]["CGC1W"]
+    assert "A_Geographic_Inquiry" in curriculum["courses"]["CGC1W"]["strands"]
+    assert len(curriculum["courses"]["CGC1W"]["strands"]["A_Geographic_Inquiry"]) > 0
+
+    # Verify output
+    captured = capsys.readouterr()
+    assert "Adding course CGC1W..." in captured.out
+    assert "Parsed new user data and appended to JSON successfully!" in captured.out
+
+    # Second run: should not duplicate or print "Adding course..."
+    main(filepath=str(temp_filepath))
+
+    # Verify second output
+    captured_second = capsys.readouterr()
+    assert "Adding course CGC1W..." not in captured_second.out
+    assert "Parsed new user data and appended to JSON successfully!" in captured_second.out
 
 def test_create_mock_irt_grade_10():
     course_name = "Science, Grade 10, Academic"
