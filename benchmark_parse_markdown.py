@@ -1,5 +1,4 @@
 import timeit
-import re
 from parse_markdown import create_mock_irt
 
 course_name = "Science, Grade 10, Academic"
