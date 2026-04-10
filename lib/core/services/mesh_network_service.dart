@@ -26,6 +26,9 @@ class MeshNetworkService {
   Socket? _teacherTcpSocket;
   final List<Socket> _studentSockets = [];
 
+  // Security properties
+  final Map<String, int> _seenNonces = {};
+
   static const int _discoveryPort = 4545;
   static const int _dataPort = 4546;
   static const String _multicastGroup = '224.0.0.1'; // Standard local multicast
@@ -39,13 +42,15 @@ class MeshNetworkService {
   String generateDiscoveryPayload() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final message = 'TEACHER_NODE_HERE';
-    final dataToSign = '${timestamp}_$message';
+    final nonce = encrypt.IV.fromSecureRandom(16).base64;
+    final dataToSign = '${timestamp}_${message}_$nonce';
     final hmac = Hmac(sha256, utf8.encode(classroomPin));
     final signature = hmac.convert(utf8.encode(dataToSign)).toString();
 
     final payload = {
       'msg': message,
       'timestamp': timestamp,
+      'nonce': nonce,
       'signature': signature,
     };
     return jsonEncode(payload);
@@ -57,26 +62,43 @@ class MeshNetworkService {
       final payload = jsonDecode(jsonPayload) as Map<String, dynamic>;
       final msg = payload['msg'] as String?;
       final timestamp = payload['timestamp'] as int?;
+      final nonce = payload['nonce'] as String?;
       final signature = payload['signature'] as String?;
 
       if (msg != 'TEACHER_NODE_HERE' ||
           timestamp == null ||
+          nonce == null ||
           signature == null) {
         return false;
       }
 
       final now = DateTime.now().millisecondsSinceEpoch;
+
+      // Cleanup old nonces based on their original timestamp
+      // A packet is valid if its timestamp is within 30s of `now`.
+      // Once `now > time + 30000`, the packet would naturally expire anyway.
+      _seenNonces.removeWhere((key, time) => now > time + 30000);
+
+      if (_seenNonces.containsKey(nonce)) {
+        return false; // Replay attack detected
+      }
+
       // Allow a 30-second window
       if ((now - timestamp).abs() > 30000) {
         return false;
       }
 
-      final dataToSign = '${timestamp}_$msg';
+      final dataToSign = '${timestamp}_${msg}_$nonce';
       final hmac = Hmac(sha256, utf8.encode(classroomPin));
       final expectedSignature =
           hmac.convert(utf8.encode(dataToSign)).toString();
 
-      return expectedSignature == signature;
+      if (expectedSignature == signature) {
+        _seenNonces[nonce] = timestamp;
+        return true;
+      }
+
+      return false;
     } catch (e) {
       return false;
     }
@@ -203,37 +225,45 @@ class MeshNetworkService {
   void handleIncomingDataForTest(Socket socket) => _handleIncomingData(socket);
 
   void _handleIncomingData(Socket socket) {
-    // Process socket data sequentially to ensure chunks don't finish out of order
-    // when using compute.
-    socket.asyncMap((data) async {
-      try {
-        String rawData = utf8.decode(data, allowMalformed: true);
+    socket.listen(
+      (List<int> data) {
+        try {
+          String rawData = utf8.decode(data, allowMalformed: true);
+          List<String> messages = rawData.split('\n');
 
-        // Offload decryption and JSON parsing to a background isolate
-        return await compute(_parseMeshMessagesIsolate, {
-          'rawData': rawData,
-          'sharedKeyBase64': _sharedKey.base64,
-        });
-      } catch (e) {
-        print('Failed to decode incoming data: $e');
-        return <Map<String, dynamic>>[];
-      }
-    }).listen(
-      (parsedPayloads) {
-        for (var payload in parsedPayloads) {
-          if (payload.containsKey('type')) {
-            String msgType = payload['type'];
-            switch (msgType) {
-              case 'CANVAS_SYNC':
-                print(
-                    'Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
-                break;
-              case 'CREDENTIAL_GOSSIP':
-                print(
-                    'Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
-                break;
-              default:
-                print('Unknown message type: $msgType');
+          for (String message in messages) {
+            message = message.trim();
+            if (message.isEmpty) continue;
+
+            try {
+              print('Received encrypted mesh data: $message');
+
+              final parts = message.split(':');
+              if (parts.length != 2)
+                throw Exception('Invalid encrypted payload format');
+
+              final iv = encrypt.IV.fromBase64(parts[0]);
+              final decryptedStr = _encrypter.decrypt64(parts[1], iv: iv);
+
+              Map<String, dynamic> payload = jsonDecode(decryptedStr);
+
+              if (payload.containsKey('type')) {
+                String msgType = payload['type'];
+                switch (msgType) {
+                  case 'CANVAS_SYNC':
+                    print(
+                        'Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
+                    break;
+                  case 'CREDENTIAL_GOSSIP':
+                    print(
+                        'Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
+                    break;
+                  default:
+                    print('Unknown message type: $msgType');
+                }
+              }
+            } catch (e) {
+              print('Failed to parse/decrypt incoming data: $e');
             }
           }
         }

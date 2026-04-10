@@ -1,5 +1,6 @@
 import json
 import re
+import uuid
 
 GRADE_RE = re.compile(r'Grade\s+(\d+)')
 VOWEL_RE = re.compile(r'[aeiouAEIOU]')
@@ -32,7 +33,7 @@ def create_mock_irt(course_name, text):
         "tags": tags
     }
 
-def main():
+def main(filepath='assets/curriculum/ontario_curriculum_full.json'):
     # Because there are so many courses, I'll extract from a hardcoded list of the user's schemas.
     # Since I don't have direct access to the entire prompt string directly in python,
     # I'll create a mapping based on the provided schemas from the instructions.
@@ -465,7 +466,6 @@ def main():
       }
     }
 
-    filepath = 'assets/curriculum/ontario_curriculum_full.json'
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             curriculum = json.load(f)
@@ -492,7 +492,7 @@ def main():
                         exp_id = f"{code}-{match.group(1)}"
                         exp_text = match.group(2)
                     else:
-                        exp_id = f"{code}-{strand_code}-{hash(text) % 10000}"
+                        exp_id = f"{code}-{strand_code}-{uuid.uuid4().hex[:8]}"
                         exp_text = text
 
                     irt = create_mock_irt(data["name"], exp_text)

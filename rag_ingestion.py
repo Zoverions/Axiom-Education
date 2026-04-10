@@ -1,16 +1,15 @@
 import json
-import os
 import itertools
 import chromadb
-from chromadb.utils import embedding_functions
 
 def load_curriculum():
     filepath = 'assets/curriculum/ontario_curriculum_full.json'
-    if not os.path.exists(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
         print(f"Error: {filepath} not found.")
         return None
-    with open(filepath, 'r', encoding='utf-8') as f:
-        return json.load(f)
 
 def extract_expectations(curriculum_data):
     courses = curriculum_data.get('courses', {})
@@ -42,7 +41,7 @@ def ingest_to_chroma(curriculum_data):
     client = chromadb.PersistentClient(path="assets/curriculum/chroma_db")
 
     # Use a lightweight local embedding model
-    sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+    sentence_transformer_ef = chromadb.utils.embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 
     # Create or get the collection
     collection_name = "ontario_curriculum"

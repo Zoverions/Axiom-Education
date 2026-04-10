@@ -1,6 +1,8 @@
 import json
 import re
-import os
+
+GRADE_RE = re.compile(r'Grade\s+(\d+)')
+VOWEL_RE = re.compile(r'[aeiouAEIOU]')
 
 def load_json(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -11,12 +13,12 @@ def save_json(data, filepath):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def create_mock_irt(course, strand, text):
-    grade_match = re.search(r'Grade\s+(\d+)', course.get('name', ''))
+    grade_match = GRADE_RE.search(course.get('name', ''))
     grade = int(grade_match.group(1)) if grade_match else 9
 
     words = text.split()
     avg_word_len = sum(len(w) for w in words) / max(len(words), 1)
-    syllable_estimate = sum(max(1, len(re.findall(r'[aeiouAEIOU]', w))) for w in words)
+    syllable_estimate = sum(max(1, len(VOWEL_RE.findall(w))) for w in words)
     complexity = (avg_word_len * 0.15 + syllable_estimate / max(len(words), 1) * 0.2)
     base_b = (grade - 9) * 0.5
     b = max(-3.0, min(3.0, base_b + complexity - 1.0))
@@ -69,9 +71,9 @@ def process_course_data(course_id, name, url, raw_strands):
 def extend_curriculum():
     filepath = 'assets/curriculum/ontario_curriculum_full.json'
 
-    if os.path.exists(filepath):
+    try:
         curriculum = load_json(filepath)
-    else:
+    except FileNotFoundError:
         curriculum = {
             "version": "4.3.0",
             "updated": "2026-03-05",
