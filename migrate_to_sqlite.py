@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3  # noqa: F401
 import json
 
 def setup_database(db_path='assets/curriculum/ontario_curriculum.sqlite'):
