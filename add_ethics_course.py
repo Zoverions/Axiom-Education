@@ -1,12 +1,7 @@
 import json
 
-def augment_ethics_course():
-    filepath = 'assets/curriculum/ontario_curriculum_full.json'
-
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            curriculum = json.load(f)
-    except FileNotFoundError:
+def augment_ethics_course(filepath='assets/curriculum/ontario_curriculum_full.json'):
+    if not os.path.exists(filepath):
         print(f"Error: {filepath} not found.")
         return
 

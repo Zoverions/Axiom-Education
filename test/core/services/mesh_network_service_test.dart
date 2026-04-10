@@ -38,6 +38,11 @@ class FakeSocket extends Fake implements Socket {
   }
 
   @override
+  Stream<E> asyncMap<E>(FutureOr<E> Function(Uint8List event) convert) {
+    return _controller.stream.asyncMap(convert);
+  }
+
+  @override
   void destroy() {
     destroyed = true;
   }
@@ -57,7 +62,8 @@ class FakeSocket extends Fake implements Socket {
 
 void main() {
   group('MeshNetworkService Authentication', () {
-    test('generateDiscoveryPayload produces valid JSON with correct structure', () {
+    test('generateDiscoveryPayload produces valid JSON with correct structure',
+        () {
       final service = MeshNetworkService(classroomPin: 'test_pin');
       final payloadJson = service.generateDiscoveryPayload();
 
@@ -67,13 +73,19 @@ void main() {
       expect(payload['msg'], equals('TEACHER_NODE_HERE'));
       expect(payload.containsKey('timestamp'), isTrue);
       expect(payload['timestamp'], isA<int>());
+      expect(payload.containsKey('nonce'), isTrue);
+      expect(payload['nonce'], isA<String>());
       expect(payload.containsKey('signature'), isTrue);
       expect(payload['signature'], isA<String>());
     });
 
-    test('verifyDiscoveryPayload returns true for valid payload with correct PIN', () {
-      final teacherService = MeshNetworkService(classroomPin: 'secret_classroom_123');
-      final studentService = MeshNetworkService(classroomPin: 'secret_classroom_123');
+    test(
+        'verifyDiscoveryPayload returns true for valid payload with correct PIN',
+        () {
+      final teacherService =
+          MeshNetworkService(classroomPin: 'secret_classroom_123');
+      final studentService =
+          MeshNetworkService(classroomPin: 'secret_classroom_123');
 
       final payloadJson = teacherService.generateDiscoveryPayload();
 
@@ -81,8 +93,28 @@ void main() {
       expect(isValid, isTrue);
     });
 
-    test('verifyDiscoveryPayload returns false for valid payload with incorrect PIN', () {
-      final teacherService = MeshNetworkService(classroomPin: 'secret_classroom_123');
+    test('verifyDiscoveryPayload returns false for replayed payload', () {
+      final teacherService =
+          MeshNetworkService(classroomPin: 'secret_classroom_123');
+      final studentService =
+          MeshNetworkService(classroomPin: 'secret_classroom_123');
+
+      final payloadJson = teacherService.generateDiscoveryPayload();
+
+      // First verification should succeed
+      final isValidFirst = studentService.verifyDiscoveryPayload(payloadJson);
+      expect(isValidFirst, isTrue);
+
+      // Second verification of the same payload should fail
+      final isValidSecond = studentService.verifyDiscoveryPayload(payloadJson);
+      expect(isValidSecond, isFalse);
+    });
+
+    test(
+        'verifyDiscoveryPayload returns false for valid payload with incorrect PIN',
+        () {
+      final teacherService =
+          MeshNetworkService(classroomPin: 'secret_classroom_123');
       final attackerService = MeshNetworkService(classroomPin: 'wrong_pin');
 
       final payloadJson = teacherService.generateDiscoveryPayload();
@@ -94,7 +126,8 @@ void main() {
     test('verifyDiscoveryPayload returns false for malformed payload', () {
       final service = MeshNetworkService(classroomPin: 'test_pin');
 
-      expect(service.verifyDiscoveryPayload('{"msg": "TEACHER_NODE_HERE"}'), isFalse);
+      expect(service.verifyDiscoveryPayload('{"msg": "TEACHER_NODE_HERE"}'),
+          isFalse);
       expect(service.verifyDiscoveryPayload('not json'), isFalse);
     });
 
@@ -106,6 +139,7 @@ void main() {
       final payloadJson = jsonEncode({
         'msg': 'TEACHER_NODE_HERE',
         'timestamp': expiredTimestamp,
+        'nonce': 'fake_nonce',
         'signature': 'fake_signature',
       });
 
@@ -119,19 +153,23 @@ void main() {
 
       await expectLater(
         service.gossipCredential('test_id', {'data': 'test'}),
-        throwsA(isA<Exception>().having((e) => e.toString(), 'message', contains('Not connected to mesh.'))),
+        throwsA(isA<Exception>().having((e) => e.toString(), 'message',
+            contains('Not connected to mesh.'))),
       );
     });
   });
 
   group('MeshNetworkService Tests', () {
-    test('startDiscovery falls back to Easy Connection on local mesh failure', () async {
-      final service = MeshNetworkService(role: MeshRole.teacherNode, classroomPin: 'test_pin');
+    test('startDiscovery falls back to Easy Connection on local mesh failure',
+        () async {
+      final service = MeshNetworkService(
+          role: MeshRole.teacherNode, classroomPin: 'test_pin');
       final logs = <String>[];
 
       // Bind to the port beforehand to cause an exception in startDiscovery
       // Teacher node attempts to bind to port 4546.
-      final blockingServer = await ServerSocket.bind(InternetAddress.anyIPv4, 4546);
+      final blockingServer =
+          await ServerSocket.bind(InternetAddress.anyIPv4, 4546);
 
       try {
         await runZoned<Future<void>>(() async {
@@ -144,11 +182,13 @@ void main() {
 
         // Assert that the fallback was attempted
         expect(
-          logs.any((log) => log.contains('Attempting Easy Connection Discovery fallback...')),
+          logs.any((log) =>
+              log.contains('Attempting Easy Connection Discovery fallback...')),
           isTrue,
         );
         expect(
-          logs.any((log) => log.contains('Connected to Global Educational Network via LEO Satellite.')),
+          logs.any((log) => log.contains(
+              'Connected to Global Educational Network via LEO Satellite.')),
           isTrue,
         );
       } finally {
@@ -196,7 +236,8 @@ void main() {
 
   group('MeshNetworkService _handleIncomingData Socket Lifecycle Tests', () {
     test('socket.destroy() is called on socket error', () async {
-      final service = MeshNetworkService(role: MeshRole.teacherNode, classroomPin: 'test_pin');
+      final service = MeshNetworkService(
+          role: MeshRole.teacherNode, classroomPin: 'test_pin');
       final fakeSocket = FakeSocket();
 
       service.handleIncomingDataForTest(fakeSocket);
@@ -210,7 +251,8 @@ void main() {
     });
 
     test('socket.destroy() is called on socket done', () async {
-      final service = MeshNetworkService(role: MeshRole.teacherNode, classroomPin: 'test_pin');
+      final service = MeshNetworkService(
+          role: MeshRole.teacherNode, classroomPin: 'test_pin');
       final fakeSocket = FakeSocket();
 
       service.handleIncomingDataForTest(fakeSocket);
@@ -224,7 +266,8 @@ void main() {
     });
 
     test('socket receives data correctly and is not destroyed', () async {
-      final service = MeshNetworkService(role: MeshRole.teacherNode, classroomPin: 'test_pin');
+      final service = MeshNetworkService(
+          role: MeshRole.teacherNode, classroomPin: 'test_pin');
       final fakeSocket = FakeSocket();
 
       service.handleIncomingDataForTest(fakeSocket);

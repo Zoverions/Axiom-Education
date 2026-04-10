@@ -8,10 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 /// Defines the roles in the P2P Mesh
-enum MeshRole {
-  teacherNode,
-  studentNode
-}
+enum MeshRole { teacherNode, studentNode }
 
 /// A service to implement a Local Area Network (LAN) Mesh.
 /// In a real cross-platform environment, this acts as the foundational fallback
@@ -29,6 +26,9 @@ class MeshNetworkService {
   Socket? _teacherTcpSocket;
   final List<Socket> _studentSockets = [];
 
+  // Security properties
+  final Map<String, int> _seenNonces = {};
+
   static const int _discoveryPort = 4545;
   static const int _dataPort = 4546;
   static const String _multicastGroup = '224.0.0.1'; // Standard local multicast
@@ -42,13 +42,15 @@ class MeshNetworkService {
   String generateDiscoveryPayload() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final message = 'TEACHER_NODE_HERE';
-    final dataToSign = '${timestamp}_$message';
+    final nonce = encrypt.IV.fromSecureRandom(16).base64;
+    final dataToSign = '${timestamp}_${message}_$nonce';
     final hmac = Hmac(sha256, utf8.encode(classroomPin));
     final signature = hmac.convert(utf8.encode(dataToSign)).toString();
 
     final payload = {
       'msg': message,
       'timestamp': timestamp,
+      'nonce': nonce,
       'signature': signature,
     };
     return jsonEncode(payload);
@@ -60,27 +62,48 @@ class MeshNetworkService {
       final payload = jsonDecode(jsonPayload) as Map<String, dynamic>;
       final msg = payload['msg'] as String?;
       final timestamp = payload['timestamp'] as int?;
+      final nonce = payload['nonce'] as String?;
       final signature = payload['signature'] as String?;
 
-      if (msg != 'TEACHER_NODE_HERE' || timestamp == null || signature == null) {
+      if (msg != 'TEACHER_NODE_HERE' ||
+          timestamp == null ||
+          nonce == null ||
+          signature == null) {
         return false;
       }
 
       final now = DateTime.now().millisecondsSinceEpoch;
+
+      // Cleanup old nonces based on their original timestamp
+      // A packet is valid if its timestamp is within 30s of `now`.
+      // Once `now > time + 30000`, the packet would naturally expire anyway.
+      _seenNonces.removeWhere((key, time) => now > time + 30000);
+
+      if (_seenNonces.containsKey(nonce)) {
+        return false; // Replay attack detected
+      }
+
       // Allow a 30-second window
       if ((now - timestamp).abs() > 30000) {
         return false;
       }
 
-      final dataToSign = '${timestamp}_$msg';
+      final dataToSign = '${timestamp}_${msg}_$nonce';
       final hmac = Hmac(sha256, utf8.encode(classroomPin));
-      final expectedSignature = hmac.convert(utf8.encode(dataToSign)).toString();
+      final expectedSignature =
+          hmac.convert(utf8.encode(dataToSign)).toString();
 
-      return expectedSignature == signature;
+      if (expectedSignature == signature) {
+        _seenNonces[nonce] = timestamp;
+        return true;
+      }
+
+      return false;
     } catch (e) {
       return false;
     }
   }
+
   // A shared key for the classroom mesh. In a real environment,
   // this would be provisioned dynamically via Diffie-Hellman or MDM.
   // For the scope of this offline MVP, we use a key derived from an environmental
@@ -88,10 +111,11 @@ class MeshNetworkService {
   // hardcoded secrets from being committed, meaning nodes must be configured with
   // the same MESH_SECRET_KEY at build/run time to communicate.
   static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
-      ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY').padRight(32, '0').substring(0, 32))
+      ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY')
+          .padRight(32, '0')
+          .substring(0, 32))
       : encrypt.Key.fromSecureRandom(32);
   static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
-
 
   /// Initiates discovery of local classroom swarms using UDP Multicast.
   /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
@@ -116,7 +140,8 @@ class MeshNetworkService {
   /// attempts to connect to a global constellation (e.g., Starlink Educational Tier)
   /// that zero-rates traffic to the OntarioEdAI master decentralized ledger.
   Future<void> _startEasyConnectionDiscovery() async {
-    print('Scanning for low-earth orbit (LEO) satellite uplinks (e.g., Starlink)...');
+    print(
+        'Scanning for low-earth orbit (LEO) satellite uplinks (e.g., Starlink)...');
 
     // Placeholder: Interface with hardware APIs to detect whitelisted educational SSIDs
     // or direct satellite terminal connections.
@@ -131,9 +156,30 @@ class MeshNetworkService {
     // In this mode, the node connects to regional master nodes rather than a local classroom swarm.
   }
 
+  Future<InternetAddress> _getLocalIpAddress() async {
+    try {
+      final interfaces = await NetworkInterface.list(
+        includeLinkLocal: false,
+        type: InternetAddressType.IPv4,
+      );
+      for (var interface in interfaces) {
+        for (var addr in interface.addresses) {
+          if (!addr.isLoopback) {
+            return addr;
+          }
+        }
+      }
+    } catch (e) {
+      print('Failed to list network interfaces: $e');
+    }
+    return InternetAddress.loopbackIPv4;
+  }
+
   Future<void> _startTeacherNode() async {
+    final localIp = await _getLocalIpAddress();
+
     // 1. Start TCP Server to listen for student connections
-    _tcpServerSocket = await ServerSocket.bind(InternetAddress.anyIPv4, _dataPort);
+    _tcpServerSocket = await ServerSocket.bind(localIp, _dataPort);
     _tcpServerSocket!.listen((Socket clientSocket) {
       print('Student connected: ${clientSocket.remoteAddress.address}');
       _studentSockets.add(clientSocket);
@@ -162,7 +208,8 @@ class MeshNetworkService {
     _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, _discoveryPort);
     _udpSocket!.joinMulticast(InternetAddress(_multicastGroup));
 
-    print('Student node listening for teacher on $_multicastGroup:$_discoveryPort');
+    print(
+        'Student node listening for teacher on $_multicastGroup:$_discoveryPort');
 
     // Wait to discover teacher
     await for (RawSocketEvent event in _udpSocket!) {
@@ -211,7 +258,8 @@ class MeshNetworkService {
               print('Received encrypted mesh data: $message');
 
               final parts = message.split(':');
-              if (parts.length != 2) throw Exception('Invalid encrypted payload format');
+              if (parts.length != 2)
+                throw Exception('Invalid encrypted payload format');
 
               final iv = encrypt.IV.fromBase64(parts[0]);
               final decryptedStr = _encrypter.decrypt64(parts[1], iv: iv);
@@ -222,10 +270,12 @@ class MeshNetworkService {
                 String msgType = payload['type'];
                 switch (msgType) {
                   case 'CANVAS_SYNC':
-                    print('Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
+                    print(
+                        'Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
                     break;
                   case 'CREDENTIAL_GOSSIP':
-                    print('Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
+                    print(
+                        'Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
                     break;
                   default:
                     print('Unknown message type: $msgType');
@@ -235,8 +285,6 @@ class MeshNetworkService {
               print('Failed to parse/decrypt incoming data: $e');
             }
           }
-        } catch (e) {
-          print('Failed to decode incoming data: $e');
         }
       },
       onError: (error) {
@@ -272,26 +320,21 @@ class MeshNetworkService {
   }
 
   /// Broadcasts a locally verified credential (VC) to the teacher's node.
-  Future<void> gossipCredential(String credentialId, Map<String, dynamic> data) async {
+  Future<void> gossipCredential(
+      String credentialId, Map<String, dynamic> data) async {
     if (!isConnected) throw Exception("Not connected to mesh.");
     print('Gossiping credential $credentialId...');
 
-    sendOverTcp({
-      'type': 'CREDENTIAL_GOSSIP',
-      'id': credentialId,
-      'payload': data
-    });
+    sendOverTcp(
+        {'type': 'CREDENTIAL_GOSSIP', 'id': credentialId, 'payload': data});
   }
 
   /// Syncs the dynamic workbook state via WebRTC/TCP for real-time offline collaboration.
   Future<void> syncCanvasState(List<Map<String, dynamic>> strokes) async {
-     if (!isConnected) return;
-     print('Syncing canvas state: ${strokes.length} strokes');
+    if (!isConnected) return;
+    print('Syncing canvas state: ${strokes.length} strokes');
 
-     sendOverTcp({
-       'type': 'CANVAS_SYNC',
-       'strokes': strokes
-     });
+    sendOverTcp({'type': 'CANVAS_SYNC', 'strokes': strokes});
   }
 
   void disconnect() {
@@ -305,4 +348,37 @@ class MeshNetworkService {
     _studentSockets.clear();
     print('Disconnected from mesh network.');
   }
+}
+
+Future<List<Map<String, dynamic>>> _parseMeshMessagesIsolate(
+    Map<String, dynamic> args) async {
+  final rawData = args['rawData'] as String;
+  final sharedKeyBase64 = args['sharedKeyBase64'] as String;
+
+  final sharedKey = encrypt.Key.fromBase64(sharedKeyBase64);
+  final encrypter = encrypt.Encrypter(encrypt.AES(sharedKey));
+
+  List<String> messages = rawData.split('\n');
+  List<Map<String, dynamic>> parsedPayloads = [];
+
+  for (String message in messages) {
+    message = message.trim();
+    if (message.isEmpty) continue;
+
+    try {
+      final parts = message.split(':');
+      if (parts.length != 2)
+        throw Exception('Invalid encrypted payload format');
+
+      final iv = encrypt.IV.fromBase64(parts[0]);
+      final decryptedStr = encrypter.decrypt64(parts[1], iv: iv);
+
+      Map<String, dynamic> payload = jsonDecode(decryptedStr);
+      parsedPayloads.add(payload);
+    } catch (e) {
+      print('Failed to parse/decrypt incoming data in isolate: $e');
+    }
+  }
+
+  return parsedPayloads;
 }
