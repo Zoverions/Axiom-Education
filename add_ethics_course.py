@@ -1,13 +1,9 @@
 import json
-import os
 
 def augment_ethics_course(filepath='assets/curriculum/ontario_curriculum_full.json'):
     if not os.path.exists(filepath):
         print(f"Error: {filepath} not found.")
         return
-
-    with open(filepath, 'r', encoding='utf-8') as f:
-        curriculum = json.load(f)
 
     # Custom Course: Ethics, Moral Foundations, and the Evolution of Thought
     course_code = "EMF1O"
