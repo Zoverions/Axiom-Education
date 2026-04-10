@@ -1,5 +1,4 @@
 import json
-import os
 from extend_json import load_json, save_json, create_mock_irt, process_course_data
 
 def test_load_json(tmp_path):
