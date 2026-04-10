@@ -6,6 +6,8 @@ class CurriculumLoader {
       '© King\'s Printer for Ontario – Supplementary use only. '
       'Official source: dcp.edu.gov.on.ca';
 
+  static final Map<String, String> _officialUrlCache = {};
+
   /// Returns all expectations for a course as typed, safe list.
   static Future<List<Map<String, dynamic>>> getExpectationsForCourse(
       String courseCode) async {
@@ -44,12 +46,20 @@ class CurriculumLoader {
 
   /// Correct Ministry URL mapping.
   static Future<String> officialUrl(String courseCode) async {
+    if (_officialUrlCache.containsKey(courseCode)) {
+      return _officialUrlCache[courseCode]!;
+    }
+
     final db = await DatabaseService.database;
     final res = await db.query('Course',
         columns: ['official_url'], where: 'id = ?', whereArgs: [courseCode]);
+
+    String url = 'https://www.ontario.ca/page/secondary-school-curriculum';
     if (res.isNotEmpty && res.first['official_url'] != null) {
-      return res.first['official_url'] as String;
+      url = res.first['official_url'] as String;
     }
-    return 'https://www.ontario.ca/page/secondary-school-curriculum';
+
+    _officialUrlCache[courseCode] = url;
+    return url;
   }
 }
