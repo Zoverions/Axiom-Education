@@ -1,16 +1,16 @@
 import json
-import os
 import itertools
 import chromadb
 from chromadb.utils import embedding_functions
 
 def load_curriculum():
     filepath = 'assets/curriculum/ontario_curriculum_full.json'
-    if not os.path.exists(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
         print(f"Error: {filepath} not found.")
         return None
-    with open(filepath, 'r', encoding='utf-8') as f:
-        return json.load(f)
 
 def extract_expectations(curriculum_data):
     courses = curriculum_data.get('courses', {})
