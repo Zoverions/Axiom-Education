@@ -266,8 +266,6 @@ class MeshNetworkService {
               print('Failed to parse/decrypt incoming data: $e');
             }
           }
-        } catch (e) {
-          print('Failed to decode incoming data: $e');
         }
       },
       onError: (error) {
@@ -331,4 +329,37 @@ class MeshNetworkService {
     _studentSockets.clear();
     print('Disconnected from mesh network.');
   }
+}
+
+Future<List<Map<String, dynamic>>> _parseMeshMessagesIsolate(
+    Map<String, dynamic> args) async {
+  final rawData = args['rawData'] as String;
+  final sharedKeyBase64 = args['sharedKeyBase64'] as String;
+
+  final sharedKey = encrypt.Key.fromBase64(sharedKeyBase64);
+  final encrypter = encrypt.Encrypter(encrypt.AES(sharedKey));
+
+  List<String> messages = rawData.split('\n');
+  List<Map<String, dynamic>> parsedPayloads = [];
+
+  for (String message in messages) {
+    message = message.trim();
+    if (message.isEmpty) continue;
+
+    try {
+      final parts = message.split(':');
+      if (parts.length != 2)
+        throw Exception('Invalid encrypted payload format');
+
+      final iv = encrypt.IV.fromBase64(parts[0]);
+      final decryptedStr = encrypter.decrypt64(parts[1], iv: iv);
+
+      Map<String, dynamic> payload = jsonDecode(decryptedStr);
+      parsedPayloads.add(payload);
+    } catch (e) {
+      print('Failed to parse/decrypt incoming data in isolate: $e');
+    }
+  }
+
+  return parsedPayloads;
 }
