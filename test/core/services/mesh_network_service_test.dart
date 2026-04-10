@@ -38,6 +38,11 @@ class FakeSocket extends Fake implements Socket {
   }
 
   @override
+  Stream<E> asyncMap<E>(FutureOr<E> Function(Uint8List event) convert) {
+    return _controller.stream.asyncMap(convert);
+  }
+
+  @override
   void destroy() {
     destroyed = true;
   }
