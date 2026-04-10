@@ -156,10 +156,30 @@ class MeshNetworkService {
     // In this mode, the node connects to regional master nodes rather than a local classroom swarm.
   }
 
+  Future<InternetAddress> _getLocalIpAddress() async {
+    try {
+      final interfaces = await NetworkInterface.list(
+        includeLinkLocal: false,
+        type: InternetAddressType.IPv4,
+      );
+      for (var interface in interfaces) {
+        for (var addr in interface.addresses) {
+          if (!addr.isLoopback) {
+            return addr;
+          }
+        }
+      }
+    } catch (e) {
+      print('Failed to list network interfaces: $e');
+    }
+    return InternetAddress.loopbackIPv4;
+  }
+
   Future<void> _startTeacherNode() async {
+    final localIp = await _getLocalIpAddress();
+
     // 1. Start TCP Server to listen for student connections
-    _tcpServerSocket =
-        await ServerSocket.bind(InternetAddress.anyIPv4, _dataPort);
+    _tcpServerSocket = await ServerSocket.bind(localIp, _dataPort);
     _tcpServerSocket!.listen((Socket clientSocket) {
       print('Student connected: ${clientSocket.remoteAddress.address}');
       _studentSockets.add(clientSocket);
@@ -185,8 +205,7 @@ class MeshNetworkService {
 
   Future<void> _startStudentNode() async {
     // 1. Listen for teacher UDP broadcasts
-    _udpSocket =
-        await RawDatagramSocket.bind(InternetAddress.anyIPv4, _discoveryPort);
+    _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, _discoveryPort);
     _udpSocket!.joinMulticast(InternetAddress(_multicastGroup));
 
     print(
