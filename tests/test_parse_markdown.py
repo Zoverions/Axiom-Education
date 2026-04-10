@@ -9,17 +9,17 @@ def test_create_mock_irt_grade_10():
     # words = ['Analyse', 'the', 'impact', 'of', 'human', 'activities', 'on', 'the', 'environment.'] (9 words)
     # len: [7, 3, 6, 2, 5, 10, 2, 3, 12] (environment. has 12 chars)
     # total len = 50. avg = 50/9 = 5.5555...
-    # syllables calculation verifying debug script output (20):
+    # syllables (estimated by VOWEL_RE = [aeiouAEIOU]):
     # Analyse: 3 (A, a, e)
     # the: 1 (e)
     # impact: 2 (i, a)
     # of: 1 (o)
     # human: 2 (u, a)
-    # activities: 5 (a, i, i, i, e) -> Note: 'activities' has 5 vowels, not 4.
+    # activities: 5 (a, i, i, i, e)
     # on: 1 (o)
     # the: 1 (e)
     # environment.: 4 (e, i, o, e)
-    # Total syllables: 3 + 1 + 2 + 1 + 2 + 5 + 1 + 1 + 4 = 20.
+    # Total syllables: 3+1+2+1+2+5+1+1+4 = 20
 
     assert result["irt_b"] == 0.78
     assert result["irt_a"] == 1.3

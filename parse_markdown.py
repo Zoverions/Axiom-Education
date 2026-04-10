@@ -1,5 +1,6 @@
 import json
 import re
+import uuid
 
 GRADE_RE = re.compile(r'Grade\s+(\d+)')
 VOWEL_RE = re.compile(r'[aeiouAEIOU]')
@@ -492,7 +493,7 @@ def main():
                         exp_id = f"{code}-{match.group(1)}"
                         exp_text = match.group(2)
                     else:
-                        exp_id = f"{code}-{strand_code}-{hash(text) % 10000}"
+                        exp_id = f"{code}-{strand_code}-{uuid.uuid4().hex[:8]}"
                         exp_text = text
 
                     irt = create_mock_irt(data["name"], exp_text)
