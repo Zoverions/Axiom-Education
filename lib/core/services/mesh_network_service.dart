@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:crypto/crypto.dart';
-import 'package:meta/meta.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
+import 'package:meta/meta.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 /// Defines the roles in the P2P Mesh
@@ -120,7 +120,7 @@ class MeshNetworkService {
   /// Initiates discovery of local classroom swarms using UDP Multicast.
   /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
   Future<void> startDiscovery() async {
-    print('Starting P2P Mesh Discovery as ${role.name}...');
+    debugPrint('Starting P2P Mesh Discovery as ${role.name}...');
     try {
       if (role == MeshRole.teacherNode) {
         await _startTeacherNode();
@@ -129,8 +129,8 @@ class MeshNetworkService {
       }
       isConnected = true;
     } catch (e) {
-      print('Failed to start mesh network: $e');
-      print('Attempting Easy Connection Discovery fallback...');
+      debugPrint('Failed to start mesh network: $e');
+      debugPrint('Attempting Easy Connection Discovery fallback...');
       await _startEasyConnectionDiscovery();
     }
   }
@@ -140,7 +140,7 @@ class MeshNetworkService {
   /// attempts to connect to a global constellation (e.g., Starlink Educational Tier)
   /// that zero-rates traffic to the OntarioEdAI master decentralized ledger.
   Future<void> _startEasyConnectionDiscovery() async {
-    print(
+    debugPrint(
         'Scanning for low-earth orbit (LEO) satellite uplinks (e.g., Starlink)...');
 
     // Placeholder: Interface with hardware APIs to detect whitelisted educational SSIDs
@@ -148,8 +148,8 @@ class MeshNetworkService {
     await Future.delayed(const Duration(seconds: 2));
 
     // Simulate successful connection to global educational network
-    print('Connected to Global Educational Network via LEO Satellite.');
-    print('Zero-rated lifelong learning access granted.');
+    debugPrint('Connected to Global Educational Network via LEO Satellite.');
+    debugPrint('Zero-rated lifelong learning access granted.');
 
     isConnected = true;
 
@@ -170,7 +170,7 @@ class MeshNetworkService {
         }
       }
     } catch (e) {
-      print('Failed to list network interfaces: $e');
+      debugPrint('Failed to list network interfaces: $e');
     }
     return InternetAddress.loopbackIPv4;
   }
@@ -181,7 +181,7 @@ class MeshNetworkService {
     // 1. Start TCP Server to listen for student connections
     _tcpServerSocket = await ServerSocket.bind(localIp, _dataPort);
     _tcpServerSocket!.listen((Socket clientSocket) {
-      print('Student connected: ${clientSocket.remoteAddress.address}');
+      debugPrint('Student connected: ${clientSocket.remoteAddress.address}');
       _studentSockets.add(clientSocket);
       _handleIncomingData(clientSocket);
     });
@@ -200,7 +200,7 @@ class MeshNetworkService {
       _udpSocket!.send(msg, InternetAddress(_multicastGroup), _discoveryPort);
     });
 
-    print('Teacher node broadcasting on $_multicastGroup:$_discoveryPort');
+    debugPrint('Teacher node broadcasting on $_multicastGroup:$_discoveryPort');
   }
 
   Future<void> _startStudentNode() async {
@@ -208,7 +208,7 @@ class MeshNetworkService {
     _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, _discoveryPort);
     _udpSocket!.joinMulticast(InternetAddress(_multicastGroup));
 
-    print(
+    debugPrint(
         'Student node listening for teacher on $_multicastGroup:$_discoveryPort');
 
     // Wait to discover teacher
@@ -218,12 +218,12 @@ class MeshNetworkService {
         if (datagram != null) {
           String msg = utf8.decode(datagram.data);
           if (verifyDiscoveryPayload(msg)) {
-            print('Teacher node discovered at ${datagram.address.address}');
+            debugPrint('Teacher node discovered at ${datagram.address.address}');
             // 2. Connect via TCP
             await _connectToTeacher(datagram.address.address);
             break; // Stop listening once connected
           } else {
-            print('Ignored unauthenticated or malformed teacher broadcast.');
+            debugPrint('Ignored unauthenticated or malformed teacher broadcast.');
           }
         }
       }
@@ -233,10 +233,10 @@ class MeshNetworkService {
   Future<void> _connectToTeacher(String teacherIp) async {
     try {
       _teacherTcpSocket = await Socket.connect(teacherIp, _dataPort);
-      print('Connected to teacher TCP channel.');
+      debugPrint('Connected to teacher TCP channel.');
       _handleIncomingData(_teacherTcpSocket!);
     } catch (e) {
-      print('Failed to connect to teacher TCP: $e');
+      debugPrint('Failed to connect to teacher TCP: $e');
     }
   }
 
@@ -255,7 +255,7 @@ class MeshNetworkService {
             if (message.isEmpty) continue;
 
             try {
-              print('Received encrypted mesh data: $message');
+              // debugPrint('Received encrypted mesh data: $message');
 
               final parts = message.split(':');
               if (parts.length != 2)
@@ -270,29 +270,29 @@ class MeshNetworkService {
                 String msgType = payload['type'];
                 switch (msgType) {
                   case 'CANVAS_SYNC':
-                    print(
+                    debugPrint(
                         'Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
                     break;
                   case 'CREDENTIAL_GOSSIP':
-                    print(
+                    debugPrint(
                         'Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
                     break;
                   default:
-                    print('Unknown message type: $msgType');
+                    debugPrint('Unknown message type: $msgType');
                 }
               }
             } catch (e) {
-              print('Failed to parse/decrypt incoming data: $e');
+              debugPrint('Failed to parse/decrypt incoming data: $e');
             }
           }
         }
       },
       onError: (error) {
-        print('Socket error: $error');
+        debugPrint('Socket error: $error');
         socket.destroy();
       },
       onDone: () {
-        print('Socket closed by peer.');
+        debugPrint('Socket closed by peer.');
         socket.destroy();
       },
     );
@@ -323,7 +323,7 @@ class MeshNetworkService {
   Future<void> gossipCredential(
       String credentialId, Map<String, dynamic> data) async {
     if (!isConnected) throw Exception("Not connected to mesh.");
-    print('Gossiping credential $credentialId...');
+    debugPrint('Gossiping credential $credentialId...');
 
     sendOverTcp(
         {'type': 'CREDENTIAL_GOSSIP', 'id': credentialId, 'payload': data});
@@ -332,7 +332,7 @@ class MeshNetworkService {
   /// Syncs the dynamic workbook state via WebRTC/TCP for real-time offline collaboration.
   Future<void> syncCanvasState(List<Map<String, dynamic>> strokes) async {
     if (!isConnected) return;
-    print('Syncing canvas state: ${strokes.length} strokes');
+    debugPrint('Syncing canvas state: ${strokes.length} strokes');
 
     sendOverTcp({'type': 'CANVAS_SYNC', 'strokes': strokes});
   }
@@ -346,7 +346,7 @@ class MeshNetworkService {
       socket.destroy();
     }
     _studentSockets.clear();
-    print('Disconnected from mesh network.');
+    debugPrint('Disconnected from mesh network.');
   }
 }
 
@@ -376,7 +376,7 @@ Future<List<Map<String, dynamic>>> _parseMeshMessagesIsolate(
       Map<String, dynamic> payload = jsonDecode(decryptedStr);
       parsedPayloads.add(payload);
     } catch (e) {
-      print('Failed to parse/decrypt incoming data in isolate: $e');
+      debugPrint('Failed to parse/decrypt incoming data in isolate: $e');
     }
   }
 
