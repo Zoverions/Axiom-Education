@@ -111,9 +111,9 @@ class MeshNetworkService {
   // hardcoded secrets from being committed, meaning nodes must be configured with
   // the same MESH_SECRET_KEY at build/run time to communicate.
   static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
-      ? encrypt.Key.fromUtf8(const String.fromEnvironment('MESH_SECRET_KEY')
-          .padRight(32, '0')
-          .substring(0, 32))
+      ? encrypt.Key.fromBase64(base64.encode(sha256
+          .convert(utf8.encode(const String.fromEnvironment('MESH_SECRET_KEY')))
+          .bytes))
       : encrypt.Key.fromSecureRandom(32);
   static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
 
@@ -285,6 +285,8 @@ class MeshNetworkService {
               debugPrint('Failed to parse/decrypt incoming data: $e');
             }
           }
+        } catch (e) {
+          print('General error in mesh data processing: $e');
         }
       },
       onError: (error) {
