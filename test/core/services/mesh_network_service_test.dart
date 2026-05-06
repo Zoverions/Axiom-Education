@@ -147,6 +147,37 @@ void main() {
     });
   });
 
+  group('MeshNetworkService syncCanvasState', () {
+    test('sends correct payload when connected', () async {
+      final service = TestMeshNetworkService();
+      service.isConnected = true;
+
+      final strokes = [
+        {'x': 10, 'y': 20, 'pressure': 0.5},
+        {'x': 15, 'y': 25, 'pressure': 0.7},
+      ];
+
+      await service.syncCanvasState(strokes);
+
+      expect(service.lastPayload, isNotNull);
+      expect(service.lastPayload!['type'], equals('CANVAS_SYNC'));
+      expect(service.lastPayload!['strokes'], equals(strokes));
+    });
+
+    test('does nothing when not connected', () async {
+      final service = TestMeshNetworkService();
+      service.isConnected = false;
+
+      final strokes = [
+        {'x': 10, 'y': 20, 'pressure': 0.5},
+      ];
+
+      await service.syncCanvasState(strokes);
+
+      expect(service.lastPayload, isNull);
+    });
+  });
+
   group('MeshNetworkService', () {
     test('gossipCredential throws exception when not connected', () async {
       final service = MeshNetworkService(classroomPin: 'test_pin');
