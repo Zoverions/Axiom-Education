@@ -1,39 +1,89 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/services/model_bindings.dart';
 import 'package:onnxruntime/onnxruntime.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+
+// Manual mock for OrtSession
+class MockOrtSession extends Fake implements OrtSession {
+  bool releaseCalled = false;
+
+  @override
+  void release() {
+    releaseCalled = true;
+  }
+}
+
+// Manual mock for Interpreter
+class MockInterpreter extends Fake implements Interpreter {
+  bool closeCalled = false;
+
+  @override
+  void close() {
+    closeCalled = true;
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('Phi3MiniModel.initModel handles exception gracefully', () async {
-    // Instantiate the actual model class
-    final model = Phi3MiniModel();
+  group('Phi3MiniModel', () {
+    test('initModel handles exception gracefully', () async {
+      final model = Phi3MiniModel();
+      await expectLater(
+        model.initModel(
+          mockSessionLoader: (String path, OrtSessionOptions options) async {
+            throw Exception('Simulated initialization failure');
+          },
+        ),
+        completes,
+      );
+    });
 
-    // Inject a mock loader that unconditionally throws an exception.
-    // We expect the initModel method to catch the exception internally and complete normally
-    // rather than throwing the exception out to the caller and crashing the app.
-    await expectLater(
-      model.initModel(mockSessionLoader: (String path, OrtSessionOptions options) async {
-        throw Exception('Simulated initialization failure');
-      }),
-      completes
-    );
+    test('dispose releases session and resets initialization state', () async {
+      final model = Phi3MiniModel();
+      final mockSession = MockOrtSession();
+
+      await model.initModel(
+        mockSessionLoader: (path, options) async => mockSession,
+      );
+
+      expect(model.isInitialized, isTrue);
+
+      model.dispose();
+
+      expect(model.isInitialized, isFalse);
+      expect(mockSession.releaseCalled, isTrue);
+    });
+  });
+
   group('HandwritingScorer', () {
-    test('initModel error leaves it uninitialized and returns fallback scores', () async {
+    test('initModel error leaves it uninitialized and returns fallback scores',
+        () async {
       final scorer = HandwritingScorer();
-
-      // Attempt init using our injected mock loader that explicitly throws
       await scorer.initModel(
         interpreterLoader: () async => throw Exception('Mock TFLite Load Failure'),
       );
-
-      // Verify that the explicitly failed mock caused isInitialized to be false
       expect(scorer.isInitialized, isFalse);
-
-      // Ensure it uses fallback by calling scoreHandwriting
       final scores = await scorer.scoreHandwriting([]);
       expect(scores, equals((0.8, 0.85)));
-  group('HandwritingScorer', () {
+    });
+
+    test('dispose closes interpreter and resets initialization state', () async {
+      final scorer = HandwritingScorer();
+      final mockInterpreter = MockInterpreter();
+
+      await scorer.initModel(
+        interpreterLoader: () async => mockInterpreter,
+      );
+
+      expect(scorer.isInitialized, isTrue);
+
+      scorer.dispose();
+
+      expect(scorer.isInitialized, isFalse);
+      expect(mockInterpreter.closeCalled, isTrue);
+    });
+
     late HandwritingScorer scorer;
 
     setUp(() {
@@ -41,73 +91,80 @@ void main() {
     });
 
     test('preprocessStrokes handles exactly 100 strokes without errors', () {
-      // Create 100 mock strokes
       final strokes = List.generate(
         100,
-        (index) => {'x': index.toDouble(), 'y': index.toDouble(), 'pressure': 0.5},
+        (index) => {
+          'x': index.toDouble(),
+          'y': index.toDouble(),
+          'pressure': 0.5,
+        },
       );
-
       final result = scorer.preprocessStrokes(strokes);
-
-      // Verify shape: [1][100][3]
       expect(result.length, 1);
       expect(result[0].length, 100);
       expect(result[0][0].length, 3);
-
-      // Verify values for the first stroke
       expect(result[0][0][0], 0.0);
       expect(result[0][0][1], 0.0);
       expect(result[0][0][2], 0.5);
-
-      // Verify values for the last (100th) stroke
       expect(result[0][99][0], 99.0);
       expect(result[0][99][1], 99.0);
       expect(result[0][99][2], 0.5);
     });
 
-    test('preprocessStrokes handles excessive strokes (>100) safely by truncating', () {
-      // Create 150 mock strokes
+    test('preprocessStrokes handles excessive strokes (>100) safely by truncating',
+        () {
       final strokes = List.generate(
         150,
-        (index) => {'x': index.toDouble(), 'y': index.toDouble(), 'pressure': 0.5},
+        (index) => {
+          'x': index.toDouble(),
+          'y': index.toDouble(),
+          'pressure': 0.5,
+        },
       );
-
       final result = scorer.preprocessStrokes(strokes);
-
-      // Verify shape is still [1][100][3] (maxStrokes is 100)
       expect(result.length, 1);
       expect(result[0].length, 100);
       expect(result[0][0].length, 3);
-
-      // Verify values for the last (100th) stroke is from index 99
       expect(result[0][99][0], 99.0);
       expect(result[0][99][1], 99.0);
       expect(result[0][99][2], 0.5);
     });
 
     test('preprocessStrokes handles fewer than 100 strokes correctly', () {
-      // Create 50 mock strokes
       final strokes = List.generate(
         50,
-        (index) => {'x': index.toDouble(), 'y': index.toDouble(), 'pressure': 0.5},
+        (index) => {
+          'x': index.toDouble(),
+          'y': index.toDouble(),
+          'pressure': 0.5,
+        },
       );
-
       final result = scorer.preprocessStrokes(strokes);
-
-      // Verify shape is still [1][100][3]
       expect(result.length, 1);
       expect(result[0].length, 100);
       expect(result[0][0].length, 3);
-
-      // Verify values for the 50th stroke (which is populated)
       expect(result[0][49][0], 49.0);
       expect(result[0][49][1], 49.0);
       expect(result[0][49][2], 0.5);
-
-      // Verify values for the 51st stroke (which is default filled with 0.0)
       expect(result[0][50][0], 0.0);
       expect(result[0][50][1], 0.0);
       expect(result[0][50][2], 0.0);
+    });
+  });
+
+  group('WatcherModel', () {
+    test('dispose closes interpreter and resets initialization state', () async {
+      final model = WatcherModel();
+      final mockInterpreter = MockInterpreter();
+
+      model.setInterpreterForTest(mockInterpreter);
+
+      expect(model.isInitialized, isTrue);
+
+      model.dispose();
+
+      expect(model.isInitialized, isFalse);
+      expect(mockInterpreter.closeCalled, isTrue);
     });
   });
 }
