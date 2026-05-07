@@ -14,6 +14,8 @@ class Phi3MiniModel {
   OrtSession? _session;
   bool _isInitialized = false;
 
+  bool get isInitialized => _isInitialized;
+
   Future<void> initModel({
     Future<OrtSession> Function(String path, OrtSessionOptions options)?
     mockSessionLoader,
@@ -200,6 +202,8 @@ class HandwritingScorer {
 class WatcherModel {
   Interpreter? _interpreter;
   bool _isInitialized = false;
+
+  bool get isInitialized => _isInitialized;
 
   Future<void> initModel() async {
     if (_isInitialized) return;
