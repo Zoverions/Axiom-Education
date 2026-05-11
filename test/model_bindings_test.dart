@@ -24,9 +24,8 @@ void main() {
       final result = await model.parseCanvas(invalidImage);
 
       expect(result, "Failed to decode image");
+    });
 
-void main() {
-  group('WatcherModel Tests', () {
     test('parseCanvas should return fallback mock equation when uninitialized', () async {
       // Arrange
       final watcherModel = WatcherModel();
@@ -37,6 +36,18 @@ void main() {
 
       // Assert
       expect(result, "Mock parsed equation: y = mx + b");
+    });
+
+    test('parseCanvas with excessively large image returns error message', () async {
+      final model = WatcherModel();
+      model.setInterpreterForTest(FakeInterpreter());
+
+      // 10MB + 1 byte
+      final largeImage = Uint8List((10 * 1024 * 1024) + 1);
+
+      final result = await model.parseCanvas(largeImage);
+
+      expect(result, "Image size too large");
     });
   });
 }
