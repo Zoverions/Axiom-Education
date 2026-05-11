@@ -26,6 +26,10 @@ class WatcherModel {
     if (!_isInitialized || _interpreter == null)
       return "Mock parsed equation: y = mx + b";
 
+    // Security Fix: Limit image size to prevent unbounded memory allocation
+    const int maxImageSize = 10 * 1024 * 1024; // 10MB
+    if (imageBytes.length > maxImageSize) return "Image size too large";
+
     try {
       // 1. Decode and preprocess the image
       img.Image? decodedImage = img.decodeImage(imageBytes);
