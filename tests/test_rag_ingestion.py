@@ -5,8 +5,26 @@ from unittest.mock import MagicMock
 sys.modules["chromadb"] = MagicMock()
 sys.modules["chromadb.utils"] = MagicMock()
 
+import json
+from unittest.mock import patch, mock_open
 import pytest
-from rag_ingestion import extract_expectations
+from rag_ingestion import extract_expectations, load_curriculum
+
+def test_load_curriculum_success():
+    mock_data = {"courses": {"TEST": {"name": "Test Course"}}}
+    mock_json = json.dumps(mock_data)
+
+    with patch("builtins.open", mock_open(read_data=mock_json)):
+        data = load_curriculum()
+        assert data == mock_data
+
+def test_load_curriculum_file_not_found(capsys):
+    with patch("builtins.open", side_effect=FileNotFoundError):
+        data = load_curriculum()
+        assert data is None
+
+        captured = capsys.readouterr()
+        assert "Error: assets/curriculum/ontario_curriculum_full.json not found." in captured.out
 
 def test_extract_expectations_basic():
     curriculum_data = {
