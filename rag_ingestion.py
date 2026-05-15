@@ -15,15 +15,17 @@ def extract_expectations(curriculum_data):
     courses = curriculum_data.get('courses', {})
     for course_code, course_info in courses.items():
         course_name = course_info.get('name', 'Unknown Course')
+        course_prefix = f"Course: {course_name} ({course_code}). "
         strands = course_info.get('strands', {})
 
         for strand_name, expectations in strands.items():
+            strand_prefix = f"{course_prefix}Strand: {strand_name}. Expectation: "
             for exp in expectations:
-                exp_id = exp.get('id', f"{course_code}-{hash(exp.get('expectation', ''))}")
                 text = exp.get('expectation', '')
+                exp_id = exp.get('id', f"{course_code}-{hash(text)}")
 
                 # The document to be embedded and searched
-                document = f"Course: {course_name} ({course_code}). Strand: {strand_name}. Expectation: {text}"
+                document = strand_prefix + text
 
                 metadata = {
                     "course_code": course_code,
