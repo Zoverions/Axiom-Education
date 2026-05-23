@@ -30,7 +30,7 @@ dependencies:
   sqflite_common_ffi: ^2.4.0+2
   image: ^4.5.4
   crypto: ^3.0.7
-  meta: ^1.17.0
+  meta: ^1.18.0
   encrypt: ^5.0.3
 
 dev_dependencies:
