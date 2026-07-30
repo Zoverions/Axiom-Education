@@ -19,28 +19,38 @@
       "id": "app.curriculum-browser",
       "family": "application",
       "status": "implemented",
-      "summary": "Flutter and Riverpod curriculum overview and detail screens read the bundled SQLite curriculum database.",
+      "summary": "Flutter and Riverpod curriculum overview and detail screens read a schema-verified bundled SQLite curriculum database.",
       "evidence": [
         "lib/main.dart",
         "lib/features/diagnostic/diagnostic_screen.dart",
-        "lib/core/providers/curriculum_provider.dart"
+        "lib/core/providers/curriculum_provider.dart",
+        "test/core/providers/curriculum_provider_test.dart"
       ]
     },
     {
       "id": "curriculum.ontario-data",
       "family": "curriculum",
       "status": "experimental",
-      "summary": "Ontario Grades 9-12 curriculum records are available in JSON and SQLite, but complete source provenance, licensing, review status, and reproducible-build evidence are not yet enforced.",
+      "summary": "The current corpus deterministically produces 293 records across 21 courses, but upstream official-document digests, licensing review, and course-by-course human verification remain incomplete.",
       "evidence": [
         "assets/curriculum/ontario_curriculum_full.json",
-        "assets/curriculum/ontario_curriculum.sqlite"
+        "assets/curriculum/ontario_curriculum.sqlite",
+        "curriculum/source-ledger.v1.json"
       ]
     },
     {
       "id": "curriculum.signed-packs",
       "family": "curriculum",
-      "status": "specified",
-      "summary": "Versioned curriculum packs will bind jurisdiction, authority, source digest, parser version, licence, review state, content digest, and supersession metadata."
+      "status": "experimental",
+      "summary": "Canonical curriculum packs bind jurisdiction, authority, namespace, source and licence status, ingestion digest, uncalibrated heuristics, record and course digests, deterministic manifests, and external-key Ed25519 signatures; activation and authority review remain unavailable.",
+      "evidence": [
+        "tools/curriculum_pack.py",
+        "tests/test_curriculum_pack.py",
+        "schemas/curriculum-record.v1.schema.json",
+        "schemas/curriculum-pack.v1.schema.json",
+        "curriculum/source-ledger.v1.json",
+        ".github/workflows/rebuild.yml"
+      ]
     },
     {
       "id": "education.axiom-bridge",
@@ -52,7 +62,12 @@
       "id": "tutor.local-inference",
       "family": "ai",
       "status": "disabled",
-      "summary": "The existing Phi-3 binding is a prototype and must not report simulated logits output as a tutor response. A configured provider must fail closed when unavailable."
+      "summary": "The incomplete Phi-3 path fails closed and cannot return simulated output; a versioned tokenizer, bounded decoder, model digest, evaluation evidence, and approved AXIOM provider remain required.",
+      "evidence": [
+        "lib/core/services/model_bindings.dart",
+        "lib/core/services/model_errors.dart",
+        "test/model_bindings_test.dart"
+      ]
     },
     {
       "id": "tools.deterministic-math",
@@ -64,17 +79,33 @@
       "id": "canvas.watcher",
       "family": "input",
       "status": "experimental",
-      "summary": "Bounded image decoding and TFLite scaffolding exist, but the current classifier is not a validated handwritten-math parser.",
+      "summary": "Bounded image decoding and TFLite classification exist without mock equations, but no validated handwritten-math grammar, label map, or deterministic verifier is supplied.",
       "evidence": [
         "lib/core/services/watcher_model.dart",
-        "lib/core/services/model_bindings.dart"
+        "lib/core/services/model_errors.dart",
+        "test/model_bindings_test.dart"
+      ]
+    },
+    {
+      "id": "input.handwriting-scorer",
+      "family": "input",
+      "status": "experimental",
+      "summary": "Bounded stylus-signal preprocessing exists and fixed fallback scores were removed, but no validated scoring artifact is bundled or promoted.",
+      "evidence": [
+        "lib/core/services/handwriting_scorer.dart",
+        "lib/core/services/model_errors.dart",
+        "test/core/services/model_bindings_test.dart"
       ]
     },
     {
       "id": "classroom.legacy-lan-mesh",
       "family": "sync",
       "status": "disabled",
-      "summary": "The raw UDP/TCP classroom mesh is development-only until authenticated encryption, identity, replay, authorization, conflict, and operational controls are evidenced."
+      "summary": "The application-owned UDP/TCP mesh is disabled by default and only available as an explicitly keyed, bounded, AES-GCM development transport; it is not an identity or learner-record authority path.",
+      "evidence": [
+        "lib/core/services/mesh_network_service.dart",
+        "test/core/services/mesh_network_service_test.dart"
+      ]
     },
     {
       "id": "classroom.axiom-causal-sync",
@@ -98,7 +129,7 @@
       "id": "assessment.calibrated-irt",
       "family": "assessment",
       "status": "disabled",
-      "summary": "Existing mock IRT fields are heuristics and are not psychometrically calibrated item-response parameters."
+      "summary": "Legacy IRT-labelled values are exported only as visibly uncalibrated adaptation heuristics and are not psychometrically validated item-response parameters."
     },
     {
       "id": "portfolio.selective-export",
@@ -124,7 +155,8 @@
     "No current model binding provides a complete local tutor.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
-    "Mock difficulty and IRT values are not validated psychometrics.",
+    "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
+    "A valid pack signature proves integrity and signer possession, not Ministry approval, curriculum correctness, licensing permission, or safe activation.",
     "Installing an education capsule does not grant access to learner data."
   ]
 }

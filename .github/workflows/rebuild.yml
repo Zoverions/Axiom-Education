@@ -31,6 +31,62 @@ jobs:
       - name: Verify capability and claim parity
         run: python tools/check_capabilities.py
 
+  curriculum-pack:
+    name: Deterministic signed curriculum pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Compile curriculum tooling
+        run: python -m py_compile tools/curriculum_pack.py tests/test_curriculum_pack.py
+
+      - name: Run curriculum pack unit tests
+        run: python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
+
+      - name: Build the repository curriculum twice
+        run: |
+          rm -rf /tmp/ontarioedai-pack-a /tmp/ontarioedai-pack-b
+          python tools/curriculum_pack.py build \
+            --input assets/curriculum/ontario_curriculum_full.json \
+            --ledger curriculum/source-ledger.v1.json \
+            --output /tmp/ontarioedai-pack-a \
+            --pack-id ontario-secondary \
+            --pack-version 1.0.0
+          python tools/curriculum_pack.py build \
+            --input assets/curriculum/ontario_curriculum_full.json \
+            --ledger curriculum/source-ledger.v1.json \
+            --output /tmp/ontarioedai-pack-b \
+            --pack-id ontario-secondary \
+            --pack-version 1.0.0
+          cmp /tmp/ontarioedai-pack-a/manifest.json /tmp/ontarioedai-pack-b/manifest.json
+          cmp /tmp/ontarioedai-pack-a/records.jsonl /tmp/ontarioedai-pack-b/records.jsonl
+          python tools/curriculum_pack.py verify --pack-dir /tmp/ontarioedai-pack-a
+
+      - name: Sign and verify with an ephemeral Ed25519 key
+        run: |
+          umask 077
+          openssl genpkey -algorithm ED25519 -out /tmp/ontarioedai-pack-private.pem
+          openssl pkey \
+            -in /tmp/ontarioedai-pack-private.pem \
+            -pubout \
+            -out /tmp/ontarioedai-pack-public.pem
+          python tools/curriculum_pack.py sign \
+            --pack-dir /tmp/ontarioedai-pack-a \
+            --private-key /tmp/ontarioedai-pack-private.pem \
+            --public-key /tmp/ontarioedai-pack-public.pem
+          python tools/curriculum_pack.py verify \
+            --pack-dir /tmp/ontarioedai-pack-a \
+            --public-key /tmp/ontarioedai-pack-public.pem \
+            --require-signature
+          rm -f /tmp/ontarioedai-pack-private.pem /tmp/ontarioedai-pack-public.pem
+
   flutter:
     name: Flutter analyze and test
     runs-on: ubuntu-latest
@@ -55,14 +111,19 @@ jobs:
       - name: Parse and format rebuild files
         run: >-
           dart format
+          lib/core/providers/curriculum_provider.dart
           lib/core/services/mesh_network_service.dart
           lib/core/services/model_bindings.dart
           lib/core/services/model_errors.dart
           lib/core/services/watcher_model.dart
           lib/core/services/handwriting_scorer.dart
+          test/core/providers/curriculum_provider_test.dart
           test/core/services/adaptive_engine_test.dart
           test/core/services/mesh_network_service_test.dart
+          test/core/services/model_bindings_test.dart
+          test/handwriting_scorer_test.dart
           test/model_bindings_test.dart
+          test/watcher_model_test.dart
 
       - name: Analyze
         run: flutter analyze --no-fatal-infos --no-fatal-warnings

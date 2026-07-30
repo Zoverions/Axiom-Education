@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ontarioedai.local/schemas/curriculum-record.v1.schema.json",
+  "title": "OntarioEdAI Curriculum Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "record_id",
+    "jurisdiction",
+    "course",
+    "strand",
+    "expectation",
+    "source",
+    "adaptation_heuristics",
+    "content_digest"
+  ],
+  "properties": {
+    "schema": {"const": "ontarioedai-curriculum-record.v1"},
+    "record_id": {"type": "string", "minLength": 8, "maxLength": 256},
+    "jurisdiction": {"const": "CA-ON"},
+    "course": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "name"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[0-9A-Z]{2,16}$"},
+        "name": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    },
+    "strand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "name": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    },
+    "expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "tags"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "text": {"type": "string", "minLength": 1, "maxLength": 20000},
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 64,
+          "items": {"type": "string", "minLength": 1, "maxLength": 128}
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "namespace",
+        "classification",
+        "authority",
+        "official_recognition",
+        "upstream_url",
+        "upstream_document_sha256",
+        "upstream_digest_status",
+        "ingestion_artifact",
+        "ingestion_artifact_sha256",
+        "review_status",
+        "licence"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "namespace": {"type": "string", "minLength": 1, "maxLength": 256},
+        "classification": {
+          "enum": ["official-derived", "ontarioedai-extension", "third-party-oer"]
+        },
+        "authority": {"type": "string", "minLength": 1, "maxLength": 500},
+        "official_recognition": {"type": "boolean"},
+        "upstream_url": {"type": ["string", "null"], "maxLength": 2048},
+        "upstream_document_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "upstream_digest_status": {"type": "string", "minLength": 1, "maxLength": 128},
+        "ingestion_artifact": {"type": "string", "minLength": 1, "maxLength": 256},
+        "ingestion_artifact_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "review_status": {"type": "string", "minLength": 1, "maxLength": 256},
+        "licence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rights_holder", "usage_basis", "redistribution_status", "notice"],
+          "properties": {
+            "rights_holder": {"type": "string", "minLength": 1, "maxLength": 500},
+            "usage_basis": {"type": "string", "minLength": 1, "maxLength": 256},
+            "redistribution_status": {"type": "string", "minLength": 1, "maxLength": 256},
+            "notice": {"type": "string", "minLength": 1, "maxLength": 2000}
+          }
+        }
+      }
+    },
+    "adaptation_heuristics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "difficulty", "discrimination", "guessing_assumption"],
+      "properties": {
+        "status": {"const": "uncalibrated"},
+        "difficulty": {"type": ["number", "null"]},
+        "discrimination": {"type": ["number", "null"]},
+        "guessing_assumption": {"type": ["number", "null"]}
+      }
+    },
+    "content_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
