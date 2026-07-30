@@ -246,7 +246,7 @@ void main() {
 
       await expectLater(
         IOOverrides.runZoned(
-          DatabaseService.database,
+          () => DatabaseService.database,
           createDirectory: (path) {
             createDirectoryCalled = true;
             return ThrowingDirectory(path);
