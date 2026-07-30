@@ -13,12 +13,14 @@ The protected branch-hygiene workflow uses `tools/repository_branch_cleanup.py` 
 
 1. Verify that GitHub reports `main` as the default branch.
 2. Enumerate every repository branch and every open pull request.
-3. Preserve `main` and any same-repository branch that is the head of an open pull request.
-4. Delete a branch directly when it has no commits ahead of `main`.
-5. When a branch has commits not reachable from `main`, create a lightweight tag at its exact head before deleting the branch.
-6. Fail if an obsolete protected branch cannot be removed.
-7. Re-enumerate branches and fail unless only `main` and active open-review branches remain.
-8. Upload a machine-readable cleanup report as workflow evidence.
+3. Preserve `main` and any same-repository branch that is the head of an open human review.
+4. During an explicitly approved dependency-queue consolidation, close only pull requests authored by `dependabot[bot]`, targeting `main`, and using a same-repository `dependabot/` head branch.
+5. Comment on each closed automated pull request with its disposition and preserve its exact head commit as an archival tag before deleting the branch.
+6. Delete a branch directly when it has no commits ahead of `main`.
+7. When a branch has commits not reachable from `main`, create a lightweight tag at its exact head before deleting the branch.
+8. Fail if an obsolete protected branch cannot be removed.
+9. Re-enumerate branches and fail unless only `main` and active human-review branches remain.
+10. Upload a machine-readable cleanup report and publish durable repository evidence.
 
 ## Archival tags
 
@@ -29,6 +31,10 @@ archive/branches/2026-07-30/<former-branch-name>
 ```
 
 An archival tag preserves the exact commit graph without leaving an apparently active development branch. It does not make the tagged implementation current, supported, secure, or production-ready.
+
+## Dependency updates
+
+Automated dependency pull requests are inputs to review, not permanent development branches. When a bot queue becomes stale, conflicting, or fragmented, it may be closed and replaced by one controlled dependency-upgrade tranche. Human-authored pull requests are never closed by the automated dependency-queue rule.
 
 ## Ongoing policy
 
