@@ -52,7 +52,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
       issues: write
     steps:
       - name: Check out canonical source
@@ -62,6 +62,93 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+
+      - name: Close stale Dependabot review queue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          api = 'https://api.github.com'
+          repository = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GITHUB_TOKEN']
+          headers = {
+              'Accept': 'application/vnd.github+json',
+              'Authorization': f'Bearer {token}',
+              'Content-Type': 'application/json',
+              'User-Agent': 'axiom-education-branch-hygiene',
+              'X-GitHub-Api-Version': '2022-11-28',
+          }
+
+          def request(method, path, payload=None):
+              data = None
+              if payload is not None:
+                  data = json.dumps(payload, separators=(',', ':')).encode('utf-8')
+              req = urllib.request.Request(
+                  f'{api}{path}', data=data, headers=headers, method=method
+              )
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  raw = response.read()
+              return json.loads(raw) if raw else None
+
+          pulls = request('GET', f'/repos/{repository}/pulls?state=open&per_page=100')
+          if not isinstance(pulls, list):
+              raise SystemExit('GitHub open-pull-request response was not an array')
+
+          closed = []
+          for pull in pulls:
+              user = pull.get('user') or {}
+              head = pull.get('head') or {}
+              head_repo = head.get('repo') or {}
+              base = pull.get('base') or {}
+              head_ref = head.get('ref')
+              if not (
+                  user.get('login') == 'dependabot[bot]'
+                  and isinstance(head_ref, str)
+                  and head_ref.startswith('dependabot/')
+                  and head_repo.get('full_name') == repository
+                  and base.get('ref') == 'main'
+              ):
+                  continue
+
+              number = int(pull['number'])
+              comment = (
+                  'Closed as part of the repository branch-hygiene migration. '
+                  'This automated dependency update is being superseded by a '
+                  'single controlled dependency-upgrade tranche. Its exact head '
+                  'commit will be preserved under the dated archival-tag namespace '
+                  'before the branch ref is deleted.'
+              )
+              request(
+                  'POST',
+                  f'/repos/{repository}/issues/{number}/comments',
+                  {'body': comment},
+              )
+              request(
+                  'PATCH',
+                  f'/repos/{repository}/pulls/{number}',
+                  {'state': 'closed'},
+              )
+              closed.append(
+                  {
+                      'number': number,
+                      'title': pull.get('title'),
+                      'head': head_ref,
+                      'sha': head.get('sha'),
+                      'disposition': 'closed; head preserved as archival tag before branch deletion',
+                  }
+              )
+
+          Path('/tmp/closed-dependabot-pulls.json').write_text(
+              json.dumps(closed, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8',
+          )
+          print(f'closed verified Dependabot pull requests: {len(closed)}')
+          PY
 
       - name: Clean repository branches fail closed
         env:
@@ -85,6 +172,16 @@ jobs:
 
           report_path = Path('/tmp/axiom-education-branch-cleanup.json')
           report = json.loads(report_path.read_text(encoding='utf-8'))
+          closed_path = Path('/tmp/closed-dependabot-pulls.json')
+          report['closed_dependabot_pull_requests'] = (
+              json.loads(closed_path.read_text(encoding='utf-8'))
+              if closed_path.exists()
+              else []
+          )
+          report_path.write_text(
+              json.dumps(report, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8',
+          )
           body = (
               '# Repository branch cleanup evidence\n\n'
               'This issue is maintained by the protected branch-hygiene workflow. '
@@ -125,6 +222,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: axiom-education-branch-cleanup
-          path: /tmp/axiom-education-branch-cleanup.json
+          path: |
+            /tmp/axiom-education-branch-cleanup.json
+            /tmp/closed-dependabot-pulls.json
           if-no-files-found: warn
           retention-days: 90
