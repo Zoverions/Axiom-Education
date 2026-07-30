@@ -48,12 +48,13 @@
       "id": "app.curriculum-browser",
       "family": "application",
       "status": "implemented",
-      "summary": "Flutter and Riverpod curriculum overview and detail screens read a schema-verified bundled SQLite curriculum database.",
+      "summary": "Flutter and Riverpod curriculum overview and detail screens read a schema-verified bundled SQLite curriculum database and expose the bounded MTH1W verified-practice entry point.",
       "evidence": [
         "lib/main.dart",
         "lib/features/diagnostic/diagnostic_screen.dart",
         "lib/core/providers/curriculum_provider.dart",
-        "test/core/providers/curriculum_provider_test.dart"
+        "test/core/providers/curriculum_provider_test.dart",
+        "test/widget_test.dart"
       ]
     },
     {
@@ -75,10 +76,30 @@
       "evidence": [
         "tools/curriculum_pack.py",
         "tests/test_curriculum_pack.py",
+        "tests/test_mth1w_slice.py",
+        "curriculum/slices/mth1w.v1.json",
         "schemas/curriculum-record.v1.schema.json",
         "schemas/curriculum-pack.v1.schema.json",
         "curriculum/source-ledger.v1.json",
         ".github/workflows/rebuild.yml"
+      ]
+    },
+    {
+      "id": "assessment.mth1w-deterministic-practice",
+      "family": "assessment",
+      "status": "experimental",
+      "summary": "MTH1W A1, A2, B2, and B4 have deterministic seed-based practice items bound to exact expectation IDs, local scaffolded hints, digest evidence, actual answer entry, and fail-closed exact verification; learner records, tutor inference, review, and export remain unavailable.",
+      "evidence": [
+        "docs/vertical-slices/MTH1W-PHASE-1.md",
+        "schemas/practice-item.v1.schema.json",
+        "lib/core/practice/practice_item.dart",
+        "lib/core/practice/math_practice_generator.dart",
+        "lib/core/practice/math_answer_verifier.dart",
+        "lib/core/practice/mth1w_practice_provider.dart",
+        "lib/features/practice/mth1w_practice_screen.dart",
+        "test/core/practice/math_practice_generator_test.dart",
+        "test/core/practice/math_answer_verifier_test.dart",
+        "test/features/practice/mth1w_practice_screen_test.dart"
       ]
     },
     {
@@ -108,8 +129,14 @@
     {
       "id": "tools.deterministic-math",
       "family": "verification",
-      "status": "adapter_required",
-      "summary": "Deterministic mathematics and science verification will run through a signed scientific-tool provider capsule."
+      "status": "experimental",
+      "summary": "A local exact-rational verifier checks numeric answers and slope-intercept equations for the four MTH1W golden-path expectations, validates item digests, and fails closed on malformed input or missing verification; broader mathematics remains unimplemented.",
+      "evidence": [
+        "lib/core/practice/rational.dart",
+        "lib/core/practice/math_answer_verifier.dart",
+        "test/core/practice/rational_test.dart",
+        "test/core/practice/math_answer_verifier_test.dart"
+      ]
     },
     {
       "id": "canvas.watcher",
@@ -189,6 +216,7 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
+    "The MTH1W deterministic practice engine covers only A1, A2, B2, and B4 and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
