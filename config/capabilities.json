@@ -55,8 +55,15 @@
     {
       "id": "education.axiom-bridge",
       "family": "integration",
-      "status": "specified",
-      "summary": "Governed learner-data and provider effects will be submitted through the AXIOM Gateway and follow Gateway to Hypervisor to Sandbox to Grid."
+      "status": "experimental",
+      "summary": "A digest-pinned education contract and transport-independent Dart client validate eight bounded AXIOM intent types, exact consent purposes, idempotency, digest fields, and fail-closed Gateway errors; no live transport or provider capsule is enabled.",
+      "evidence": [
+        "contracts/axiom-education.v1.json",
+        "lib/core/axiom/education_contract.dart",
+        "lib/core/axiom/education_client.dart",
+        "test/core/axiom/education_client_test.dart",
+        ".github/workflows/rebuild.yml"
+      ]
     },
     {
       "id": "tutor.local-inference",
@@ -157,6 +164,7 @@
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
     "A valid pack signature proves integrity and signer possession, not Ministry approval, curriculum correctness, licensing permission, or safe activation.",
+    "The AXIOM education contract and client do not enable a provider, learner-record store, or network authority.",
     "Installing an education capsule does not grant access to learner data."
   ]
 }
