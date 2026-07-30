@@ -5,8 +5,9 @@
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
+    "canonical_repository": "Zoverions/Axiom-Education",
     "canonical_branch": "main",
-    "repository_target": "Zoverions/Axiom-Education"
+    "repository_rename_completed": "2026-07-30"
   },
   "integration_target": {
     "platform": "AXIOM-MESH",
@@ -24,12 +25,12 @@
     {
       "id": "repository.slug.ontarioedai",
       "replacement": "Zoverions/Axiom-Education",
-      "disposition": "GitHub redirect only after repository rename"
+      "disposition": "deprecated slug; GitHub compatibility redirect only"
     },
     {
       "id": "branch.feature-init-ontarioedai-v0.3",
       "replacement": "main",
-      "disposition": "retired; no new work"
+      "disposition": "retired as default branch; no new work"
     },
     {
       "id": "dart.package.ontarioedai",
