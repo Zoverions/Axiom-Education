@@ -2,11 +2,13 @@ import 'dart:collection';
 
 abstract final class AxiomEducationContract {
   static const schema = 'axiom-domain-contract.v1';
-  static const id = 'education.ontarioedai';
+  static const brand = 'Axiom Education';
+  static const id = 'axiom.education';
   static const version = '1.0.0';
   static const sha256 =
-      '19f3fdb09352bb87694913d760562065a9a84fcd89780d541ee186be4b193254';
-  static const controller = 'capsule:education.ontarioedai';
+      'a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2';
+  static const controller = 'capsule:axiom.education';
+  static const curriculumPackProfile = 'jurisdictional';
   static const gatewayPath = '/v1/intents';
   static const idempotencyHeader = 'idempotency-key';
 
