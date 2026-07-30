@@ -1,31 +1,36 @@
-# Repository migration: OntarioEdAI to Axiom-Education
+# Repository rename record: OntarioEdAI to Axiom-Education
 
-## Target state
+**Status:** completed  
+**Completed:** 2026-07-30
+
+## Canonical state
 
 - Repository: `Zoverions/Axiom-Education`
 - Product: **Axiom Education**
 - Default branch: `main`
-- Historical URL: `Zoverions/OntarioEdAI` retained only through GitHub's automatic redirect
+- Historical URL: `Zoverions/OntarioEdAI`, retained only through GitHub's automatic redirect
 - Ontario content: jurisdictional curriculum pack, not platform identity
 
-## GitHub administrative change
+## Completed GitHub administration
 
-From the repository settings:
+The repository was renamed from `OntarioEdAI` to `Axiom-Education`, and `main` was set as the default branch.
 
-1. Open **Settings → General → Repository name**.
-2. Rename `OntarioEdAI` to `Axiom-Education`.
-3. Set **Settings → Branches → Default branch** to `main`.
-4. Confirm branch-protection rules and required checks target `main`.
-5. Do not create a replacement repository at the old slug; preserve GitHub's redirect.
+The completed administrative state must remain:
 
-GitHub redirects ordinary web, clone, fetch, and push traffic from the former repository URL after a rename, but local remotes should still be updated explicitly:
+1. repository name `Axiom-Education`;
+2. default branch `main`;
+3. branch protection and required checks targeting `main`;
+4. no replacement repository created at the deprecated slug;
+5. the former URL retained only as GitHub's redirect.
+
+Local remotes should use the canonical URL explicitly:
 
 ```bash
 git remote set-url origin https://github.com/Zoverions/Axiom-Education.git
 git remote -v
 ```
 
-## Required post-rename verification
+## Post-rename verification
 
 ```bash
 python tools/check_capabilities.py
@@ -35,13 +40,16 @@ flutter analyze
 flutter test
 ```
 
-Also verify:
+Verified repository conditions:
 
-- the protected `Axiom Education Rebuild` workflow runs on `main`;
-- README and documentation links resolve under the new slug;
-- AXIOM-MESH contains no pinned reference to the deprecated repository slug;
-- open issues and pull requests remain present after the rename;
-- package registries, deployment manifests, local clones, and external automation use the new remote.
+- the canonical repository resolves as `Zoverions/Axiom-Education`;
+- GitHub reports `main` as the default branch;
+- the protected `Axiom Education CI` workflow targets `main` and pull requests;
+- README and canonical documentation identify the new repository and product;
+- AXIOM-MESH contains no current code-search result for the deprecated repository slug;
+- historical issues, pull requests, commits, and redirects remain part of the same repository identity.
+
+External package registries, deployment manifests, local clones, mirrors, and automation must use the canonical remote rather than relying on redirects.
 
 ## Compatibility policy
 

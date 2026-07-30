@@ -1,18 +1,19 @@
 # Axiom Education deprecations
 
 **Effective:** 2026-07-30  
+**Canonical repository:** `Zoverions/Axiom-Education`  
 **Canonical product name:** Axiom Education  
 **Canonical branch:** `main`
 
-This document records interfaces, names, branches, and implementation paths that remain in the repository only for traceability or temporary compatibility. Deprecated material must not be used to establish current capability, security, privacy, architecture, or release claims.
+This document records interfaces, names, branches, and implementation paths that remain only for traceability or temporary compatibility. Deprecated material must not be used to establish current capability, security, privacy, architecture, or release claims.
 
 ## Repository and product naming
 
 | Deprecated surface | Replacement | Disposition |
 |---|---|---|
-| GitHub repository slug `OntarioEdAI` | `Axiom-Education` | Rename the repository. The old GitHub URL should exist only as GitHub's redirect. |
-| Product name `OntarioEdAI` | Axiom Education | Remove from current product and operator documentation. Historical records may retain it when clearly labelled. |
-| Default branch `feature/init-ontarioedai-v0.3-11996005026797377764` | `main` | Change the GitHub default branch to `main`; do not base new work on the feature branch. |
+| GitHub repository slug `OntarioEdAI` | `Zoverions/Axiom-Education` | Rename completed. The old GitHub URL is compatibility redirect only. |
+| Product name `OntarioEdAI` | Axiom Education | Removed from current product and operator documentation. Historical records may retain it when clearly labelled. |
+| Default branch `feature/init-ontarioedai-v0.3-11996005026797377764` | `main` | Default-branch migration completed. No new work may target the feature branch. |
 | Rebuild branch `rebuild/axiom-education-v0.5` | `main` | Merged and closed. Preserve only as Git history. |
 | Internal Dart package name `ontarioedai` | `axiom_education` | Temporary compatibility shim. Migrate imports and generated platform metadata in a dedicated, test-gated change before `0.6.0`. |
 
