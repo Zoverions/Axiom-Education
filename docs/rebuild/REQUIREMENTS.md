@@ -1,4 +1,4 @@
-# OntarioEdAI Rebuild Requirements
+# Axiom Education Rebuild Requirements
 
 **Current build:** `0.5.0-dev.0`  
 **Updated:** 2026-07-30
@@ -9,22 +9,23 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 
 | ID | Requirement | Acceptance evidence |
 |---|---|---|
-| EDU-ARCH-01 | OntarioEdAI MUST remain independently releasable and MUST NOT become part of the AXIOM trusted kernel. | Repository and dependency-boundary tests. |
-| EDU-ARCH-02 | Governed learner-data and externally visible effects MUST follow OntarioEdAI UI → AXIOM Gateway → Hypervisor → Sandbox → Grid. | End-to-end bypass rejection tests. |
+| EDU-ARCH-01 | Axiom Education MUST remain independently releasable and MUST NOT become part of the AXIOM trusted kernel. | Repository and dependency-boundary tests. |
+| EDU-ARCH-02 | Governed learner-data and externally visible effects MUST follow Axiom Education UI → AXIOM Gateway → Hypervisor → Sandbox → Grid. | End-to-end bypass rejection tests. |
 | EDU-ARCH-03 | Flutter presentation, pure education-domain logic, and provider implementations MUST be separate packages or modules. | Import-boundary tests and domain-only test command. |
 | EDU-ARCH-04 | Interfaces MUST be versioned and incompatible capsule, curriculum, provider, or record schemas MUST fail closed. | Compatibility fixtures. |
 | EDU-ARCH-05 | Development adapters and mocks MUST be impossible to select in release or governed builds. | Build-mode negative tests. |
+| EDU-ARCH-06 | Current product, repository, contract, package, and branch identifiers MUST be declared; deprecated identifiers MUST be documented and MUST NOT be used as current claim authority. | Documentation parity and repository migration checks. |
 
 ## Curriculum and provenance
 
 | ID | Requirement | Acceptance evidence |
 |---|---|---|
 | EDU-CUR-01 | Every curriculum record MUST identify jurisdiction, authority, official-or-extension status, source, source digest, publication/effective dates when known, ingestion date, parser version, licence, review state, content digest, and supersession. | Schema and fixture validation. |
-| EDU-CUR-02 | Official Ontario curriculum, OntarioEdAI extensions, and third-party OER MUST be separate namespaces. | Collision and presentation tests. |
+| EDU-CUR-02 | Official jurisdictional curriculum, Axiom Education extensions, and third-party OER MUST use separate namespaces. | Collision and presentation tests. |
 | EDU-CUR-03 | Curriculum builds MUST be reproducible from pinned inputs and tools. | Two clean builds produce identical manifest and record digests. |
 | EDU-CUR-04 | Curriculum activation MUST require a valid signed manifest and MUST preserve the prior active pack for rollback. | Tamper, signer, downgrade, activation, and rollback tests. |
 | EDU-CUR-05 | Retrieval indexes MUST be disposable derived artifacts and MUST NOT replace authoritative curriculum records. | Rebuild and corruption tests. |
-| EDU-CUR-06 | Custom course codes MUST be visibly marked as OntarioEdAI extensions and MUST NOT imply Ministry recognition. | UI and export snapshot tests. |
+| EDU-CUR-06 | Custom course codes MUST be visibly marked as Axiom Education extensions and MUST NOT imply jurisdictional authority recognition. | UI and export snapshot tests. |
 
 ## Tutor and deterministic verification
 
@@ -87,3 +88,4 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | EDU-OPS-04 | Secrets, model binaries, generated indexes, databases containing learner data, caches, and build artifacts MUST NOT be tracked. | Repository hygiene gate. |
 | EDU-OPS-05 | Security, privacy, curriculum, accessibility, recovery, and model-evaluation findings MUST be tied to an owner and disposition. | Findings-ledger verifier. |
 | EDU-OPS-06 | Public claims MUST be generated or checked against `config/capabilities.json`. | Documentation parity test. |
+| EDU-OPS-07 | `main` MUST be the default branch and repository automation MUST NOT target a retired feature branch. | GitHub settings and protected workflow inspection. |
