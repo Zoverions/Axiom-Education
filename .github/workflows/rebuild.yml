@@ -102,13 +102,10 @@ jobs:
     name: Flutter analyze, test, and Android smoke build
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    permissions:
-      contents: write
     steps:
-      - name: Check out trusted branch head
+      - name: Check out source
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Flutter
@@ -124,47 +121,23 @@ jobs:
       - name: Install exact Dart dependencies
         run: flutter pub get --enforce-lockfile
 
-      - name: Format runnable application files
-        run: >-
-          dart format
-          lib/main.dart
-          lib/core/providers/curriculum_provider.dart
-          lib/core/services/hive_service.dart
-          lib/features/diagnostic/diagnostic_screen.dart
-          test/widget_test.dart
-
-      - name: Commit canonical formatting once
-        if: >-
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.head.repo.full_name == github.repository &&
-          github.head_ref == 'fix/runnable-curriculum-browser'
+      - name: Verify changed Dart formatting
         shell: bash
         run: |
-          paths=(
-            lib/main.dart
-            lib/core/providers/curriculum_provider.dart
-            lib/core/services/hive_service.dart
-            lib/features/diagnostic/diagnostic_screen.dart
-            test/widget_test.dart
-          )
-          if git diff --quiet -- "${paths[@]}"; then
-            echo 'Runnable application files are already canonically formatted.'
-            exit 0
+          if [[ -n "${GITHUB_BASE_REF}" ]]; then
+            base="origin/${GITHUB_BASE_REF}"
+          else
+            base='HEAD^'
           fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- "${paths[@]}"
-          git commit -m 'Apply canonical Dart formatting'
-          git push origin "HEAD:${GITHUB_HEAD_REF}"
-
-      - name: Verify runnable application formatting
-        run: >-
-          git diff --exit-code --
-          lib/main.dart
-          lib/core/providers/curriculum_provider.dart
-          lib/core/services/hive_service.dart
-          lib/features/diagnostic/diagnostic_screen.dart
-          test/widget_test.dart
+          mapfile -t dart_files < <(
+            git diff --name-only --diff-filter=ACMRT "${base}...HEAD" -- '*.dart'
+          )
+          if ((${#dart_files[@]})); then
+            printf 'Checking %s\n' "${dart_files[@]}"
+            dart format --output=none --set-exit-if-changed "${dart_files[@]}"
+          else
+            echo 'No changed Dart files.'
+          fi
 
       - name: Analyze
         run: flutter analyze
