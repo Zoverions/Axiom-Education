@@ -1,4 +1,4 @@
-name: OntarioEdAI rebuild
+name: Axiom Education rebuild
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ontarioedai-rebuild-${{ github.workflow }}-${{ github.ref }}
+  group: axiom-education-rebuild-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,20 +31,20 @@ jobs:
       - name: Verify capability and claim parity
         run: python tools/check_capabilities.py
 
-      - name: Verify canonical education contract digest
+      - name: Verify canonical Axiom Education contract digest
         run: |
           python - <<'PY'
           from hashlib import sha256
           from pathlib import Path
-          expected = '19f3fdb09352bb87694913d760562065a9a84fcd89780d541ee186be4b193254'
+          expected = 'a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2'
           actual = sha256(Path('contracts/axiom-education.v1.json').read_bytes()).hexdigest()
           if actual != expected:
-              raise SystemExit(f'education contract digest mismatch: {actual}')
-          print(f'education contract verified: {actual}')
+              raise SystemExit(f'Axiom Education contract digest mismatch: {actual}')
+          print(f'Axiom Education contract verified: {actual}')
           PY
 
   curriculum-pack:
-    name: Deterministic signed curriculum pack
+    name: Deterministic signed Ontario curriculum pack
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -62,42 +62,42 @@ jobs:
       - name: Run curriculum pack unit tests
         run: python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
 
-      - name: Build the repository curriculum twice
+      - name: Build the Ontario curriculum pack twice
         run: |
-          rm -rf /tmp/ontarioedai-pack-a /tmp/ontarioedai-pack-b
+          rm -rf /tmp/axiom-education-ontario-a /tmp/axiom-education-ontario-b
           python tools/curriculum_pack.py build \
             --input assets/curriculum/ontario_curriculum_full.json \
             --ledger curriculum/source-ledger.v1.json \
-            --output /tmp/ontarioedai-pack-a \
+            --output /tmp/axiom-education-ontario-a \
             --pack-id ontario-secondary \
             --pack-version 1.0.0
           python tools/curriculum_pack.py build \
             --input assets/curriculum/ontario_curriculum_full.json \
             --ledger curriculum/source-ledger.v1.json \
-            --output /tmp/ontarioedai-pack-b \
+            --output /tmp/axiom-education-ontario-b \
             --pack-id ontario-secondary \
             --pack-version 1.0.0
-          cmp /tmp/ontarioedai-pack-a/manifest.json /tmp/ontarioedai-pack-b/manifest.json
-          cmp /tmp/ontarioedai-pack-a/records.jsonl /tmp/ontarioedai-pack-b/records.jsonl
-          python tools/curriculum_pack.py verify --pack-dir /tmp/ontarioedai-pack-a
+          cmp /tmp/axiom-education-ontario-a/manifest.json /tmp/axiom-education-ontario-b/manifest.json
+          cmp /tmp/axiom-education-ontario-a/records.jsonl /tmp/axiom-education-ontario-b/records.jsonl
+          python tools/curriculum_pack.py verify --pack-dir /tmp/axiom-education-ontario-a
 
       - name: Sign and verify with an ephemeral Ed25519 key
         run: |
           umask 077
-          openssl genpkey -algorithm ED25519 -out /tmp/ontarioedai-pack-private.pem
+          openssl genpkey -algorithm ED25519 -out /tmp/axiom-education-ontario-private.pem
           openssl pkey \
-            -in /tmp/ontarioedai-pack-private.pem \
+            -in /tmp/axiom-education-ontario-private.pem \
             -pubout \
-            -out /tmp/ontarioedai-pack-public.pem
+            -out /tmp/axiom-education-ontario-public.pem
           python tools/curriculum_pack.py sign \
-            --pack-dir /tmp/ontarioedai-pack-a \
-            --private-key /tmp/ontarioedai-pack-private.pem \
-            --public-key /tmp/ontarioedai-pack-public.pem
+            --pack-dir /tmp/axiom-education-ontario-a \
+            --private-key /tmp/axiom-education-ontario-private.pem \
+            --public-key /tmp/axiom-education-ontario-public.pem
           python tools/curriculum_pack.py verify \
-            --pack-dir /tmp/ontarioedai-pack-a \
-            --public-key /tmp/ontarioedai-pack-public.pem \
+            --pack-dir /tmp/axiom-education-ontario-a \
+            --public-key /tmp/axiom-education-ontario-public.pem \
             --require-signature
-          rm -f /tmp/ontarioedai-pack-private.pem /tmp/ontarioedai-pack-public.pem
+          rm -f /tmp/axiom-education-ontario-private.pem /tmp/axiom-education-ontario-public.pem
 
   flutter:
     name: Flutter analyze and test
