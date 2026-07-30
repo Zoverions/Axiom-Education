@@ -28,6 +28,19 @@ The Flutter application remains independently releasable. AXIOM-MESH supplies th
 
 Installing a curriculum or education capsule does not grant access to learner records, activate a provider, or authorize execution.
 
+## Current usable surface
+
+The runnable application is a local Ontario curriculum browser. It provides:
+
+- recoverable first-run initialization;
+- a searchable list of courses and expectation counts;
+- course, strand, expectation, and tag browsing;
+- pull-to-refresh and explicit retry states;
+- automatic restoration of a missing or invalid bundled curriculum database;
+- a read-only curriculum database and a separate local settings store.
+
+The application does **not** currently provide a live tutor, governed learner records, pack activation, portfolio export, or classroom synchronization. Those paths remain disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+
 ## First five minutes
 
 Supported rebuild toolchain:
@@ -41,12 +54,27 @@ Supported rebuild toolchain:
 flutter pub get --enforce-lockfile
 python tools/check_capabilities.py
 python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
+dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test
-flutter run -d windows
+flutter devices
+flutter run -d <device-id>
 ```
 
-The current application opens the Axiom Education diagnostic browser over the bundled Ontario curriculum database. The learner workspace, live AXIOM transport, configured tutor provider, encrypted learner records, governed pack activation, and governed classroom synchronization remain rebuild work.
+For an Android installation smoke build:
+
+```bash
+flutter build apk --debug
+```
+
+The APK is written to `build/app/outputs/flutter-apk/app-debug.apk`. The protected GitHub workflow also builds this APK and publishes it as a short-lived workflow artifact after formatting, analysis, and tests pass.
+
+Desktop runs require the corresponding Flutter desktop toolchain to be enabled. For example:
+
+```bash
+flutter config --enable-windows-desktop
+flutter run -d windows
+```
 
 ## Axiom Education contract
 
