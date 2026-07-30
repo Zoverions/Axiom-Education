@@ -1,17 +1,16 @@
-name: Axiom Education rebuild
+name: Axiom Education CI
 
 on:
   pull_request:
   push:
     branches:
-      - rebuild/**
       - main
 
 permissions:
   contents: read
 
 concurrency:
-  group: axiom-education-rebuild-${{ github.workflow }}-${{ github.ref }}
+  group: axiom-education-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -28,7 +27,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Verify capability and claim parity
+      - name: Verify capability, identity, deprecation, and claim parity
         run: python tools/check_capabilities.py
 
       - name: Verify canonical Axiom Education contract digest
