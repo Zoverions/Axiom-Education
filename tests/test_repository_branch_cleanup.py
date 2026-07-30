@@ -55,9 +55,10 @@ class BranchCleanupPlanningTest(unittest.TestCase):
             ahead_by_branch={},
             archive_prefix="archive/branches/2026-07-30",
         )
-        self.assertEqual(plan[0].action, "preserve")
-        self.assertEqual(plan[1].action, "preserve")
-        self.assertEqual(plan[1].reason, "open pull-request head")
+        by_name = {decision.name: decision for decision in plan}
+        self.assertEqual(by_name["main"].action, "preserve")
+        self.assertEqual(by_name["active-review"].action, "preserve")
+        self.assertEqual(by_name["active-review"].reason, "open pull-request head")
 
     def test_rejects_missing_default_branch(self) -> None:
         with self.assertRaises(CleanupError):
