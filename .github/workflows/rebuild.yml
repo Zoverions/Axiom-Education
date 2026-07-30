@@ -102,13 +102,10 @@ jobs:
     name: Flutter analyze, test, and Android smoke build
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    permissions:
-      contents: write
     steps:
-      - name: Check out trusted branch head
+      - name: Check out source
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Flutter
@@ -123,34 +120,6 @@ jobs:
 
       - name: Install exact Dart dependencies
         run: flutter pub get --enforce-lockfile
-
-      - name: Verify ML Kit pose detection is unused
-        shell: bash
-        run: |
-          if grep -R --line-number --extended-regexp \
-            'package:google_mlkit_pose_detection|PoseDetector' lib test; then
-            echo 'google_mlkit_pose_detection is still referenced; refusing removal.' >&2
-            exit 1
-          fi
-          echo 'No ML Kit pose detection use exists in executable or test code.'
-
-      - name: Remove incompatible unused ML Kit dependency
-        if: >-
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.head.repo.full_name == github.repository &&
-          github.head_ref == 'fix/runnable-curriculum-browser'
-        shell: bash
-        run: |
-          if ! grep -q '^  google_mlkit_pose_detection:' pubspec.yaml; then
-            echo 'ML Kit pose detection dependency is already absent.'
-            exit 0
-          fi
-          flutter pub remove google_mlkit_pose_detection
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add pubspec.yaml pubspec.lock
-          git commit -m 'Remove unused incompatible ML Kit dependency'
-          git push origin "HEAD:${GITHUB_HEAD_REF}"
 
       - name: Verify changed Dart formatting
         shell: bash
