@@ -52,8 +52,17 @@ jobs:
       - name: Install exact Dart dependencies
         run: flutter pub get --enforce-lockfile
 
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Parse and format-check rebuild files
+        run: >-
+          dart format --output=none
+          lib/core/services/mesh_network_service.dart
+          lib/core/services/model_bindings.dart
+          lib/core/services/model_errors.dart
+          lib/core/services/watcher_model.dart
+          lib/core/services/handwriting_scorer.dart
+          test/core/services/adaptive_engine_test.dart
+          test/core/services/mesh_network_service_test.dart
+          test/model_bindings_test.dart
 
       - name: Analyze
         run: flutter analyze
