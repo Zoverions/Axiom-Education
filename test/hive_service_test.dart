@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ontarioedai/core/services/hive_service.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'dart:io';
 
 class MockPathProviderPlatform extends PathProviderPlatform {
   @override
@@ -24,10 +25,10 @@ void main() {
     }
   });
 
-  test('HiveService.init initializes hive and opens boxes', () async {
+  test('HiveService.init opens settings without learner storage', () async {
     await HiveService.init();
 
-    expect(Hive.isBoxOpen('settings'), isTrue);
-    expect(Hive.isBoxOpen('student_data'), isTrue);
+    expect(Hive.isBoxOpen(HiveService.settingsBoxName), isTrue);
+    expect(Hive.isBoxOpen('student_data'), isFalse);
   });
 }

@@ -1,18 +1,26 @@
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
 class HiveService {
+  static const String settingsBoxName = 'settings';
+
+  static bool _configured = false;
+
   static Future<void> init() async {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      final dir = await getApplicationSupportDirectory();
-      Hive.init(dir.path);
-    } else {
-      await Hive.initFlutter();
+    if (!_configured) {
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final directory = await getApplicationSupportDirectory();
+        Hive.init(directory.path);
+      } else {
+        await Hive.initFlutter();
+      }
+      _configured = true;
     }
 
-    // Open default boxes
-    await Hive.openBox('settings');
-    await Hive.openBox('student_data');
+    if (!Hive.isBoxOpen(settingsBoxName)) {
+      await Hive.openBox<dynamic>(settingsBoxName);
+    }
   }
 }

@@ -99,12 +99,14 @@ jobs:
           rm -f /tmp/axiom-education-ontario-private.pem /tmp/axiom-education-ontario-public.pem
 
   flutter:
-    name: Flutter analyze and test
+    name: Flutter analyze, test, and Android smoke build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Check out source
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -119,28 +121,37 @@ jobs:
       - name: Install exact Dart dependencies
         run: flutter pub get --enforce-lockfile
 
-      - name: Parse and format rebuild files
-        run: >-
-          dart format
-          lib/core/axiom/education_contract.dart
-          lib/core/axiom/education_client.dart
-          lib/core/providers/curriculum_provider.dart
-          lib/core/services/mesh_network_service.dart
-          lib/core/services/model_bindings.dart
-          lib/core/services/model_errors.dart
-          lib/core/services/watcher_model.dart
-          lib/core/services/handwriting_scorer.dart
-          test/core/axiom/education_client_test.dart
-          test/core/providers/curriculum_provider_test.dart
-          test/core/services/adaptive_engine_test.dart
-          test/core/services/mesh_network_service_test.dart
-          test/core/services/model_bindings_test.dart
-          test/handwriting_scorer_test.dart
-          test/model_bindings_test.dart
-          test/watcher_model_test.dart
+      - name: Verify changed Dart formatting
+        shell: bash
+        run: |
+          if [[ -n "${GITHUB_BASE_REF}" ]]; then
+            base="origin/${GITHUB_BASE_REF}"
+          else
+            base='HEAD^'
+          fi
+          mapfile -t dart_files < <(
+            git diff --name-only --diff-filter=ACMRT "${base}...HEAD" -- '*.dart'
+          )
+          if ((${#dart_files[@]})); then
+            printf 'Checking %s\n' "${dart_files[@]}"
+            dart format --output=none --set-exit-if-changed "${dart_files[@]}"
+          else
+            echo 'No changed Dart files.'
+          fi
 
-      - name: Analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      - name: Analyze errors and warnings
+        run: flutter analyze --no-fatal-infos
 
       - name: Test
         run: flutter test --reporter expanded
+
+      - name: Build Android debug APK
+        run: flutter build apk --debug
+
+      - name: Upload Android debug APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: axiom-education-android-debug-${{ github.sha }}
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7

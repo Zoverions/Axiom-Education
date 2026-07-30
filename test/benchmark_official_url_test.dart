@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
-import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 
 void main() {
   late Directory tempDir;
@@ -19,16 +18,17 @@ void main() {
     const channel = MethodChannel('plugins.flutter.io/path_provider');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-      if (methodCall.method == 'getApplicationSupportDirectory' ||
-          methodCall.method == 'getDatabasesPath') {
-        return tempDir.path;
-      }
-      return '.';
-    });
+          if (methodCall.method == 'getApplicationSupportDirectory' ||
+              methodCall.method == 'getDatabasesPath') {
+            return tempDir.path;
+          }
+          return '.';
+        });
 
     // Manually copy the database file for testing
-    final dbBytes =
-        await File('assets/curriculum/ontario_curriculum.sqlite').readAsBytes();
+    final dbBytes = await File(
+      'assets/curriculum/ontario_curriculum.sqlite',
+    ).readAsBytes();
     final dbPath = '${tempDir.path}/ontario_curriculum.sqlite';
     await File(dbPath).writeAsBytes(dbBytes, flush: true);
   });
@@ -54,6 +54,7 @@ void main() {
     }
 
     print(
-        'Average time elapsed per call (officialUrl): ${totalTime / iterations / 1000}ms');
+      'Average time elapsed per call (officialUrl): ${totalTime / iterations / 1000}ms',
+    );
   });
 }
