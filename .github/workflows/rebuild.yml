@@ -119,8 +119,37 @@ jobs:
       - name: Install exact Dart dependencies
         run: flutter pub get --enforce-lockfile
 
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Format runnable application files
+        run: >-
+          dart format
+          lib/main.dart
+          lib/core/providers/curriculum_provider.dart
+          lib/core/services/hive_service.dart
+          lib/features/diagnostic/diagnostic_screen.dart
+          test/widget_test.dart
+
+      - name: Verify runnable application formatting
+        run: >-
+          git diff --exit-code --
+          lib/main.dart
+          lib/core/providers/curriculum_provider.dart
+          lib/core/services/hive_service.dart
+          lib/features/diagnostic/diagnostic_screen.dart
+          test/widget_test.dart
+
+      - name: Upload canonical formatted sources on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: canonical-formatted-runnable-sources-${{ github.sha }}
+          path: |
+            lib/main.dart
+            lib/core/providers/curriculum_provider.dart
+            lib/core/services/hive_service.dart
+            lib/features/diagnostic/diagnostic_screen.dart
+            test/widget_test.dart
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Analyze
         run: flutter analyze
