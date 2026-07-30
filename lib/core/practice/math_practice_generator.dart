@@ -32,7 +32,9 @@ class MathPracticeGenerator {
       throw UnsupportedPracticeExpectationException(expectationId);
     }
 
-    final sequence = _DeterministicSequence(seed ^ expectationId.hashCode);
+    final sequence = _DeterministicSequence(
+      seed ^ _stableStringSeed(expectationId),
+    );
     return switch (expectationId) {
       'MTH1W-A1' => _generateOrderOfOperations(
           expectationId,
@@ -188,6 +190,15 @@ class MathPracticeGenerator {
     );
   }
 
+  static int _stableStringSeed(String value) {
+    var hash = 0x811c9dc5;
+    for (final codeUnit in value.codeUnits) {
+      hash ^= codeUnit;
+      hash = (hash * 0x01000193) & 0x7fffffff;
+    }
+    return hash;
+  }
+
   static String _linearExpression(int coefficient, int constant) {
     final xTerm = switch (coefficient) {
       1 => 'x',
@@ -204,7 +215,8 @@ class MathPracticeGenerator {
         : 'subtracting ${constant.abs()}';
   }
 
-  static String _signedValue(int value) => value >= 0 ? '$value' : '−${value.abs()}';
+  static String _signedValue(int value) =>
+      value >= 0 ? '$value' : '−${value.abs()}';
 }
 
 class _DeterministicSequence {
