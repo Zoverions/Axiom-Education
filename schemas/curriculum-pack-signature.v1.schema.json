@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ontarioedai.local/schemas/curriculum-pack-signature.v1.schema.json",
+  "title": "OntarioEdAI Curriculum Pack Signature v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "algorithm",
+    "key_id",
+    "manifest_sha256",
+    "signature_file",
+    "signature_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ontarioedai-curriculum-pack-signature.v1"},
+    "algorithm": {"const": "Ed25519"},
+    "key_id": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "signature_file": {"const": "manifest.sig"},
+    "signature_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
