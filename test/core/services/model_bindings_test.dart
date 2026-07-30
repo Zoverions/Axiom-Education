@@ -3,7 +3,6 @@ import 'package:ontarioedai/core/services/model_bindings.dart';
 import 'package:onnxruntime/onnxruntime.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-// Manual mock for OrtSession
 class MockOrtSession extends Fake implements OrtSession {
   bool releaseCalled = false;
 
@@ -13,7 +12,6 @@ class MockOrtSession extends Fake implements OrtSession {
   }
 }
 
-// Manual mock for Interpreter
 class MockInterpreter extends Fake implements Interpreter {
   bool closeCalled = false;
 
@@ -27,26 +25,28 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Phi3MiniModel', () {
-    test('initModel handles exception gracefully', () async {
+    test('initModel surfaces initialization failure and remains unavailable',
+        () async {
       final model = Phi3MiniModel();
+
       await expectLater(
         model.initModel(
-          mockSessionLoader: (String path, OrtSessionOptions options) async {
+          testSessionLoader: () async {
             throw Exception('Simulated initialization failure');
           },
         ),
-        completes,
+        throwsA(isA<ModelUnavailableException>()),
       );
+      expect(model.isInitialized, isFalse);
     });
 
-    test('dispose releases session and resets initialization state', () async {
+    test('dispose releases an injected session and resets state', () async {
       final model = Phi3MiniModel();
       final mockSession = MockOrtSession();
 
       await model.initModel(
-        mockSessionLoader: (path, options) async => mockSession,
+        testSessionLoader: () async => mockSession,
       );
-
       expect(model.isInitialized, isTrue);
 
       model.dispose();
@@ -57,15 +57,23 @@ void main() {
   });
 
   group('HandwritingScorer', () {
-    test('initModel error leaves it uninitialized and returns fallback scores',
+    test('initialization failure is explicit and leaves scorer unavailable',
         () async {
       final scorer = HandwritingScorer();
-      await scorer.initModel(
-        interpreterLoader: () async => throw Exception('Mock TFLite Load Failure'),
+
+      await expectLater(
+        scorer.initModel(
+          interpreterLoader: () async {
+            throw Exception('Mock TFLite load failure');
+          },
+        ),
+        throwsA(isA<ModelUnavailableException>()),
       );
       expect(scorer.isInitialized, isFalse);
-      final scores = await scorer.scoreHandwriting([]);
-      expect(scores, equals((0.8, 0.85)));
+      await expectLater(
+        scorer.scoreHandwriting(const []),
+        throwsA(isA<ModelUnavailableException>()),
+      );
     });
 
     test('dispose closes interpreter and resets initialization state', () async {
@@ -75,7 +83,6 @@ void main() {
       await scorer.initModel(
         interpreterLoader: () async => mockInterpreter,
       );
-
       expect(scorer.isInitialized, isTrue);
 
       scorer.dispose();
@@ -84,13 +91,8 @@ void main() {
       expect(mockInterpreter.closeCalled, isTrue);
     });
 
-    late HandwritingScorer scorer;
-
-    setUp(() {
-      scorer = HandwritingScorer();
-    });
-
-    test('preprocessStrokes handles exactly 100 strokes without errors', () {
+    test('preprocessStrokes accepts exactly 100 bounded strokes', () {
+      final scorer = HandwritingScorer();
       final strokes = List.generate(
         100,
         (index) => {
@@ -99,38 +101,34 @@ void main() {
           'pressure': 0.5,
         },
       );
+
       final result = scorer.preprocessStrokes(strokes);
+
       expect(result.length, 1);
       expect(result[0].length, 100);
-      expect(result[0][0].length, 3);
-      expect(result[0][0][0], 0.0);
-      expect(result[0][0][1], 0.0);
-      expect(result[0][0][2], 0.5);
-      expect(result[0][99][0], 99.0);
-      expect(result[0][99][1], 99.0);
-      expect(result[0][99][2], 0.5);
+      expect(result[0][0], [0.0, 0.0, 0.5]);
+      expect(result[0][99], [99.0, 99.0, 0.5]);
     });
 
-    test('preprocessStrokes handles excessive strokes (>100) safely by truncating',
-        () {
+    test('preprocessStrokes rejects excessive strokes instead of truncating', () {
+      final scorer = HandwritingScorer();
       final strokes = List.generate(
-        150,
+        101,
         (index) => {
           'x': index.toDouble(),
           'y': index.toDouble(),
           'pressure': 0.5,
         },
       );
-      final result = scorer.preprocessStrokes(strokes);
-      expect(result.length, 1);
-      expect(result[0].length, 100);
-      expect(result[0][0].length, 3);
-      expect(result[0][99][0], 99.0);
-      expect(result[0][99][1], 99.0);
-      expect(result[0][99][2], 0.5);
+
+      expect(
+        () => scorer.preprocessStrokes(strokes),
+        throwsFormatException,
+      );
     });
 
-    test('preprocessStrokes handles fewer than 100 strokes correctly', () {
+    test('preprocessStrokes zero-pads unused rows', () {
+      final scorer = HandwritingScorer();
       final strokes = List.generate(
         50,
         (index) => {
@@ -139,26 +137,20 @@ void main() {
           'pressure': 0.5,
         },
       );
+
       final result = scorer.preprocessStrokes(strokes);
-      expect(result.length, 1);
-      expect(result[0].length, 100);
-      expect(result[0][0].length, 3);
-      expect(result[0][49][0], 49.0);
-      expect(result[0][49][1], 49.0);
-      expect(result[0][49][2], 0.5);
-      expect(result[0][50][0], 0.0);
-      expect(result[0][50][1], 0.0);
-      expect(result[0][50][2], 0.0);
+
+      expect(result[0][49], [49.0, 49.0, 0.5]);
+      expect(result[0][50], [0.0, 0.0, 0.0]);
     });
   });
 
   group('WatcherModel', () {
-    test('dispose closes interpreter and resets initialization state', () async {
+    test('dispose closes interpreter and resets initialization state', () {
       final model = WatcherModel();
       final mockInterpreter = MockInterpreter();
 
       model.setInterpreterForTest(mockInterpreter);
-
       expect(model.isInitialized, isTrue);
 
       model.dispose();

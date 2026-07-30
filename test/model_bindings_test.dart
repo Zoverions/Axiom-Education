@@ -1,53 +1,67 @@
 import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/services/model_bindings.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-// Create a Fake that throws UnimplementedError for any method called except ones we need
-class FakeInterpreter extends Fake implements Interpreter {
-  // We don't need to implement anything because decodeImage error happens before any method is called on Interpreter
-}
+class FakeInterpreter extends Fake implements Interpreter {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('WatcherModel Tests', () {
-    test('parseCanvas with invalid image returns error message', () async {
+  group('WatcherModel', () {
+    test('throws an unavailable error when uninitialized', () async {
       final model = WatcherModel();
 
-      // Inject fake interpreter to bypass initialization check
-      model.setInterpreterForTest(FakeInterpreter());
-
-      // Pass an invalid/empty Uint8List which will fail decoding in img.decodeImage
-      final Uint8List invalidImage = Uint8List(0);
-
-      final result = await model.parseCanvas(invalidImage);
-
-      expect(result, "Failed to decode image");
+      await expectLater(
+        model.parseCanvas(Uint8List(0)),
+        throwsA(
+          isA<ModelUnavailableException>().having(
+            (error) => error.capability,
+            'capability',
+            'canvas.watcher',
+          ),
+        ),
+      );
     });
 
-    test('parseCanvas should return fallback mock equation when uninitialized', () async {
-      // Arrange
-      final watcherModel = WatcherModel();
-      final emptyBytes = Uint8List(0);
+    test('reports invalid image data without a mock equation', () async {
+      final model = WatcherModel()..setInterpreterForTest(FakeInterpreter());
 
-      // Act
-      final result = await watcherModel.parseCanvas(emptyBytes);
-
-      // Assert
-      expect(result, "Mock parsed equation: y = mx + b");
+      expect(await model.parseCanvas(Uint8List(0)), 'Failed to decode image');
     });
 
-    test('parseCanvas with excessively large image returns error message', () async {
+    test('rejects oversized encoded images before model access', () async {
       final model = WatcherModel();
-      model.setInterpreterForTest(FakeInterpreter());
+      final image = Uint8List(WatcherModel.maxEncodedImageBytes + 1);
 
-      // 10MB + 1 byte
-      final largeImage = Uint8List((10 * 1024 * 1024) + 1);
+      expect(await model.parseCanvas(image), 'Image size too large');
+    });
+  });
 
-      final result = await model.parseCanvas(largeImage);
+  group('Phi3MiniModel', () {
+    test('rejects empty prompts', () async {
+      final model = Phi3MiniModel();
 
-      expect(result, "Image size too large");
+      await expectLater(
+        model.generateResponse('   '),
+        throwsFormatException,
+      );
+    });
+
+    test('fails closed when the model is uninitialized', () async {
+      final model = Phi3MiniModel();
+
+      await expectLater(
+        model.generateResponse('Explain slope.'),
+        throwsA(
+          isA<ModelUnavailableException>().having(
+            (error) => error.capability,
+            'capability',
+            'tutor.local-inference',
+          ),
+        ),
+      );
     });
   });
 }

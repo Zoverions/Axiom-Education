@@ -1,0 +1,71 @@
+name: OntarioEdAI rebuild
+
+on:
+  pull_request:
+  push:
+    branches:
+      - rebuild/**
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ontarioedai-rebuild-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capability-registry:
+    name: Capability registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Verify capability and claim parity
+        run: python tools/check_capabilities.py
+
+  flutter:
+    name: Flutter analyze and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.1'
+          channel: stable
+          cache: true
+
+      - name: Report toolchain
+        run: flutter --version
+
+      - name: Install exact Dart dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Parse and format rebuild files
+        run: >-
+          dart format
+          lib/core/services/mesh_network_service.dart
+          lib/core/services/model_bindings.dart
+          lib/core/services/model_errors.dart
+          lib/core/services/watcher_model.dart
+          lib/core/services/handwriting_scorer.dart
+          test/core/services/adaptive_engine_test.dart
+          test/core/services/mesh_network_service_test.dart
+          test/model_bindings_test.dart
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Test
+        run: flutter test --reporter expanded
