@@ -1,14 +1,19 @@
-# AXIOM Education Contract v1
+# Axiom Education Contract v1
 
 **Status:** experimental contract and client; no live provider  
-**Contract ID:** `education.ontarioedai`  
+**Brand:** Axiom Education  
+**Contract ID:** `axiom.education`  
+**Controller:** `capsule:axiom.education`  
+**Curriculum-pack profile:** `jurisdictional`  
 **Version:** `1.0.0`  
-**Canonical SHA-256:** `19f3fdb09352bb87694913d760562065a9a84fcd89780d541ee186be4b193254`  
+**Canonical SHA-256:** `a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2`  
 **Minimum AXIOM kernel:** `0.12.0-dev.0`
 
 ## Purpose
 
-The contract is the first executable boundary between OntarioEdAI and AXIOM-MESH. It defines what OntarioEdAI may ask for, what purpose and consent must accompany learner-related requests, which actions are high-risk, and what AXIOM must report while no approved education provider exists.
+Axiom Education is the generic education-domain boundary for AXIOM-MESH. OntarioEdAI is its first jurisdictional application and curriculum profile, not the permanent identity of the shared contract.
+
+The contract defines what an education application may request, what purpose and consent must accompany learner-related requests, which actions are high-risk, and what AXIOM must report while no approved education provider exists.
 
 The identical canonical JSON file is committed in both repositories:
 
@@ -18,6 +23,12 @@ AXIOM-MESH/mesh/config/domain-contracts/education.v1.json
 ```
 
 Both sides pin the exact file digest. A syntactically valid replacement contract is rejected unless its bytes match the pinned SHA-256.
+
+## Jurisdictional curriculum profile
+
+`curriculum_pack_profile: jurisdictional` means the domain contract remains reusable while curriculum packs retain their own jurisdiction, authority, provenance, licensing, review, and signature metadata.
+
+Ontario is the first profile. Future jurisdictions must use separate reviewed curriculum packs and policy without changing the generic Axiom Education authority boundary or inheriting Ontario-specific claims.
 
 ## Gateway envelope
 
@@ -32,9 +43,9 @@ Content-Type: application/json
 {
   "action": "education.curriculum.query",
   "input": {
-    "contract_id": "education.ontarioedai",
+    "contract_id": "axiom.education",
     "contract_version": "1.0.0",
-    "contract_sha256": "19f3...3254",
+    "contract_sha256": "a20e191a...8fa2",
     "active_pack_manifest_sha256": "...",
     "course_code": "MTH1W"
   }
