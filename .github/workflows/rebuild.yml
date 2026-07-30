@@ -31,6 +31,18 @@ jobs:
       - name: Verify capability and claim parity
         run: python tools/check_capabilities.py
 
+      - name: Verify canonical education contract digest
+        run: |
+          python - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          expected = '19f3fdb09352bb87694913d760562065a9a84fcd89780d541ee186be4b193254'
+          actual = sha256(Path('contracts/axiom-education.v1.json').read_bytes()).hexdigest()
+          if actual != expected:
+              raise SystemExit(f'education contract digest mismatch: {actual}')
+          print(f'education contract verified: {actual}')
+          PY
+
   curriculum-pack:
     name: Deterministic signed curriculum pack
     runs-on: ubuntu-latest
@@ -111,12 +123,15 @@ jobs:
       - name: Parse and format rebuild files
         run: >-
           dart format
+          lib/core/axiom/education_contract.dart
+          lib/core/axiom/education_client.dart
           lib/core/providers/curriculum_provider.dart
           lib/core/services/mesh_network_service.dart
           lib/core/services/model_bindings.dart
           lib/core/services/model_errors.dart
           lib/core/services/watcher_model.dart
           lib/core/services/handwriting_scorer.dart
+          test/core/axiom/education_client_test.dart
           test/core/providers/curriculum_provider_test.dart
           test/core/services/adaptive_engine_test.dart
           test/core/services/mesh_network_service_test.dart
