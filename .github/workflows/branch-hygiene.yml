@@ -1,0 +1,83 @@
+name: Repository branch hygiene
+
+on:
+  pull_request:
+    paths:
+      - tools/repository_branch_cleanup.py
+      - tests/test_repository_branch_cleanup.py
+      - .github/workflows/branch-hygiene.yml
+  push:
+    branches:
+      - main
+    paths:
+      - tools/repository_branch_cleanup.py
+      - .github/workflows/branch-hygiene.yml
+
+permissions: {}
+
+concurrency:
+  group: repository-branch-hygiene
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    if: github.event_name == 'pull_request'
+    name: Audit branch cleanup tooling
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Compile branch cleanup tool
+        run: python -m py_compile tools/repository_branch_cleanup.py tests/test_repository_branch_cleanup.py
+
+      - name: Run branch cleanup tests
+        run: python -m unittest tests/test_repository_branch_cleanup.py -v
+
+      - name: Verify command surface
+        run: python tools/repository_branch_cleanup.py --help
+
+  cleanup:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Archive unique refs and delete stale branches
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Check out canonical source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Clean repository branches fail closed
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          python tools/repository_branch_cleanup.py
+          --repository "$GITHUB_REPOSITORY"
+          --default-branch main
+          --archive-prefix archive/branches/2026-07-30
+          --apply
+          --report /tmp/axiom-education-branch-cleanup.json
+
+      - name: Upload cleanup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axiom-education-branch-cleanup
+          path: /tmp/axiom-education-branch-cleanup.json
+          if-no-files-found: warn
+          retention-days: 90
