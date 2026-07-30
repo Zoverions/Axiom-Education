@@ -6,9 +6,15 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/services/mesh_network_service.dart';
 
+const testMeshSecret = 'test-only-mesh-secret-with-sufficient-entropy';
+
 class TestMeshNetworkService extends MeshNetworkService {
   TestMeshNetworkService({super.role = MeshRole.studentNode})
-      : super(classroomPin: 'test_pin');
+      : super(
+          classroomPin: 'test_pin',
+          meshSecret: testMeshSecret,
+          allowLegacyMesh: true,
+        );
 
   Map<String, dynamic>? lastPayload;
 
@@ -19,7 +25,8 @@ class TestMeshNetworkService extends MeshNetworkService {
 }
 
 class FakeSocket extends Fake implements Socket {
-  final StreamController<Uint8List> _controller = StreamController<Uint8List>();
+  final StreamController<Uint8List> _controller =
+      StreamController<Uint8List>();
   bool destroyed = false;
 
   @override
@@ -38,120 +45,174 @@ class FakeSocket extends Fake implements Socket {
   }
 
   @override
-  Stream<E> asyncMap<E>(FutureOr<E> Function(Uint8List event) convert) {
-    return _controller.stream.asyncMap(convert);
-  }
-
-  @override
   void destroy() {
     destroyed = true;
   }
 
-  void simulateError(Object error) {
-    _controller.addError(error);
-  }
+  void simulateError(Object error) => _controller.addError(error);
 
-  void simulateDone() {
-    _controller.close();
-  }
+  void simulateDone() => _controller.close();
 
-  void simulateData(Uint8List data) {
-    _controller.add(data);
+  void simulateData(List<int> data) {
+    _controller.add(Uint8List.fromList(data));
   }
 }
 
 void main() {
-  group('MeshNetworkService Authentication', () {
-    test('generateDiscoveryPayload produces valid JSON with correct structure',
-        () {
+  group('discovery authentication', () {
+    test('generates the expected signed payload shape', () {
       final service = MeshNetworkService(classroomPin: 'test_pin');
-      final payloadJson = service.generateDiscoveryPayload();
+      final payload = jsonDecode(service.generateDiscoveryPayload())
+          as Map<String, dynamic>;
 
-      final payload = jsonDecode(payloadJson) as Map<String, dynamic>;
-
-      expect(payload.containsKey('msg'), isTrue);
-      expect(payload['msg'], equals('TEACHER_NODE_HERE'));
-      expect(payload.containsKey('timestamp'), isTrue);
+      expect(payload['msg'], 'TEACHER_NODE_HERE');
       expect(payload['timestamp'], isA<int>());
-      expect(payload.containsKey('nonce'), isTrue);
       expect(payload['nonce'], isA<String>());
-      expect(payload.containsKey('signature'), isTrue);
       expect(payload['signature'], isA<String>());
+      expect((payload['signature'] as String).length, 64);
     });
 
-    test(
-        'verifyDiscoveryPayload returns true for valid payload with correct PIN',
-        () {
-      final teacherService =
-          MeshNetworkService(classroomPin: 'secret_classroom_123');
-      final studentService =
-          MeshNetworkService(classroomPin: 'secret_classroom_123');
+    test('accepts a valid payload once', () {
+      final teacher = MeshNetworkService(classroomPin: 'classroom-secret');
+      final student = MeshNetworkService(classroomPin: 'classroom-secret');
+      final payload = teacher.generateDiscoveryPayload();
 
-      final payloadJson = teacherService.generateDiscoveryPayload();
-
-      final isValid = studentService.verifyDiscoveryPayload(payloadJson);
-      expect(isValid, isTrue);
+      expect(student.verifyDiscoveryPayload(payload), isTrue);
+      expect(student.verifyDiscoveryPayload(payload), isFalse);
     });
 
-    test('verifyDiscoveryPayload returns false for replayed payload', () {
-      final teacherService =
-          MeshNetworkService(classroomPin: 'secret_classroom_123');
-      final studentService =
-          MeshNetworkService(classroomPin: 'secret_classroom_123');
+    test('rejects wrong PIN, malformed, and expired payloads', () {
+      final teacher = MeshNetworkService(classroomPin: 'classroom-secret');
+      final attacker = MeshNetworkService(classroomPin: 'wrong-secret');
+      expect(
+        attacker.verifyDiscoveryPayload(teacher.generateDiscoveryPayload()),
+        isFalse,
+      );
 
-      final payloadJson = teacherService.generateDiscoveryPayload();
-
-      // First verification should succeed
-      final isValidFirst = studentService.verifyDiscoveryPayload(payloadJson);
-      expect(isValidFirst, isTrue);
-
-      // Second verification of the same payload should fail
-      final isValidSecond = studentService.verifyDiscoveryPayload(payloadJson);
-      expect(isValidSecond, isFalse);
-    });
-
-    test(
-        'verifyDiscoveryPayload returns false for valid payload with incorrect PIN',
-        () {
-      final teacherService =
-          MeshNetworkService(classroomPin: 'secret_classroom_123');
-      final attackerService = MeshNetworkService(classroomPin: 'wrong_pin');
-
-      final payloadJson = teacherService.generateDiscoveryPayload();
-
-      final isValid = attackerService.verifyDiscoveryPayload(payloadJson);
-      expect(isValid, isFalse);
-    });
-
-    test('verifyDiscoveryPayload returns false for malformed payload', () {
-      final service = MeshNetworkService(classroomPin: 'test_pin');
-
-      expect(service.verifyDiscoveryPayload('{"msg": "TEACHER_NODE_HERE"}'),
-          isFalse);
-      expect(service.verifyDiscoveryPayload('not json'), isFalse);
-    });
-
-    test('verifyDiscoveryPayload returns false for expired timestamp', () {
-      final service = MeshNetworkService(classroomPin: 'test_pin');
-
-      // Expired timestamp (1 hour ago)
-      final expiredTimestamp = DateTime.now().millisecondsSinceEpoch - 3600000;
-      final payloadJson = jsonEncode({
-        'msg': 'TEACHER_NODE_HERE',
-        'timestamp': expiredTimestamp,
-        'nonce': 'fake_nonce',
-        'signature': 'fake_signature',
-      });
-
-      expect(service.verifyDiscoveryPayload(payloadJson), isFalse);
+      expect(attacker.verifyDiscoveryPayload('not-json'), isFalse);
+      expect(
+        attacker.verifyDiscoveryPayload(
+          jsonEncode({
+            'msg': 'TEACHER_NODE_HERE',
+            'timestamp': DateTime.now().millisecondsSinceEpoch - 3600000,
+            'nonce': 'expired',
+            'signature': '0' * 64,
+          }),
+        ),
+        isFalse,
+      );
     });
   });
 
-  group('MeshNetworkService syncCanvasState', () {
-    test('sends correct payload when connected', () async {
-      final service = TestMeshNetworkService();
-      service.isConnected = true;
+  group('fail-closed startup', () {
+    test('legacy mesh is disabled by default', () async {
+      final service = MeshNetworkService(
+        role: MeshRole.teacherNode,
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+      );
 
+      await expectLater(
+        service.startDiscovery(),
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            contains('disabled'),
+          ),
+        ),
+      );
+      expect(service.isConnected, isFalse);
+    });
+
+    test('explicit legacy opt-in still requires a configured key', () async {
+      final service = MeshNetworkService(
+        role: MeshRole.teacherNode,
+        classroomPin: 'test_pin',
+        allowLegacyMesh: true,
+        meshSecret: '',
+      );
+
+      await expectLater(
+        service.startDiscovery(),
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            contains('MESH_SECRET_KEY'),
+          ),
+        ),
+      );
+      expect(service.isConnected, isFalse);
+    });
+  });
+
+  group('authenticated encryption', () {
+    test('round-trips a bounded payload with AES-GCM', () {
+      final service = MeshNetworkService(
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+        allowLegacyMesh: true,
+      );
+      final payload = {
+        'type': 'CANVAS_SYNC',
+        'strokes': [
+          {'x': 10, 'y': 20, 'pressure': 0.5},
+        ],
+      };
+
+      final encoded = service.encodePayloadForTest(payload);
+      expect(service.decodePayloadForTest(encoded), payload);
+    });
+
+    test('rejects tampered ciphertext', () {
+      final service = MeshNetworkService(
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+        allowLegacyMesh: true,
+      );
+      final encoded = service.encodePayloadForTest({
+        'type': 'CANVAS_SYNC',
+        'strokes': <Map<String, dynamic>>[],
+      });
+      final parts = encoded.trim().split(':');
+      final ciphertext = base64.decode(parts[1]);
+      ciphertext[0] ^= 0x01;
+      final tampered = '${parts[0]}:${base64.encode(ciphertext)}';
+
+      expect(
+        () => service.decodePayloadForTest(tampered),
+        throwsA(anything),
+      );
+    });
+
+    test('rejects unsupported message types and excessive strokes', () {
+      final service = MeshNetworkService(
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+        allowLegacyMesh: true,
+      );
+
+      expect(
+        () => service.encodePayloadForTest({'type': 'UNKNOWN'}),
+        throwsFormatException,
+      );
+      expect(
+        () => service.encodePayloadForTest({
+          'type': 'CANVAS_SYNC',
+          'strokes': List<Map<String, dynamic>>.generate(
+            10001,
+            (index) => {'x': index, 'y': index},
+          ),
+        }),
+        throwsFormatException,
+      );
+    });
+  });
+
+  group('bounded domain messages', () {
+    test('syncCanvasState sends the expected payload when connected', () async {
+      final service = TestMeshNetworkService()..isConnected = true;
       final strokes = [
         {'x': 10, 'y': 20, 'pressure': 0.5},
         {'x': 15, 'y': 25, 'pressure': 0.7},
@@ -159,157 +220,81 @@ void main() {
 
       await service.syncCanvasState(strokes);
 
-      expect(service.lastPayload, isNotNull);
-      expect(service.lastPayload!['type'], equals('CANVAS_SYNC'));
-      expect(service.lastPayload!['strokes'], equals(strokes));
+      expect(service.lastPayload, {
+        'type': 'CANVAS_SYNC',
+        'strokes': strokes,
+      });
     });
 
-    test('does nothing when not connected', () async {
+    test('syncCanvasState does nothing while disconnected', () async {
       final service = TestMeshNetworkService();
-      service.isConnected = false;
-
-      final strokes = [
+      await service.syncCanvasState([
         {'x': 10, 'y': 20, 'pressure': 0.5},
-      ];
-
-      await service.syncCanvasState(strokes);
-
+      ]);
       expect(service.lastPayload, isNull);
     });
-  });
 
-  group('MeshNetworkService', () {
-    test('gossipCredential throws exception when not connected', () async {
-      final service = MeshNetworkService(classroomPin: 'test_pin');
-
+    test('gossipCredential requires a connection', () async {
+      final service = TestMeshNetworkService();
       await expectLater(
-        service.gossipCredential('test_id', {'data': 'test'}),
-        throwsA(isA<Exception>().having((e) => e.toString(), 'message',
-            contains('Not connected to mesh.'))),
+        service.gossipCredential('credential-1', {'grade': 'A'}),
+        throwsA(isA<StateError>()),
       );
     });
-  });
 
-  group('MeshNetworkService Tests', () {
-    test('startDiscovery falls back to Easy Connection on local mesh failure',
-        () async {
-      final service = MeshNetworkService(
-          role: MeshRole.teacherNode, classroomPin: 'test_pin');
-      final logs = <String>[];
+    test('gossipCredential sends the expected payload when connected', () async {
+      final service = TestMeshNetworkService()..isConnected = true;
+      await service.gossipCredential('credential-1', {'grade': 'A'});
 
-      // Bind to the port beforehand to cause an exception in startDiscovery
-      // Teacher node attempts to bind to port 4546.
-      final blockingServer =
-          await ServerSocket.bind(InternetAddress.anyIPv4, 4546);
-
-      try {
-        await runZoned<Future<void>>(() async {
-          await service.startDiscovery();
-        }, zoneSpecification: ZoneSpecification(
-          print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-            logs.add(line);
-          },
-        ));
-
-        // Assert that the fallback was attempted
-        expect(
-          logs.any((log) =>
-              log.contains('Attempting Easy Connection Discovery fallback...')),
-          isTrue,
-        );
-        expect(
-          logs.any((log) => log.contains(
-              'Connected to Global Educational Network via LEO Satellite.')),
-          isTrue,
-        );
-      } finally {
-        await blockingServer.close();
-        service.disconnect();
-      }
+      expect(service.lastPayload, {
+        'type': 'CREDENTIAL_GOSSIP',
+        'id': 'credential-1',
+        'payload': {'grade': 'A'},
+      });
     });
   });
 
-  group('MeshNetworkService gossipCredential', () {
-    test('sends correct payload when connected', () async {
-      final service = TestMeshNetworkService();
-      service.isConnected = true;
+  group('socket lifecycle and framing', () {
+    late MeshNetworkService service;
+    late FakeSocket socket;
 
-      final credentialId = 'test-cred-123';
-      final payloadData = {'grade': 'A', 'subject': 'Math'};
-
-      await service.gossipCredential(credentialId, payloadData);
-
-      expect(service.lastPayload, isNotNull);
-      expect(service.lastPayload!['type'], equals('CREDENTIAL_GOSSIP'));
-      expect(service.lastPayload!['id'], equals(credentialId));
-      expect(service.lastPayload!['payload'], equals(payloadData));
-    });
-
-    test('throws Exception when not connected', () async {
-      final service = TestMeshNetworkService();
-      service.isConnected = false;
-
-      final credentialId = 'test-cred-123';
-      final payloadData = {'grade': 'A', 'subject': 'Math'};
-
-      expect(
-        () => service.gossipCredential(credentialId, payloadData),
-        throwsA(
-          isA<Exception>().having(
-            (e) => e.toString(),
-            'message',
-            contains('Not connected to mesh.'),
-          ),
-        ),
+    setUp(() {
+      service = MeshNetworkService(
+        role: MeshRole.teacherNode,
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+        allowLegacyMesh: true,
       );
-    });
-  });
-
-  group('MeshNetworkService _handleIncomingData Socket Lifecycle Tests', () {
-    test('socket.destroy() is called on socket error', () async {
-      final service = MeshNetworkService(
-          role: MeshRole.teacherNode, classroomPin: 'test_pin');
-      final fakeSocket = FakeSocket();
-
-      service.handleIncomingDataForTest(fakeSocket);
-
-      fakeSocket.simulateError(Exception('Simulated Socket Error'));
-
-      // Yield to allow the stream error handler to fire
-      await Future.delayed(Duration.zero);
-
-      expect(fakeSocket.destroyed, isTrue);
+      socket = FakeSocket();
+      service.handleIncomingDataForTest(socket);
     });
 
-    test('socket.destroy() is called on socket done', () async {
-      final service = MeshNetworkService(
-          role: MeshRole.teacherNode, classroomPin: 'test_pin');
-      final fakeSocket = FakeSocket();
-
-      service.handleIncomingDataForTest(fakeSocket);
-
-      fakeSocket.simulateDone();
-
-      // Yield to allow the stream done handler to fire
-      await Future.delayed(Duration.zero);
-
-      expect(fakeSocket.destroyed, isTrue);
+    test('destroys a socket on stream error', () async {
+      socket.simulateError(Exception('simulated'));
+      await Future<void>.delayed(Duration.zero);
+      expect(socket.destroyed, isTrue);
     });
 
-    test('socket receives data correctly and is not destroyed', () async {
-      final service = MeshNetworkService(
-          role: MeshRole.teacherNode, classroomPin: 'test_pin');
-      final fakeSocket = FakeSocket();
+    test('destroys a socket when the stream closes', () async {
+      socket.simulateDone();
+      await Future<void>.delayed(Duration.zero);
+      expect(socket.destroyed, isTrue);
+    });
 
-      service.handleIncomingDataForTest(fakeSocket);
+    test('accepts a correctly framed encrypted message', () async {
+      final message = service.encodePayloadForTest({
+        'type': 'CANVAS_SYNC',
+        'strokes': <Map<String, dynamic>>[],
+      });
+      socket.simulateData(utf8.encode(message));
+      await Future<void>.delayed(Duration.zero);
+      expect(socket.destroyed, isFalse);
+    });
 
-      // Send some valid JSON to ensure it handles data
-      final data = utf8.encode('{"type": "CANVAS_SYNC", "strokes": []}\n');
-      fakeSocket.simulateData(Uint8List.fromList(data));
-
-      await Future.delayed(Duration.zero);
-
-      expect(fakeSocket.destroyed, isFalse);
+    test('closes the socket on malformed UTF-8', () async {
+      socket.simulateData([0xC3, 0x28]);
+      await Future<void>.delayed(Duration.zero);
+      expect(socket.destroyed, isTrue);
     });
   });
 }
