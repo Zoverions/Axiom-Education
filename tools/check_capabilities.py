@@ -52,6 +52,7 @@ REQUIRED_DEPRECATIONS = {
 }
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 class RegistryError(RuntimeError):
@@ -99,10 +100,15 @@ def verify() -> Counter[str]:
     require(isinstance(product, dict), "product identity must be an object")
     require(product.get("name") == "Axiom Education", "canonical product name missing")
     require(product.get("contract_id") == "axiom.education", "contract id mismatch")
-    require(product.get("canonical_branch") == "main", "main is not canonical")
     require(
-        product.get("repository_target") == "Zoverions/Axiom-Education",
-        "repository rename target mismatch",
+        product.get("canonical_repository") == "Zoverions/Axiom-Education",
+        "canonical repository mismatch",
+    )
+    require(product.get("canonical_branch") == "main", "main is not canonical")
+    rename_completed = product.get("repository_rename_completed")
+    require(
+        isinstance(rename_completed, str) and bool(DATE_RE.fullmatch(rename_completed)),
+        "repository rename completion date missing or invalid",
     )
 
     integration_target = registry.get("integration_target")
@@ -204,10 +210,20 @@ def verify() -> Counter[str]:
         require("Axiom Education" in content, f"{document_path.relative_to(ROOT)} lacks canonical product name")
 
     readme = README_PATH.read_text(encoding="utf-8")
+    require("Zoverions/Axiom-Education" in readme, "README canonical repository is missing")
     require("config/capabilities.json" in readme, "README does not link the registry")
     require("not production-ready" in readme, "README production boundary is missing")
     require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")
-    require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration runbook")
+    require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration record")
+
+    migration = MIGRATION_PATH.read_text(encoding="utf-8")
+    require("**Status:** completed" in migration, "repository migration is not recorded as completed")
+    require("Zoverions/Axiom-Education" in migration, "migration record lacks canonical repository")
+    require("default branch: `main`" in migration.lower(), "migration record lacks completed default branch")
+
+    deprecations_text = DEPRECATIONS_PATH.read_text(encoding="utf-8")
+    require("Rename completed" in deprecations_text, "repository slug deprecation is not finalized")
+    require("Default-branch migration completed" in deprecations_text, "default branch deprecation is not finalized")
 
     return counts
 
