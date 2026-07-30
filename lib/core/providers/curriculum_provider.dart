@@ -18,8 +18,7 @@ class CurriculumDatabaseInitializationException implements Exception {
 }
 
 class DatabaseService {
-  static const String assetPath =
-      'assets/curriculum/ontario_curriculum.sqlite';
+  static const String assetPath = 'assets/curriculum/ontario_curriculum.sqlite';
   static const int databaseAssetVersion = 1;
   static const String databaseFileName =
       'ontario_curriculum_v$databaseAssetVersion.sqlite';
@@ -113,9 +112,7 @@ class DatabaseService {
     }
   }
 
-  static Future<void> _materializeBundledDatabase(
-    String databasePath,
-  ) async {
+  static Future<void> _materializeBundledDatabase(String databasePath) async {
     try {
       await Directory(dirname(databasePath)).create(recursive: true);
     } catch (error) {
@@ -185,11 +182,13 @@ class DatabaseService {
       );
     }
 
-    final courseCount = Sqflite.firstIntValue(
+    final courseCount =
+        Sqflite.firstIntValue(
           await database.rawQuery('SELECT COUNT(*) FROM Course'),
         ) ??
         0;
-    final expectationCount = Sqflite.firstIntValue(
+    final expectationCount =
+        Sqflite.firstIntValue(
           await database.rawQuery('SELECT COUNT(*) FROM Expectation'),
         ) ??
         0;
@@ -213,7 +212,9 @@ class CourseOverview {
   const CourseOverview(this.id, this.name, this.expectationCount);
 }
 
-final courseOverviewProvider = FutureProvider<List<CourseOverview>>((ref) async {
+final courseOverviewProvider = FutureProvider<List<CourseOverview>>((
+  ref,
+) async {
   final db = await ref.watch(databaseProvider.future);
   final maps = await db.rawQuery('''
     SELECT c.id, c.name, COUNT(e.id) as count
@@ -256,11 +257,13 @@ class ExpectationDetail {
   const ExpectationDetail(this.text, this.tags);
 }
 
-final courseDetailProvider = FutureProvider.family<CourseDetail, String>(
-  (ref, courseId) async {
-    final db = await ref.watch(databaseProvider.future);
-    final rows = await db.rawQuery(
-      '''
+final courseDetailProvider = FutureProvider.family<CourseDetail, String>((
+  ref,
+  courseId,
+) async {
+  final db = await ref.watch(databaseProvider.future);
+  final rows = await db.rawQuery(
+    '''
       SELECT
         c.name as course_name,
         s.id as strand_id,
@@ -275,51 +278,52 @@ final courseDetailProvider = FutureProvider.family<CourseDetail, String>(
       WHERE c.id = ?
       ORDER BY s.id ASC, e.id ASC, t.tag ASC
       ''',
-      [courseId],
+    [courseId],
+  );
+
+  if (rows.isEmpty) {
+    return CourseDetail(courseId, 'Unknown', const []);
+  }
+
+  final courseName = rows.first['course_name'] as String;
+  final strandBuilders = <String, _StrandBuilder>{};
+
+  for (final row in rows) {
+    final strandId = row['strand_id'] as String?;
+    if (strandId == null) continue;
+
+    final strandBuilder = strandBuilders.putIfAbsent(
+      strandId,
+      () => _StrandBuilder(row['strand_name'] as String),
     );
 
-    if (rows.isEmpty) {
-      return CourseDetail(courseId, 'Unknown', const []);
-    }
+    final expectationId = row['exp_id'] as String?;
+    if (expectationId == null) continue;
 
-    final courseName = rows.first['course_name'] as String;
-    final strandBuilders = <String, _StrandBuilder>{};
+    final expectationBuilder = strandBuilder.expectations.putIfAbsent(
+      expectationId,
+      () => _ExpectationBuilder(row['exp_text'] as String),
+    );
+    final tag = row['tag'] as String?;
+    if (tag != null) expectationBuilder.tags.add(tag);
+  }
 
-    for (final row in rows) {
-      final strandId = row['strand_id'] as String?;
-      if (strandId == null) continue;
+  final strands = strandBuilders.values
+      .map((strandBuilder) {
+        final expectations = strandBuilder.expectations.values
+            .map(
+              (expectationBuilder) => ExpectationDetail(
+                expectationBuilder.text,
+                expectationBuilder.tags.toList()..sort(),
+              ),
+            )
+            .toList(growable: false);
+        return StrandDetail(strandBuilder.name, expectations);
+      })
+      .toList(growable: false);
 
-      final strandBuilder = strandBuilders.putIfAbsent(
-        strandId,
-        () => _StrandBuilder(row['strand_name'] as String),
-      );
-
-      final expectationId = row['exp_id'] as String?;
-      if (expectationId == null) continue;
-
-      final expectationBuilder = strandBuilder.expectations.putIfAbsent(
-        expectationId,
-        () => _ExpectationBuilder(row['exp_text'] as String),
-      );
-      final tag = row['tag'] as String?;
-      if (tag != null) expectationBuilder.tags.add(tag);
-    }
-
-    final strands = strandBuilders.values.map((strandBuilder) {
-      final expectations = strandBuilder.expectations.values
-          .map(
-            (expectationBuilder) => ExpectationDetail(
-              expectationBuilder.text,
-              expectationBuilder.tags.toList()..sort(),
-            ),
-          )
-          .toList(growable: false);
-      return StrandDetail(strandBuilder.name, expectations);
-    }).toList(growable: false);
-
-    return CourseDetail(courseId, courseName, strands);
-  },
-);
+  return CourseDetail(courseId, courseName, strands);
+});
 
 class _StrandBuilder {
   final String name;
@@ -335,7 +339,9 @@ class _ExpectationBuilder {
   _ExpectationBuilder(this.text);
 }
 
-final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async {
+final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((
+  ref,
+) async {
   final db = await ref.watch(databaseProvider.future);
   final rows = await db.rawQuery('''
     SELECT
@@ -379,23 +385,28 @@ final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async 
 });
 
 final filteredItemsProvider =
-    Provider.family<AsyncValue<List<CurriculumItem>>, CurriculumFilter>(
-  (ref, filter) {
-    return ref.watch(curriculumBankProvider).whenData(
-          (items) => items
-              .where(
-                (item) =>
-                    (filter.courseCode == null ||
-                        item.courseCode == filter.courseCode) &&
-                    (filter.tag == null || item.tags.contains(filter.tag)) &&
-                    item.irtB >= filter.minDifficulty &&
-                    item.irtB <= filter.maxDifficulty,
-              )
-              .toList()
-            ..sort((left, right) => left.irtB.compareTo(right.irtB)),
-        );
-  },
-);
+    Provider.family<AsyncValue<List<CurriculumItem>>, CurriculumFilter>((
+      ref,
+      filter,
+    ) {
+      return ref
+          .watch(curriculumBankProvider)
+          .whenData(
+            (items) =>
+                items
+                    .where(
+                      (item) =>
+                          (filter.courseCode == null ||
+                              item.courseCode == filter.courseCode) &&
+                          (filter.tag == null ||
+                              item.tags.contains(filter.tag)) &&
+                          item.irtB >= filter.minDifficulty &&
+                          item.irtB <= filter.maxDifficulty,
+                    )
+                    .toList()
+                  ..sort((left, right) => left.irtB.compareTo(right.irtB)),
+          );
+    });
 
 class CurriculumItem {
   final String id;
@@ -419,12 +430,12 @@ class CurriculumItem {
   });
 
   Map<String, dynamic> toIrtItem() => {
-        'id': id,
-        'b': irtB,
-        'a': irtA,
-        'c': irtC,
-        'text': expectation,
-      };
+    'id': id,
+    'b': irtB,
+    'a': irtA,
+    'c': irtC,
+    'text': expectation,
+  };
 }
 
 class CurriculumFilter {
@@ -440,10 +451,7 @@ class CurriculumFilter {
     this.maxDifficulty = 4.0,
   });
 
-  factory CurriculumFilter.aroundTheta(
-    double theta, {
-    String? courseCode,
-  }) {
+  factory CurriculumFilter.aroundTheta(double theta, {String? courseCode}) {
     return CurriculumFilter(
       courseCode: courseCode,
       minDifficulty: theta - 1.5,

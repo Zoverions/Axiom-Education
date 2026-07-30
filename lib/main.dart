@@ -17,11 +17,7 @@ Future<void> main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,9 +37,7 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
       ),
-      home: AppBootstrapGate(
-        initializer: initializer ?? HiveService.init,
-      ),
+      home: AppBootstrapGate(initializer: initializer ?? HiveService.init),
     );
   }
 }
@@ -137,11 +131,7 @@ class _StartupErrorScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.storage_rounded,
-                      size: 48,
-                      color: colors.error,
-                    ),
+                    Icon(Icons.storage_rounded, size: 48, color: colors.error),
                     const SizedBox(height: 16),
                     Text(
                       'Local setup could not finish',

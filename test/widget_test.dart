@@ -12,9 +12,7 @@ void main() {
 
   Widget buildApp({AppInitializer? initializer}) {
     return ProviderScope(
-      overrides: [
-        courseOverviewProvider.overrideWith((ref) async => courses),
-      ],
+      overrides: [courseOverviewProvider.overrideWith((ref) async => courses)],
       child: MyApp(initializer: initializer ?? () async {}),
     );
   }

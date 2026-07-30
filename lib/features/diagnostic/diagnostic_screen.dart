@@ -62,11 +62,13 @@ class _DiagnosticScreenState extends ConsumerState<DiagnosticScreen> {
 
   Widget _buildCourseBrowser(List<CourseOverview> courses) {
     final normalizedQuery = _query.trim().toLowerCase();
-    final filteredCourses = courses.where((course) {
-      if (normalizedQuery.isEmpty) return true;
-      return course.id.toLowerCase().contains(normalizedQuery) ||
-          course.name.toLowerCase().contains(normalizedQuery);
-    }).toList(growable: false);
+    final filteredCourses = courses
+        .where((course) {
+          if (normalizedQuery.isEmpty) return true;
+          return course.id.toLowerCase().contains(normalizedQuery) ||
+              course.name.toLowerCase().contains(normalizedQuery);
+        })
+        .toList(growable: false);
     final totalExpectations = courses.fold<int>(
       0,
       (total, course) => total + course.expectationCount,
@@ -188,16 +190,16 @@ class _PackSummary extends StatelessWidget {
                   Text(
                     'Ontario Secondary Curriculum Pack',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: colors.onPrimaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: colors.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     '$courseCount courses • $expectationCount expectations',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: colors.onPrimaryContainer,
-                        ),
+                      color: colors.onPrimaryContainer,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -205,8 +207,8 @@ class _PackSummary extends StatelessWidget {
                     'records remain unavailable until their governed providers '
                     'are enabled.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colors.onPrimaryContainer,
-                        ),
+                      color: colors.onPrimaryContainer,
+                    ),
                   ),
                 ],
               ),
@@ -251,10 +253,7 @@ class _CourseCard extends StatelessWidget {
             foregroundColor: colors.onSecondaryContainer,
             child: Text(
               _monogram,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
           title: Text(
@@ -306,7 +305,8 @@ class CourseDetailScreen extends ConsumerWidget {
           loading: () => const _LoadingState(),
           error: (error, stackTrace) => _LoadError(
             title: 'This course could not be opened',
-            message: 'Retry to reload the course from the local curriculum pack.',
+            message:
+                'Retry to reload the course from the local curriculum pack.',
             onRetry: () => ref.invalidate(courseDetailProvider(courseId)),
           ),
           data: (detail) {
@@ -364,35 +364,39 @@ class CourseDetailScreen extends ConsumerWidget {
                           subtitle: Text(
                             '${strand.expectations.length} expectations',
                           ),
-                          children: strand.expectations.map((expectation) {
-                            return ListTile(
-                              contentPadding: const EdgeInsets.fromLTRB(
-                                24,
-                                8,
-                                24,
-                                12,
-                              ),
-                              title: Text(expectation.text),
-                              subtitle: expectation.tags.isEmpty
-                                  ? null
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Wrap(
-                                        spacing: 6,
-                                        runSpacing: 6,
-                                        children: expectation.tags
-                                            .map(
-                                              (tag) => Chip(
-                                                label: Text(tag),
-                                                visualDensity:
-                                                    VisualDensity.compact,
-                                              ),
-                                            )
-                                            .toList(growable: false),
-                                      ),
-                                    ),
-                            );
-                          }).toList(growable: false),
+                          children: strand.expectations
+                              .map((expectation) {
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.fromLTRB(
+                                    24,
+                                    8,
+                                    24,
+                                    12,
+                                  ),
+                                  title: Text(expectation.text),
+                                  subtitle: expectation.tags.isEmpty
+                                      ? null
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          child: Wrap(
+                                            spacing: 6,
+                                            runSpacing: 6,
+                                            children: expectation.tags
+                                                .map(
+                                                  (tag) => Chip(
+                                                    label: Text(tag),
+                                                    visualDensity:
+                                                        VisualDensity.compact,
+                                                  ),
+                                                )
+                                                .toList(growable: false),
+                                          ),
+                                        ),
+                                );
+                              })
+                              .toList(growable: false),
                         ),
                       ),
                     ),
