@@ -1,7 +1,13 @@
 {
-  "schema": "ontarioedai-capabilities.v1",
+  "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
   "verified_at": "2026-07-30",
+  "product": {
+    "name": "Axiom Education",
+    "contract_id": "axiom.education",
+    "canonical_branch": "main",
+    "repository_target": "Zoverions/Axiom-Education"
+  },
   "integration_target": {
     "platform": "AXIOM-MESH",
     "minimum_kernel": "0.12.0-dev.0",
@@ -14,6 +20,28 @@
     "specified": "The behavior is designed but not yet implemented.",
     "disabled": "The capability must not be represented as available in governed or release builds."
   },
+  "deprecations": [
+    {
+      "id": "repository.slug.ontarioedai",
+      "replacement": "Zoverions/Axiom-Education",
+      "disposition": "GitHub redirect only after repository rename"
+    },
+    {
+      "id": "branch.feature-init-ontarioedai-v0.3",
+      "replacement": "main",
+      "disposition": "retired; no new work"
+    },
+    {
+      "id": "dart.package.ontarioedai",
+      "replacement": "axiom_education",
+      "disposition": "temporary compatibility shim until a dedicated pre-0.6.0 import migration"
+    },
+    {
+      "id": "document.legacy-master-architecture",
+      "replacement": "docs/rebuild/PRODUCT-DEFINITION.md",
+      "disposition": "archived; not claim authority"
+    }
+  ],
   "capabilities": [
     {
       "id": "app.curriculum-browser",
@@ -158,7 +186,7 @@
     }
   ],
   "non_claims": [
-    "OntarioEdAI is not production-ready.",
+    "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
