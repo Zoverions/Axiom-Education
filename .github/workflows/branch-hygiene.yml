@@ -53,6 +53,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+      issues: write
     steps:
       - name: Check out canonical source
         uses: actions/checkout@v6
@@ -72,6 +73,52 @@ jobs:
           --archive-prefix archive/branches/2026-07-30
           --apply
           --report /tmp/axiom-education-branch-cleanup.json
+
+      - name: Publish durable cleanup evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVIDENCE_TITLE: Repository branch cleanup evidence — 2026-07-30
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report_path = Path('/tmp/axiom-education-branch-cleanup.json')
+          report = json.loads(report_path.read_text(encoding='utf-8'))
+          body = (
+              '# Repository branch cleanup evidence\n\n'
+              'This issue is maintained by the protected branch-hygiene workflow. '
+              'It records the exact post-cleanup branch state and the reversible '
+              'disposition of removed branch refs.\n\n'
+              '```json\n'
+              + json.dumps(report, indent=2, sort_keys=True)
+              + '\n```\n'
+          )
+          Path('/tmp/axiom-education-branch-cleanup-issue.md').write_text(
+              body, encoding='utf-8'
+          )
+          PY
+
+          issue_number="$(
+            gh issue list \
+              --repo "$GITHUB_REPOSITORY" \
+              --state all \
+              --search '"Repository branch cleanup evidence — 2026-07-30" in:title' \
+              --json number,title \
+              --jq '.[] | select(.title == env.EVIDENCE_TITLE) | .number' \
+              | head -n 1
+          )"
+
+          if [[ -n "$issue_number" ]]; then
+            gh issue edit "$issue_number" \
+              --repo "$GITHUB_REPOSITORY" \
+              --body-file /tmp/axiom-education-branch-cleanup-issue.md
+          else
+            gh issue create \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$EVIDENCE_TITLE" \
+              --body-file /tmp/axiom-education-branch-cleanup-issue.md
+          fi
 
       - name: Upload cleanup evidence
         if: always()
