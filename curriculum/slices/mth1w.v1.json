@@ -1,0 +1,143 @@
+{
+  "version": "4.3.0",
+  "updated": "2026-03-05",
+  "legal_note": "© King's Printer for Ontario – Supplementary use only. Official: dcp.edu.gov.on.ca",
+  "courses": {
+    "MTH1W": {
+      "name": "Mathematics, Grade 9 (De-streamed)",
+      "official_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/mathematics/grade9",
+      "strands": {
+        "A_Number": [
+          {
+            "id": "MTH1W-A1",
+            "expectation": "Perform operations on integers and rational numbers, including order of operations.",
+            "irt_b": -0.8,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-A2",
+            "expectation": "Apply rates, ratios, percentages, and proportional reasoning to solve problems in various contexts.",
+            "irt_b": -0.3,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-A3",
+            "expectation": "Represent very large and very small numbers using scientific notation and perform operations with them.",
+            "irt_b": 0.5,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "math"
+            ]
+          }
+        ],
+        "B_Algebra": [
+          {
+            "id": "MTH1W-B1",
+            "expectation": "Create, evaluate, and simplify algebraic expressions involving integer and rational exponents.",
+            "irt_b": -0.1,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-B2",
+            "expectation": "Solve linear equations and inequalities algebraically and represent solutions on a number line.",
+            "irt_b": 0.4,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          },
+          {
+            "id": "MTH1W-B3",
+            "expectation": "Represent linear and non-linear relations using tables, graphs, and equations; compare their properties.",
+            "irt_b": 0.9,
+            "irt_a": 1.3,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao",
+              "graphing"
+            ]
+          },
+          {
+            "id": "MTH1W-B4",
+            "expectation": "Determine the equation of a line given slope and y-intercept, or two points.",
+            "irt_b": 1.1,
+            "irt_a": 1.4,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "eqao"
+            ]
+          }
+        ],
+        "C_Data": [
+          {
+            "id": "MTH1W-C1",
+            "expectation": "Collect, display, and analyse one-variable data to make convincing arguments and informed decisions.",
+            "irt_b": -0.4,
+            "irt_a": 1.0,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "data"
+            ]
+          },
+          {
+            "id": "MTH1W-C2",
+            "expectation": "Determine and describe the impact of bias on data collection and the conclusions drawn.",
+            "irt_b": 0.6,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "critical_thinking"
+            ]
+          }
+        ],
+        "D_Geometry": [
+          {
+            "id": "MTH1W-D1",
+            "expectation": "Determine the properties of triangles and quadrilaterals using geometric reasoning.",
+            "irt_b": 0.1,
+            "irt_a": 1.1,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "geometry"
+            ]
+          },
+          {
+            "id": "MTH1W-D2",
+            "expectation": "Solve problems involving the surface area and volume of composite 3D figures.",
+            "irt_b": 0.8,
+            "irt_a": 1.2,
+            "irt_c": 0.2,
+            "tags": [
+              "math",
+              "geometry",
+              "eqao"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
