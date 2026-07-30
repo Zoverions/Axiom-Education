@@ -25,31 +25,31 @@ class Phi3MiniModel {
   bool get isInitialized => _isInitialized;
 
   Future<void> initModel({
-    Future<OrtSession> Function(String path, OrtSessionOptions options)?
-        mockSessionLoader,
+    Future<OrtSession> Function()? testSessionLoader,
   }) async {
     if (_isInitialized) return;
 
-    final sessionOptions = OrtSessionOptions();
     try {
+      if (testSessionLoader != null) {
+        _session = await testSessionLoader();
+        _isInitialized = true;
+        return;
+      }
+
       OrtEnv.instance.init();
       _environmentInitialized = true;
-
-      if (mockSessionLoader != null) {
-        _session = await mockSessionLoader(modelAssetPath, sessionOptions);
-      } else {
-        final asset = await rootBundle.load(modelAssetPath);
-        if (asset.lengthInBytes > maxModelAssetBytes) {
-          throw const FormatException('Local tutor model artifact is too large.');
-        }
-        _session = OrtSession.fromBuffer(
-          asset.buffer.asUint8List(
-            asset.offsetInBytes,
-            asset.lengthInBytes,
-          ),
-          sessionOptions,
-        );
+      final sessionOptions = OrtSessionOptions();
+      final asset = await rootBundle.load(modelAssetPath);
+      if (asset.lengthInBytes > maxModelAssetBytes) {
+        throw const FormatException('Local tutor model artifact is too large.');
       }
+      _session = OrtSession.fromBuffer(
+        asset.buffer.asUint8List(
+          asset.offsetInBytes,
+          asset.lengthInBytes,
+        ),
+        sessionOptions,
+      );
       _isInitialized = true;
     } catch (error) {
       _session?.release();
