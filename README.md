@@ -10,14 +10,15 @@ The Flutter application remains independently releasable. AXIOM-MESH supplies th
 
 ## First five minutes
 
-Requirements:
+Supported rebuild toolchain:
 
-- Flutter `>=3.19.0`
-- Dart `>=3.3.0 <4.0.0`
-- Python tooling only when rebuilding curriculum artifacts
+- Flutter `3.41.1`
+- Dart `3.11.x`
+- Python tooling only when rebuilding or verifying curriculum artifacts
 
 ```bash
-flutter pub get
+flutter pub get --enforce-lockfile
+python tools/check_capabilities.py
 flutter analyze
 flutter test
 flutter run -d windows
@@ -47,9 +48,10 @@ Presently:
 
 - curriculum browsing from bundled SQLite is implemented;
 - curriculum JSON and SQLite are useful experimental assets;
-- local tutor inference is disabled because the existing Phi-3 path is incomplete and simulated;
-- canvas observation is experimental;
-- the legacy UDP/TCP classroom mesh is disabled by default and development-only;
+- local tutor inference is disabled, fails closed, and no longer returns simulated logits output;
+- canvas observation is an explicitly experimental bounded classifier and no longer returns mock equations;
+- handwriting scoring no longer returns fixed synthetic scores when its model is missing;
+- the legacy UDP/TCP classroom mesh is disabled by default, AES-GCM protected when explicitly enabled for development, and is not a trusted authority path;
 - governed learner records, signed curriculum packs, selective portfolio export, accessibility gates, and AXIOM classroom synchronization are specified or adapter-required;
 - mock IRT fields are heuristics, not calibrated psychometrics.
 
