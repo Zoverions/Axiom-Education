@@ -130,7 +130,7 @@ class WatcherModel {
       }
 
       return 'Watcher classification ID: $maxIndex; confidence: '
-          '${maxProbability.toStringAsFixed(4)}'; label-map: unavailable';
+          '${maxProbability.toStringAsFixed(4)}; label-map: unavailable';
     } catch (error) {
       throw ModelExecutionException(
         capability: 'canvas.watcher',
