@@ -1,0 +1,130 @@
+{
+  "schema": "ontarioedai-capabilities.v1",
+  "application_version": "0.5.0-dev.0",
+  "verified_at": "2026-07-30",
+  "integration_target": {
+    "platform": "AXIOM-MESH",
+    "minimum_kernel": "0.12.0-dev.0",
+    "mode": "governed-domain-capability-pack"
+  },
+  "status_definitions": {
+    "implemented": "Production-path behavior exists with tests and no synthetic success fallback.",
+    "experimental": "Executable prototype exists, but security, validity, or operations evidence is incomplete.",
+    "adapter_required": "The domain contract exists but requires an approved provider or AXIOM adapter.",
+    "specified": "The behavior is designed but not yet implemented.",
+    "disabled": "The capability must not be represented as available in governed or release builds."
+  },
+  "capabilities": [
+    {
+      "id": "app.curriculum-browser",
+      "family": "application",
+      "status": "implemented",
+      "summary": "Flutter and Riverpod curriculum overview and detail screens read the bundled SQLite curriculum database.",
+      "evidence": [
+        "lib/main.dart",
+        "lib/features/diagnostic/diagnostic_screen.dart",
+        "lib/core/providers/curriculum_provider.dart"
+      ]
+    },
+    {
+      "id": "curriculum.ontario-data",
+      "family": "curriculum",
+      "status": "experimental",
+      "summary": "Ontario Grades 9-12 curriculum records are available in JSON and SQLite, but complete source provenance, licensing, review status, and reproducible-build evidence are not yet enforced.",
+      "evidence": [
+        "assets/curriculum/ontario_curriculum_full.json",
+        "assets/curriculum/ontario_curriculum.sqlite"
+      ]
+    },
+    {
+      "id": "curriculum.signed-packs",
+      "family": "curriculum",
+      "status": "specified",
+      "summary": "Versioned curriculum packs will bind jurisdiction, authority, source digest, parser version, licence, review state, content digest, and supersession metadata."
+    },
+    {
+      "id": "education.axiom-bridge",
+      "family": "integration",
+      "status": "specified",
+      "summary": "Governed learner-data and provider effects will be submitted through the AXIOM Gateway and follow Gateway to Hypervisor to Sandbox to Grid."
+    },
+    {
+      "id": "tutor.local-inference",
+      "family": "ai",
+      "status": "disabled",
+      "summary": "The existing Phi-3 binding is a prototype and must not report simulated logits output as a tutor response. A configured provider must fail closed when unavailable."
+    },
+    {
+      "id": "tools.deterministic-math",
+      "family": "verification",
+      "status": "adapter_required",
+      "summary": "Deterministic mathematics and science verification will run through a signed scientific-tool provider capsule."
+    },
+    {
+      "id": "canvas.watcher",
+      "family": "input",
+      "status": "experimental",
+      "summary": "Bounded image decoding and TFLite scaffolding exist, but the current classifier is not a validated handwritten-math parser.",
+      "evidence": [
+        "lib/core/services/watcher_model.dart",
+        "lib/core/services/model_bindings.dart"
+      ]
+    },
+    {
+      "id": "classroom.legacy-lan-mesh",
+      "family": "sync",
+      "status": "disabled",
+      "summary": "The raw UDP/TCP classroom mesh is development-only until authenticated encryption, identity, replay, authorization, conflict, and operational controls are evidenced."
+    },
+    {
+      "id": "classroom.axiom-causal-sync",
+      "family": "sync",
+      "status": "adapter_required",
+      "summary": "Classroom synchronization will use admitted education nodes and AXIOM signed causal bundles rather than an application-owned authority path."
+    },
+    {
+      "id": "learner.local-records",
+      "family": "privacy",
+      "status": "disabled",
+      "summary": "The current Hive student_data box is not an evidenced encrypted learner-record store and must not support governed learner data."
+    },
+    {
+      "id": "learner.axiom-records",
+      "family": "privacy",
+      "status": "specified",
+      "summary": "Learner events, preferences, accommodations, and progress will be encrypted, purpose-bound, revocable, selectively exportable, and human-appealable."
+    },
+    {
+      "id": "assessment.calibrated-irt",
+      "family": "assessment",
+      "status": "disabled",
+      "summary": "Existing mock IRT fields are heuristics and are not psychometrically calibrated item-response parameters."
+    },
+    {
+      "id": "portfolio.selective-export",
+      "family": "portability",
+      "status": "specified",
+      "summary": "Learners will be able to export selected work, progress evidence, consent records, and provenance without unrelated private records."
+    },
+    {
+      "id": "identity.education-credentials",
+      "family": "identity",
+      "status": "adapter_required",
+      "summary": "Education credentials require the approved AXIOM SSI credential profile, issuer governance, revocation, and verification evidence."
+    },
+    {
+      "id": "accessibility.learner-interface",
+      "family": "accessibility",
+      "status": "specified",
+      "summary": "Keyboard, screen-reader, contrast, text scaling, reduced-motion, stylus alternatives, and accessible export requirements are release gates."
+    }
+  ],
+  "non_claims": [
+    "OntarioEdAI is not production-ready.",
+    "No current model binding provides a complete local tutor.",
+    "The current classroom mesh is not an AXIOM federation or secure production transport.",
+    "Local-first architecture alone does not establish legal or regulatory compliance.",
+    "Mock difficulty and IRT values are not validated psychometrics.",
+    "Installing an education capsule does not grant access to learner data."
+  ]
+}
