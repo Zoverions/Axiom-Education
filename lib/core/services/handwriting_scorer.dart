@@ -1,66 +1,128 @@
+import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-/// TFLite model binding for handwriting scoring
+import 'model_errors.dart';
+
+/// Experimental TFLite binding for stylus-signal scoring.
+///
+/// The scorer is disabled unless an explicit model is initialized. It never
+/// substitutes fixed scores when the model is absent or execution fails.
 class HandwritingScorer {
+  static const int maxStrokes = 100;
+
   Interpreter? _interpreter;
   bool _isInitialized = false;
 
-  Future<void> initModel() async {
+  bool get isInitialized => _isInitialized;
+
+  Future<void> initModel({
+    Future<Interpreter> Function()? interpreterLoader,
+  }) async {
     if (_isInitialized) return;
+
     try {
-      final options = InterpreterOptions()..threads = 4;
-      _interpreter = await Interpreter.fromAsset(
-        'assets/models/handwriting_scorer.tflite',
-        options: options,
-      );
+      if (interpreterLoader != null) {
+        _interpreter = await interpreterLoader();
+      } else {
+        final options = InterpreterOptions()..threads = 4;
+        _interpreter = await Interpreter.fromAsset(
+          'assets/models/handwriting_scorer.tflite',
+          options: options,
+        );
+      }
       _isInitialized = true;
-    } catch (e) {
-      // Error is caught but not printed
+    } catch (error) {
+      _interpreter = null;
+      _isInitialized = false;
+      throw ModelUnavailableException(
+        capability: 'input.handwriting-scorer',
+        message: 'The handwriting scorer could not be initialized.',
+        cause: error,
+      );
     }
   }
 
-  /// Evaluates stylus pressure and stroke consistency.
-  /// Returns a record: (pressure_score, consistency_score)
+  @visibleForTesting
+  List<List<List<double>>> preprocessStrokes(
+    List<Map<String, dynamic>> strokes,
+  ) {
+    if (strokes.length > maxStrokes) {
+      throw const FormatException('Handwriting stroke limit exceeded.');
+    }
+
+    final inputTensor = List.generate(
+      1,
+      (_) => List.generate(maxStrokes, (_) => List<double>.filled(3, 0.0)),
+    );
+
+    for (var index = 0; index < strokes.length; index++) {
+      final stroke = strokes[index];
+      inputTensor[0][index][0] = _boundedNumber(stroke['x'], 'x');
+      inputTensor[0][index][1] = _boundedNumber(stroke['y'], 'y');
+      inputTensor[0][index][2] = _boundedNumber(
+        stroke['pressure'] ?? 0.5,
+        'pressure',
+        minimum: 0.0,
+        maximum: 1.0,
+      );
+    }
+
+    return inputTensor;
+  }
+
+  static double _boundedNumber(
+    Object? value,
+    String field, {
+    double minimum = -1000000.0,
+    double maximum = 1000000.0,
+  }) {
+    if (value is! num || !value.isFinite) {
+      throw FormatException('Invalid handwriting $field value.');
+    }
+    final converted = value.toDouble();
+    if (converted < minimum || converted > maximum) {
+      throw FormatException('Handwriting $field value is out of range.');
+    }
+    return converted;
+  }
+
+  /// Returns `(pressureScore, consistencyScore)` from an initialized model.
   Future<(double, double)> scoreHandwriting(
     List<Map<String, dynamic>> strokes,
   ) async {
-    if (!_isInitialized || _interpreter == null)
-      return (0.8, 0.85); // fallback mock scores
+    if (!_isInitialized || _interpreter == null) {
+      throw const ModelUnavailableException(
+        capability: 'input.handwriting-scorer',
+        message: 'The handwriting scorer is not initialized.',
+      );
+    }
 
     try {
-      // 1. Preprocess strokes into tensor shape [1, MAX_STROKES, 3] (x, y, pressure)
-      const int maxStrokes = 100;
-      var inputTensor = List.generate(
+      final inputTensor = preprocessStrokes(strokes);
+      final outputTensor = List.generate(
         1,
-        (_) => List.generate(maxStrokes, (_) => List.filled(3, 0.0)),
+        (_) => List<double>.filled(2, 0.0),
       );
-
-      int strokeIdx = 0;
-      for (var stroke in strokes) {
-        if (strokeIdx >= maxStrokes) break;
-        inputTensor[0][strokeIdx][0] = (stroke['x'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][1] = (stroke['y'] as double?) ?? 0.0;
-        inputTensor[0][strokeIdx][2] = (stroke['pressure'] as double?) ?? 0.5;
-        strokeIdx++;
-      }
-
-      // 2. Output tensor shape [1, 2] for pressure and consistency scores
-      var outputTensor = List.generate(1, (_) => List.filled(2, 0.0));
-
-      // 3. Run inference
       _interpreter!.run(inputTensor, outputTensor);
 
-      double pressureScore = outputTensor[0][0];
-      double consistencyScore = outputTensor[0][1];
-
-      return (pressureScore.clamp(0.0, 1.0), consistencyScore.clamp(0.0, 1.0));
-    } catch (e) {
-      return (0.8, 0.85);
+      return (
+        outputTensor[0][0].clamp(0.0, 1.0).toDouble(),
+        outputTensor[0][1].clamp(0.0, 1.0).toDouble(),
+      );
+    } on FormatException {
+      rethrow;
+    } catch (error) {
+      throw ModelExecutionException(
+        capability: 'input.handwriting-scorer',
+        message: 'Handwriting scoring failed.',
+        cause: error,
+      );
     }
   }
 
   void dispose() {
     _interpreter?.close();
+    _interpreter = null;
     _isInitialized = false;
   }
 }
