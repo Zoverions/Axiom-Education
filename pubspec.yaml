@@ -18,7 +18,6 @@ dependencies:
   onnxruntime: ^1.4.0
   tflite_flutter: ^0.11.0
   camera: ^0.11.0
-  google_mlkit_pose_detection: ^0.9.0
   pdf: ^3.11.1
   printing: ^5.13.1
   share_plus: ^10.0.0
