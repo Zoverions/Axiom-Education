@@ -20,7 +20,9 @@ class CurriculumDatabaseInitializationException implements Exception {
 class DatabaseService {
   static const String assetPath =
       'assets/curriculum/ontario_curriculum.sqlite';
-  static const String databaseFileName = 'ontario_curriculum.sqlite';
+  static const int databaseAssetVersion = 1;
+  static const String databaseFileName =
+      'ontario_curriculum_v$databaseAssetVersion.sqlite';
   static const Set<String> requiredTables = {
     'Course',
     'Strand',
@@ -61,7 +63,24 @@ class DatabaseService {
       await _materializeBundledDatabase(databasePath);
     }
 
-    final database = await openDatabase(databasePath, version: 1);
+    try {
+      return await _openVerifiedDatabase(databasePath);
+    } catch (_) {
+      try {
+        await _replaceBundledDatabase(databasePath);
+        return await _openVerifiedDatabase(databasePath);
+      } catch (error) {
+        throw CurriculumDatabaseInitializationException(
+          'The bundled curriculum database failed validation after a clean '
+          'restore.',
+          error,
+        );
+      }
+    }
+  }
+
+  static Future<Database> _openVerifiedDatabase(String databasePath) async {
+    final database = await openDatabase(databasePath, readOnly: true);
     try {
       await _verifySchema(database);
       return database;
@@ -79,6 +98,21 @@ class DatabaseService {
     return getDatabasesPath();
   }
 
+  static Future<void> _replaceBundledDatabase(String databasePath) async {
+    try {
+      final databaseFile = File(databasePath);
+      if (await databaseFile.exists()) {
+        await databaseFile.delete();
+      }
+      await _materializeBundledDatabase(databasePath);
+    } catch (error) {
+      throw CurriculumDatabaseInitializationException(
+        'Unable to restore the bundled curriculum database.',
+        error,
+      );
+    }
+  }
+
   static Future<void> _materializeBundledDatabase(
     String databasePath,
   ) async {
@@ -91,7 +125,14 @@ class DatabaseService {
       );
     }
 
+    final temporaryPath = '$databasePath.tmp';
+    final temporaryFile = File(temporaryPath);
+
     try {
+      if (await temporaryFile.exists()) {
+        await temporaryFile.delete();
+      }
+
       final data = await rootBundle.load(assetPath);
       if (data.lengthInBytes == 0) {
         throw const FormatException('Bundled curriculum database is empty.');
@@ -100,14 +141,24 @@ class DatabaseService {
         data.offsetInBytes,
         data.lengthInBytes,
       );
-      final file = File(databasePath);
-      await file.writeAsBytes(bytes, flush: true);
-      if (!await file.exists() || await file.length() != bytes.length) {
+
+      await temporaryFile.writeAsBytes(bytes, flush: true);
+      if (!await temporaryFile.exists() ||
+          await temporaryFile.length() != bytes.length) {
         throw const FileSystemException(
           'Curriculum database copy verification failed.',
         );
       }
+
+      final databaseFile = File(databasePath);
+      if (await databaseFile.exists()) {
+        await databaseFile.delete();
+      }
+      await temporaryFile.rename(databasePath);
     } catch (error) {
+      if (await temporaryFile.exists()) {
+        await temporaryFile.delete();
+      }
       throw CurriculumDatabaseInitializationException(
         'Unable to materialize the bundled curriculum database.',
         error,
@@ -133,6 +184,20 @@ class DatabaseService {
         '${missing.toList()..sort()}.',
       );
     }
+
+    final courseCount = Sqflite.firstIntValue(
+          await database.rawQuery('SELECT COUNT(*) FROM Course'),
+        ) ??
+        0;
+    final expectationCount = Sqflite.firstIntValue(
+          await database.rawQuery('SELECT COUNT(*) FROM Expectation'),
+        ) ??
+        0;
+    if (courseCount == 0 || expectationCount == 0) {
+      throw const CurriculumDatabaseInitializationException(
+        'Curriculum database contains no usable course expectations.',
+      );
+    }
   }
 }
 
@@ -145,7 +210,7 @@ class CourseOverview {
   final String name;
   final int expectationCount;
 
-  CourseOverview(this.id, this.name, this.expectationCount);
+  const CourseOverview(this.id, this.name, this.expectationCount);
 }
 
 final courseOverviewProvider = FutureProvider<List<CourseOverview>>((ref) async {
@@ -154,7 +219,7 @@ final courseOverviewProvider = FutureProvider<List<CourseOverview>>((ref) async 
     SELECT c.id, c.name, COUNT(e.id) as count
     FROM Course c
     LEFT JOIN Expectation e ON c.id = e.course_id
-    GROUP BY c.id
+    GROUP BY c.id, c.name
     ORDER BY c.id ASC
   ''');
 
@@ -166,7 +231,7 @@ final courseOverviewProvider = FutureProvider<List<CourseOverview>>((ref) async 
           record['count'] as int,
         ),
       )
-      .toList();
+      .toList(growable: false);
 });
 
 class CourseDetail {
@@ -174,21 +239,21 @@ class CourseDetail {
   final String name;
   final List<StrandDetail> strands;
 
-  CourseDetail(this.id, this.name, this.strands);
+  const CourseDetail(this.id, this.name, this.strands);
 }
 
 class StrandDetail {
   final String name;
   final List<ExpectationDetail> expectations;
 
-  StrandDetail(this.name, this.expectations);
+  const StrandDetail(this.name, this.expectations);
 }
 
 class ExpectationDetail {
   final String text;
   final List<String> tags;
 
-  ExpectationDetail(this.text, this.tags);
+  const ExpectationDetail(this.text, this.tags);
 }
 
 final courseDetailProvider = FutureProvider.family<CourseDetail, String>(
@@ -208,12 +273,13 @@ final courseDetailProvider = FutureProvider.family<CourseDetail, String>(
       LEFT JOIN Expectation e ON s.id = e.strand_id
       LEFT JOIN Tag t ON e.id = t.expectation_id
       WHERE c.id = ?
+      ORDER BY s.id ASC, e.id ASC, t.tag ASC
       ''',
       [courseId],
     );
 
     if (rows.isEmpty) {
-      return CourseDetail(courseId, 'Unknown', []);
+      return CourseDetail(courseId, 'Unknown', const []);
     }
 
     final courseName = rows.first['course_name'] as String;
@@ -244,12 +310,12 @@ final courseDetailProvider = FutureProvider.family<CourseDetail, String>(
           .map(
             (expectationBuilder) => ExpectationDetail(
               expectationBuilder.text,
-              expectationBuilder.tags.toList(),
+              expectationBuilder.tags.toList()..sort(),
             ),
           )
-          .toList();
+          .toList(growable: false);
       return StrandDetail(strandBuilder.name, expectations);
-    }).toList();
+    }).toList(growable: false);
 
     return CourseDetail(courseId, courseName, strands);
   },
@@ -284,6 +350,7 @@ final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async 
     FROM Expectation e
     JOIN Strand s ON e.strand_id = s.id
     LEFT JOIN Tag t ON e.id = t.expectation_id
+    ORDER BY e.course_id ASC, e.id ASC, t.tag ASC
   ''');
 
   final items = <String, CurriculumItem>{};
@@ -308,7 +375,7 @@ final curriculumBankProvider = FutureProvider<List<CurriculumItem>>((ref) async 
     }
   }
 
-  return items.values.toList();
+  return items.values.toList(growable: false);
 });
 
 final filteredItemsProvider =
