@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/curriculum_provider.dart';
+import '../practice/mth1w_practice_screen.dart';
 
 class DiagnosticScreen extends ConsumerStatefulWidget {
   const DiagnosticScreen({super.key});
@@ -25,9 +26,7 @@ class _DiagnosticScreenState extends ConsumerState<DiagnosticScreen> {
     await ref.read(courseOverviewProvider.future);
   }
 
-  void _retry() {
-    ref.invalidate(courseOverviewProvider);
-  }
+  void _retry() => ref.invalidate(courseOverviewProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +168,6 @@ class _PackSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
     return Card(
       color: colors.primaryContainer,
       child: Padding(
@@ -190,25 +188,25 @@ class _PackSummary extends StatelessWidget {
                   Text(
                     'Ontario Secondary Curriculum Pack',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: colors.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: colors.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     '$courseCount courses • $expectationCount expectations',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: colors.onPrimaryContainer,
-                    ),
+                          color: colors.onPrimaryContainer,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Browse the bundled local curriculum. Tutoring and learner '
-                    'records remain unavailable until their governed providers '
-                    'are enabled.',
+                    'Browse the bundled local curriculum. MTH1W now includes '
+                    'a deterministic offline practice slice; tutoring and '
+                    'learner records remain unavailable.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors.onPrimaryContainer,
-                    ),
+                          color: colors.onPrimaryContainer,
+                        ),
                   ),
                 ],
               ),
@@ -228,14 +226,12 @@ class _CourseCard extends StatelessWidget {
   String get _monogram {
     final id = course.id.trim();
     if (id.isEmpty) return '?';
-    final end = id.length < 3 ? id.length : 3;
-    return id.substring(0, end).toUpperCase();
+    return id.substring(0, id.length < 3 ? id.length : 3).toUpperCase();
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       clipBehavior: Clip.antiAlias,
@@ -343,6 +339,26 @@ class CourseDetailScreen extends ConsumerWidget {
                               '${detail.strands.length} strands • '
                               '$expectationCount expectations',
                             ),
+                            if (courseId == 'MTH1W') ...[
+                              const SizedBox(height: 16),
+                              const Text(
+                                'A1, A2, B2, and B4 have deterministic local '
+                                'practice with exact answer verification.',
+                              ),
+                              const SizedBox(height: 12),
+                              FilledButton.icon(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (context) =>
+                                          const Mth1wPracticeScreen(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.calculate_rounded),
+                                label: const Text('Start verified practice'),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -365,8 +381,8 @@ class CourseDetailScreen extends ConsumerWidget {
                             '${strand.expectations.length} expectations',
                           ),
                           children: strand.expectations
-                              .map((expectation) {
-                                return ListTile(
+                              .map(
+                                (expectation) => ListTile(
                                   contentPadding: const EdgeInsets.fromLTRB(
                                     24,
                                     8,
@@ -377,9 +393,7 @@ class CourseDetailScreen extends ConsumerWidget {
                                   subtitle: expectation.tags.isEmpty
                                       ? null
                                       : Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 10,
-                                          ),
+                                          padding: const EdgeInsets.only(top: 10),
                                           child: Wrap(
                                             spacing: 6,
                                             runSpacing: 6,
@@ -394,8 +408,8 @@ class CourseDetailScreen extends ConsumerWidget {
                                                 .toList(growable: false),
                                           ),
                                         ),
-                                );
-                              })
+                                ),
+                              )
                               .toList(growable: false),
                         ),
                       ),
@@ -416,7 +430,7 @@ class _LoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Semantics(
         liveRegion: true,
         label: 'Loading curriculum',
@@ -440,7 +454,6 @@ class _LoadError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560),
