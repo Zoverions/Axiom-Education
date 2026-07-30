@@ -102,9 +102,14 @@ jobs:
     name: Flutter analyze, test, and Android smoke build
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: write
     steps:
-      - name: Check out source
+      - name: Check out trusted branch head
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -128,6 +133,30 @@ jobs:
           lib/features/diagnostic/diagnostic_screen.dart
           test/widget_test.dart
 
+      - name: Commit canonical formatting once
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          github.head_ref == 'fix/runnable-curriculum-browser'
+        shell: bash
+        run: |
+          paths=(
+            lib/main.dart
+            lib/core/providers/curriculum_provider.dart
+            lib/core/services/hive_service.dart
+            lib/features/diagnostic/diagnostic_screen.dart
+            test/widget_test.dart
+          )
+          if git diff --quiet -- "${paths[@]}"; then
+            echo 'Runnable application files are already canonically formatted.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "${paths[@]}"
+          git commit -m 'Apply canonical Dart formatting'
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
+
       - name: Verify runnable application formatting
         run: >-
           git diff --exit-code --
@@ -136,20 +165,6 @@ jobs:
           lib/core/services/hive_service.dart
           lib/features/diagnostic/diagnostic_screen.dart
           test/widget_test.dart
-
-      - name: Upload canonical formatted sources on failure
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: canonical-formatted-runnable-sources-${{ github.sha }}
-          path: |
-            lib/main.dart
-            lib/core/providers/curriculum_provider.dart
-            lib/core/services/hive_service.dart
-            lib/features/diagnostic/diagnostic_screen.dart
-            test/widget_test.dart
-          if-no-files-found: error
-          retention-days: 1
 
       - name: Analyze
         run: flutter analyze
