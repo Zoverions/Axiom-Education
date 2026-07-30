@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed verification for OntarioEdAI's public capability registry."""
+"""Fail-closed verification for Axiom Education's public capability registry."""
 
 from __future__ import annotations
 
@@ -14,6 +14,8 @@ REGISTRY_PATH = ROOT / "config" / "capabilities.json"
 PUBSPEC_PATH = ROOT / "pubspec.yaml"
 README_PATH = ROOT / "README.md"
 PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
+DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
+MIGRATION_PATH = ROOT / "docs" / "REPOSITORY-MIGRATION.md"
 
 ALLOWED_STATUSES = {
     "implemented",
@@ -31,6 +33,7 @@ REQUIRED_CAPABILITIES = {
     "tutor.local-inference",
     "tools.deterministic-math",
     "canvas.watcher",
+    "input.handwriting-scorer",
     "classroom.legacy-lan-mesh",
     "classroom.axiom-causal-sync",
     "learner.local-records",
@@ -39,6 +42,13 @@ REQUIRED_CAPABILITIES = {
     "portfolio.selective-export",
     "identity.education-credentials",
     "accessibility.learner-interface",
+}
+
+REQUIRED_DEPRECATIONS = {
+    "repository.slug.ontarioedai",
+    "branch.feature-init-ontarioedai-v0.3",
+    "dart.package.ontarioedai",
+    "document.legacy-master-architecture",
 }
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
@@ -76,7 +86,7 @@ def pubspec_version() -> str:
 def verify() -> Counter[str]:
     registry = load_registry()
     require(
-        registry.get("schema") == "ontarioedai-capabilities.v1",
+        registry.get("schema") == "axiom-education-capabilities.v1",
         "unsupported capability registry schema",
     )
 
@@ -84,6 +94,16 @@ def verify() -> Counter[str]:
     require(isinstance(version, str), "application_version must be a string")
     require(bool(VERSION_RE.fullmatch(version)), "invalid application_version")
     require(version == pubspec_version(), "registry and pubspec versions differ")
+
+    product = registry.get("product")
+    require(isinstance(product, dict), "product identity must be an object")
+    require(product.get("name") == "Axiom Education", "canonical product name missing")
+    require(product.get("contract_id") == "axiom.education", "contract id mismatch")
+    require(product.get("canonical_branch") == "main", "main is not canonical")
+    require(
+        product.get("repository_target") == "Zoverions/Axiom-Education",
+        "repository rename target mismatch",
+    )
 
     integration_target = registry.get("integration_target")
     require(isinstance(integration_target, dict), "integration_target must be an object")
@@ -96,6 +116,31 @@ def verify() -> Counter[str]:
     definitions = registry.get("status_definitions")
     require(isinstance(definitions, dict), "status_definitions must be an object")
     require(set(definitions) == ALLOWED_STATUSES, "status definitions are incomplete")
+
+    deprecations = registry.get("deprecations")
+    require(isinstance(deprecations, list), "deprecations must be an array")
+    depreciation_ids: list[str] = []
+    for index, depreciation in enumerate(deprecations):
+        require(isinstance(depreciation, dict), f"deprecation {index} must be an object")
+        depreciation_id = depreciation.get("id")
+        replacement = depreciation.get("replacement")
+        disposition = depreciation.get("disposition")
+        require(
+            isinstance(depreciation_id, str) and re.fullmatch(r"[a-z0-9.-]+", depreciation_id),
+            f"deprecation {index} has an invalid id",
+        )
+        require(isinstance(replacement, str) and replacement, f"{depreciation_id}: replacement missing")
+        require(
+            isinstance(disposition, str) and len(disposition.strip()) >= 10,
+            f"{depreciation_id}: disposition is too short",
+        )
+        depreciation_ids.append(depreciation_id)
+
+    require(len(depreciation_ids) == len(set(depreciation_ids)), "deprecation ids must be unique")
+    require(
+        REQUIRED_DEPRECATIONS.issubset(depreciation_ids),
+        "required deprecations are missing",
+    )
 
     capabilities = registry.get("capabilities")
     require(isinstance(capabilities, list), "capabilities must be an array")
@@ -145,13 +190,24 @@ def verify() -> Counter[str]:
     require(isinstance(non_claims, list) and len(non_claims) >= 5, "non_claims are incomplete")
     require(all(isinstance(item, str) and item.strip() for item in non_claims), "invalid non_claim")
 
+    for document_path in (
+        README_PATH,
+        PRODUCT_DEFINITION_PATH,
+        DEPRECATIONS_PATH,
+        MIGRATION_PATH,
+    ):
+        require(document_path.exists(), f"missing canonical document: {document_path.relative_to(ROOT)}")
+
     for document_path in (README_PATH, PRODUCT_DEFINITION_PATH):
         content = document_path.read_text(encoding="utf-8")
         require(version in content, f"{document_path.relative_to(ROOT)} does not name {version}")
+        require("Axiom Education" in content, f"{document_path.relative_to(ROOT)} lacks canonical product name")
 
     readme = README_PATH.read_text(encoding="utf-8")
     require("config/capabilities.json" in readme, "README does not link the registry")
     require("not production-ready" in readme, "README production boundary is missing")
+    require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")
+    require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration runbook")
 
     return counts
 
