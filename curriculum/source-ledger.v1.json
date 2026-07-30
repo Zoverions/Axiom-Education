@@ -1,0 +1,52 @@
+{
+  "schema": "ontarioedai-curriculum-source-ledger.v1",
+  "ledger_version": "1.0.0",
+  "jurisdiction": "CA-ON",
+  "effective_date": "2026-03-05",
+  "sources": [
+    {
+      "source_id": "ontario-ministry-secondary-derived",
+      "namespace": "ca.on.education.secondary.derived",
+      "classification": "official-derived",
+      "authority": "Ontario Ministry of Education",
+      "official_recognition": true,
+      "default_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "machine-transcription-requires-course-review",
+      "licence": {
+        "rights_holder": "King's Printer for Ontario",
+        "usage_basis": "supplementary-reference",
+        "redistribution_status": "review-required",
+        "notice": "Official curriculum remains authoritative at the Ontario Ministry source. This pack is a derived machine-readable aid and does not replace official documents."
+      }
+    },
+    {
+      "source_id": "ontarioedai-ethics-extension",
+      "namespace": "org.ontarioedai.extension.ethics",
+      "classification": "ontarioedai-extension",
+      "authority": "OntarioEdAI",
+      "official_recognition": false,
+      "default_url": null,
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-applicable",
+      "review_status": "experimental-author-content",
+      "licence": {
+        "rights_holder": "OntarioEdAI contributors",
+        "usage_basis": "project-extension",
+        "redistribution_status": "project-policy-required",
+        "notice": "This is an OntarioEdAI extension and is not an Ontario Ministry-recognized course or curriculum document."
+      }
+    }
+  ],
+  "routing": [
+    {
+      "course_code_pattern": "^EMF[0-9A-Z]*$",
+      "source_id": "ontarioedai-ethics-extension"
+    },
+    {
+      "course_code_pattern": "^[0-9A-Z]+$",
+      "source_id": "ontario-ministry-secondary-derived"
+    }
+  ]
+}
