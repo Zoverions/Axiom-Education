@@ -4,9 +4,13 @@ Axiom Education is a local-first adaptive learning platform built as the educati
 
 **Current rebuild:** `0.5.0-dev.0`  
 **Status:** active development; not production-ready  
+**Canonical branch:** `main`  
+**Repository rename target:** `Zoverions/Axiom-Education`  
 **First curriculum capsule:** Ontario Secondary Curriculum Pack
 
-The repository retains the historical `OntarioEdAI` name while the product moves to jurisdiction-neutral Axiom Education branding. Ontario is the first supported curriculum pack because its source corpus is already present; future curriculum packs can target other provinces, countries, boards, institutions, or independent programmes without changing the core education contract.
+The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdictional curriculum pack because its source corpus is present; it is not the identity or architectural boundary of the platform. After the GitHub repository is renamed, the former URL must remain only as GitHub's compatibility redirect.
+
+See [Repository Migration](docs/REPOSITORY-MIGRATION.md) and [Deprecations](docs/DEPRECATIONS.md).
 
 ## Product boundary
 
@@ -112,15 +116,16 @@ A valid pack signature proves that the exact canonical manifest was signed by th
 
 The source ledger records that upstream official-document digests have not yet been captured and that course-by-course source and licensing review remains required.
 
-## Rebuild documents
+## Canonical documents
 
-- [Canonical product definition](docs/rebuild/PRODUCT-DEFINITION.md)
+- [Product definition](docs/rebuild/PRODUCT-DEFINITION.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
-- [Legacy architecture research input](ARCHITECTURE.md)
-- [Curriculum sources and augmentation notes](CURRICULUM_SOURCES.md)
+- [Repository migration](docs/REPOSITORY-MIGRATION.md)
+- [Deprecations](docs/DEPRECATIONS.md)
+- [Current curriculum source policy](CURRICULUM_SOURCES.md)
 
-When documents conflict, executable behavior and [`config/capabilities.json`](config/capabilities.json) control. Legacy documents are research and traceability inputs unless promoted with code, tests, evidence, and current status.
+Historical research is preserved under `docs/archive/`. When documents conflict, executable behavior and [`config/capabilities.json`](config/capabilities.json) control. Archived or deprecated documents are never current claim authority.
 
 ## Security and privacy boundary
 
