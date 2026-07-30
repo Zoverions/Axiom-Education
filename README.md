@@ -4,13 +4,13 @@ Axiom Education is a local-first adaptive learning platform built as the educati
 
 **Current rebuild:** `0.5.0-dev.0`  
 **Status:** active development; not production-ready  
+**Canonical repository:** `Zoverions/Axiom-Education`  
 **Canonical branch:** `main`  
-**Repository rename target:** `Zoverions/Axiom-Education`  
 **First curriculum capsule:** Ontario Secondary Curriculum Pack
 
-The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdictional curriculum pack because its source corpus is present; it is not the identity or architectural boundary of the platform. After the GitHub repository is renamed, the former URL must remain only as GitHub's compatibility redirect.
+The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdictional curriculum pack because its source corpus is present; it is not the identity or architectural boundary of the platform. The former repository URL is retained only through GitHub's compatibility redirect.
 
-See [Repository Migration](docs/REPOSITORY-MIGRATION.md) and [Deprecations](docs/DEPRECATIONS.md).
+See the [Repository Rename Record](docs/REPOSITORY-MIGRATION.md) and [Deprecations](docs/DEPRECATIONS.md).
 
 ## Product boundary
 
@@ -121,7 +121,7 @@ The source ledger records that upstream official-document digests have not yet b
 - [Product definition](docs/rebuild/PRODUCT-DEFINITION.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
-- [Repository migration](docs/REPOSITORY-MIGRATION.md)
+- [Repository rename record](docs/REPOSITORY-MIGRATION.md)
 - [Deprecations](docs/DEPRECATIONS.md)
 - [Current curriculum source policy](CURRICULUM_SOURCES.md)
 
