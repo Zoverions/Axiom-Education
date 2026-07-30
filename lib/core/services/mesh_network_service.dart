@@ -2,125 +2,174 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
-import 'package:meta/meta.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
-/// Defines the roles in the P2P Mesh
+/// Defines the roles in the development-only LAN mesh.
 enum MeshRole { teacherNode, studentNode }
 
-/// A service to implement a Local Area Network (LAN) Mesh.
-/// In a real cross-platform environment, this acts as the foundational fallback
-/// for when direct Wi-Fi Aware/Bluetooth bindings are not available,
-/// leveraging UDP multicast for discovery and TCP for data sync.
+/// Development-only LAN transport retained while AXIOM admitted-node causal
+/// synchronization is implemented.
+///
+/// This transport is disabled by default. Enabling it never makes it a trusted
+/// authority layer: learner-record access and governed effects must still pass
+/// through AXIOM policy, consent, grants, execution, and evidence.
 class MeshNetworkService {
+  static const int _discoveryPort = 4545;
+  static const int _dataPort = 4546;
+  static const String _multicastGroup = '224.0.0.1';
+  static const int _maxEncryptedMessageBytes = 512 * 1024;
+  static const int _maxReceiveBufferBytes = 1024 * 1024;
+  static const int _maxCanvasStrokes = 10000;
+
   final MeshRole role;
   final String classroomPin;
+
+  /// Must be opted into explicitly by development code. Release and governed
+  /// builds leave this false and therefore cannot start the legacy transport.
+  final bool allowLegacyMesh;
+
+  final String? _meshSecret;
+  encrypt.Encrypter? _encrypter;
+
   @visibleForTesting
   bool isConnected = false;
 
-  // Networking properties
   RawDatagramSocket? _udpSocket;
   ServerSocket? _tcpServerSocket;
   Socket? _teacherTcpSocket;
   final List<Socket> _studentSockets = [];
-
-  // Security properties
+  final Map<Socket, String> _receiveBuffers = {};
   final Map<String, int> _seenNonces = {};
-
-  static const int _discoveryPort = 4545;
-  static const int _dataPort = 4546;
-  static const String _multicastGroup = '224.0.0.1'; // Standard local multicast
 
   MeshNetworkService({
     this.role = MeshRole.studentNode,
     required this.classroomPin,
-  });
+    this.allowLegacyMesh = false,
+    String? meshSecret,
+  }) : _meshSecret = _normalizeSecret(
+          meshSecret ??
+              const String.fromEnvironment(
+                'MESH_SECRET_KEY',
+                defaultValue: '',
+              ),
+        );
+
+  static String? _normalizeSecret(String value) {
+    final normalized = value.trim();
+    return normalized.isEmpty ? null : normalized;
+  }
+
+  bool get hasConfiguredTransportKey => _meshSecret != null;
+
+  encrypt.Encrypter _requireEncrypter() {
+    final secret = _meshSecret;
+    if (secret == null) {
+      throw StateError(
+        'MESH_SECRET_KEY is required for the development LAN mesh.',
+      );
+    }
+
+    return _encrypter ??= encrypt.Encrypter(
+      encrypt.AES(
+        encrypt.Key.fromBase64(
+          base64.encode(sha256.convert(utf8.encode(secret)).bytes),
+        ),
+        mode: encrypt.AESMode.gcm,
+      ),
+    );
+  }
 
   @visibleForTesting
   String generateDiscoveryPayload() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final message = 'TEACHER_NODE_HERE';
+    const message = 'TEACHER_NODE_HERE';
     final nonce = encrypt.IV.fromSecureRandom(16).base64;
     final dataToSign = '${timestamp}_${message}_$nonce';
     final hmac = Hmac(sha256, utf8.encode(classroomPin));
     final signature = hmac.convert(utf8.encode(dataToSign)).toString();
 
-    final payload = {
+    return jsonEncode({
       'msg': message,
       'timestamp': timestamp,
       'nonce': nonce,
       'signature': signature,
-    };
-    return jsonEncode(payload);
+    });
   }
 
   @visibleForTesting
   bool verifyDiscoveryPayload(String jsonPayload) {
     try {
-      final payload = jsonDecode(jsonPayload) as Map<String, dynamic>;
-      final msg = payload['msg'] as String?;
-      final timestamp = payload['timestamp'] as int?;
-      final nonce = payload['nonce'] as String?;
-      final signature = payload['signature'] as String?;
+      final decoded = jsonDecode(jsonPayload);
+      if (decoded is! Map<String, dynamic>) return false;
+
+      final msg = decoded['msg'];
+      final timestamp = decoded['timestamp'];
+      final nonce = decoded['nonce'];
+      final signature = decoded['signature'];
 
       if (msg != 'TEACHER_NODE_HERE' ||
-          timestamp == null ||
-          nonce == null ||
-          signature == null) {
+          timestamp is! int ||
+          nonce is! String ||
+          signature is! String ||
+          nonce.length > 128 ||
+          signature.length != 64) {
         return false;
       }
 
       final now = DateTime.now().millisecondsSinceEpoch;
-
-      // Cleanup old nonces based on their original timestamp
-      // A packet is valid if its timestamp is within 30s of `now`.
-      // Once `now > time + 30000`, the packet would naturally expire anyway.
       _seenNonces.removeWhere((key, time) => now > time + 30000);
 
-      if (_seenNonces.containsKey(nonce)) {
-        return false; // Replay attack detected
-      }
-
-      // Allow a 30-second window
-      if ((now - timestamp).abs() > 30000) {
+      if (_seenNonces.containsKey(nonce) ||
+          (now - timestamp).abs() > 30000) {
         return false;
       }
 
       final dataToSign = '${timestamp}_${msg}_$nonce';
-      final hmac = Hmac(sha256, utf8.encode(classroomPin));
-      final expectedSignature =
-          hmac.convert(utf8.encode(dataToSign)).toString();
+      final expectedSignature = Hmac(
+        sha256,
+        utf8.encode(classroomPin),
+      ).convert(utf8.encode(dataToSign)).toString();
 
-      if (expectedSignature == signature) {
-        _seenNonces[nonce] = timestamp;
-        return true;
-      }
+      if (!_constantTimeEquals(expectedSignature, signature)) return false;
 
-      return false;
-    } catch (e) {
+      _seenNonces[nonce] = timestamp;
+      return true;
+    } catch (_) {
       return false;
     }
   }
 
-  // A shared key for the classroom mesh. In a real environment,
-  // this would be provisioned dynamically via Diffie-Hellman or MDM.
-  // For the scope of this offline MVP, we use a key derived from an environmental
-  // variable. If no variable is provided, we generate a secure random key to prevent
-  // hardcoded secrets from being committed, meaning nodes must be configured with
-  // the same MESH_SECRET_KEY at build/run time to communicate.
-  static final _sharedKey = const bool.hasEnvironment('MESH_SECRET_KEY')
-      ? encrypt.Key.fromBase64(base64.encode(sha256
-          .convert(utf8.encode(const String.fromEnvironment('MESH_SECRET_KEY')))
-          .bytes))
-      : encrypt.Key.fromSecureRandom(32);
-  static final _encrypter = encrypt.Encrypter(encrypt.AES(_sharedKey));
+  static bool _constantTimeEquals(String left, String right) {
+    final leftBytes = utf8.encode(left);
+    final rightBytes = utf8.encode(right);
+    if (leftBytes.length != rightBytes.length) return false;
 
-  /// Initiates discovery of local classroom swarms using UDP Multicast.
-  /// Falls back to "Easy Connection" global discovery if local mesh is unavailable.
+    var difference = 0;
+    for (var index = 0; index < leftBytes.length; index++) {
+      difference |= leftBytes[index] ^ rightBytes[index];
+    }
+    return difference == 0;
+  }
+
+  /// Starts the legacy LAN transport only after explicit development opt-in and
+  /// key configuration. Local failure remains a visible offline failure; no
+  /// synthetic satellite or global-network success is produced.
   Future<void> startDiscovery() async {
-    debugPrint('Starting P2P Mesh Discovery as ${role.name}...');
+    if (!allowLegacyMesh) {
+      throw StateError(
+        'Legacy classroom mesh is disabled. Use the AXIOM classroom-sync adapter.',
+      );
+    }
+    if (!hasConfiguredTransportKey) {
+      throw StateError(
+        'MESH_SECRET_KEY is required before legacy mesh discovery can start.',
+      );
+    }
+
+    debugPrint('Starting development LAN mesh as ${role.name}...');
     try {
       if (role == MeshRole.teacherNode) {
         await _startTeacherNode();
@@ -128,65 +177,35 @@ class MeshNetworkService {
         await _startStudentNode();
       }
       isConnected = true;
-    } catch (e) {
-      debugPrint('Failed to start mesh network: $e');
-      debugPrint('Attempting Easy Connection Discovery fallback...');
-      await _startEasyConnectionDiscovery();
+    } catch (error) {
+      disconnect();
+      debugPrint('Development LAN mesh unavailable; remaining offline: $error');
+      rethrow;
     }
-  }
-
-  /// Easy Connection Discovery: Strategic partnership mode for rural/global access.
-  /// If the local P2P mesh fails (e.g., isolated student, no teacher node), the device
-  /// attempts to connect to a global constellation (e.g., Starlink Educational Tier)
-  /// that zero-rates traffic to the OntarioEdAI master decentralized ledger.
-  Future<void> _startEasyConnectionDiscovery() async {
-    debugPrint(
-        'Scanning for low-earth orbit (LEO) satellite uplinks (e.g., Starlink)...');
-
-    // Placeholder: Interface with hardware APIs to detect whitelisted educational SSIDs
-    // or direct satellite terminal connections.
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Simulate successful connection to global educational network
-    debugPrint('Connected to Global Educational Network via LEO Satellite.');
-    debugPrint('Zero-rated lifelong learning access granted.');
-
-    isConnected = true;
-
-    // In this mode, the node connects to regional master nodes rather than a local classroom swarm.
   }
 
   Future<InternetAddress> _getLocalIpAddress() async {
-    try {
-      final interfaces = await NetworkInterface.list(
-        includeLinkLocal: false,
-        type: InternetAddressType.IPv4,
-      );
-      for (var interface in interfaces) {
-        for (var addr in interface.addresses) {
-          if (!addr.isLoopback) {
-            return addr;
-          }
-        }
+    final interfaces = await NetworkInterface.list(
+      includeLinkLocal: false,
+      type: InternetAddressType.IPv4,
+    );
+    for (final interface in interfaces) {
+      for (final address in interface.addresses) {
+        if (!address.isLoopback) return address;
       }
-    } catch (e) {
-      debugPrint('Failed to list network interfaces: $e');
     }
-    return InternetAddress.loopbackIPv4;
+    throw const SocketException('No non-loopback IPv4 interface is available.');
   }
 
   Future<void> _startTeacherNode() async {
     final localIp = await _getLocalIpAddress();
-
-    // 1. Start TCP Server to listen for student connections
     _tcpServerSocket = await ServerSocket.bind(localIp, _dataPort);
-    _tcpServerSocket!.listen((Socket clientSocket) {
-      debugPrint('Student connected: ${clientSocket.remoteAddress.address}');
+    _tcpServerSocket!.listen((clientSocket) {
+      debugPrint('Development student socket connected.');
       _studentSockets.add(clientSocket);
       _handleIncomingData(clientSocket);
     });
 
-    // 2. Broadcast presence via UDP
     _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
     _udpSocket!.broadcastEnabled = true;
 
@@ -195,192 +214,227 @@ class MeshNetworkService {
         timer.cancel();
         return;
       }
-      final discoveryJson = generateDiscoveryPayload();
-      final msg = utf8.encode(discoveryJson);
-      _udpSocket!.send(msg, InternetAddress(_multicastGroup), _discoveryPort);
+      final message = utf8.encode(generateDiscoveryPayload());
+      _udpSocket!.send(
+        message,
+        InternetAddress(_multicastGroup),
+        _discoveryPort,
+      );
     });
 
-    debugPrint('Teacher node broadcasting on $_multicastGroup:$_discoveryPort');
+    debugPrint('Development teacher node bound to local interface.');
   }
 
   Future<void> _startStudentNode() async {
-    // 1. Listen for teacher UDP broadcasts
-    _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, _discoveryPort);
+    _udpSocket = await RawDatagramSocket.bind(
+      InternetAddress.anyIPv4,
+      _discoveryPort,
+    );
     _udpSocket!.joinMulticast(InternetAddress(_multicastGroup));
 
-    debugPrint(
-        'Student node listening for teacher on $_multicastGroup:$_discoveryPort');
+    await for (final event in _udpSocket!) {
+      if (event != RawSocketEvent.read) continue;
+      final datagram = _udpSocket!.receive();
+      if (datagram == null) continue;
 
-    // Wait to discover teacher
-    await for (RawSocketEvent event in _udpSocket!) {
-      if (event == RawSocketEvent.read) {
-        Datagram? datagram = _udpSocket!.receive();
-        if (datagram != null) {
-          String msg = utf8.decode(datagram.data);
-          if (verifyDiscoveryPayload(msg)) {
-            debugPrint('Teacher node discovered at ${datagram.address.address}');
-            // 2. Connect via TCP
-            await _connectToTeacher(datagram.address.address);
-            break; // Stop listening once connected
-          } else {
-            debugPrint('Ignored unauthenticated or malformed teacher broadcast.');
-          }
-        }
+      final message = utf8.decode(datagram.data, allowMalformed: false);
+      if (!verifyDiscoveryPayload(message)) {
+        debugPrint('Ignored unauthenticated or malformed teacher broadcast.');
+        continue;
       }
+
+      await _connectToTeacher(datagram.address.address);
+      return;
     }
+
+    throw const SocketException('Teacher discovery socket closed.');
   }
 
   Future<void> _connectToTeacher(String teacherIp) async {
-    try {
-      _teacherTcpSocket = await Socket.connect(teacherIp, _dataPort);
-      debugPrint('Connected to teacher TCP channel.');
-      _handleIncomingData(_teacherTcpSocket!);
-    } catch (e) {
-      debugPrint('Failed to connect to teacher TCP: $e');
-    }
+    _teacherTcpSocket = await Socket.connect(teacherIp, _dataPort);
+    _handleIncomingData(_teacherTcpSocket!);
+    debugPrint('Connected to development teacher TCP channel.');
   }
 
-  /// Visible for testing socket lifecycle handling
+  @visibleForTesting
   void handleIncomingDataForTest(Socket socket) => _handleIncomingData(socket);
 
   void _handleIncomingData(Socket socket) {
+    _receiveBuffers[socket] = '';
     socket.listen(
-      (List<int> data) {
+      (data) {
         try {
-          String rawData = utf8.decode(data, allowMalformed: true);
-          List<String> messages = rawData.split('\n');
+          final chunk = utf8.decode(data, allowMalformed: false);
+          var buffer = '${_receiveBuffers[socket] ?? ''}$chunk';
+          if (utf8.encode(buffer).length > _maxReceiveBufferBytes) {
+            throw const FormatException('Mesh receive buffer limit exceeded.');
+          }
 
-          for (String message in messages) {
-            message = message.trim();
+          while (true) {
+            final newline = buffer.indexOf('\n');
+            if (newline < 0) break;
+
+            final message = buffer.substring(0, newline).trim();
+            buffer = buffer.substring(newline + 1);
             if (message.isEmpty) continue;
+            if (utf8.encode(message).length > _maxEncryptedMessageBytes) {
+              throw const FormatException('Encrypted mesh message is too large.');
+            }
 
             try {
-              // debugPrint('Received encrypted mesh data: $message');
-
-              final parts = message.split(':');
-              if (parts.length != 2)
-                throw Exception('Invalid encrypted payload format');
-
-              final iv = encrypt.IV.fromBase64(parts[0]);
-              final decryptedStr = _encrypter.decrypt64(parts[1], iv: iv);
-
-              Map<String, dynamic> payload = jsonDecode(decryptedStr);
-
-              if (payload.containsKey('type')) {
-                String msgType = payload['type'];
-                switch (msgType) {
-                  case 'CANVAS_SYNC':
-                    debugPrint(
-                        'Routing CANVAS_SYNC to canvas handler. Strokes: ${payload['strokes']?.length}');
-                    break;
-                  case 'CREDENTIAL_GOSSIP':
-                    debugPrint(
-                        'Routing CREDENTIAL_GOSSIP to achievement ledger. ID: ${payload['id']}');
-                    break;
-                  default:
-                    debugPrint('Unknown message type: $msgType');
-                }
-              }
-            } catch (e) {
-              debugPrint('Failed to parse/decrypt incoming data: $e');
+              _routePayload(_decodePayload(message));
+            } catch (error) {
+              debugPrint('Rejected development mesh message: $error');
             }
           }
-        } catch (e) {
-          print('General error in mesh data processing: $e');
+
+          _receiveBuffers[socket] = buffer;
+        } catch (error) {
+          debugPrint('Closing invalid development mesh stream: $error');
+          _receiveBuffers.remove(socket);
+          socket.destroy();
         }
       },
       onError: (error) {
-        debugPrint('Socket error: $error');
+        debugPrint('Development mesh socket error: $error');
+        _receiveBuffers.remove(socket);
         socket.destroy();
       },
       onDone: () {
-        debugPrint('Socket closed by peer.');
+        _receiveBuffers.remove(socket);
         socket.destroy();
       },
+      cancelOnError: true,
     );
   }
+
+  Map<String, dynamic> _decodePayload(String message) {
+    final parts = message.split(':');
+    if (parts.length != 2) {
+      throw const FormatException('Invalid encrypted payload framing.');
+    }
+
+    final iv = encrypt.IV.fromBase64(parts[0]);
+    if (iv.bytes.length != 12) {
+      throw const FormatException('AES-GCM nonce must be 12 bytes.');
+    }
+
+    final plaintext = _requireEncrypter().decrypt64(parts[1], iv: iv);
+    final decoded = jsonDecode(plaintext);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Mesh payload must be a JSON object.');
+    }
+
+    _validatePayload(decoded);
+    return decoded;
+  }
+
+  void _validatePayload(Map<String, dynamic> payload) {
+    final type = payload['type'];
+    if (type == 'CANVAS_SYNC') {
+      final strokes = payload['strokes'];
+      if (strokes is! List || strokes.length > _maxCanvasStrokes) {
+        throw const FormatException('Invalid CANVAS_SYNC payload.');
+      }
+      return;
+    }
+
+    if (type == 'CREDENTIAL_GOSSIP') {
+      if (payload['id'] is! String || payload['payload'] is! Map) {
+        throw const FormatException('Invalid CREDENTIAL_GOSSIP payload.');
+      }
+      return;
+    }
+
+    throw const FormatException('Unsupported development mesh message type.');
+  }
+
+  void _routePayload(Map<String, dynamic> payload) {
+    switch (payload['type']) {
+      case 'CANVAS_SYNC':
+        debugPrint('Accepted bounded CANVAS_SYNC development message.');
+        break;
+      case 'CREDENTIAL_GOSSIP':
+        debugPrint('Accepted bounded CREDENTIAL_GOSSIP development message.');
+        break;
+    }
+  }
+
+  String _encodePayload(Map<String, dynamic> payload) {
+    _validatePayload(payload);
+    final plaintext = jsonEncode(payload);
+    if (utf8.encode(plaintext).length > _maxEncryptedMessageBytes) {
+      throw const FormatException('Mesh payload is too large.');
+    }
+
+    final iv = encrypt.IV.fromSecureRandom(12);
+    final encrypted = _requireEncrypter().encrypt(plaintext, iv: iv);
+    return '${iv.base64}:${encrypted.base64}\n';
+  }
+
+  @visibleForTesting
+  String encodePayloadForTest(Map<String, dynamic> payload) =>
+      _encodePayload(payload);
+
+  @visibleForTesting
+  Map<String, dynamic> decodePayloadForTest(String message) =>
+      _decodePayload(message.trim());
 
   @visibleForTesting
   void sendOverTcp(Map<String, dynamic> payload) => _sendOverTcp(payload);
 
   void _sendOverTcp(Map<String, dynamic> payload) {
-    final iv = encrypt.IV.fromSecureRandom(16);
-    final encrypted = _encrypter.encrypt(jsonEncode(payload), iv: iv);
-    final messageStr = '${iv.base64}:${encrypted.base64}\n';
+    final message = _encodePayload(payload);
 
     if (role == MeshRole.studentNode) {
-      if (_teacherTcpSocket != null) {
-        _teacherTcpSocket!.write(messageStr);
-      }
-    } else {
-      for (var socket in _studentSockets) {
-        try {
-          socket.write(messageStr);
-        } catch (_) {}
+      _teacherTcpSocket?.write(message);
+      return;
+    }
+
+    for (final socket in List<Socket>.from(_studentSockets)) {
+      try {
+        socket.write(message);
+      } catch (error) {
+        debugPrint('Dropping failed development student socket: $error');
+        _studentSockets.remove(socket);
+        _receiveBuffers.remove(socket);
+        socket.destroy();
       }
     }
   }
 
-  /// Broadcasts a locally verified credential (VC) to the teacher's node.
   Future<void> gossipCredential(
-      String credentialId, Map<String, dynamic> data) async {
-    if (!isConnected) throw Exception("Not connected to mesh.");
-    debugPrint('Gossiping credential $credentialId...');
-
-    sendOverTcp(
-        {'type': 'CREDENTIAL_GOSSIP', 'id': credentialId, 'payload': data});
+    String credentialId,
+    Map<String, dynamic> data,
+  ) async {
+    if (!isConnected) throw StateError('Not connected to mesh.');
+    sendOverTcp({
+      'type': 'CREDENTIAL_GOSSIP',
+      'id': credentialId,
+      'payload': data,
+    });
   }
 
-  /// Syncs the dynamic workbook state via WebRTC/TCP for real-time offline collaboration.
   Future<void> syncCanvasState(List<Map<String, dynamic>> strokes) async {
     if (!isConnected) return;
-    debugPrint('Syncing canvas state: ${strokes.length} strokes');
-
+    if (strokes.length > _maxCanvasStrokes) {
+      throw const FormatException('Canvas stroke limit exceeded.');
+    }
     sendOverTcp({'type': 'CANVAS_SYNC', 'strokes': strokes});
   }
 
   void disconnect() {
     isConnected = false;
     _udpSocket?.close();
+    _udpSocket = null;
     _tcpServerSocket?.close();
+    _tcpServerSocket = null;
     _teacherTcpSocket?.destroy();
-    for (var socket in _studentSockets) {
+    _teacherTcpSocket = null;
+    for (final socket in _studentSockets) {
       socket.destroy();
     }
     _studentSockets.clear();
-    debugPrint('Disconnected from mesh network.');
+    _receiveBuffers.clear();
   }
-}
-
-Future<List<Map<String, dynamic>>> _parseMeshMessagesIsolate(
-    Map<String, dynamic> args) async {
-  final rawData = args['rawData'] as String;
-  final sharedKeyBase64 = args['sharedKeyBase64'] as String;
-
-  final sharedKey = encrypt.Key.fromBase64(sharedKeyBase64);
-  final encrypter = encrypt.Encrypter(encrypt.AES(sharedKey));
-
-  List<String> messages = rawData.split('\n');
-  List<Map<String, dynamic>> parsedPayloads = [];
-
-  for (String message in messages) {
-    message = message.trim();
-    if (message.isEmpty) continue;
-
-    try {
-      final parts = message.split(':');
-      if (parts.length != 2)
-        throw Exception('Invalid encrypted payload format');
-
-      final iv = encrypt.IV.fromBase64(parts[0]);
-      final decryptedStr = encrypter.decrypt64(parts[1], iv: iv);
-
-      Map<String, dynamic> payload = jsonDecode(decryptedStr);
-      parsedPayloads.add(payload);
-    } catch (e) {
-      debugPrint('Failed to parse/decrypt incoming data in isolate: $e');
-    }
-  }
-
-  return parsedPayloads;
 }
