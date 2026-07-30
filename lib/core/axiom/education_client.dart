@@ -221,7 +221,7 @@ class AxiomEducationClient {
         details: details,
       );
     }
-    return AxiomEducationGatewayException(
+    return AxiomEducationUnexpectedGatewayException(
       statusCode: response.statusCode,
       code: code,
       message: message,
@@ -265,6 +265,16 @@ sealed class AxiomEducationGatewayException extends AxiomEducationException {
     required this.code,
     required super.message,
     this.details = const {},
+  });
+}
+
+class AxiomEducationUnexpectedGatewayException
+    extends AxiomEducationGatewayException {
+  const AxiomEducationUnexpectedGatewayException({
+    required super.statusCode,
+    required super.code,
+    required super.message,
+    super.details,
   });
 }
 
