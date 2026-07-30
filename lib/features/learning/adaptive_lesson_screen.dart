@@ -30,8 +30,7 @@ class AdaptiveLessonScreen extends ConsumerStatefulWidget {
       _AdaptiveLessonScreenState();
 }
 
-class _AdaptiveLessonScreenState
-    extends ConsumerState<AdaptiveLessonScreen> {
+class _AdaptiveLessonScreenState extends ConsumerState<AdaptiveLessonScreen> {
   _LessonPhase _phase = _LessonPhase.loading;
   List<CurriculumItem> _itemQueue = [];
   int _queueIndex = 0;
@@ -44,7 +43,6 @@ class _AdaptiveLessonScreenState
   late Duration _sessionTarget;
 
   // Handwriting reflection state
-  double _reflectionPressure = 0.0;
   double _reflectionConsistency = 0.0;
 
   @override
@@ -62,13 +60,16 @@ class _AdaptiveLessonScreenState
       _sessionTheta,
       courseCode: widget.courseCode,
     );
-    final filtered = bank
-        .where((item) =>
-            item.courseCode == filter.courseCode &&
-            item.irtB >= filter.minDifficulty &&
-            item.irtB <= filter.maxDifficulty)
-        .toList()
-      ..sort((a, b) => a.irtB.compareTo(b.irtB));
+    final filtered =
+        bank
+            .where(
+              (item) =>
+                  item.courseCode == filter.courseCode &&
+                  item.irtB >= filter.minDifficulty &&
+                  item.irtB <= filter.maxDifficulty,
+            )
+            .toList()
+          ..sort((a, b) => a.irtB.compareTo(b.irtB));
 
     if (filtered.isEmpty) {
       // Fallback: any items from this course
@@ -147,10 +148,7 @@ class _AdaptiveLessonScreenState
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: _buildPhase(),
-      ),
+      body: Padding(padding: const EdgeInsets.all(24), child: _buildPhase()),
     );
   }
 
@@ -178,12 +176,11 @@ class _AdaptiveLessonScreenState
       case _LessonPhase.handwritingReflection:
         return _HandwritingReflection(
           prompt: _reflectionPrompt(),
-          onScore: (p, c) {
-            _reflectionPressure = p;
-            _reflectionConsistency = c;
+          onScore: (_, consistency) {
+            _reflectionConsistency = consistency;
           },
-          onNext: () => setState(
-              () => _phase = _LessonPhase.metacognitionPrompt),
+          onNext: () =>
+              setState(() => _phase = _LessonPhase.metacognitionPrompt),
         );
 
       case _LessonPhase.metacognitionPrompt:
@@ -201,19 +198,23 @@ class _AdaptiveLessonScreenState
           ontarioLevel: AdaptiveEngine.ontarioLevel(_sessionTheta),
           elapsed: _sessionTimer.elapsed,
           strokeConsistency: _reflectionConsistency,
-          nextReview: AdaptiveEngine.nextReviewInterval(
-              _responses.length, 2.5),
+          nextReview: AdaptiveEngine.nextReviewInterval(_responses.length, 2.5),
         );
     }
   }
 
   String _reflectionPrompt() {
     final prompts = {
-      'MTH1W': 'In 2–3 sentences, explain how you would solve a linear equation. Use your own words.',
-      'ENL1W': 'Write a topic sentence for an essay about a text you have recently read.',
-      'SNC1W': 'Describe one real-world application of what you practised today.',
-      'CGC1W': 'Write a short geographic observation about your local area using today\'s concepts.',
-      'BEM1O': 'Describe one entrepreneurial quality you saw in today\'s examples.',
+      'MTH1W':
+          'In 2–3 sentences, explain how you would solve a linear equation. Use your own words.',
+      'ENL1W':
+          'Write a topic sentence for an essay about a text you have recently read.',
+      'SNC1W':
+          'Describe one real-world application of what you practised today.',
+      'CGC1W':
+          'Write a short geographic observation about your local area using today\'s concepts.',
+      'BEM1O':
+          'Describe one entrepreneurial quality you saw in today\'s examples.',
     };
     return prompts[widget.courseCode] ??
         'In 2–3 sentences, reflect on what you learned today and one question you still have.';
@@ -227,9 +228,12 @@ class _IntroSlide extends StatelessWidget {
   final Duration sessionLength;
   final String band;
   final VoidCallback onStart;
-  const _IntroSlide(
-      {required this.item, required this.sessionLength,
-       required this.band, required this.onStart});
+  const _IntroSlide({
+    required this.item,
+    required this.sessionLength,
+    required this.band,
+    required this.onStart,
+  });
 
   @override
   Widget build(BuildContext context) => Column(
@@ -237,8 +241,10 @@ class _IntroSlide extends StatelessWidget {
     children: [
       Text('Today\'s Focus', style: Theme.of(context).textTheme.headlineMedium),
       const SizedBox(height: 4),
-      Text('${item.courseCode} — ${item.strand.replaceAll('_', ' ')}',
-          style: const TextStyle(color: Colors.grey)),
+      Text(
+        '${item.courseCode} — ${item.strand.replaceAll('_', ' ')}',
+        style: const TextStyle(color: Colors.grey),
+      ),
       const SizedBox(height: 20),
       Container(
         padding: const EdgeInsets.all(16),
@@ -247,25 +253,40 @@ class _IntroSlide extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.blue.shade700),
         ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Ontario Expectation',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.blue)),
-          const SizedBox(height: 6),
-          Text(item.expectation, style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 8),
-          Text('ID: ${item.id}',
-              style: const TextStyle(color: Colors.grey, fontSize: 11)),
-        ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Ontario Expectation',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                color: Colors.blue,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(item.expectation, style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 8),
+            Text(
+              'ID: ${item.id}',
+              style: const TextStyle(color: Colors.grey, fontSize: 11),
+            ),
+          ],
+        ),
       ),
       const SizedBox(height: 20),
       _BandHint(band: band),
       const SizedBox(height: 20),
-      Row(children: [
-        Icon(Icons.timer_outlined, color: Colors.orange, size: 18),
-        const SizedBox(width: 6),
-        Text('Session: ${sessionLength.inMinutes} minutes (focus burst)',
-            style: const TextStyle(color: Colors.orange)),
-      ]),
+      Row(
+        children: [
+          Icon(Icons.timer_outlined, color: Colors.orange, size: 18),
+          const SizedBox(width: 6),
+          Text(
+            'Session: ${sessionLength.inMinutes} minutes (focus burst)',
+            style: const TextStyle(color: Colors.orange),
+          ),
+        ],
+      ),
       const SizedBox(height: 20),
       ElevatedButton.icon(
         onPressed: onStart,
@@ -283,11 +304,16 @@ class _BandHint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hints = {
-      'intensive': '🔵 We\'ll work through this step by step with worked examples.',
-      'developing': '🟡 Look for the pattern — you\'ve got more of this than you think.',
-      'grade_level': '🟢 Apply the method you know. Challenge yourself on the harder ones.',
-      'enriched': '🟠 Try to solve it more than one way. Look for connections to other ideas.',
-      'gifted': '🔴 Push into the extension. What breaks the rule? Where are its limits?',
+      'intensive':
+          '🔵 We\'ll work through this step by step with worked examples.',
+      'developing':
+          '🟡 Look for the pattern — you\'ve got more of this than you think.',
+      'grade_level':
+          '🟢 Apply the method you know. Challenge yourself on the harder ones.',
+      'enriched':
+          '🟠 Try to solve it more than one way. Look for connections to other ideas.',
+      'gifted':
+          '🔴 Push into the extension. What breaks the rule? Where are its limits?',
     };
     return Container(
       padding: const EdgeInsets.all(12),
@@ -306,8 +332,10 @@ class _PracticeQuestion extends StatefulWidget {
   final VoidCallback onCorrect;
   final VoidCallback onIncorrect;
   const _PracticeQuestion({
-    required this.item, required this.questionNumber,
-    required this.onCorrect, required this.onIncorrect,
+    required this.item,
+    required this.questionNumber,
+    required this.onCorrect,
+    required this.onIncorrect,
   });
 
   @override
@@ -321,11 +349,15 @@ class _PracticeQuestionState extends State<_PracticeQuestion> {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text('Question ${widget.questionNumber}',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      Text(
+        'Question ${widget.questionNumber}',
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
       const SizedBox(height: 4),
-      Text('${widget.item.courseCode} — ${widget.item.strand.replaceAll('_', ' ')}',
-          style: const TextStyle(color: Colors.grey, fontSize: 12)),
+      Text(
+        '${widget.item.courseCode} — ${widget.item.strand.replaceAll('_', ' ')}',
+        style: const TextStyle(color: Colors.grey, fontSize: 12),
+      ),
       const SizedBox(height: 20),
       Container(
         width: double.infinity,
@@ -334,8 +366,10 @@ class _PracticeQuestionState extends State<_PracticeQuestion> {
           color: Colors.blue.shade900,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(widget.item.expectation,
-            style: const TextStyle(fontSize: 18)),
+        child: Text(
+          widget.item.expectation,
+          style: const TextStyle(fontSize: 18),
+        ),
       ),
       const SizedBox(height: 16),
       const Text(
@@ -344,43 +378,55 @@ class _PracticeQuestionState extends State<_PracticeQuestion> {
       ),
       const SizedBox(height: 12),
       if (_answered == null) ...[
-        Row(children: [
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                setState(() => _answered = true);
-                Future.delayed(
-                    const Duration(milliseconds: 300), widget.onCorrect);
-              },
-              icon: const Icon(Icons.check, color: Colors.green),
-              label: const Text('Yes — got it'),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  setState(() => _answered = true);
+                  Future.delayed(
+                    const Duration(milliseconds: 300),
+                    widget.onCorrect,
+                  );
+                },
+                icon: const Icon(Icons.check, color: Colors.green),
+                label: const Text('Yes — got it'),
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                setState(() => _answered = false);
-                Future.delayed(
-                    const Duration(milliseconds: 300), widget.onIncorrect);
-              },
-              icon: const Icon(Icons.close, color: Colors.red),
-              label: const Text('Not yet'),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  setState(() => _answered = false);
+                  Future.delayed(
+                    const Duration(milliseconds: 300),
+                    widget.onIncorrect,
+                  );
+                },
+                icon: const Icon(Icons.close, color: Colors.red),
+                label: const Text('Not yet'),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ] else ...[
-        Row(children: [
-          Icon(_answered! ? Icons.check_circle : Icons.cancel,
-              color: _answered! ? Colors.green : Colors.orange),
-          const SizedBox(width: 8),
-          Text(
-            _answered!
-                ? 'Great — moving on.'
-                : 'That\'s okay — the next question will help.',
-            style: TextStyle(color: _answered! ? Colors.green : Colors.orange),
-          ),
-        ]),
+        Row(
+          children: [
+            Icon(
+              _answered! ? Icons.check_circle : Icons.cancel,
+              color: _answered! ? Colors.green : Colors.orange,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              _answered!
+                  ? 'Great — moving on.'
+                  : 'That\'s okay — the next question will help.',
+              style: TextStyle(
+                color: _answered! ? Colors.green : Colors.orange,
+              ),
+            ),
+          ],
+        ),
       ],
       const SizedBox(height: 16),
       // Spaced repetition hint
@@ -397,15 +443,20 @@ class _HandwritingReflection extends StatelessWidget {
   final String prompt;
   final void Function(double, double) onScore;
   final VoidCallback onNext;
-  const _HandwritingReflection(
-      {required this.prompt, required this.onScore, required this.onNext});
+  const _HandwritingReflection({
+    required this.prompt,
+    required this.onScore,
+    required this.onNext,
+  });
 
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text('Stylus Reflection',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+      const Text(
+        'Stylus Reflection',
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      ),
       const SizedBox(height: 8),
       Container(
         padding: const EdgeInsets.all(12),
@@ -445,34 +496,46 @@ class _MetacognitionPromptState extends State<_MetacognitionPrompt> {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text('Quick Reflection 🧠',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+      const Text(
+        'Quick Reflection 🧠',
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      ),
       const SizedBox(height: 4),
-      const Text('Metacognition builds stronger long-term memory.',
-          style: TextStyle(color: Colors.grey)),
+      const Text(
+        'Metacognition builds stronger long-term memory.',
+        style: TextStyle(color: Colors.grey),
+      ),
       const SizedBox(height: 20),
-      ...List.generate(_prompts.length, (i) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade900,
-            borderRadius: BorderRadius.circular(8),
+      ...List.generate(
+        _prompts.length,
+        (i) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade900,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text('${i + 1}. ${_prompts[i]}'),
           ),
-          child: Text('${i + 1}. ${_prompts[i]}'),
         ),
-      )),
+      ),
       const SizedBox(height: 12),
       const Text('How confident do you feel now? (1 = unsure, 5 = solid)'),
       const SizedBox(height: 8),
-      Row(children: List.generate(5, (i) => Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: ChoiceChip(
-          label: Text('${i + 1}'),
-          selected: _confidence == i + 1,
-          onSelected: (_) => setState(() => _confidence = i + 1),
+      Row(
+        children: List.generate(
+          5,
+          (i) => Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text('${i + 1}'),
+              selected: _confidence == i + 1,
+              onSelected: (_) => setState(() => _confidence = i + 1),
+            ),
+          ),
         ),
-      ))),
+      ),
       const SizedBox(height: 20),
       ElevatedButton(
         onPressed: _confidence != null ? widget.onDone : null,
@@ -491,44 +554,62 @@ class _SessionSummary extends StatelessWidget {
   final Duration nextReview;
 
   const _SessionSummary({
-    required this.questionsAnswered, required this.correctCount,
-    required this.thetaStart, required this.thetaEnd,
-    required this.ontarioLevel, required this.elapsed,
-    required this.strokeConsistency, required this.nextReview,
+    required this.questionsAnswered,
+    required this.correctCount,
+    required this.thetaStart,
+    required this.thetaEnd,
+    required this.ontarioLevel,
+    required this.elapsed,
+    required this.strokeConsistency,
+    required this.nextReview,
   });
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Session Complete! 🎉',
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-      const SizedBox(height: 20),
-      _SummaryRow('Questions answered', '$questionsAnswered'),
-      _SummaryRow('Correct responses',
-          '$correctCount / $questionsAnswered (${questionsAnswered > 0 ? (correctCount / questionsAnswered * 100).toStringAsFixed(0) : 0}%)'),
-      _SummaryRow('Ability change',
-          'θ ${thetaStart.toStringAsFixed(2)} → ${thetaEnd.toStringAsFixed(2)}'),
-      _SummaryRow('Current level', ontarioLevel),
-      _SummaryRow('Session time', '${elapsed.inMinutes}m ${elapsed.inSeconds % 60}s'),
-      _SummaryRow('Penmanship consistency',
-          '${(strokeConsistency * 100).toStringAsFixed(0)}%'),
-      _SummaryRow('Next review in', '${nextReview.inDays} days'),
-      const SizedBox(height: 20),
-      Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.green.shade900.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.green.shade700),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Session Complete! 🎉',
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
-        child: Text(
-          thetaEnd > thetaStart
-              ? '📈 Ability improved this session. Come back in ${nextReview.inDays} days for best retention (spaced practice).'
-              : '💪 Challenging session — that\'s where growth happens. Rest and return tomorrow.',
-          style: const TextStyle(fontSize: 14),
+        const SizedBox(height: 20),
+        _SummaryRow('Questions answered', '$questionsAnswered'),
+        _SummaryRow(
+          'Correct responses',
+          '$correctCount / $questionsAnswered (${questionsAnswered > 0 ? (correctCount / questionsAnswered * 100).toStringAsFixed(0) : 0}%)',
         ),
-      ),
-    ]),
+        _SummaryRow(
+          'Ability change',
+          'θ ${thetaStart.toStringAsFixed(2)} → ${thetaEnd.toStringAsFixed(2)}',
+        ),
+        _SummaryRow('Current level', ontarioLevel),
+        _SummaryRow(
+          'Session time',
+          '${elapsed.inMinutes}m ${elapsed.inSeconds % 60}s',
+        ),
+        _SummaryRow(
+          'Penmanship consistency',
+          '${(strokeConsistency * 100).toStringAsFixed(0)}%',
+        ),
+        _SummaryRow('Next review in', '${nextReview.inDays} days'),
+        const SizedBox(height: 20),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.green.shade900.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.green.shade700),
+          ),
+          child: Text(
+            thetaEnd > thetaStart
+                ? '📈 Ability improved this session. Come back in ${nextReview.inDays} days for best retention (spaced practice).'
+                : '💪 Challenging session — that\'s where growth happens. Rest and return tomorrow.',
+            style: const TextStyle(fontSize: 14),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
@@ -539,12 +620,19 @@ class _SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
-    child: Row(children: [
-      SizedBox(width: 220,
-          child: Text(label, style: const TextStyle(color: Colors.grey))),
-      Expanded(
-          child: Text(value,
-              style: const TextStyle(fontWeight: FontWeight.w500))),
-    ]),
+    child: Row(
+      children: [
+        SizedBox(
+          width: 220,
+          child: Text(label, style: const TextStyle(color: Colors.grey)),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+      ],
+    ),
   );
 }
