@@ -1,23 +1,24 @@
-# OntarioEdAI Product Definition
+# Axiom Education Product Definition
 
 **Status:** Canonical rebuild definition  
 **Current build:** `0.5.0-dev.0`  
-**Rebuild branch:** `rebuild/axiom-education-v0.5`  
+**Canonical branch:** `main`  
+**Repository rename target:** `Zoverions/Axiom-Education`  
 **Archived baseline:** `archive/ontarioedai-pre-axiom-2026-07-30`  
 **AXIOM target:** `0.12.0-dev.0` or later
 
 ## One-sentence definition
 
-OntarioEdAI is a local-first adaptive education application that uses signed curriculum packs and separately governed education capabilities to provide tutoring, assessment, learner records, classroom synchronization, and portable evidence without granting the application ambient authority over a learner's data or device.
+Axiom Education is a local-first adaptive education application that uses signed jurisdictional curriculum packs and separately governed education capabilities to provide tutoring, assessment, learner records, classroom synchronization, and portable evidence without granting the application ambient authority over a learner's data or device.
 
 ## Product boundary
 
-OntarioEdAI remains an independently releasable Flutter application and education-domain repository. AXIOM-MESH remains the policy, capability, execution, evidence, consent, and portability substrate.
+Axiom Education remains an independently releasable Flutter application and education-domain repository. AXIOM-MESH remains the policy, capability, execution, evidence, consent, and portability substrate.
 
 The intended governed effect path is:
 
 ```text
-OntarioEdAI UI
+Axiom Education UI
   -> AXIOM Gateway
   -> policy, consent, risk, and plan evaluation
   -> short-lived capability grant
@@ -28,7 +29,7 @@ OntarioEdAI UI
 
 No learner-data mutation, external provider call, credential issuance, curriculum activation, or classroom synchronization effect may bypass that path in governed mode.
 
-## Responsibilities retained by OntarioEdAI
+## Responsibilities retained by Axiom Education
 
 - Flutter presentation and local interaction state.
 - Course, lesson, workspace, canvas, progress, portfolio, and privacy interfaces.
@@ -51,7 +52,7 @@ No learner-data mutation, external provider call, credential issuance, curriculu
 
 ## Initial capability pack
 
-The education domain will be divided into narrow capability surfaces:
+The education domain is divided into narrow capability surfaces:
 
 1. `education.curriculum` — verify, query, install, and activate signed curriculum packs.
 2. `education.tutor` — retrieve grounding and invoke an explicitly configured model provider.
@@ -80,7 +81,7 @@ Every minor-related capability defaults to:
 
 ## First supported vertical slice
 
-The first complete course experience will be `MTH1W`.
+The first complete course experience will be the Ontario `MTH1W` profile.
 
 It must exercise:
 
@@ -95,7 +96,7 @@ It must exercise:
 - selective portfolio export;
 - offline operation.
 
-Expansion to other courses follows only after this slice passes its acceptance gates.
+Expansion to other courses or jurisdictions follows only after this slice passes its acceptance gates.
 
 ## Rebuild acceptance rule
 
@@ -114,7 +115,7 @@ Anything else is `experimental`, `adapter_required`, `specified`, or `disabled`.
 
 ## Deliberate non-claims
 
-Until independently demonstrated, OntarioEdAI does not claim:
+Until independently demonstrated, Axiom Education does not claim:
 
 - production readiness;
 - complete coverage or currency of every Ontario secondary course;
@@ -125,3 +126,7 @@ Until independently demonstrated, OntarioEdAI does not claim:
 - verified DIDs or educational credentials without an approved issuer and verifier profile;
 - that generated explanations are correct unless their relevant claims are grounded and checked;
 - that attention, engagement, sentience, emotion, disability, or diagnosis can be inferred from ordinary interaction traces.
+
+## Naming and compatibility
+
+`OntarioEdAI` is a deprecated historical name. Ontario content remains a jurisdictional pack. The internal Dart package identifier `ontarioedai` is a temporary compatibility shim scheduled for isolated migration before `0.6.0`; it does not define the product or contract identity.
