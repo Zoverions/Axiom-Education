@@ -1,50 +1,66 @@
-# Curriculum Sources & Augmentation Strategy
+# Axiom Education Curriculum Source Policy
 
-This document tracks the origins of the educational data powering the OntarioEdAI platform and outlines our strategy for incorporating open-source educational resources.
+This document defines the current provenance boundary for jurisdictional curriculum packs and Axiom Education extensions.
 
-## 1. Core Curriculum (The Ground Truth)
+The former augmentation strategy is archived at [`docs/archive/CURRICULUM-SOURCES-LEGACY.md`](docs/archive/CURRICULUM-SOURCES-LEGACY.md). It is not evidence of source accuracy, licensing permission, Ministry approval, pedagogical quality, or production readiness.
 
-Our primary data substrate is built upon the official Ministry of Education documents for Ontario, Canada. These have been parsed and structured into machine-readable JSON and SQLite schemas.
+## Authority hierarchy
 
-**Included Disciplines (Grades 9-12):**
-*   **Mathematics:** De-streamed (MTH1W) and legacy academic/applied pathways.
-*   **Science:** SNC1W (de-streamed), Biology, Chemistry, Physics.
-*   **English:** ENL1W, ENG3U, ENG4U (focus on literacy, digital media, and critical analysis).
-*   **Technology & Skilled Trades:** TAS1O, TAS2O, ICD2O, and legacy computer studies.
-*   **Business:** BEM1O, BEP2O, BOH4M (Entrepreneurial mindset and leadership).
-*   **Guidance & Career Education:** GLC2O and overarching Grade 9-12 frameworks.
-*   **Health & Physical Education:** PPL1O, PPL2O (Active living, consent, mental health).
-*   **The Arts:** Universal frameworks for visual arts, music, drama, and dance.
-*   **Language Acquisition:** Core French (FSL), Native Languages, English as a Second Language (ESL), American Sign Language (ASL).
-*   **Cross-Curricular:** First Nations, Métis, and Inuit (FNMI) Studies framework, and Co-operative Education frameworks.
+1. Canonical signed curriculum-pack records and manifest.
+2. `curriculum/source-ledger.v1.json`.
+3. Versioned curriculum schemas and deterministic pack tooling.
+4. Course-by-course human review evidence.
+5. Disposable retrieval indexes derived from the canonical records.
 
-## 2. Custom Augmented Modules: "Ethics & Moral Foundations"
+JSON, SQLite, Chroma, embeddings, and generated indexes are not independently authoritative merely because they are local.
 
-While the Ontario curriculum implicitly covers ethics within specific subjects (e.g., Business ethics, English media bias, Science climate change), the Master Plan requires a dedicated, explicit focus on the evolution of human thought.
+## Required record provenance
 
-We have custom-built an open-source module: **Ethics, Moral Foundations, and the Evolution of Thought (EMF1O/EMF3U)**.
+Every curriculum record must identify, when available:
 
-**Topics Covered:**
-*   **Early Spiritualism:** Examining cave paintings, animism, and early attempts to understand existence.
-*   **Philosophical Evolution:** The transition from mythos to logos, examining Eastern and Western philosophical foundations.
-*   **Modern Ethics:** Application of moral frameworks (utilitarianism, deontology, virtue ethics) to modern challenges (AI, bioethics).
-*   **Personal Mentality & Choice:** Emphasizing that students have the freedom to explore and align with belief systems that resonate with their own cognitive style.
+- jurisdiction;
+- issuing authority;
+- official or extension status;
+- source locator and source-document digest;
+- publication and effective dates;
+- ingestion date and parser version;
+- licence or redistribution status;
+- review state and reviewer evidence;
+- content digest and supersession relationship.
 
-## 3. Open Educational Resources (OER) Ingestion Strategy
+Unknown values must remain explicitly unknown. They must not be inferred from filenames, repository history, or model output.
 
-To ensure the platform is universally applicable and not strictly bound to Ontario, we are building ingestion pipelines for global Open Educational Resources.
+## Namespace policy
 
-*   **Grokipedia / Wikipedia:** Extracting factual, unbiased summaries of historical events and scientific concepts to feed the Deterministic Engine.
-*   **Khan Academy (Perseus/Content):** Leveraging their open-source math generators and problem sets to supplement the dynamically generated SLM questions.
-*   **International Frameworks:** The database schema is designed to ingest US Common Core, UK A-Levels, and Australian curriculum standards. The SLM maps the local student's requirements to the corresponding global standard to pull the best learning materials.
+- Ontario-derived records use the Ontario jurisdictional namespace.
+- Axiom Education-created content uses an extension namespace and must not imply Ontario Ministry recognition.
+- Third-party OER uses a separate provider namespace with explicit licence and attribution metadata.
+- Custom course codes such as historical `EMF1O` or `EMF3U` are extensions unless an issuing authority independently recognizes them.
 
-## 4. The "On-The-Fly" Content Generation Principle
+## Current Ontario pack status
 
-The curriculum database tells the AI *what* to teach. The Open Source libraries (like SymPy for math) provide the *facts*.
+The current corpus deterministically builds into 293 canonical records across 21 courses. That reproducibility establishes pack integrity, not source completeness or official approval.
 
-The NPU-driven SLM takes these two inputs and **dynamically generates** the actual question presented to the student. This means:
-*   No two students get the exact same math word problem.
-*   A student interested in robotics gets physics problems framed around servos and motors.
-*   A student interested in art gets geometry problems framed around perspective drawing.
+Outstanding work includes:
 
-This guarantees maximum engagement and aligns perfectly with the student's personal mentality.
+- capture of upstream official-document digests;
+- licensing and redistribution review;
+- course-by-course verification against current Ministry documents;
+- effective-date and supersession review;
+- removal or correction of unsupported records;
+- educator and accessibility review.
+
+## Open educational resources
+
+No source is accepted as factual, neutral, pedagogically appropriate, or redistributable based only on brand or popularity. Each OER source requires:
+
+- licence verification;
+- attribution requirements;
+- version and retrieval date;
+- subject-matter review;
+- suitability and accessibility review;
+- separation from official jurisdictional expectations.
+
+## Generated content
+
+Generated questions, explanations, hints, and examples are not curriculum records. They must bind the exact curriculum expectation IDs, pack digest, generator and provider versions, verifier state, and uncertainty. Deterministically solvable claims require an approved verifier before being represented as verified.
