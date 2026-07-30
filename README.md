@@ -1,11 +1,28 @@
-# OntarioEdAI
+# Axiom Education
 
-OntarioEdAI is a local-first adaptive education application being rebuilt as the first governed education capability pack for AXIOM-MESH.
+Axiom Education is a local-first adaptive learning platform built as the education domain layer for AXIOM-MESH.
 
 **Current rebuild:** `0.5.0-dev.0`  
-**Status:** active development; not production-ready
+**Status:** active development; not production-ready  
+**First curriculum capsule:** Ontario Secondary Curriculum Pack
+
+The repository retains the historical `OntarioEdAI` name while the product moves to jurisdiction-neutral Axiom Education branding. Ontario is the first supported curriculum pack because its source corpus is already present; future curriculum packs can target other provinces, countries, boards, institutions, or independent programmes without changing the core education contract.
+
+## Product boundary
+
+```text
+Axiom Education application
+  -> AXIOM Gateway
+  -> policy, consent, risk, and plan evaluation
+  -> short-lived capability grant
+  -> approved education or provider capsule
+  -> bounded execution
+  -> encrypted learner state and evidence in Grid
+```
 
 The Flutter application remains independently releasable. AXIOM-MESH supplies the policy, consent, bounded execution, evidence, portability, and synchronization substrate for governed effects.
+
+Installing a curriculum or education capsule does not grant access to learner records, activate a provider, or authorize execution.
 
 ## First five minutes
 
@@ -25,21 +42,22 @@ flutter test
 flutter run -d windows
 ```
 
-The current application opens a curriculum diagnostic browser. The learner workspace, AXIOM bridge, configured tutor provider, encrypted learner records, governed pack activation, and governed classroom synchronization remain rebuild work.
+The current application opens the Axiom Education diagnostic browser over the bundled Ontario curriculum database. The learner workspace, live AXIOM transport, configured tutor provider, encrypted learner records, governed pack activation, and governed classroom synchronization remain rebuild work.
 
-## Product boundary
+## Axiom Education contract
 
-```text
-OntarioEdAI UI
-  -> AXIOM Gateway
-  -> policy, consent, risk, and plan evaluation
-  -> short-lived capability grant
-  -> approved education or provider capsule
-  -> bounded execution
-  -> encrypted learner state and evidence in Grid
-```
+The generic cross-repository contract is [`contracts/axiom-education.v1.json`](contracts/axiom-education.v1.json).
 
-OntarioEdAI does not receive ambient authority over learner records, providers, credentials, curriculum activation, or classroom nodes.
+- Brand: `Axiom Education`
+- Contract ID: `axiom.education`
+- Version: `1.0.0`
+- Curriculum-pack profile: `jurisdictional`
+- Gateway: `POST /v1/intents`
+- Installation grants authority: `false`
+
+The contract defines bounded curriculum inspection, staging, activation, querying, tutoring, learner-event, progress, and portfolio actions. Learner-data actions require exact purpose-bound consent. High-risk activation and export require explicit confirmation and independent approval.
+
+A missing provider, verifier, identity, policy, consent, source, or artifact must produce an explicit unavailable or denied result. It must never produce mock success in a governed or release build.
 
 ## Current capability status
 
@@ -48,9 +66,9 @@ The authoritative status registry is [`config/capabilities.json`](config/capabil
 Presently:
 
 - curriculum browsing from a schema-verified bundled SQLite database is implemented;
-- the current curriculum corpus deterministically builds into 293 canonical records across 21 courses;
-- curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not yet authorize activation;
-- Ontario-derived records and OntarioEdAI extensions use visibly separate namespaces and official-recognition flags;
+- the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
+- curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
+- Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;
 - local tutor inference is disabled, fails closed, and no longer returns simulated logits output;
 - canvas observation is an explicitly experimental bounded classifier and no longer returns mock equations;
@@ -58,19 +76,7 @@ Presently:
 - the legacy UDP/TCP classroom mesh is disabled by default, AES-GCM protected when explicitly enabled for development, and is not a trusted authority path;
 - governed learner records, selective portfolio export, accessibility gates, pack activation, and AXIOM classroom synchronization remain specified or adapter-required.
 
-A missing model, provider, verifier, identity, policy, consent, source, or artifact must produce an explicit unavailable or denied result. It must never produce mock success in a governed or release build.
-
-## Rebuild documents
-
-- [Canonical product definition](docs/rebuild/PRODUCT-DEFINITION.md)
-- [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
-- [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
-- [Legacy architecture research input](ARCHITECTURE.md)
-- [Curriculum sources and augmentation notes](CURRICULUM_SOURCES.md)
-
-When documents conflict, executable behavior and [`config/capabilities.json`](config/capabilities.json) control. Legacy documents are research and traceability inputs unless promoted with code, tests, evidence, and current status.
-
-## Curriculum pack
+## Ontario Curriculum Pack
 
 Build a deterministic unsigned pack into an empty directory:
 
@@ -78,7 +84,7 @@ Build a deterministic unsigned pack into an empty directory:
 python tools/curriculum_pack.py build \
   --input assets/curriculum/ontario_curriculum_full.json \
   --ledger curriculum/source-ledger.v1.json \
-  --output /tmp/ontarioedai-pack \
+  --output /tmp/axiom-education-ontario \
   --pack-id ontario-secondary \
   --pack-version 1.0.0
 ```
@@ -87,18 +93,10 @@ Verify content integrity:
 
 ```bash
 python tools/curriculum_pack.py verify \
-  --pack-dir /tmp/ontarioedai-pack
+  --pack-dir /tmp/axiom-education-ontario
 ```
 
-The protected workflow builds the complete pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It then signs one build with an ephemeral Ed25519 key and requires successful signature verification.
-
-The legacy ingestion commands remain development inputs:
-
-```bash
-python parse_markdown.py
-python migrate_to_sqlite.py
-python rag_ingestion.py
-```
+The protected workflow builds the complete Ontario pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It then signs one build with an ephemeral Ed25519 key and requires successful signature verification.
 
 Retrieval indexes are disposable derived artifacts. They are never the authority for curriculum content.
 
@@ -112,34 +110,18 @@ A valid pack signature proves that the exact canonical manifest was signed by th
 - pedagogical quality;
 - safe application activation.
 
-The source ledger explicitly records that upstream official-document digests have not yet been captured and that course-by-course source and licensing review remains required.
+The source ledger records that upstream official-document digests have not yet been captured and that course-by-course source and licensing review remains required.
+
+## Rebuild documents
+
+- [Canonical product definition](docs/rebuild/PRODUCT-DEFINITION.md)
+- [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
+- [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
+- [Legacy architecture research input](ARCHITECTURE.md)
+- [Curriculum sources and augmentation notes](CURRICULUM_SOURCES.md)
+
+When documents conflict, executable behavior and [`config/capabilities.json`](config/capabilities.json) control. Legacy documents are research and traceability inputs unless promoted with code, tests, evidence, and current status.
 
 ## Security and privacy boundary
 
-The project targets local processing and data minimization, but local-first architecture alone is not a compliance or security claim.
-
-Until the governed learner-record path is implemented:
-
-- the current Hive `student_data` box must not store governed learner records;
-- raw canvas images and detailed strokes should be treated as ephemeral development data;
-- the legacy mesh must remain disabled outside explicit development tests;
-- no DID, verifiable credential, assessment-validity, or production-encryption claim should be made.
-
-Security issues should follow [`.github/SECURITY.md`](.github/SECURITY.md).
-
-## Initial delivery target
-
-The first complete vertical slice is `MTH1W` and must include:
-
-- a reviewed and approved signed curriculum pack;
-- deterministic algebra and numerical verification;
-- a configured local tutor provider;
-- expectation-linked generated practice;
-- scaffolded hints;
-- consent-bound learner events;
-- visible provenance and uncertainty;
-- educator review and appeal;
-- selective portfolio export;
-- offline operation.
-
-Additional courses follow only after that slice passes its acceptance gates.
+The project targets local processing and data minimization, but local-first architecture alone is not a compliance or security claim. Minor-related data defaults prohibit advertising, behavioural targeting, covert attention or emotion monitoring, diagnosis inference, raw prompts in evidence, and raw student work in logs. Human review and appeal remain mandatory design requirements.
