@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../core/providers/curriculum_provider.dart';
 
 class DiagnosticScreen extends ConsumerWidget {
@@ -10,10 +11,14 @@ class DiagnosticScreen extends ConsumerWidget {
     final overviewAsync = ref.watch(courseOverviewProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Curriculum Diagnostic Overview')),
+      appBar: AppBar(
+        title: const Text('Axiom Education — Ontario Pack'),
+      ),
       body: overviewAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error loading curriculum database: $err')),
+        error: (err, stack) => Center(
+          child: Text('Error loading the Ontario curriculum pack: $err'),
+        ),
         data: (courses) {
           return ListView.builder(
             itemCount: courses.length,
@@ -25,19 +30,25 @@ class DiagnosticScreen extends ConsumerWidget {
                   leading: CircleAvatar(
                     backgroundColor: Colors.deepPurple,
                     child: Text(
-                        course.id.substring(0, 3),
-                        style: const TextStyle(color: Colors.white, fontSize: 12)
+                      course.id.substring(0, 3),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
-                  title: Text(course.id, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('${course.name}\nExpectations: ${course.expectationCount}'),
+                  title: Text(
+                    course.id,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '${course.name}\nExpectations: ${course.expectationCount}',
+                  ),
                   isThreeLine: true,
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CourseDetailScreen(courseId: course.id),
+                        builder: (context) =>
+                            CourseDetailScreen(courseId: course.id),
                       ),
                     );
                   },
@@ -71,21 +82,34 @@ class CourseDetailScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final strand = detail.strands[index];
               return ExpansionTile(
-                title: Text(strand.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(
+                  strand.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 subtitle: Text('${strand.expectations.length} expectations'),
                 children: strand.expectations.map((exp) {
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 4,
+                    ),
                     title: Text(exp.text),
                     subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Wrap(
-                            spacing: 6.0,
-                            children: exp.tags.map((tag) => Chip(
-                                label: Text(tag, style: const TextStyle(fontSize: 10)),
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Wrap(
+                        spacing: 6,
+                        children: exp.tags
+                            .map(
+                              (tag) => Chip(
+                                label: Text(
+                                  tag,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
                                 visualDensity: VisualDensity.compact,
-                            )).toList(),
-                        ),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   );
                 }).toList(),
