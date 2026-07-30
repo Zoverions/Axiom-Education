@@ -96,7 +96,7 @@ void main() {
             'msg': 'TEACHER_NODE_HERE',
             'timestamp': DateTime.now().millisecondsSinceEpoch - 3600000,
             'nonce': 'expired',
-            'signature': '0' * 64,
+            'signature': List<String>.filled(64, '0').join(),
           }),
         ),
         isFalse,
