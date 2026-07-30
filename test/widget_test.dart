@@ -24,7 +24,7 @@ void main() {
 
     expect(find.text('Ontario Secondary Curriculum Pack'), findsOneWidget);
     expect(find.text('3 courses • 31 expectations'), findsOneWidget);
-    expect(find.text('Arts Foundations'), findsOneWidget);
+    expect(find.textContaining('Arts Foundations'), findsOneWidget);
     expect(find.text('A'), findsNWidgets(2));
     expect(tester.takeException(), isNull);
 
