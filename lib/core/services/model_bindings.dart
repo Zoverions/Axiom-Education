@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:onnxruntime/onnxruntime.dart';
 
 import 'model_errors.dart';
@@ -15,6 +16,7 @@ export 'watcher_model.dart';
 class Phi3MiniModel {
   static const String modelAssetPath =
       'assets/models/phi3-mini-4k-instruct-q4.onnx';
+  static const int maxModelAssetBytes = 8 * 1024 * 1024 * 1024;
 
   OrtSession? _session;
   bool _isInitialized = false;
@@ -32,9 +34,22 @@ class Phi3MiniModel {
     try {
       OrtEnv.instance.init();
       _environmentInitialized = true;
-      _session = mockSessionLoader != null
-          ? await mockSessionLoader(modelAssetPath, sessionOptions)
-          : OrtSession.fromAsset(modelAssetPath, sessionOptions);
+
+      if (mockSessionLoader != null) {
+        _session = await mockSessionLoader(modelAssetPath, sessionOptions);
+      } else {
+        final asset = await rootBundle.load(modelAssetPath);
+        if (asset.lengthInBytes > maxModelAssetBytes) {
+          throw const FormatException('Local tutor model artifact is too large.');
+        }
+        _session = OrtSession.fromBuffer(
+          asset.buffer.asUint8List(
+            asset.offsetInBytes,
+            asset.lengthInBytes,
+          ),
+          sessionOptions,
+        );
+      }
       _isInitialized = true;
     } catch (error) {
       _session?.release();
