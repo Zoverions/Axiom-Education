@@ -90,7 +90,9 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextField), item.canonicalAnswer);
-    await tester.tap(find.text('Check answer'));
+    final checkAnswer = find.text('Check answer');
+    await tester.ensureVisible(checkAnswer);
+    await tester.tap(checkAnswer);
     await tester.pump();
 
     expect(find.text('Exact deterministic verification'), findsOneWidget);
@@ -101,7 +103,9 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Show hint'));
+    final showHint = find.text('Show hint');
+    await tester.ensureVisible(showHint);
+    await tester.tap(showHint);
     await tester.pump();
 
     expect(find.text('Scaffolded hints'), findsOneWidget);
@@ -117,6 +121,6 @@ void main() {
       find.widgetWithText(FilledButton, 'Check answer'),
     );
     expect(button.onPressed, isNull);
-    expect(find.textContaining('learner record'), findsOneWidget);
+    expect(find.textContaining('answers cannot be submitted'), findsOneWidget);
   });
 }
