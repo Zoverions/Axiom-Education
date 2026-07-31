@@ -55,11 +55,18 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile curriculum tooling
-        run: python -m py_compile tools/curriculum_pack.py tests/test_curriculum_pack.py
+      - name: Compile curriculum tooling and slice tests
+        run: >-
+          python -m py_compile
+          tools/curriculum_pack.py
+          tests/test_curriculum_pack.py
+          tests/test_mth1w_slice.py
 
       - name: Run curriculum pack unit tests
         run: python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
+
+      - name: Run frozen MTH1W subset tests
+        run: python -m unittest discover -s tests -p 'test_mth1w_slice.py' -v
 
       - name: Build the Ontario curriculum pack twice
         run: |

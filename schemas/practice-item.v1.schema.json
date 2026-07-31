@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.education/schemas/practice-item.v1.schema.json",
+  "title": "Axiom Education Practice Item v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "item_id",
+    "course_code",
+    "expectation",
+    "generator",
+    "prompt",
+    "answer",
+    "hints",
+    "difficulty",
+    "item_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "axiom-education-practice-item.v1"
+    },
+    "item_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 256
+    },
+    "course_code": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{2,16}$"
+    },
+    "expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9A-Z]+-[A-Z][0-9]+$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "seed"],
+      "properties": {
+        "id": {
+          "const": "mth1w-deterministic-practice"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      }
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "canonical"],
+      "properties": {
+        "kind": {
+          "enum": ["rational", "line_slope_intercept"]
+        },
+        "canonical": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "hints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "source", "status"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": -1000,
+          "maximum": 1000
+        },
+        "source": {
+          "const": "curriculum_irt_b"
+        },
+        "status": {
+          "const": "uncalibrated"
+        }
+      }
+    },
+    "item_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

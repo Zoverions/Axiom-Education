@@ -30,16 +30,22 @@ Installing a curriculum or education capsule does not grant access to learner re
 
 ## Current usable surface
 
-The runnable application is a local Ontario curriculum browser. It provides:
+The runnable application provides a local Ontario curriculum browser and the first bounded MTH1W practice slice:
 
 - recoverable first-run initialization;
 - a searchable list of courses and expectation counts;
 - course, strand, expectation, and tag browsing;
 - pull-to-refresh and explicit retry states;
 - automatic restoration of a missing or invalid bundled curriculum database;
-- a read-only curriculum database and a separate local settings store.
+- a read-only curriculum database and a separate local settings store;
+- deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
+- actual answer entry with exact rational and slope-intercept verification;
+- item-linked scaffolded hints, exact expectation IDs, uncalibrated difficulty disclosure, and digest evidence;
+- fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The application does **not** currently provide a live tutor, governed learner records, pack activation, portfolio export, or classroom synchronization. Those paths remain disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+The MTH1W practice phase does **not** use tutor inference or write a learner record. The application does **not** currently provide governed learner records, pack activation, educator review and appeal, portfolio export, or classroom synchronization. Those paths remain disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+
+The scope and negative-path gates are frozen in [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md).
 
 ## First five minutes
 
@@ -54,6 +60,7 @@ Supported rebuild toolchain:
 flutter pub get --enforce-lockfile
 python tools/check_capabilities.py
 python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
+python -m unittest discover -s tests -p 'test_mth1w_slice.py' -v
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test
@@ -99,6 +106,8 @@ Presently:
 
 - curriculum browsing from a schema-verified bundled SQLite database is implemented;
 - the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
+- the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
+- MTH1W A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to those four expectations;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;
@@ -121,6 +130,17 @@ python tools/curriculum_pack.py build \
   --pack-version 1.0.0
 ```
 
+Build the frozen MTH1W phase-one subset:
+
+```bash
+python tools/curriculum_pack.py build \
+  --input curriculum/slices/mth1w.v1.json \
+  --ledger curriculum/source-ledger.v1.json \
+  --output /tmp/axiom-education-mth1w \
+  --pack-id ontario-mth1w-phase-1 \
+  --pack-version 1.0.0
+```
+
 Verify content integrity:
 
 ```bash
@@ -128,7 +148,7 @@ python tools/curriculum_pack.py verify \
   --pack-dir /tmp/axiom-education-ontario
 ```
 
-The protected workflow builds the complete Ontario pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It then signs one build with an ephemeral Ed25519 key and requires successful signature verification.
+The protected workflow builds the complete Ontario pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It also verifies that the frozen MTH1W subset contains exactly 11 source-identical records and produces byte-identical repeated builds. The complete pack is then signed with an ephemeral Ed25519 key and must pass signature verification.
 
 Retrieval indexes are disposable derived artifacts. They are never the authority for curriculum content.
 
@@ -148,6 +168,7 @@ The source ledger records that upstream official-document digests have not yet b
 
 - [Product definition](docs/rebuild/PRODUCT-DEFINITION.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
+- [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
 - [Repository rename record](docs/REPOSITORY-MIGRATION.md)
 - [Branch hygiene policy](docs/BRANCH-HYGIENE.md)
