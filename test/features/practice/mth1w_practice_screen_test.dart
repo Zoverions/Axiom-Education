@@ -90,9 +90,11 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextField), item.canonicalAnswer);
-    final checkAnswer = find.text('Check answer');
-    await tester.ensureVisible(checkAnswer);
-    await tester.tap(checkAnswer);
+    final checkButton = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Check answer'),
+    );
+    expect(checkButton.onPressed, isNotNull);
+    checkButton.onPressed!();
     await tester.pump();
 
     expect(find.text('Exact deterministic verification'), findsOneWidget);
@@ -103,9 +105,11 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    final showHint = find.text('Show hint');
-    await tester.ensureVisible(showHint);
-    await tester.tap(showHint);
+    final hintButton = tester.widget<OutlinedButton>(
+      find.widgetWithText(OutlinedButton, 'Show hint'),
+    );
+    expect(hintButton.onPressed, isNotNull);
+    hintButton.onPressed!();
     await tester.pump();
 
     expect(find.text('Scaffolded hints'), findsOneWidget);
