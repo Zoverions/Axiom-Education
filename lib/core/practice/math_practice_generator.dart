@@ -37,33 +37,33 @@ class MathPracticeGenerator {
     );
     return switch (expectationId) {
       'MTH1W-A1' => _generateOrderOfOperations(
-          expectationId,
-          expectationText,
-          difficultyValue,
-          seed,
-          sequence,
-        ),
+        expectationId,
+        expectationText,
+        difficultyValue,
+        seed,
+        sequence,
+      ),
       'MTH1W-A2' => _generatePercentage(
-          expectationId,
-          expectationText,
-          difficultyValue,
-          seed,
-          sequence,
-        ),
+        expectationId,
+        expectationText,
+        difficultyValue,
+        seed,
+        sequence,
+      ),
       'MTH1W-B2' => _generateLinearEquation(
-          expectationId,
-          expectationText,
-          difficultyValue,
-          seed,
-          sequence,
-        ),
+        expectationId,
+        expectationText,
+        difficultyValue,
+        seed,
+        sequence,
+      ),
       'MTH1W-B4' => _generateLineFromPoints(
-          expectationId,
-          expectationText,
-          difficultyValue,
-          seed,
-          sequence,
-        ),
+        expectationId,
+        expectationText,
+        difficultyValue,
+        seed,
+        sequence,
+      ),
       _ => throw UnsupportedPracticeExpectationException(expectationId),
     };
   }
@@ -210,9 +210,7 @@ class MathPracticeGenerator {
   }
 
   static String _constantOperation(int constant) {
-    return constant > 0
-        ? 'adding $constant'
-        : 'subtracting ${constant.abs()}';
+    return constant > 0 ? 'adding $constant' : 'subtracting ${constant.abs()}';
   }
 
   static String _signedValue(int value) =>

@@ -84,7 +84,10 @@ void main() {
 
     expect(find.text('MTH1W-A1'), findsOneWidget);
     expect(find.textContaining('uncalibrated'), findsOneWidget);
-    expect(find.textContaining(item.itemDigest.substring(0, 12)), findsOneWidget);
+    expect(
+      find.textContaining(item.itemDigest.substring(0, 12)),
+      findsOneWidget,
+    );
 
     await tester.enterText(find.byType(TextField), item.canonicalAnswer);
     await tester.tap(find.text('Check answer'));

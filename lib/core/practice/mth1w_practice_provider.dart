@@ -19,7 +19,9 @@ const List<String> mth1wGoldenPathOrder = [
   'MTH1W-B4',
 ];
 
-final mth1wGoldenPathProvider = FutureProvider<List<CurriculumItem>>((ref) async {
+final mth1wGoldenPathProvider = FutureProvider<List<CurriculumItem>>((
+  ref,
+) async {
   final bank = await ref.watch(curriculumBankProvider.future);
   final byId = <String, CurriculumItem>{
     for (final item in bank)

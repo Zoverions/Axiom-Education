@@ -65,7 +65,9 @@ class PracticeItem {
       throw RangeError.range(generatorSeed, 0, 0x7fffffff, 'generatorSeed');
     }
     if (expectationId.trim().isEmpty || expectationText.trim().isEmpty) {
-      throw const FormatException('Expectation identity and text are required.');
+      throw const FormatException(
+        'Expectation identity and text are required.',
+      );
     }
     if (prompt.trim().isEmpty || canonicalAnswer.trim().isEmpty) {
       throw const FormatException('Prompt and canonical answer are required.');
@@ -90,7 +92,9 @@ class PracticeItem {
       hints: normalizedHints,
       difficultyValue: difficultyValue,
     );
-    final digest = sha256.convert(utf8.encode(jsonEncode(digestPayload))).toString();
+    final digest = sha256
+        .convert(utf8.encode(jsonEncode(digestPayload)))
+        .toString();
 
     return PracticeItem._(
       itemId: itemId,
@@ -154,20 +158,20 @@ class PracticeItem {
   }
 
   Map<String, dynamic> toJson() => {
-        ..._digestPayload(
-          itemId: itemId,
-          courseCode: courseCode,
-          expectationId: expectationId,
-          expectationText: expectationText,
-          generatorSeed: generatorSeed,
-          prompt: prompt,
-          answerKind: answerKind,
-          canonicalAnswer: canonicalAnswer,
-          hints: hints,
-          difficultyValue: difficultyValue,
-        ),
-        'item_digest': itemDigest,
-      };
+    ..._digestPayload(
+      itemId: itemId,
+      courseCode: courseCode,
+      expectationId: expectationId,
+      expectationText: expectationText,
+      generatorSeed: generatorSeed,
+      prompt: prompt,
+      answerKind: answerKind,
+      canonicalAnswer: canonicalAnswer,
+      hints: hints,
+      difficultyValue: difficultyValue,
+    ),
+    'item_digest': itemDigest,
+  };
 
   static Map<String, dynamic> _digestPayload({
     required String itemId,
@@ -185,20 +189,14 @@ class PracticeItem {
       'schema': schema,
       'item_id': itemId,
       'course_code': courseCode,
-      'expectation': {
-        'id': expectationId,
-        'text': expectationText,
-      },
+      'expectation': {'id': expectationId, 'text': expectationText},
       'generator': {
         'id': generatorId,
         'version': generatorVersion,
         'seed': generatorSeed,
       },
       'prompt': prompt,
-      'answer': {
-        'kind': answerKind.wireName,
-        'canonical': canonicalAnswer,
-      },
+      'answer': {'kind': answerKind.wireName, 'canonical': canonicalAnswer},
       'hints': List<String>.from(hints),
       'difficulty': {
         'value': difficultyValue,

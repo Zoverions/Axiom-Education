@@ -1,16 +1,9 @@
 class Rational {
   factory Rational(int numerator, [int denominator = 1]) {
     if (denominator == 0) {
-      throw ArgumentError.value(
-        denominator,
-        'denominator',
-        'must not be zero',
-      );
+      throw ArgumentError.value(denominator, 'denominator', 'must not be zero');
     }
-    final divisor = _greatestCommonDivisor(
-      numerator.abs(),
-      denominator.abs(),
-    );
+    final divisor = _greatestCommonDivisor(numerator.abs(), denominator.abs());
     final sign = denominator < 0 ? -1 : 1;
     return Rational._(
       sign * numerator ~/ divisor,
@@ -53,19 +46,17 @@ class Rational {
   }
 
   Rational operator +(Rational other) => Rational(
-        numerator * other.denominator + other.numerator * denominator,
-        denominator * other.denominator,
-      );
+    numerator * other.denominator + other.numerator * denominator,
+    denominator * other.denominator,
+  );
 
   Rational operator -(Rational other) => Rational(
-        numerator * other.denominator - other.numerator * denominator,
-        denominator * other.denominator,
-      );
+    numerator * other.denominator - other.numerator * denominator,
+    denominator * other.denominator,
+  );
 
-  Rational operator *(Rational other) => Rational(
-        numerator * other.numerator,
-        denominator * other.denominator,
-      );
+  Rational operator *(Rational other) =>
+      Rational(numerator * other.numerator, denominator * other.denominator);
 
   Rational operator /(Rational other) {
     if (other.numerator == 0) {
@@ -89,7 +80,8 @@ class Rational {
   int get hashCode => Object.hash(numerator, denominator);
 
   @override
-  String toString() => denominator == 1 ? '$numerator' : '$numerator/$denominator';
+  String toString() =>
+      denominator == 1 ? '$numerator' : '$numerator/$denominator';
 
   static int _greatestCommonDivisor(int a, int b) {
     if (a == 0) return b == 0 ? 1 : b;

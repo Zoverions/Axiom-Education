@@ -228,9 +228,7 @@ class _PracticeBody extends StatelessWidget {
                 ),
                 if (visibleHintCount > 0) ...[
                   const SizedBox(height: 12),
-                  _HintCard(
-                    hints: item.hints.take(visibleHintCount).toList(),
-                  ),
+                  _HintCard(hints: item.hints.take(visibleHintCount).toList()),
                 ],
                 if (result != null) ...[
                   const SizedBox(height: 12),
@@ -272,7 +270,9 @@ class _StatusBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Card(
-      color: verifierAvailable ? colors.primaryContainer : colors.errorContainer,
+      color: verifierAvailable
+          ? colors.primaryContainer
+          : colors.errorContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -288,9 +288,9 @@ class _StatusBanner extends StatelessWidget {
               child: Text(
                 verifierAvailable
                     ? 'Offline deterministic practice is active. No tutor '
-                        'provider or learner record is used in this phase.'
+                          'provider or learner record is used in this phase.'
                     : 'Fail-closed mode: the verifier is unavailable, so '
-                        'answers cannot be submitted or treated as correct.',
+                          'answers cannot be submitted or treated as correct.',
               ),
             ),
           ],
@@ -316,9 +316,9 @@ class _ExpectationCard extends StatelessWidget {
           children: [
             Text(
               item.expectationId,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
             Text(item.expectationText),
@@ -357,7 +357,10 @@ class _QuestionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Practice item', style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              'Practice item',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const SizedBox(height: 8),
             SelectableText(
               item.prompt,
@@ -389,7 +392,10 @@ class _HintCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Scaffolded hints', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Scaffolded hints',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             for (var index = 0; index < hints.length; index += 1)
               Padding(
@@ -412,13 +418,14 @@ class _VerificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final successful = result.status == VerificationStatus.correct;
-    final unavailable = result.status == VerificationStatus.unavailable ||
+    final unavailable =
+        result.status == VerificationStatus.unavailable ||
         result.status == VerificationStatus.integrityFailure;
     final background = successful
         ? colors.primaryContainer
         : unavailable
-            ? colors.errorContainer
-            : colors.tertiaryContainer;
+        ? colors.errorContainer
+        : colors.tertiaryContainer;
 
     return Semantics(
       liveRegion: true,
@@ -431,9 +438,9 @@ class _VerificationCard extends StatelessWidget {
             children: [
               Text(
                 result.evidenceLabel,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 6),
               Text(result.message),

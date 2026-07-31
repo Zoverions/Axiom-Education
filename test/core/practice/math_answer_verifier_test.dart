@@ -6,26 +6,26 @@ void main() {
   const verifier = MathAnswerVerifier();
 
   PracticeItem rationalItem() => PracticeItem.create(
-        expectationId: 'MTH1W-A2',
-        expectationText: 'Apply rates, ratios, and percentages.',
-        generatorSeed: 1,
-        prompt: 'What is 75% of 1?',
-        answerKind: PracticeAnswerKind.rational,
-        canonicalAnswer: '3/4',
-        hints: const ['Rewrite the percentage as a fraction.'],
-        difficultyValue: -0.3,
-      );
+    expectationId: 'MTH1W-A2',
+    expectationText: 'Apply rates, ratios, and percentages.',
+    generatorSeed: 1,
+    prompt: 'What is 75% of 1?',
+    answerKind: PracticeAnswerKind.rational,
+    canonicalAnswer: '3/4',
+    hints: const ['Rewrite the percentage as a fraction.'],
+    difficultyValue: -0.3,
+  );
 
   PracticeItem lineItem() => PracticeItem.create(
-        expectationId: 'MTH1W-B4',
-        expectationText: 'Determine the equation of a line.',
-        generatorSeed: 2,
-        prompt: 'Find the line.',
-        answerKind: PracticeAnswerKind.lineSlopeIntercept,
-        canonicalAnswer: '-2,3',
-        hints: const ['Find slope, then intercept.'],
-        difficultyValue: 1.1,
-      );
+    expectationId: 'MTH1W-B4',
+    expectationText: 'Determine the equation of a line.',
+    generatorSeed: 2,
+    prompt: 'Find the line.',
+    answerKind: PracticeAnswerKind.lineSlopeIntercept,
+    canonicalAnswer: '-2,3',
+    hints: const ['Find slope, then intercept.'],
+    difficultyValue: 1.1,
+  );
 
   group('MathAnswerVerifier', () {
     test('accepts exact equivalent rational forms', () {

@@ -28,13 +28,13 @@ class VerificationResult {
       status == VerificationStatus.incorrect;
 
   String get evidenceLabel => switch (status) {
-        VerificationStatus.correct || VerificationStatus.incorrect =>
-          'Exact deterministic verification',
-        VerificationStatus.invalidInput => 'No result — answer could not be parsed',
-        VerificationStatus.unavailable => 'No result — verifier unavailable',
-        VerificationStatus.integrityFailure =>
-          'No result — practice item integrity failed',
-      };
+    VerificationStatus.correct ||
+    VerificationStatus.incorrect => 'Exact deterministic verification',
+    VerificationStatus.invalidInput => 'No result — answer could not be parsed',
+    VerificationStatus.unavailable => 'No result — verifier unavailable',
+    VerificationStatus.integrityFailure =>
+      'No result — practice item integrity failed',
+  };
 }
 
 abstract interface class PracticeVerifier {
@@ -51,7 +51,8 @@ class MathAnswerVerifier implements PracticeVerifier {
     if (!item.hasValidDigest) {
       return VerificationResult(
         status: VerificationStatus.integrityFailure,
-        message: 'This practice item changed after generation and was not checked.',
+        message:
+            'This practice item changed after generation and was not checked.',
         itemDigest: item.itemDigest,
       );
     }
@@ -66,15 +67,14 @@ class MathAnswerVerifier implements PracticeVerifier {
 
     return switch (item.answerKind) {
       PracticeAnswerKind.rational => _verifyRational(item, learnerAnswer),
-      PracticeAnswerKind.lineSlopeIntercept =>
-        _verifyLineEquation(item, learnerAnswer),
+      PracticeAnswerKind.lineSlopeIntercept => _verifyLineEquation(
+        item,
+        learnerAnswer,
+      ),
     };
   }
 
-  VerificationResult _verifyRational(
-    PracticeItem item,
-    String learnerAnswer,
-  ) {
+  VerificationResult _verifyRational(PracticeItem item, String learnerAnswer) {
     final expected = Rational.tryParse(item.canonicalAnswer);
     final actual = Rational.tryParse(learnerAnswer);
     if (expected == null) {
@@ -94,7 +94,9 @@ class MathAnswerVerifier implements PracticeVerifier {
 
     final correct = actual == expected;
     return VerificationResult(
-      status: correct ? VerificationStatus.correct : VerificationStatus.incorrect,
+      status: correct
+          ? VerificationStatus.correct
+          : VerificationStatus.incorrect,
       message: correct
           ? 'Correct. The exact rational result matches.'
           : 'Not yet. The exact rational result does not match.',
@@ -136,7 +138,9 @@ class MathAnswerVerifier implements PracticeVerifier {
     final correct =
         actual.slope == expectedSlope && actual.intercept == expectedIntercept;
     return VerificationResult(
-      status: correct ? VerificationStatus.correct : VerificationStatus.incorrect,
+      status: correct
+          ? VerificationStatus.correct
+          : VerificationStatus.incorrect,
       message: correct
           ? 'Correct. Both the exact slope and intercept match.'
           : 'Not yet. Check the exact slope and y-intercept.',

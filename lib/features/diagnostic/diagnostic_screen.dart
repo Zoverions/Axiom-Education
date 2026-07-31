@@ -188,16 +188,16 @@ class _PackSummary extends StatelessWidget {
                   Text(
                     'Ontario Secondary Curriculum Pack',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: colors.onPrimaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: colors.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     '$courseCount courses • $expectationCount expectations',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: colors.onPrimaryContainer,
-                        ),
+                      color: colors.onPrimaryContainer,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -205,8 +205,8 @@ class _PackSummary extends StatelessWidget {
                     'a deterministic offline practice slice; tutoring and '
                     'learner records remain unavailable.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colors.onPrimaryContainer,
-                        ),
+                      color: colors.onPrimaryContainer,
+                    ),
                   ),
                 ],
               ),
@@ -393,7 +393,9 @@ class CourseDetailScreen extends ConsumerWidget {
                                   subtitle: expectation.tags.isEmpty
                                       ? null
                                       : Padding(
-                                          padding: const EdgeInsets.only(top: 10),
+                                          padding: const EdgeInsets.only(
+                                            top: 10,
+                                          ),
                                           child: Wrap(
                                             spacing: 6,
                                             runSpacing: 6,
