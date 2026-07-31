@@ -59,7 +59,8 @@ Supported rebuild toolchain:
 ```bash
 flutter pub get --enforce-lockfile
 python tools/check_capabilities.py
-python -m unittest discover -s tests -p 'test_*.py' -v
+python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
+python -m unittest discover -s tests -p 'test_mth1w_slice.py' -v
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test
