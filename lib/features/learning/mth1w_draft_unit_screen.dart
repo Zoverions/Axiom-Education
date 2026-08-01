@@ -6,15 +6,13 @@ import '../../core/providers/mth1w_unit_content_provider.dart';
 
 class Mth1wDraftUnitScreen extends ConsumerWidget {
   const Mth1wDraftUnitScreen({super.key, this.unitNumber = 1})
-    : assert(unitNumber == 1 || unitNumber == 2);
+    : assert(unitNumber >= 1 && unitNumber <= 3);
 
   final int unitNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final unitProvider = unitNumber == 1
-        ? mth1wUnitOneProvider
-        : mth1wUnitTwoProvider;
+    final unitProvider = mth1wUnitProvider(unitNumber);
     final unitAsync = ref.watch(unitProvider);
     return Scaffold(
       appBar: AppBar(title: Text('MTH1W draft Unit $unitNumber')),

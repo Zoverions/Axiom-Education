@@ -9,15 +9,15 @@ import 'package:ontarioedai/features/learning/mth1w_draft_unit_screen.dart';
 
 const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
 const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
+const unitThreeContentPath =
+    'curriculum/content/mth1w/u3-rational-applications.v1.json';
 
 Mth1wUnitContent loadUnit() {
   return Mth1wUnitContent.fromJsonString(File(contentPath).readAsStringSync());
 }
 
 Widget buildUnitScreen(Mth1wUnitContent unit, {int unitNumber = 1}) {
-  final provider = unitNumber == 1
-      ? mth1wUnitOneProvider
-      : mth1wUnitTwoProvider;
+  final provider = mth1wUnitProvider(unitNumber);
   return ProviderScope(
     overrides: [provider.overrideWith((ref) async => unit)],
     child: MaterialApp(home: Mth1wDraftUnitScreen(unitNumber: unitNumber)),
@@ -91,6 +91,23 @@ void main() {
       find.byKey(const ValueKey('mth1w-u2-open-performance-task')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('presents the source-mapped draft Unit 3 path', (tester) async {
+    final unit = Mth1wUnitContent.fromJsonString(
+      File(unitThreeContentPath).readAsStringSync(),
+    );
+    await tester.pumpWidget(buildUnitScreen(unit, unitNumber: 3));
+    await tester.pumpAndSettle();
+
+    expect(find.text(unit.title), findsOneWidget);
+    expect(find.textContaining('B3.1, B3.2, B3.3, B3.4, B3.5'), findsOneWidget);
+    expect(find.text('Signed quantities in place and change'), findsOneWidget);
+    expect(
+      find.text('Rates, percentages, and proportional decisions'),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('mth1w-u3-open-quiz')), findsOneWidget);
   });
 
   testWidgets('teaches, accepts a response, and gives task-specific feedback', (

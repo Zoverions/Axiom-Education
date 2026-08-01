@@ -37,7 +37,7 @@ The baseline student experience must include:
 10. dependable offline operation for downloaded courses.
 
 Items 1–6 have an executable first slice for four Grade 9 math foundation
-topics and separately source-mapped Unit 1 and Unit 2 drafts. Each lesson exposes two
+topics and separately source-mapped Units 1 through 3. Each lesson exposes two
 valid reasoning routes and multiple representations, while keeping one outcome
 and one quality standard. The older foundation topics retain preliminary local
 identifiers; the newer units bind to B1.1 through B1.3 and B2.1 through B2.2 in the verified
@@ -67,8 +67,15 @@ Unit 2 adds exponent-pattern and place-value routes for B2.1 and
 factor-expansion and operation-pattern routes for B2.2, with 4 worked examples,
 22 practice items, a 10-item quiz, and a scale-comparison task.
 
+Unit 3 adds five rational-number lessons for B3.1 through B3.5. Number-line
+and signed-change routes connect position and change; unit-fraction iteration
+connects measurement and scaling; sign-tracking connects ratios, rates,
+fractions, and decimals; exact and technology-supported routes verify signed
+fraction operations; and unit-rate and equivalent-ratio routes support
+proportional decisions.
+
 These are machine-verified draft previews, not reviewed or complete courses.
-The remaining seven units, human educator review, cultural review, licensing,
+The remaining six units, human educator review, cultural review, licensing,
 printable alternatives, and governed progress are still open gates.
 
 ## Current Grade 9 math foundations preview

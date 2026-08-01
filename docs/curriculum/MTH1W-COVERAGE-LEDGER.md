@@ -1,6 +1,6 @@
 # MTH1W Coverage Ledger
 
-**Status:** official inventory and complete course blueprint verified; 2 of 9 units authored as machine-verified drafts
+**Status:** official inventory and complete course blueprint verified; 3 of 9 units authored as machine-verified drafts
 **Source audit date:** 2026-08-01
 **Course-complete claim:** blocked
 
@@ -57,6 +57,14 @@ place-value routes build zero and negative exponents before scientific
 notation; its factor-expansion and operation-pattern routes derive exponent
 relationships while preserving non-zero restrictions.
 
+Unit 3 is delivered from
+`curriculum/content/mth1w/u3-rational-applications.v1.json`. Its 5 lessons map
+to B3.1 through B3.5 and add 10 worked examples, 55 practice items, a 10-item
+quiz, and a proportional-decision portfolio. Signed quantities, unit
+fractions, rational operations, unit rates, percentages, and proportions are
+connected through number lines, measurement, exact computation, unit-rate
+scaling, and equivalent-ratio methods.
+
 Run the evidence checks with:
 
 ```bash
@@ -84,8 +92,8 @@ They remain useful for study, but they do not mark any row above as covered
 until their exact official bindings and instructional interpretations pass
 educator review.
 
-The newer Unit 1 and Unit 2 content binds to official inventory identifiers
-B1.1 through B1.3 and B2.1 through B2.2 and passes structural and
+The newer Units 1 through 3 bind to official inventory identifiers B1.1
+through B3.5 and pass structural and
 answer-contract verification. It is authored coverage, but is not marked
 reviewed teaching coverage until the required human review evidence is
 recorded.
@@ -112,7 +120,7 @@ not independently prove coverage.
 ## Remaining course gates
 
 The official-inventory gate and complete-coverage blueprint are verified.
-Authored delivery is 5 of 43 primary lessons across 2 of 9 units. These gates
+Authored delivery is 10 of 43 primary lessons across 3 of 9 units. These gates
 remain blocked:
 
 - educator source and instructional review;

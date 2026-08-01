@@ -8,6 +8,39 @@ import '../practice/mth1w_practice_screen.dart';
 import 'home_learning_guide_screen.dart';
 import 'mth1w_draft_unit_screen.dart';
 
+const _draftUnits = <_DraftUnitLink>[
+  _DraftUnitLink(
+    unitNumber: 1,
+    icon: Icons.construction_rounded,
+    description:
+        'Three draft lessons mapped to official B1.1-B1.3: number systems, histories, density, infinity, and limits.',
+  ),
+  _DraftUnitLink(
+    unitNumber: 2,
+    icon: Icons.exposure_rounded,
+    description:
+        'Two draft lessons mapped to official B2.1-B2.2: powers, scientific notation, and exponent relationships.',
+  ),
+  _DraftUnitLink(
+    unitNumber: 3,
+    icon: Icons.calculate_rounded,
+    description:
+        'Five draft lessons mapped to official B3.1-B3.5: signed quantities, fractions, rates, percentages, and proportions.',
+  ),
+];
+
+class _DraftUnitLink {
+  const _DraftUnitLink({
+    required this.unitNumber,
+    required this.icon,
+    required this.description,
+  });
+
+  final int unitNumber;
+  final IconData icon;
+  final String description;
+}
+
 class Mth1wCourseScreen extends ConsumerWidget {
   const Mth1wCourseScreen({super.key});
 
@@ -78,43 +111,7 @@ class _CourseBody extends StatelessWidget {
                   icon: const Icon(Icons.home_work_rounded),
                   label: const Text('Open home learning guide'),
                 ),
-                const SizedBox(height: 16),
-                FilledButton.icon(
-                  key: const ValueKey('mth1w-open-draft-unit-1'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) => const Mth1wDraftUnitScreen(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.construction_rounded),
-                  label: const Text('Open source-mapped draft Unit 1'),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Unit 1 adds three draft lessons mapped to official B1.1-B1.3. Educator and cultural review remain required.',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  key: const ValueKey('mth1w-open-draft-unit-2'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) =>
-                            const Mth1wDraftUnitScreen(unitNumber: 2),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.exposure_rounded),
-                  label: const Text('Open source-mapped draft Unit 2'),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Unit 2 adds two draft lessons mapped to official B2.1-B2.2, including powers, scientific notation, and exponent relationships.',
-                  textAlign: TextAlign.center,
-                ),
+                for (final unit in _draftUnits) _DraftUnitEntry(unit: unit),
                 const SizedBox(height: 16),
                 Text(
                   'Foundation lessons',
@@ -150,6 +147,42 @@ class _CourseBody extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _DraftUnitEntry extends StatelessWidget {
+  const _DraftUnitEntry({required this.unit});
+
+  final _DraftUnitLink unit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FilledButton.icon(
+            key: ValueKey('mth1w-open-draft-unit-${unit.unitNumber}'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) =>
+                      Mth1wDraftUnitScreen(unitNumber: unit.unitNumber),
+                ),
+              );
+            },
+            icon: Icon(unit.icon),
+            label: Text('Open source-mapped draft Unit ${unit.unitNumber}'),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${unit.description} Educator and cultural review remain required.',
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

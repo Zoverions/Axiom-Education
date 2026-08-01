@@ -18,6 +18,9 @@ claims.
 - A bundled offline Unit 2 draft covering exponent patterns, scientific
   notation, and exponent relationships through two method routes, four worked
   examples, 22 practice items, a 10-item quiz, and a scale-comparison task.
+- A bundled offline Unit 3 draft covering five rational-number expectations
+  through 10 worked examples, 55 practice items, a 10-item quiz, and a
+  proportional-decision portfolio task.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

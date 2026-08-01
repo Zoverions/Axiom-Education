@@ -25,11 +25,11 @@ def test_current_unit_has_teaching_practice_and_assessment_depth():
     counts = verify_all()
 
     assert counts == {
-        "lessons": 5,
-        "worked_examples": 10,
-        "practice_items": 55,
-        "quiz_items": 20,
-        "constructed_responses": 25,
+        "lessons": 10,
+        "worked_examples": 20,
+        "practice_items": 110,
+        "quiz_items": 30,
+        "constructed_responses": 42,
     }
 
 

@@ -6,9 +6,12 @@ import 'package:ontarioedai/core/learning/mth1w_unit_content.dart';
 
 const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
 const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
+const unitThreeContentPath =
+    'curriculum/content/mth1w/u3-rational-applications.v1.json';
 
 String source() => File(contentPath).readAsStringSync();
 String unitTwoSource() => File(unitTwoContentPath).readAsStringSync();
+String unitThreeSource() => File(unitThreeContentPath).readAsStringSync();
 
 void main() {
   group('MTH1W authored Unit 1 content', () {
@@ -120,6 +123,31 @@ void main() {
       expect(written.type, Mth1wResponseType.constructed);
       expect(written.isAutoCheckable, isFalse);
       expect(written.educatorReviewRequired, isTrue);
+    });
+  });
+
+  group('MTH1W authored Unit 3 content', () {
+    test('loads the complete rational-application package', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitThreeSource());
+
+      expect(unit.unitId, 'mth1w-u3');
+      expect(unit.lessons, hasLength(5));
+      expect(
+        unit.lessons.expand((lesson) => lesson.workedExamples),
+        hasLength(10),
+      );
+      expect(
+        unit.lessons.expand(
+          (lesson) => [
+            ...lesson.practiceSets.guided,
+            ...lesson.practiceSets.independent,
+            ...lesson.practiceSets.retrieval,
+          ],
+        ),
+        hasLength(55),
+      );
+      expect(unit.assessment.quiz.items, hasLength(10));
+      expect(unit.assessment.performanceTask.rubric, hasLength(5));
     });
   });
 }

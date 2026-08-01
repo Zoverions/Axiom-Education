@@ -91,7 +91,7 @@
       "id": "instruction.mth1w-foundation",
       "family": "instruction",
       "status": "experimental",
-      "summary": "A four-lesson Grade 9 Math Foundations Preview and separately source-mapped MTH1W Units 1 and 2 provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and focused offline practice without an AI tutor; seven official units and human review remain incomplete.",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview and separately source-mapped MTH1W Units 1 through 3 provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and focused offline practice without an AI tutor; six official units and human review remain incomplete.",
       "evidence": [
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
         "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
@@ -101,6 +101,7 @@
         "curriculum/courses/ontario-mth1w-2021.course.json",
         "curriculum/content/mth1w/u1-number-systems.v1.json",
         "curriculum/content/mth1w/u2-powers.v1.json",
+        "curriculum/content/mth1w/u3-rational-applications.v1.json",
         "docs/home-learning/START-HERE.md",
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "lib/core/learning/mth1w_foundation.dart",
@@ -120,7 +121,7 @@
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; source-mapped Units 1 and 2 add 55 authored practice items, two 10-item delayed-feedback quizzes with correction attempts, and educator-reviewed performance tasks. These are not grades or mastery records, and full-course assessment remains unavailable.",
+      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; source-mapped Units 1 through 3 add 110 authored practice items, three 10-item delayed-feedback quizzes with correction attempts, and educator-reviewed performance tasks. These are not grades or mastery records, and full-course assessment remains unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",
@@ -134,6 +135,7 @@
         "test/features/practice/mth1w_practice_screen_test.dart",
         "curriculum/content/mth1w/u1-number-systems.v1.json",
         "curriculum/content/mth1w/u2-powers.v1.json",
+        "curriculum/content/mth1w/u3-rational-applications.v1.json",
         "test/features/learning/mth1w_draft_unit_screen_test.dart"
       ]
     },
@@ -251,7 +253,7 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
-    "The current four-lesson Grade 9 Math Foundations Preview and source-mapped Units 1 and 2 are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "The current four-lesson Grade 9 Math Foundations Preview and source-mapped Units 1 through 3 are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
     "Known conflicts remain in preliminary local MTH1W identifiers; the newer official inventory and blueprint do not authorize a complete-course claim without the remaining authored content and human review.",
     "The deterministic practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
