@@ -27,6 +27,20 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | EDU-CUR-05 | Retrieval indexes MUST be disposable derived artifacts and MUST NOT replace authoritative curriculum records. | Rebuild and corruption tests. |
 | EDU-CUR-06 | Custom course codes MUST be visibly marked as Axiom Education extensions and MUST NOT imply jurisdictional authority recognition. | UI and export snapshot tests. |
 
+## High-school instructional core
+
+| ID | Requirement | Acceptance evidence |
+|---|---|---|
+| EDU-CORE-01 | Every supported course MUST remain teachable and practicable when tutor, adaptive, network, and learner-record capabilities are unavailable. | Provider-absence end-to-end course test. |
+| EDU-CORE-02 | The student surface MUST organize curriculum into a visible course → unit → lesson → practice → assessment sequence rather than exposing an expectation database as the complete learning experience. | Navigation and course-completion tests. |
+| EDU-CORE-03 | Every lesson MUST identify its curriculum binding, learning goals, prerequisite knowledge, direct instruction, at least one worked example, independent practice, and expected scope. | Lesson-contract validation and UI tests. |
+| EDU-CORE-04 | Instruction MUST move from modelling to graduated support to independent work; generated exercises alone MUST NOT be represented as a complete lesson. | Content review and lesson-state tests. |
+| EDU-CORE-05 | Deterministic feedback MUST address the task or answer, allow another attempt, and MUST NOT turn an isolated response into a grade, mastery claim, diagnosis, or ability label. | Feedback, retry, and prohibited-claim tests. |
+| EDU-CORE-06 | Supported courses MUST provide conventional lesson checks, quizzes, unit assessments, cumulative review, transparent scoring rules, and educator-correctable outcomes. | Assessment lifecycle and correction tests. |
+| EDU-CORE-07 | Learners MUST be able to plan, monitor, explain, and reflect within subject lessons without covert attention, emotion, disability, motivation, or diagnosis inference. | UI prompts, schema gates, and prohibited-inference tests. |
+| EDU-CORE-08 | High-school interfaces MUST use age-respectful language, clear structure, meaningful choice, and accessible alternatives without manipulative streaks, artificial urgency, or unvalidated competitive ranking. | Content review, accessibility audit, and dark-pattern gate. |
+| EDU-CORE-09 | Educators MUST be able to assign, inspect, correct, accommodate, return, and review governed student work before the product claims a complete school workflow. | Educator end-to-end workflow and rights tests. |
+
 ## Tutor and deterministic verification
 
 | ID | Requirement | Acceptance evidence |

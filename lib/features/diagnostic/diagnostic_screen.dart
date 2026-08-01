@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/curriculum_provider.dart';
+import '../learning/mth1w_course_screen.dart';
 import '../practice/mth1w_practice_screen.dart';
 
 class DiagnosticScreen extends ConsumerStatefulWidget {
@@ -342,21 +343,40 @@ class CourseDetailScreen extends ConsumerWidget {
                             if (courseId == 'MTH1W') ...[
                               const SizedBox(height: 16),
                               const Text(
-                                'A1, A2, B2, and B4 have deterministic local '
-                                'practice with exact answer verification.',
+                                'Start with conventional lessons and worked '
+                                'examples for A1, A2, B2, and B4, then use '
+                                'deterministic practice with exact feedback.',
                               ),
                               const SizedBox(height: 12),
-                              FilledButton.icon(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (context) =>
-                                          const Mth1wPracticeScreen(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.calculate_rounded),
-                                label: const Text('Start verified practice'),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  FilledButton.icon(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (context) =>
+                                              const Mth1wCourseScreen(),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.school_rounded),
+                                    label: const Text('Open course lessons'),
+                                  ),
+                                  OutlinedButton.icon(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (context) =>
+                                              const Mth1wPracticeScreen(),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.calculate_rounded),
+                                    label: const Text('Quick practice'),
+                                  ),
+                                ],
                               ),
                             ],
                           ],

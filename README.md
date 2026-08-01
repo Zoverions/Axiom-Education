@@ -1,6 +1,6 @@
 # Axiom Education
 
-Axiom Education is a local-first adaptive learning platform built as the education domain layer for AXIOM-MESH.
+Axiom Education is a local-first high-school learning platform built as the education domain layer for AXIOM-MESH. Conventional lessons, examples, practice, assessment, and school workflows are the foundation; adaptive and AI capabilities are optional enhancements.
 
 **Current rebuild:** `0.5.0-dev.0`  
 **Status:** active development; not production-ready  
@@ -10,7 +10,7 @@ Axiom Education is a local-first adaptive learning platform built as the educati
 
 The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdictional curriculum pack because its source corpus is present; it is not the identity or architectural boundary of the platform. The former repository URL is retained only through GitHub's compatibility redirect.
 
-See the [Repository Rename Record](docs/REPOSITORY-MIGRATION.md), [Branch Hygiene Policy](docs/BRANCH-HYGIENE.md), and [Deprecations](docs/DEPRECATIONS.md).
+See the [High-School Foundation Strategy](docs/rebuild/HIGH-SCHOOL-FOUNDATION.md), [Repository Rename Record](docs/REPOSITORY-MIGRATION.md), [Branch Hygiene Policy](docs/BRANCH-HYGIENE.md), and [Deprecations](docs/DEPRECATIONS.md).
 
 ## Product boundary
 
@@ -30,7 +30,7 @@ Installing a curriculum or education capsule does not grant access to learner re
 
 ## Current usable surface
 
-The runnable application provides a local Ontario curriculum browser and the first bounded MTH1W practice slice:
+The runnable application provides a local Ontario curriculum browser and the first bounded MTH1W conventional course slice:
 
 - recoverable first-run initialization;
 - a searchable list of courses and expectation counts;
@@ -38,15 +38,17 @@ The runnable application provides a local Ontario curriculum browser and the fir
 - pull-to-refresh and explicit retry states;
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
+- a four-lesson MTH1W course path with explicit goals, prerequisites, direct instruction, worked examples, misconception checks, and reflection prompts;
+- lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
 - an ephemeral on-screen count of checks and exact successes that is never saved to a learner record;
 - item-linked scaffolded hints, exact expectation IDs, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The MTH1W practice phase does **not** use tutor inference or write a learner record. The application does **not** currently provide governed learner records, pack activation, educator review and appeal, portfolio export, or classroom synchronization. Those paths remain disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+The MTH1W lesson and practice phase does **not** use tutor inference or write a learner record. It is intentionally usable without AI. The application does **not** currently provide conventional quizzes or unit tests, governed learner progress, assignments, educator review and appeal, pack activation, portfolio export, or classroom synchronization. Those paths remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
 
-The scope and negative-path gates are frozen in [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md).
+The scope and negative-path gates are frozen in [MTH1W Phase 0 through Phase 2](docs/vertical-slices/MTH1W-PHASE-1.md). Product sequencing and the definition of a complete conventional platform are set by the [High-School Foundation Strategy](docs/rebuild/HIGH-SCHOOL-FOUNDATION.md).
 
 ## First five minutes
 
@@ -109,6 +111,7 @@ Presently:
 - the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
 - MTH1W A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to those four expectations;
+- the four-lesson MTH1W traditional course path is experimental; full-course instruction, quizzes, unit tests, assignments, progress, and teacher workflows remain incomplete;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;

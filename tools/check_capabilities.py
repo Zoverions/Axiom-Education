@@ -15,6 +15,7 @@ PUBSPEC_PATH = ROOT / "pubspec.yaml"
 README_PATH = ROOT / "README.md"
 CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
+HIGH_SCHOOL_FOUNDATION_PATH = ROOT / "docs" / "rebuild" / "HIGH-SCHOOL-FOUNDATION.md"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
 MIGRATION_PATH = ROOT / "docs" / "REPOSITORY-MIGRATION.md"
 
@@ -30,6 +31,7 @@ REQUIRED_CAPABILITIES = {
     "app.curriculum-browser",
     "curriculum.ontario-data",
     "curriculum.signed-packs",
+    "instruction.mth1w-foundation",
     "education.axiom-bridge",
     "tutor.local-inference",
     "tools.deterministic-math",
@@ -201,6 +203,7 @@ def verify() -> Counter[str]:
         README_PATH,
         CHANGELOG_PATH,
         PRODUCT_DEFINITION_PATH,
+        HIGH_SCHOOL_FOUNDATION_PATH,
         DEPRECATIONS_PATH,
         MIGRATION_PATH,
     ):
@@ -215,6 +218,10 @@ def verify() -> Counter[str]:
     require("Zoverions/Axiom-Education" in readme, "README canonical repository is missing")
     require("config/capabilities.json" in readme, "README does not link the registry")
     require("CHANGELOG.md" in readme, "README does not link the changelog")
+    require(
+        "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md" in readme,
+        "README does not link the high-school foundation strategy",
+    )
     require("not production-ready" in readme, "README production boundary is missing")
     require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")
     require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration record")

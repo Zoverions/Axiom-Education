@@ -9,7 +9,21 @@
 
 ## One-sentence definition
 
-Axiom Education is a local-first adaptive education application that uses signed jurisdictional curriculum packs and separately governed education capabilities to provide tutoring, assessment, learner records, classroom synchronization, and portable evidence without granting the application ambient authority over a learner's data or device.
+Axiom Education is a local-first high-school education application that uses signed jurisdictional curriculum packs to deliver conventional courses, lessons, examples, practice, and assessment without requiring AI, then adds separately governed adaptive, tutor, learner-record, classroom, and portability capabilities without granting ambient authority over a learner's data or device.
+
+## Product sequencing principle
+
+The conventional educational platform comes first. A student must be able to
+open a course, learn from explicit instruction and worked examples, complete
+guided and independent practice, receive understandable feedback, take
+conventional assessments, and review prior material when no AI tutor is
+configured.
+
+Adaptive scheduling and tutoring are enhancement layers. They must remain
+optional, transparent, reversible, and unable to bypass the same curriculum,
+assessment, evidence, privacy, and educator-review rules as the baseline path.
+The canonical detail and completion gate are in
+`docs/rebuild/HIGH-SCHOOL-FOUNDATION.md`.
 
 ## Product boundary
 
@@ -83,18 +97,25 @@ Every minor-related capability defaults to:
 
 The first complete course experience will be the Ontario `MTH1W` profile.
 
-It must exercise:
+Its conventional foundation must exercise before AI is introduced:
 
 - a signed Ontario curriculum pack;
+- a student-visible course, unit, and lesson sequence;
+- explicit learning goals, prerequisites, direct instruction, and worked examples;
 - deterministic arithmetic and algebra verification;
-- a configured local tutor provider;
 - generated practice linked to exact expectation identifiers;
 - scaffolded hints;
+- independent practice, lesson checks, quizzes, unit tests, and review;
 - learner-event recording;
 - uncertainty and evidence display;
 - educator review and appeal;
 - selective portfolio export;
 - offline operation.
+
+Only after that foundation passes its acceptance gates may the course require
+evidence for an optional configured local tutor provider and adaptive review
+recommendations. The conventional route must remain available when either is
+disabled or unavailable.
 
 Expansion to other courses or jurisdictions follows only after this slice passes its acceptance gates.
 

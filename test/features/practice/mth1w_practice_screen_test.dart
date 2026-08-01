@@ -55,7 +55,10 @@ void main() {
     ),
   ];
 
-  Widget buildScreen({bool verifierAvailable = true}) {
+  Widget buildScreen({
+    bool verifierAvailable = true,
+    String? initialExpectationId,
+  }) {
     return ProviderScope(
       overrides: [
         mth1wGoldenPathProvider.overrideWith((ref) async => expectations),
@@ -63,6 +66,7 @@ void main() {
       child: MaterialApp(
         home: Mth1wPracticeScreen(
           verifier: verifierAvailable ? const MathAnswerVerifier() : null,
+          initialExpectationId: initialExpectationId,
         ),
       ),
     );
@@ -147,6 +151,14 @@ void main() {
 
     expect(find.text('Scaffolded hints'), findsOneWidget);
     expect(find.textContaining('Multiply'), findsOneWidget);
+  });
+
+  testWidgets('starts with a lesson-selected expectation', (tester) async {
+    await tester.pumpWidget(buildScreen(initialExpectationId: 'MTH1W-B2'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('MTH1W-B2'), findsOneWidget);
+    expect(find.text('Golden-path expectation 3 of 4'), findsOneWidget);
   });
 
   testWidgets('fails closed when the verifier is unavailable', (tester) async {

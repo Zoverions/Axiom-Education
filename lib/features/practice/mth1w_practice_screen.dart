@@ -12,10 +12,12 @@ class Mth1wPracticeScreen extends ConsumerStatefulWidget {
     super.key,
     this.verifier = const MathAnswerVerifier(),
     this.generator = const MathPracticeGenerator(),
+    this.initialExpectationId,
   });
 
   final PracticeVerifier? verifier;
   final MathPracticeGenerator generator;
+  final String? initialExpectationId;
 
   @override
   ConsumerState<Mth1wPracticeScreen> createState() =>
@@ -30,6 +32,16 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
   int _sessionCheckCount = 0;
   int _sessionCorrectCount = 0;
   VerificationResult? _result;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialExpectationId = widget.initialExpectationId;
+    if (initialExpectationId != null) {
+      final requestedIndex = mth1wGoldenPathOrder.indexOf(initialExpectationId);
+      if (requestedIndex >= 0) _expectationIndex = requestedIndex;
+    }
+  }
 
   @override
   void dispose() {
@@ -102,6 +114,15 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
           ),
           data: (expectations) {
             if (expectations.isEmpty) {
+              return _ConfigurationError(
+                onRetry: () => ref.invalidate(mth1wGoldenPathProvider),
+              );
+            }
+            final initialExpectationId = widget.initialExpectationId;
+            if (initialExpectationId != null &&
+                !expectations.any(
+                  (expectation) => expectation.id == initialExpectationId,
+                )) {
               return _ConfigurationError(
                 onRetry: () => ref.invalidate(mth1wGoldenPathProvider),
               );

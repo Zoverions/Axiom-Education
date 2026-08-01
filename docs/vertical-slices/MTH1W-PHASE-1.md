@@ -1,9 +1,9 @@
-# MTH1W Vertical Slice — Phase 0 and Phase 1
+# MTH1W Vertical Slice — Phase 0, Phase 1, and Phase 2
 
 **Status:** Active implementation contract  
 **Course:** Ontario Grade 9 Mathematics, de-streamed (`MTH1W`)  
 **Application version:** `0.5.0-dev.0`  
-**Capability scope:** signed curriculum grounding plus deterministic local practice  
+**Capability scope:** signed curriculum grounding, conventional local lessons, and deterministic local practice
 
 ## Frozen curriculum scope
 
@@ -33,6 +33,23 @@ The first deterministic practice engine supports exactly these expectation IDs:
 4. `MTH1W-B4`
 
 Unsupported expectation IDs fail closed and must not fall back to synthetic questions.
+
+## Phase 2 conventional course path
+
+The same four golden-path expectations form a sequenced, non-AI instructional
+path. Every lesson includes:
+
+- a student-visible title, expected duration, and exact expectation binding;
+- learning goals and prerequisite knowledge;
+- teacher-authored direct instruction and a statement of relevance;
+- a fully worked example with visible intermediate reasoning;
+- a common misconception and a subject-specific planning prompt; and
+- an action that opens deterministic practice at the lesson's expectation.
+
+The lessons are local, deterministic application content and do not require a
+tutor provider. Runtime curriculum joining fails closed when any required
+expectation is missing. The student may also open mixed practice independently
+of the lesson path.
 
 ## Practice-item contract
 
@@ -77,7 +94,9 @@ The JSON contract is `schemas/practice-item.v1.schema.json`.
 
 ### User experience
 
-- `MTH1W` course detail exposes a **Start verified practice** action.
+- `MTH1W` course detail exposes an **Open course lessons** action and a secondary **Quick practice** action.
+- The course screen teaches before asking the learner to practise and makes the four-lesson sequence visible.
+- Every lesson presents goals, prerequisites, instruction, a worked example, a misconception check, and a planning prompt before focused practice.
 - The practice screen uses actual answer entry, not learner self-report.
 - Hints are local, deterministic, and item-linked.
 - Feedback distinguishes correct, incorrect, malformed, and unavailable states.
@@ -105,6 +124,8 @@ The tranche must test:
 This tranche does **not** promote or claim:
 
 - configured local tutor inference;
+- complete instruction for all 11 MTH1W expectations;
+- lesson quizzes, unit tests, cumulative review, or conventional grading;
 - durable or governed learner-event recording;
 - consent-bound learner-record mutation;
 - educator review or appeal;

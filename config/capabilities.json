@@ -85,6 +85,20 @@
       ]
     },
     {
+      "id": "instruction.mth1w-foundation",
+      "family": "instruction",
+      "status": "experimental",
+      "summary": "A four-lesson MTH1W course path provides curriculum-bound learning goals, prerequisites, human-authored direct instruction, worked examples, misconception checks, metacognitive planning prompts, and focused deterministic practice without an AI tutor; full-course lessons, quizzes, grading, progress, and educator workflows remain incomplete.",
+      "evidence": [
+        "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
+        "docs/vertical-slices/MTH1W-PHASE-1.md",
+        "lib/core/learning/mth1w_foundation.dart",
+        "lib/features/learning/mth1w_course_screen.dart",
+        "test/core/learning/mth1w_foundation_test.dart",
+        "test/features/learning/mth1w_course_screen_test.dart"
+      ]
+    },
+    {
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
@@ -216,6 +230,7 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
+    "The current four-lesson MTH1W foundation does not yet provide complete course instruction, quizzes, unit tests, grades, governed progress, assignments, or educator workflows.",
     "The MTH1W deterministic practice engine covers only A1, A2, B2, and B4 and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",

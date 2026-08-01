@@ -8,6 +8,13 @@ claims.
 
 ### Added
 
+- A conventional MTH1W course path that teaches four curriculum-bound lessons
+  through explicit goals, prerequisites, direct instruction, worked examples,
+  misconception checks, reflection prompts, and focused deterministic
+  practice. The entire path works offline without an AI tutor.
+- A canonical high-school foundation strategy defining lessons, practice,
+  assessment, progress, educator workflows, adolescent-learning principles,
+  and the gates that must precede adaptive or tutor enhancements.
 - An ephemeral MTH1W practice-session summary showing local answer checks and
   exact successes. The counters exist only while the practice screen is open
   and are never written to a learner record.
