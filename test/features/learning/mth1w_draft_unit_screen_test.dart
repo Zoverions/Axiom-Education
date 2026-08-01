@@ -11,6 +11,8 @@ const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
 const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
 const unitThreeContentPath =
     'curriculum/content/mth1w/u3-rational-applications.v1.json';
+const unitFourContentPath =
+    'curriculum/content/mth1w/u4-algebraic-thinking.v1.json';
 
 Mth1wUnitContent loadUnit() {
   return Mth1wUnitContent.fromJsonString(File(contentPath).readAsStringSync());
@@ -108,6 +110,20 @@ void main() {
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('mth1w-u3-open-quiz')), findsOneWidget);
+  });
+
+  testWidgets('presents the source-mapped draft Unit 4 path', (tester) async {
+    final unit = Mth1wUnitContent.fromJsonString(
+      File(unitFourContentPath).readAsStringSync(),
+    );
+    await tester.pumpWidget(buildUnitScreen(unit, unitNumber: 4));
+    await tester.pumpAndSettle();
+
+    expect(find.text(unit.title), findsOneWidget);
+    expect(find.textContaining('C1.1, C1.2, C1.3, C1.4, C1.5'), findsOneWidget);
+    expect(find.text('Algebra across cultures and contexts'), findsOneWidget);
+    expect(find.text('Model, solve, and verify equations'), findsOneWidget);
+    expect(find.byKey(const ValueKey('mth1w-u4-open-quiz')), findsOneWidget);
   });
 
   testWidgets('teaches, accepts a response, and gives task-specific feedback', (

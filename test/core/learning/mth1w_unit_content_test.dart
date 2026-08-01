@@ -8,10 +8,13 @@ const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
 const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
 const unitThreeContentPath =
     'curriculum/content/mth1w/u3-rational-applications.v1.json';
+const unitFourContentPath =
+    'curriculum/content/mth1w/u4-algebraic-thinking.v1.json';
 
 String source() => File(contentPath).readAsStringSync();
 String unitTwoSource() => File(unitTwoContentPath).readAsStringSync();
 String unitThreeSource() => File(unitThreeContentPath).readAsStringSync();
+String unitFourSource() => File(unitFourContentPath).readAsStringSync();
 
 void main() {
   group('MTH1W authored Unit 1 content', () {
@@ -131,6 +134,31 @@ void main() {
       final unit = Mth1wUnitContent.fromJsonString(unitThreeSource());
 
       expect(unit.unitId, 'mth1w-u3');
+      expect(unit.lessons, hasLength(5));
+      expect(
+        unit.lessons.expand((lesson) => lesson.workedExamples),
+        hasLength(10),
+      );
+      expect(
+        unit.lessons.expand(
+          (lesson) => [
+            ...lesson.practiceSets.guided,
+            ...lesson.practiceSets.independent,
+            ...lesson.practiceSets.retrieval,
+          ],
+        ),
+        hasLength(55),
+      );
+      expect(unit.assessment.quiz.items, hasLength(10));
+      expect(unit.assessment.performanceTask.rubric, hasLength(5));
+    });
+  });
+
+  group('MTH1W authored Unit 4 content', () {
+    test('loads the complete algebraic-thinking package', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitFourSource());
+
+      expect(unit.unitId, 'mth1w-u4');
       expect(unit.lessons, hasLength(5));
       expect(
         unit.lessons.expand((lesson) => lesson.workedExamples),

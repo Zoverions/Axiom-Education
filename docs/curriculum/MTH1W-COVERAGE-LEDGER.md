@@ -1,6 +1,6 @@
 # MTH1W Coverage Ledger
 
-**Status:** official inventory and complete course blueprint verified; 3 of 9 units authored as machine-verified drafts
+**Status:** official inventory and complete course blueprint verified; 4 of 9 units authored as machine-verified drafts
 **Source audit date:** 2026-08-01
 **Course-complete claim:** blocked
 
@@ -65,6 +65,14 @@ fractions, rational operations, unit rates, percentages, and proportions are
 connected through number lines, measurement, exact computation, unit-rate
 scaling, and equivalent-ratio methods.
 
+Unit 4 is delivered from
+`curriculum/content/mth1w/u4-algebraic-thinking.v1.json`. Its 5 lessons map to
+C1.1 through C1.5 and add 10 worked examples, 55 practice items, a 10-item
+quiz, and a design-and-equation performance task. Historical source evidence,
+pattern tables, visual decomposition, area models, counterexamples, algebra
+tiles, property-labelled steps, balance models, and inverse operations provide
+multiple routes through a common algebra standard.
+
 Run the evidence checks with:
 
 ```bash
@@ -92,8 +100,8 @@ They remain useful for study, but they do not mark any row above as covered
 until their exact official bindings and instructional interpretations pass
 educator review.
 
-The newer Units 1 through 3 bind to official inventory identifiers B1.1
-through B3.5 and pass structural and
+The newer Units 1 through 4 bind to official inventory identifiers B1.1
+through C1.5 and pass structural and
 answer-contract verification. It is authored coverage, but is not marked
 reviewed teaching coverage until the required human review evidence is
 recorded.
@@ -120,7 +128,7 @@ not independently prove coverage.
 ## Remaining course gates
 
 The official-inventory gate and complete-coverage blueprint are verified.
-Authored delivery is 10 of 43 primary lessons across 3 of 9 units. These gates
+Authored delivery is 15 of 43 primary lessons across 4 of 9 units. These gates
 remain blocked:
 
 - educator source and instructional review;

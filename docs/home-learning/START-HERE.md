@@ -1,7 +1,7 @@
 # Start Here: Grade 9 Math Foundations Preview
 
 This is a short, non-AI learning routine for the four math foundation lessons
-and the source-mapped Units 1 through 3 currently available in Axiom Education. It
+and the source-mapped Units 1 through 4 currently available in Axiom Education. It
 can help a learner restart regular study while the complete MTH1W course is
 being built and reviewed.
 
@@ -50,6 +50,11 @@ Then open **Source-mapped draft Unit 3** for signed quantities, fractions,
 rates, percentages, and proportions. Keep the reference point and units beside
 every sign, estimate before exact fraction work, and compare unit-rate and
 equivalent-ratio solutions before making a proportional decision.
+
+Next open **Source-mapped draft Unit 4** for algebraic histories, growing
+patterns, equivalent expressions, simplification, and equations. Keep source
+evidence separate from historical inference, connect every expression term to
+a pattern feature, and verify every transformation or equation by substitution.
 
 ## Starter week
 

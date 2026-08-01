@@ -27,6 +27,12 @@ const _draftUnits = <_DraftUnitLink>[
     description:
         'Five draft lessons mapped to official B3.1-B3.5: signed quantities, fractions, rates, percentages, and proportions.',
   ),
+  _DraftUnitLink(
+    unitNumber: 4,
+    icon: Icons.functions_rounded,
+    description:
+        'Five draft lessons mapped to official C1.1-C1.5: algebraic histories, patterns, equivalence, simplification, and equations.',
+  ),
 ];
 
 class _DraftUnitLink {

@@ -21,6 +21,11 @@ claims.
 - A bundled offline Unit 3 draft covering five rational-number expectations
   through 10 worked examples, 55 practice items, a 10-item quiz, and a
   proportional-decision portfolio task.
+- A bundled offline Unit 4 draft covering five algebra expectations through
+  evidence-aware mathematical history, visual and table pattern routes,
+  equivalence proofs, property-labelled simplification, balance and inverse
+  equation methods, 10 worked examples, 55 practice items, a 10-item quiz, and
+  a design-and-equation performance task.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

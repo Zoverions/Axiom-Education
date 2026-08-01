@@ -51,5 +51,6 @@ flutter:
     - curriculum/content/mth1w/u1-number-systems.v1.json
     - curriculum/content/mth1w/u2-powers.v1.json
     - curriculum/content/mth1w/u3-rational-applications.v1.json
+    - curriculum/content/mth1w/u4-algebraic-thinking.v1.json
     - config/capabilities.json
     - contracts/axiom-education.v1.json

@@ -1,0 +1,609 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u4",
+  "title": "Unit 4: Algebraic thinking and equations",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+      "publisher": "Ontario Ministry of Education",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary-mathematics/courses/mth1w",
+      "use": "Official course context for algebraic histories, expressions, equivalence, operation properties, and equations."
+    },
+    {
+      "title": "Al-Khwarizmi",
+      "publisher": "MacTutor History of Mathematics, University of St Andrews",
+      "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Al-Khwarizmi/",
+      "use": "Teacher background for carefully bounded claims about al-jabr, balancing, verbal algebra, and geometric equation methods."
+    },
+    {
+      "title": "A Classic from China: The Nine Chapters",
+      "publisher": "Mathematical Association of America",
+      "url": "https://old.maa.org/press/periodicals/convergence/a-classic-from-china-the-nine-chapters",
+      "use": "Teacher background for the long instructional history and problem-centred methods of the Nine Chapters and Liu Hui commentary."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u4-l1",
+      "title": "Algebra across cultures and contexts",
+      "official_expectation_ids": ["C1.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Investigate a specific algebraic idea using a reliable historical source rather than a broad culture label.",
+        "Compare a historical verbal or diagram-based method with a modern symbolic method for the same problem.",
+        "Connect completion, balancing, or structured problem solving to a present-day algebra application."
+      ],
+      "success_criteria": [
+        "I separate source evidence from my inference and avoid claiming that one person or culture invented all algebra.",
+        "I accurately solve one problem with both a historical representation and modern symbols.",
+        "I describe a concrete modern use of the shared algebraic idea."
+      ],
+      "vocabulary": [
+        {"term": "algebra", "meaning": "reasoning about quantities and relationships, including known and unknown values"},
+        {"term": "al-jabr", "meaning": "a historical term associated with completion or restoration in equation solving"},
+        {"term": "balancing", "meaning": "maintaining equality while reducing or transforming both sides of an equation"},
+        {"term": "primary source", "meaning": "an artifact or account produced in the historical period being investigated"},
+        {"term": "secondary source", "meaning": "a later analysis that interprets evidence from primary sources and scholarship"}
+      ],
+      "why_it_matters": "Algebra developed through many places, languages, practical problems, and exchanges. Comparing a verbal completion method with symbolic balance reasoning shows that notation can change while the mathematical structure remains, and it builds the source-checking habits needed to resist simple invention myths.",
+      "direct_instruction": [
+        {"heading": "Make bounded historical claims", "body": "A reliable history statement names the source, place, period, mathematical idea, and uncertainty. Al-Khwarizmi's ninth-century treatise systematically taught equation methods in words and connected algebraic and geometric reasoning, but that does not mean all algebra began with one author or travelled in only one direction."},
+        {"heading": "Compare structures, not stereotypes", "body": "The Nine Chapters was compiled over time and later commented on by Liu Hui. Its problem-and-procedure organization supported instruction across centuries. Compare the structure of an example with a modern method; do not turn a complex mathematical tradition into a claim about how all people in a culture think."},
+        {"heading": "Connect completion and balance", "body": "Historical completion and balancing can be connected cautiously to today's principle that equality is preserved when equivalent changes are made. The notation, accepted numbers, and purposes differed across times, so state the similarity as a mathematical comparison rather than claiming the methods are identical."}
+      ],
+      "method_routes": [
+        {
+          "id": "source-evidence-timeline",
+          "title": "Source-evidence timeline route",
+          "steps": ["Choose one bounded algebraic idea and record the exact source used.", "Place the source, author or commentator, location, and approximate date on a timeline.", "Separate what the source supports from later interpretation or uncertainty.", "Demonstrate the mathematical method on a small example.", "Connect the idea to a modern application without claiming a single origin."],
+          "when_useful": "Use this route when evaluating a historical claim or tracing how a documented method was taught and transmitted.",
+          "check": "Every factual claim must be traceable to the cited source, while every inference is labelled as an inference."
+        },
+        {
+          "id": "historical-modern-comparison",
+          "title": "Historical and modern method comparison",
+          "steps": ["State one problem using words or a diagram instead of modern variable notation.", "Follow the documented historical-style procedure using only supported features.", "Solve the same relationship with a modern equation and equality-preserving steps.", "Match corresponding quantities and operations across the two representations.", "Name one genuine similarity and one limitation of the comparison."],
+          "when_useful": "Use this route to see invariant algebraic structure while respecting differences in notation, number systems, and purpose.",
+          "check": "Both routes must produce the same verified result, and the comparison must not invent unsupported historical details."
+        }
+      ],
+      "representations": [
+        {"id": "claim-evidence-timeline", "label": "Claim-and-evidence timeline", "description": "A dated sequence links each bounded historical statement to its source and marks uncertain or later interpretations explicitly.", "text_alternative": "Read the entries in date order, naming the evidence for each claim and pausing wherever the evidence is uncertain."},
+        {"id": "method-comparison-table", "label": "Historical-modern method table", "description": "Parallel rows align a verbal or geometric action with a modern symbolic step and a note about similarities or differences.", "text_alternative": "For each row, read the historical action, the matching modern equation step, and the limitation of the comparison."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u4-l1-we1",
+          "prompt": "Evaluate the claim: 'Al-Khwarizmi invented algebra and used the same symbolic balancing method taught today.'",
+          "method_route_id": "source-evidence-timeline",
+          "steps": [
+            {"label": "Check the source", "explanation": "MacTutor documents a major ninth-century algebra treatise using verbal and geometric methods and explains completion and balancing."},
+            {"label": "Identify overreach", "explanation": "The word invented erases earlier and parallel traditions, while same symbolic method is false because the treatise did not use modern notation."},
+            {"label": "Rewrite carefully", "explanation": "State the documented contribution and the modern structural connection without making a single-origin claim."}
+          ],
+          "answer": "A supported revision is: 'Al-Khwarizmi's ninth-century treatise systematically taught equation methods in words; its completion and balancing ideas can be compared with, but are not identical to, modern symbolic equation solving.'",
+          "verification": "The revision retains the source-supported contribution, removes unsupported exclusivity, and acknowledges the representational difference."
+        },
+        {
+          "id": "mth1w-u4-l1-we2",
+          "prompt": "Compare a verbal balance problem, 'a quantity plus 7 equals 19,' with a modern symbolic solution.",
+          "method_route_id": "historical-modern-comparison",
+          "steps": [
+            {"label": "Reason verbally", "explanation": "Remove the same amount, 7, from the total 19; the unknown quantity is the remaining 12."},
+            {"label": "Write symbols", "explanation": "Let the quantity be x: x + 7 = 19, then subtract 7 from both sides to obtain x = 12."},
+            {"label": "Compare and check", "explanation": "Both routes preserve the relationship by undoing the added 7, and 12 + 7 = 19 verifies the result."}
+          ],
+          "answer": "Both routes produce 12; the shared structure is undoing an addition while preserving equality, though their notation differs.",
+          "verification": "Substitution gives 12 + 7 = 19, and the comparison claims only a structural similarity rather than an identical historical procedure."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "One person invented all of algebra.", "correction": "Algebraic ideas developed through many traditions and exchanges; a source may establish a specific documented contribution, not total ownership."},
+        {"claim": "A modern-looking equation is a faithful copy of every historical method.", "correction": "Modern notation can translate a relationship while changing how the original method was represented and understood."},
+        {"claim": "Naming a culture is enough evidence for a mathematical claim.", "correction": "A sound claim needs a bounded source, time, place, mathematical detail, and an honest account of uncertainty."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u4-l1-g1", "prompt": "Which statement is the most appropriately bounded?", "response": {"type": "selected", "options": ["Al-Khwarizmi's treatise systematically taught equation methods in ninth-century Baghdad", "Al-Khwarizmi invented every algebraic idea", "Everyone in medieval Baghdad solved equations identically", "Modern notation is unchanged from the ninth century"], "correct_answer": "Al-Khwarizmi's treatise systematically taught equation methods in ninth-century Baghdad"}, "rationale": "The statement names a documented work, contribution, place, and period without turning evidence into a universal claim."},
+          {"id": "mth1w-u4-l1-g2", "prompt": "What detail belongs in a claim-and-evidence note?", "response": {"type": "selected", "options": ["The source and the precise claim it supports", "A guess presented as certainty", "A national stereotype", "An uncited invention story"], "correct_answer": "The source and the precise claim it supports"}, "rationale": "Evidence notes let a reader distinguish sourced facts, reasonable interpretations, and uncertainty."},
+          {"id": "mth1w-u4-l1-g3", "prompt": "Rewrite 'ancient people used our algebra' as a careful comparison of representations.", "response": {"type": "constructed", "criteria": ["removes the broad label", "names a specific documented source or method", "states a mathematical similarity", "states a representational difference"], "sample_response": "A documented verbal equation procedure can share the structure of undoing operations with a modern symbolic equation, while differing in notation, accepted quantities, and historical purpose.", "educator_review_required": true}, "rationale": "A careful comparison identifies evidence and structure without collapsing distinct histories into one vague claim."}
+        ],
+        "independent": [
+          {"id": "mth1w-u4-l1-i1", "prompt": "The English word algebra is connected to which historical term?", "response": {"type": "selected", "options": ["al-jabr", "algorithm", "geometry", "calculus"], "correct_answer": "al-jabr"}, "rationale": "The title of al-Khwarizmi's treatise contains al-jabr, associated with completion or restoration."},
+          {"id": "mth1w-u4-l1-i2", "prompt": "Which feature best describes the instructional form of the Nine Chapters?", "response": {"type": "selected", "options": ["Problems followed by procedures and later commentary", "Only modern symbolic proofs", "A single author's autobiography", "A table of logarithms"], "correct_answer": "Problems followed by procedures and later commentary"}, "rationale": "The source is known for problem-and-procedure organization and influential commentary, including Liu Hui's."},
+          {"id": "mth1w-u4-l1-i3", "prompt": "Solve 'a quantity plus 15 equals 42' using modern notation.", "response": {"type": "short_text", "accepted_answers": ["27", "x=27", "x = 27"], "case_sensitive": false}, "rationale": "Subtracting 15 from both sides gives the unknown quantity 27, and 27 + 15 = 42."},
+          {"id": "mth1w-u4-l1-i4", "prompt": "Which sentence properly labels uncertainty?", "response": {"type": "selected", "options": ["The surviving evidence does not establish a single original author", "There was definitely one author because that is simpler", "No citation is needed for old claims", "All later methods were direct copies"], "correct_answer": "The surviving evidence does not establish a single original author"}, "rationale": "Historical knowledge is strongest when the limits of surviving evidence are stated explicitly."},
+          {"id": "mth1w-u4-l1-i5", "prompt": "Create a two-row comparison between a verbal equation method and modern symbols, including one limitation.", "response": {"type": "constructed", "criteria": ["states a solvable relationship", "shows a correct verbal route", "shows correct modern symbols", "names a limitation or difference", "verifies the answer"], "sample_response": "For 'a quantity doubled is 18,' the verbal route halves 18 to get 9. The modern route writes 2x = 18 and divides both sides by 2. Both preserve the relationship, but the modern variable notation should not be projected onto a source that used words.", "educator_review_required": true}, "rationale": "The response must demonstrate mathematical equivalence and historical restraint at the same time."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u4-l1-r1", "prompt": "What is one required feature of a reliable historical mathematics claim?", "response": {"type": "selected", "options": ["A traceable source", "A fixed learner label", "A single-origin story", "A modern symbol inserted into every artifact"], "correct_answer": "A traceable source"}, "rationale": "Traceable evidence allows the claim and its limits to be checked rather than merely repeated."},
+          {"id": "mth1w-u4-l1-r2", "prompt": "Solve and verify: a quantity decreased by 8 equals 13.", "response": {"type": "short_text", "accepted_answers": ["21", "x=21", "x = 21"], "case_sensitive": false}, "rationale": "Adding 8 gives 21, and substituting verifies that 21 - 8 = 13."},
+          {"id": "mth1w-u4-l1-r3", "prompt": "Explain why comparing methods does not prove that one culture copied the other.", "response": {"type": "constructed", "criteria": ["distinguishes similarity from transmission", "mentions evidence", "avoids a universal culture claim"], "sample_response": "Two methods can share a mathematical structure without evidence of direct transmission. A copying claim would need historical evidence about contact, texts, dates, and movement of the method, not similarity alone.", "educator_review_required": true}, "rationale": "Mathematical resemblance is evidence for comparison, but historical transmission requires separate documentary support."}
+        ]
+      },
+      "reflection_prompt": "Which part of your comparison was directly sourced, which part was mathematical analysis, and where did you state uncertainty?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Timelines and parallel method tables are also provided as ordered text that names every date, source, operation, and comparison.",
+        "response_options": ["typed or handwritten source note", "spoken method comparison", "physical balance demonstration with labelled cards"]
+      }
+    },
+
+    {
+      "id": "mth1w-u4-l2",
+      "title": "Generalize patterns with expressions",
+      "official_expectation_ids": ["C1.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Identify changing and fixed quantities in numerical, visual, and contextual patterns.",
+        "Build an expression for any term by using a table route or decomposing a visual structure.",
+        "Test a general expression against known terms and explain the meaning of each part."
+      ],
+      "success_criteria": [
+        "I define the term number and the quantity being counted before writing symbols.",
+        "I connect every coefficient and constant to a feature of the pattern.",
+        "I verify my expression with at least two term values, including one not used to create it."
+      ],
+      "vocabulary": [
+        {"term": "variable", "meaning": "a symbol representing a quantity that can vary or is not yet known"},
+        {"term": "coefficient", "meaning": "a numerical factor multiplying a variable in an algebraic term"},
+        {"term": "constant", "meaning": "a quantity in an expression whose value does not change with the variable"},
+        {"term": "term number", "meaning": "the position index that identifies a particular member of a sequence"},
+        {"term": "generalize", "meaning": "describe a relationship that works for every allowed case rather than a few examples"}
+      ],
+      "why_it_matters": "A general expression compresses infinitely many cases into one testable rule. Pattern generalization supports budgeting, design, coding, measurement, and later linear modelling because it makes both the repeated growth and the fixed starting structure visible.",
+      "direct_instruction": [
+        {"heading": "Define what varies", "body": "Let n represent the term number only after deciding what counts as term 1. Record the measured or counted output for each term. A useful expression must connect n to that output, so labels and units matter as much as the symbols."},
+        {"heading": "Use a table relationship", "body": "For constant first differences, the amount added per step suggests the coefficient of n. The constant adjusts the rule to the chosen starting term. Build a candidate expression, then substitute two known n-values and one new n-value rather than trusting the difference alone."},
+        {"heading": "See repeated and fixed parts", "body": "A visual pattern may be decomposed as identical groups that depend on n plus a fixed piece. For example, n groups of 3 tiles with 2 shared end tiles gives 3n + 2. A different decomposition can produce an equivalent expression and reveal the same structure."}
+      ],
+      "method_routes": [
+        {
+          "id": "term-value-table",
+          "title": "Term-value table route",
+          "steps": ["Define n as the term number and label the output quantity.", "Record several accurate term-output pairs in a table.", "Find the constant change in output for each increase of 1 in n.", "Use the change as a coefficient and solve for the constant using a known row.", "Test the expression on another row and an unseen term."],
+          "when_useful": "Use this route when numerical data are easy to collect or the visual arrangement is difficult to decompose reliably.",
+          "check": "Substitution must reproduce every known row, including the first term and at least one later term."
+        },
+        {
+          "id": "visual-decomposition",
+          "title": "Visual decomposition route",
+          "steps": ["Circle or describe a repeated group linked to each value of n.", "Count the size of one repeated group and write its contribution as a product with n.", "Identify any fixed pieces that do not change with n.", "Combine repeated and fixed contributions into an expression.", "Compare the count and expression for two drawn terms."],
+          "when_useful": "Use this route when the arrangement clearly exposes repeated groups, shared boundaries, or a fixed core.",
+          "check": "Every object in the diagram must be counted exactly once by either the repeated part or the fixed part."
+        }
+      ],
+      "representations": [
+        {"id": "pattern-table-expression", "label": "Pattern, table, and expression", "description": "A labelled sequence of figures is aligned with term numbers, output values, first differences, and the resulting general expression.", "text_alternative": "List each term number and output, state the constant difference, then read the coefficient and fixed adjustment in words."},
+        {"id": "decomposed-tile-count", "label": "Decomposed tile count", "description": "Repeated groups and fixed pieces are marked with outlines and text labels so the count maps directly to separate expression terms.", "text_alternative": "Describe how many repeated groups occur, how many objects are in each group, and which fixed objects remain."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u4-l2-we1",
+          "prompt": "A growing pattern has 5, 8, 11, and 14 tiles in terms 1 through 4. Write and verify an expression for term n.",
+          "method_route_id": "term-value-table",
+          "steps": [
+            {"label": "Find the change", "explanation": "The output increases by 3 whenever n increases by 1, so begin with 3n."},
+            {"label": "Adjust the start", "explanation": "At n = 1, 3n gives 3 but the pattern has 5, so add the fixed adjustment 2."},
+            {"label": "Verify", "explanation": "The rule 3n + 2 gives 8, 11, and 14 for n = 2, 3, and 4, matching the table."}
+          ],
+          "answer": "The expression is 3n + 2 tiles for term n.",
+          "verification": "For the unseen term n = 10, the expression predicts 32; continuing the +3 pattern from term 4 also reaches 32."
+        },
+        {
+          "id": "mth1w-u4-l2-we2",
+          "prompt": "Term n is made from n rows of four tiles plus one fixed top tile. Generalize the tile count.",
+          "method_route_id": "visual-decomposition",
+          "steps": [
+            {"label": "Count repeated groups", "explanation": "There are n rows and each row contains 4 tiles, so the repeated contribution is 4n."},
+            {"label": "Count fixed pieces", "explanation": "The single top tile does not depend on n, so it contributes the constant 1."},
+            {"label": "Combine and test", "explanation": "The total is 4n + 1; for n = 3 the diagram should contain 12 row tiles plus 1 top tile, or 13."}
+          ],
+          "answer": "Term n contains 4n + 1 tiles.",
+          "verification": "For n = 1 and n = 3 the expression gives 5 and 13, which match direct counts from the described structure."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "The constant difference is the whole expression.", "correction": "The difference usually gives the coefficient, but a constant adjustment may be needed to match the indexed starting term."},
+        {"claim": "The term number and output value can be interchanged.", "correction": "The variable represents a defined input; switching columns changes the relationship and usually produces a different rule."},
+        {"claim": "Checking one term proves a formula works.", "correction": "Many incorrect expressions can match one value, so test several known cases and explain why the structure continues."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u4-l2-g1", "prompt": "The outputs 7, 11, 15, 19 correspond to n = 1, 2, 3, 4. What is the coefficient of n?", "response": {"type": "selected", "options": ["4", "3", "7", "11"], "correct_answer": "4"}, "rationale": "The output rises by 4 for each increase of 1 in n, so the linear coefficient is 4."},
+          {"id": "mth1w-u4-l2-g2", "prompt": "Which expression gives 7 when n = 1 and then increases by 4 per term?", "response": {"type": "selected", "options": ["4n + 3", "4n + 7", "7n - 4", "3n + 4"], "correct_answer": "4n + 3"}, "rationale": "A coefficient of 4 gives the correct growth and adding 3 makes the first value 7."},
+          {"id": "mth1w-u4-l2-g3", "prompt": "Explain what 6n + 2 could mean in a tile pattern.", "response": {"type": "constructed", "criteria": ["defines n", "interprets 6n as repeated groups", "interprets 2 as fixed", "checks one term"], "sample_response": "If n is the term number, each term could have n groups of 6 tiles plus 2 fixed end tiles. At n = 3 this gives 18 repeated tiles and 2 fixed tiles, for 20 total.", "educator_review_required": true}, "rationale": "A valid interpretation connects each algebraic part to a countable feature and confirms a case."}
+        ],
+        "independent": [
+          {"id": "mth1w-u4-l2-i1", "prompt": "Find the nth-term expression for 10, 15, 20, 25 beginning at n = 1.", "response": {"type": "selected", "options": ["5n + 5", "5n + 10", "10n - 5", "n + 9"], "correct_answer": "5n + 5"}, "rationale": "The coefficient is 5 and a constant 5 makes the first output 10."},
+          {"id": "mth1w-u4-l2-i2", "prompt": "A design uses n groups of 3 posts and 4 fixed posts. How many posts are used when n = 8?", "response": {"type": "short_text", "accepted_answers": ["28", "28 posts"], "case_sensitive": false}, "rationale": "Substitute n = 8 into 3n + 4 to get 24 + 4 = 28 posts."},
+          {"id": "mth1w-u4-l2-i3", "prompt": "Which expression matches a $12 fixed fee plus $5 per hour h?", "response": {"type": "selected", "options": ["5h + 12", "12h + 5", "17h", "5(h + 12)"], "correct_answer": "5h + 12"}, "rationale": "The hourly part varies as 5h and the $12 fee is added once as a constant."},
+          {"id": "mth1w-u4-l2-i4", "prompt": "What output does 7n - 2 give for n = 6?", "response": {"type": "short_text", "accepted_answers": ["40"], "case_sensitive": false}, "rationale": "Substitution gives 7(6) - 2 = 42 - 2 = 40."},
+          {"id": "mth1w-u4-l2-i5", "prompt": "Create and verify two different-looking expressions for the same border pattern.", "response": {"type": "constructed", "criteria": ["defines the pattern and n", "gives two correct expressions", "explains both decompositions", "tests at least two values", "accounts for every object once"], "sample_response": "For two rows of n tiles with one extra tile at each end, I can count 2n + 2. I can also count 2(n + 1). Both give 8 when n = 3 and 12 when n = 5, and both count the same repeated rows and two ends.", "educator_review_required": true}, "rationale": "Different decompositions can reveal equivalent expressions when every pattern element is counted exactly once."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u4-l2-r1", "prompt": "In 9n + 4, which number is the constant?", "response": {"type": "selected", "options": ["4", "9", "n", "13"], "correct_answer": "4"}, "rationale": "The value 4 is added once and does not vary with n."},
+          {"id": "mth1w-u4-l2-r2", "prompt": "Evaluate 2n + 7 when n = 9.", "response": {"type": "short_text", "accepted_answers": ["25"], "case_sensitive": false}, "rationale": "Substituting gives 2(9) + 7 = 18 + 7 = 25."},
+          {"id": "mth1w-u4-l2-r3", "prompt": "Explain why the rule 3n does not fit outputs 5, 8, 11 for n = 1, 2, 3.", "response": {"type": "constructed", "criteria": ["substitutes at least one value", "identifies the missing adjustment", "states the corrected rule"], "sample_response": "At n = 1, 3n gives 3 rather than 5, so the constant difference alone is not the full rule. Adding 2 gives 3n + 2, which produces 5, 8, and 11.", "educator_review_required": true}, "rationale": "Testing the indexed starting value exposes the required constant adjustment."}
+        ]
+      },
+      "reflection_prompt": "Which route made the coefficient and constant most meaningful for this pattern, and what did the other route reveal?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every visual arrangement is also described as repeated groups and fixed pieces, with a term-output table that can be read in order.",
+        "response_options": ["typed or handwritten expression", "spoken pattern rule with verification", "physical tile or counter construction"]
+      }
+    },
+    {
+      "id": "mth1w-u4-l3",
+      "title": "Prove expressions equivalent",
+      "official_expectation_ids": ["C1.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Determine whether two algebraic expressions are equivalent using models, values, and operation properties.",
+        "Distinguish evidence that suggests equivalence from a justification that works for every allowed value.",
+        "Disprove a universal equivalence claim with one valid counterexample."
+      ],
+      "success_criteria": [
+        "I compare expressions at correctly chosen input values and record both outputs.",
+        "I use a model or property-labelled transformation when claiming equivalence for all values.",
+        "I provide and verify a counterexample when expressions are not equivalent."
+      ],
+      "vocabulary": [
+        {"term": "equivalent expressions", "meaning": "expressions that have the same value for every allowed value of their variables"},
+        {"term": "identity", "meaning": "an equation stating that two expressions are equal for every allowed variable value"},
+        {"term": "counterexample", "meaning": "one allowed input that makes a universal mathematical claim false"},
+        {"term": "distributive property", "meaning": "the property a(b + c) = ab + ac connecting multiplication with addition"},
+        {"term": "substitution", "meaning": "replacing a variable with a specified value and evaluating the resulting expression"}
+      ],
+      "why_it_matters": "Equivalent forms reveal different features of the same relationship: a factored form may expose groups, while an expanded form may expose a rate and constant. Knowing how to prove or disprove equivalence prevents invalid shortcuts in algebra, formulas, spreadsheets, and code.",
+      "direct_instruction": [
+        {"heading": "Define equivalence", "body": "Two expressions are equivalent only when they produce the same value for every allowed input, not merely for one convenient number. Numerical testing can quickly disprove a claim and build confidence, but a finite table alone cannot prove an unrestricted identity."},
+        {"heading": "Model the distributive property", "body": "An area rectangle with side lengths a and b + c can be divided into regions ab and ac. Since the total area is unchanged, a(b + c) and ab + ac are equivalent. The model explains why both terms inside the parentheses must be multiplied."},
+        {"heading": "Use transformations and counterexamples", "body": "A sequence of valid properties proves equivalence because each step preserves value for all allowed inputs. To disprove a claim, choose an input that exposes the suspected error, evaluate both sides accurately, and state the unequal outputs as a counterexample."}
+      ],
+      "method_routes": [
+        {
+          "id": "area-model-equivalence",
+          "title": "Area-model equivalence route",
+          "steps": ["Represent the first expression as the area or signed count of labelled pieces.", "Rearrange or partition the same pieces without adding or removing any quantity.", "Write the expression represented by the new arrangement.", "Match each area or group to a symbolic term.", "Confirm the result with one substitution as an error check."],
+          "when_useful": "Use this route for distributive, factored, and expanded expressions when a rectangular area or grouped quantity is meaningful.",
+          "check": "The original and rearranged models must contain exactly the same labelled quantities with no overlap or omission."
+        },
+        {
+          "id": "table-property-proof",
+          "title": "Table, counterexample, and property route",
+          "steps": ["Evaluate both expressions at a simple value and record the outputs.", "Try a value such as 0, 1, or -1 that may expose a structural difference.", "If any outputs differ, present that row as a counterexample.", "If the claim still appears true, transform one expression using named properties.", "Stop only when the other expression is reached or an invalid step is identified."],
+          "when_useful": "Use this route when testing a claim quickly, diagnosing an error, and then producing a general symbolic justification.",
+          "check": "A proof must use value-preserving properties; matching a few table rows is supporting evidence but not a universal proof."
+        }
+      ],
+      "representations": [
+        {"id": "labelled-area-parts", "label": "Labelled area parts", "description": "A rectangle is partitioned into non-overlapping regions whose side labels and area terms show factored and expanded forms.", "text_alternative": "State the full side lengths, then list each partition's product and add the products to recover the same total area."},
+        {"id": "dual-expression-table", "label": "Dual-expression value table", "description": "Each row shows one input, the evaluated value of each expression, and whether the outputs match or form a counterexample.", "text_alternative": "Read the input followed by the first output and second output, then state equal or unequal for that row."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u4-l3-we1",
+          "prompt": "Prove that 3(x + 4) and 3x + 12 are equivalent.",
+          "method_route_id": "area-model-equivalence",
+          "steps": [
+            {"label": "Model the product", "explanation": "Use a rectangle with height 3 and total width x + 4, so its area is 3(x + 4)."},
+            {"label": "Partition", "explanation": "Split the width into x and 4; the two region areas are 3x and 3 times 4, or 12."},
+            {"label": "State equivalence", "explanation": "The unchanged total area equals the sum 3x + 12, so the expressions agree for every allowed x."}
+          ],
+          "answer": "3(x + 4) = 3x + 12 for every real x by the distributive property.",
+          "verification": "At x = -2 both forms give 6, providing an independent arithmetic check of the symbolic proof."
+        },
+        {
+          "id": "mth1w-u4-l3-we2",
+          "prompt": "Assess the claim that 2(x + 5) and 2x + 5 are equivalent.",
+          "method_route_id": "table-property-proof",
+          "steps": [
+            {"label": "Choose an input", "explanation": "Use x = 0 because it isolates the constants in both expressions."},
+            {"label": "Evaluate", "explanation": "The first expression is 2(0 + 5) = 10, while the second is 2(0) + 5 = 5."},
+            {"label": "Conclude", "explanation": "Because one allowed input gives unequal outputs, the universal equivalence claim is false."}
+          ],
+          "answer": "The expressions are not equivalent; x = 0 is a counterexample because 10 is not equal to 5.",
+          "verification": "Correct distribution would produce 2x + 10, which explains the missing factor on the constant term."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "If two expressions match at x = 1, they are equivalent.", "correction": "One match is not a proof; equivalent expressions must agree for every allowed input and require a general justification."},
+        {"claim": "A factor outside parentheses multiplies only the variable term.", "correction": "The distributive property multiplies every term inside the parentheses, including constants and signed terms."},
+        {"claim": "Several matching table rows prove equivalence forever.", "correction": "A finite table supports a conjecture, while a property-based transformation or structural model establishes the identity."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u4-l3-g1", "prompt": "Which expression is equivalent to 4(y + 3)?", "response": {"type": "selected", "options": ["4y + 12", "4y + 3", "y + 12", "7y"], "correct_answer": "4y + 12"}, "rationale": "Distribute 4 to both y and 3 to obtain 4y + 12."},
+          {"id": "mth1w-u4-l3-g2", "prompt": "Which input quickly disproves 5x + 2 = 7x?", "response": {"type": "selected", "options": ["x = 0", "x = 1", "x = 2", "x = 5"], "correct_answer": "x = 0"}, "rationale": "At x = 0 the left side is 2 and the right side is 0, immediately giving a counterexample."},
+          {"id": "mth1w-u4-l3-g3", "prompt": "Explain why 6a + 9a and 15a are equivalent.", "response": {"type": "constructed", "criteria": ["identifies like terms", "uses a valid property", "states all-value equivalence", "includes a check"], "sample_response": "Both terms count multiples of the same variable a. Factoring gives 6a + 9a = (6 + 9)a = 15a by the distributive property. At a = -2 both forms equal -30.", "educator_review_required": true}, "rationale": "Combining like terms is justified by factoring the shared variable, not by combining unlike structures."}
+        ],
+        "independent": [
+          {"id": "mth1w-u4-l3-i1", "prompt": "Which expression is equivalent to -3(x - 4)?", "response": {"type": "selected", "options": ["-3x + 12", "-3x - 12", "3x - 12", "-3x + 4"], "correct_answer": "-3x + 12"}, "rationale": "Distributing -3 gives -3x and positive 12 because (-3)(-4) = 12."},
+          {"id": "mth1w-u4-l3-i2", "prompt": "Are 2(x + 1) + x and 3x + 2 equivalent?", "response": {"type": "selected", "options": ["Yes, for every x", "Only when x = 0", "No, never", "Only for positive x"], "correct_answer": "Yes, for every x"}, "rationale": "Distribute and combine like terms: 2x + 2 + x = 3x + 2."},
+          {"id": "mth1w-u4-l3-i3", "prompt": "Evaluate both 3(x - 2) and 3x - 2 at x = 0. Enter the two outputs in order.", "response": {"type": "short_text", "accepted_answers": ["-6, -2", "-6,-2"], "case_sensitive": false}, "rationale": "The first is 3(-2) = -6 and the second is -2, so the row is a counterexample."},
+          {"id": "mth1w-u4-l3-i4", "prompt": "Which property justifies 7(x + y) = 7x + 7y?", "response": {"type": "selected", "options": ["Distributive property", "Commutative property only", "Identity property", "Zero-product property"], "correct_answer": "Distributive property"}, "rationale": "The common factor 7 multiplies each addend inside the parentheses."},
+          {"id": "mth1w-u4-l3-i5", "prompt": "Prove or disprove: 4(2x - 1) = 8x - 1.", "response": {"type": "constructed", "criteria": ["states a conclusion", "uses distribution or a counterexample", "calculates accurately", "identifies the structural error", "checks the result"], "sample_response": "The claim is false. Distributing gives 4(2x - 1) = 8x - 4, not 8x - 1. At x = 0 the two claimed expressions give -4 and -1, so x = 0 is a counterexample.", "educator_review_required": true}, "rationale": "A correct response can disprove the claim structurally and confirm it with a single unequal input."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u4-l3-r1", "prompt": "What does one valid counterexample prove about a universal claim?", "response": {"type": "selected", "options": ["The claim is false", "The claim is always true", "Only the input is invalid", "Nothing can be concluded"], "correct_answer": "The claim is false"}, "rationale": "A universal statement must hold for every allowed input, so one allowed failure disproves it."},
+          {"id": "mth1w-u4-l3-r2", "prompt": "Expand 5(2x + 3).", "response": {"type": "short_text", "accepted_answers": ["10x + 15", "10x+15"], "case_sensitive": false}, "rationale": "Multiplying both terms by 5 gives 10x + 15."},
+          {"id": "mth1w-u4-l3-r3", "prompt": "Explain why matching outputs at x = 0 and x = 1 is not a complete equivalence proof.", "response": {"type": "constructed", "criteria": ["defines equivalence for all allowed inputs", "identifies the table as finite evidence", "names a general proof route"], "sample_response": "Equivalent expressions must agree for every allowed input. Two matching rows are useful evidence but leave infinitely many cases unchecked, so a property-based transformation or structural model is still needed.", "educator_review_required": true}, "rationale": "The explanation distinguishes empirical checks from a general algebraic justification."}
+        ]
+      },
+      "reflection_prompt": "When was a quick substitution enough, and when did you need an area model or property-based proof to justify the claim?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Area partitions are also described as full side lengths followed by each region product, and all value tables are readable row by row.",
+        "response_options": ["typed or handwritten proof", "spoken counterexample explanation", "physical rectangle or algebra-tile rearrangement"]
+      }
+    },
+    {
+      "id": "mth1w-u4-l4",
+      "title": "Simplify with operation properties",
+      "official_expectation_ids": ["C1.4"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Simplify algebraic expressions by grouping like terms and using operation properties accurately.",
+        "Represent simplification with algebra tiles or property-labelled symbolic steps.",
+        "Verify a simplified expression by substitution and diagnose invalid combinations of unlike terms."
+      ],
+      "success_criteria": [
+        "I identify terms by their complete variable part, including exponents and signs.",
+        "I name or explain the property used at each transformation rather than skipping unexplained steps.",
+        "I substitute a value into the original and simplified forms to check that their values agree."
+      ],
+      "vocabulary": [
+        {"term": "like terms", "meaning": "terms with identical variable factors and exponents that can be combined by their coefficients"},
+        {"term": "simplify", "meaning": "rewrite an expression in an equivalent form that is more compact or useful"},
+        {"term": "associative property", "meaning": "the property allowing regrouping within addition or multiplication without changing order"},
+        {"term": "commutative property", "meaning": "the property allowing the order of addends or factors to be exchanged"},
+        {"term": "algebra tile", "meaning": "a physical or diagrammatic piece representing a constant, variable term, or signed opposite"}
+      ],
+      "why_it_matters": "Simplification makes the structure of formulas, costs, measurements, and programs easier to see and calculate. A valid simplification preserves every input-output value, so explaining properties and checking by substitution are safeguards against shortcuts that only look plausible.",
+      "direct_instruction": [
+        {"heading": "Classify complete terms", "body": "A term includes its sign, numerical coefficient, variables, and exponents. Terms such as 3x and -5x are like because their variable parts match, but 3x and 3x squared are unlike. Constants are like other constants and do not become variable terms."},
+        {"heading": "Combine by factoring", "body": "Combining 3x + 5x as 8x is an application of the distributive property in reverse: 3x + 5x = (3 + 5)x. Algebra tiles show the same action by grouping eight positive x-pieces after ensuring that all pieces represent the same quantity."},
+        {"heading": "Distribute before regrouping", "body": "When parentheses are present, distribute the outside factor to every term, preserve signs, then regroup like terms using commutative and associative properties. Write aligned steps and finish by comparing values of the original and simplified forms at a chosen input."}
+      ],
+      "method_routes": [
+        {
+          "id": "algebra-tile-grouping",
+          "title": "Algebra-tile grouping route",
+          "steps": ["Represent every signed constant and variable term with labelled tiles or text tokens.", "Expand any grouped sets while preserving the multiplier and sign.", "Pair positive and negative tiles of the same type as zero pairs.", "Group the remaining like tiles and count their signed coefficients.", "Translate the grouped model back into a simplified expression."],
+          "when_useful": "Use this route when signs, zero pairs, or the distinction between variable terms and constants need a concrete check.",
+          "check": "Only identical tile types may combine, and every original tile must be accounted for after distribution and zero-pair removal."
+        },
+        {
+          "id": "property-labelled-lines",
+          "title": "Property-labelled symbolic route",
+          "steps": ["Copy the expression and mark each complete term with its sign.", "Apply distribution to remove grouping symbols when needed.", "Reorder and regroup only through valid commutative and associative properties.", "Combine coefficients of like terms using the distributive property in reverse.", "Verify the original and simplified values at a chosen input."],
+          "when_useful": "Use this route for efficient written work when each transformation can be explained and checked symbolically.",
+          "check": "Each line must be equivalent to the preceding line, and substitution must produce matching final values."
+        }
+      ],
+      "representations": [
+        {"id": "signed-algebra-tiles", "label": "Signed algebra tiles", "description": "Distinct labelled shapes represent variable and constant terms, while plus and minus signs identify opposites without relying on colour.", "text_alternative": "List the signed count of each tile type, cancel opposite pairs of the same type, then state the remaining counts."},
+        {"id": "aligned-property-steps", "label": "Aligned property steps", "description": "One expression appears per line with a short label naming distribution, regrouping, zero-pair removal, or combining like terms.", "text_alternative": "Read each equivalent line followed by the name and explanation of the property that produced it."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u4-l4-we1",
+          "prompt": "Simplify 4x - 7 + 3x + 2 using a grouping model and verify the result.",
+          "method_route_id": "algebra-tile-grouping",
+          "steps": [
+            {"label": "Represent terms", "explanation": "Use four positive x-tiles, seven negative unit tiles, three positive x-tiles, and two positive unit tiles."},
+            {"label": "Group and cancel", "explanation": "The seven x-tiles combine as 7x, while two positive units cancel two of the seven negative units, leaving five negative units."},
+            {"label": "Translate and check", "explanation": "The model gives 7x - 5; at x = 2 both the original and simplified expressions equal 9."}
+          ],
+          "answer": "4x - 7 + 3x + 2 simplifies to 7x - 5.",
+          "verification": "Substituting x = 2 gives 8 - 7 + 6 + 2 = 9 and 14 - 5 = 9."
+        },
+        {
+          "id": "mth1w-u4-l4-we2",
+          "prompt": "Simplify -2(3x - 4) + 5x - 1 using property-labelled symbolic steps.",
+          "method_route_id": "property-labelled-lines",
+          "steps": [
+            {"label": "Distribute", "explanation": "Multiply -2 by both terms to obtain -6x + 8 + 5x - 1."},
+            {"label": "Regroup", "explanation": "Use addition properties to place like terms together: (-6x + 5x) + (8 - 1)."},
+            {"label": "Combine and check", "explanation": "Combine coefficients and constants to get -x + 7; at x = 3 both forms equal 4."}
+          ],
+          "answer": "The simplified expression is -x + 7.",
+          "verification": "The original at x = 3 is -2(9 - 4) + 15 - 1 = 4, while -3 + 7 is also 4."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "All terms containing x are like terms.", "correction": "Their complete variable parts must match, so x and x squared cannot be combined as one type of term."},
+        {"claim": "The minus sign between terms can be dropped while rearranging.", "correction": "Treat subtraction as adding a signed term and move the sign together with the complete term."},
+        {"claim": "In -3(x + 2), only x is multiplied by -3.", "correction": "Distribution multiplies every term in the group, producing -3x - 6."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u4-l4-g1", "prompt": "Which pair contains like terms?", "response": {"type": "selected", "options": ["5x and -2x", "5x and 5", "x and x squared", "2a and 2b"], "correct_answer": "5x and -2x"}, "rationale": "Both terms have the identical variable part x, so their coefficients can be combined."},
+          {"id": "mth1w-u4-l4-g2", "prompt": "Simplify 8y - 3y + 4.", "response": {"type": "selected", "options": ["5y + 4", "9y", "5y + 1", "11y + 4"], "correct_answer": "5y + 4"}, "rationale": "Combine the y-coefficients 8 - 3 and leave the unlike constant term unchanged."},
+          {"id": "mth1w-u4-l4-g3", "prompt": "Explain the error in simplifying 2x + 3 as 5x.", "response": {"type": "constructed", "criteria": ["identifies unlike terms", "explains variable and constant meanings", "states the expression cannot combine", "includes a substitution check"], "sample_response": "The terms 2x and 3 are unlike because one varies with x and the other is constant. They must remain 2x + 3. At x = 1 the original is 5 but 5x happens to match; at x = 2 the original is 7 while 5x is 10, exposing the error.", "educator_review_required": true}, "rationale": "Unlike quantities cannot be combined, and a second substitution prevents a coincidental match from hiding the error."}
+        ],
+        "independent": [
+          {"id": "mth1w-u4-l4-i1", "prompt": "Simplify 6a + 4 - 2a + 9.", "response": {"type": "selected", "options": ["4a + 13", "8a + 13", "4a + 5", "17a"], "correct_answer": "4a + 13"}, "rationale": "Combine 6a - 2a as 4a and 4 + 9 as 13."},
+          {"id": "mth1w-u4-l4-i2", "prompt": "Expand and simplify 3(2x + 5) - x.", "response": {"type": "short_text", "accepted_answers": ["5x + 15", "5x+15"], "case_sensitive": false}, "rationale": "Distribution gives 6x + 15 - x, and combining like terms gives 5x + 15."},
+          {"id": "mth1w-u4-l4-i3", "prompt": "Simplify -4m + 7 + 9m - 12.", "response": {"type": "selected", "options": ["5m - 5", "13m - 5", "5m + 19", "-13m - 5"], "correct_answer": "5m - 5"}, "rationale": "The variable coefficient is -4 + 9 = 5 and the constant is 7 - 12 = -5."},
+          {"id": "mth1w-u4-l4-i4", "prompt": "Which is the correct expansion of -(x - 6)?", "response": {"type": "selected", "options": ["-x + 6", "-x - 6", "x - 6", "x + 6"], "correct_answer": "-x + 6"}, "rationale": "The outside factor is -1, so both x and -6 change signs."},
+          {"id": "mth1w-u4-l4-i5", "prompt": "Simplify 2(3p - 4) - (p + 5), label each property, and verify with p = 2.", "response": {"type": "constructed", "criteria": ["distributes both factors correctly", "moves signs with terms", "combines like terms", "names properties", "verifies both forms"], "sample_response": "Distribute to get 6p - 8 - p - 5. Regroup like terms using addition properties, then combine to obtain 5p - 13. At p = 2, the original is 2(2) - 7 = -3 and the simplified form is 10 - 13 = -3.", "educator_review_required": true}, "rationale": "The explanation makes each equivalence-preserving step visible and confirms the final form independently."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u4-l4-r1", "prompt": "Simplify 3x + 2x.", "response": {"type": "short_text", "accepted_answers": ["5x"], "case_sensitive": false}, "rationale": "The terms share the variable part x, so their coefficients add to 5."},
+          {"id": "mth1w-u4-l4-r2", "prompt": "Which expression is already simplified?", "response": {"type": "selected", "options": ["4x + 3", "2x + 5x", "3(x + 2)", "7 - 2 + x"], "correct_answer": "4x + 3"}, "rationale": "The variable term and constant are unlike and no grouping or like terms remain to combine."},
+          {"id": "mth1w-u4-l4-r3", "prompt": "Explain why 4x + 3x squared cannot simplify to 7x cubed.", "response": {"type": "constructed", "criteria": ["identifies unlike variable parts", "distinguishes addition from multiplication", "states the valid unchanged form"], "sample_response": "The terms have different variable parts, x and x squared, so they are unlike and cannot be added through their coefficients. Exponents add during multiplication of powers, not addition, so the expression remains 4x + 3x squared.", "educator_review_required": true}, "rationale": "The response distinguishes the rules for adding terms from the rules for multiplying powers."}
+        ]
+      },
+      "reflection_prompt": "Which representation helped you protect signs and term types, and how did substitution reveal or rule out an error?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Tile models are also stated as signed counts of each term type, and symbolic work names every property and sign change aloud in text.",
+        "response_options": ["typed or handwritten aligned steps", "spoken property explanation", "physical signed algebra tiles or labelled cards"]
+      }
+    },
+    {
+      "id": "mth1w-u4-l5",
+      "title": "Model, solve, and verify equations",
+      "official_expectation_ids": ["C1.5"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Create a one-variable equation that represents a contextual relationship with defined quantities and units.",
+        "Solve equations by balance reasoning or an inverse-operation chain while preserving equality.",
+        "Verify a solution in both the original equation and the original context."
+      ],
+      "success_criteria": [
+        "I define the variable and translate the context before performing calculations.",
+        "I apply equivalent changes to both sides or reverse operations in a justified order.",
+        "I substitute the result, check units and constraints, and answer the question in a sentence."
+      ],
+      "vocabulary": [
+        {"term": "equation", "meaning": "a statement that two mathematical expressions have the same value"},
+        {"term": "solution", "meaning": "a value that makes an equation true when substituted for its variable"},
+        {"term": "inverse operations", "meaning": "operations such as addition and subtraction that undo one another"},
+        {"term": "preserve equality", "meaning": "transform both sides in a way that keeps the same solution set"},
+        {"term": "constraint", "meaning": "a condition from the context that limits which mathematical values are meaningful"}
+      ],
+      "why_it_matters": "Equations turn unknown prices, distances, quantities, and design limits into relationships that can be solved and checked. Modelling before calculating and verifying afterward prevents a technically correct manipulation from answering the wrong contextual question.",
+      "direct_instruction": [
+        {"heading": "Model before solving", "body": "Name the unknown with a variable and unit, then translate each contextual quantity into an expression. The equal sign connects two quantities that represent the same total, not an instruction to write the next computational result."},
+        {"heading": "Preserve the balance", "body": "An equation is like a balanced comparison: adding, subtracting, multiplying, or dividing both sides by the same permitted value preserves equality. Keep each equation line complete so the transformation and the unchanged relationship remain visible."},
+        {"heading": "Reverse the operation chain", "body": "When one side is built from a clear sequence of operations on the variable, undo them in reverse order. This is a compressed form of balance reasoning, so each inverse operation still corresponds to the same valid change on both sides. Finish by substituting into the original equation and checking the context."}
+      ],
+      "method_routes": [
+        {
+          "id": "balance-model-reasoning",
+          "title": "Balance-model reasoning route",
+          "steps": ["Define the variable and write the complete equation with units in the context note.", "Represent both sides as equal collections or balance pans.", "Remove or add equal quantities on both sides to isolate variable groups.", "Divide both sides into the same number of equal groups when required.", "Substitute the result into the original equation and interpret it in context."],
+          "when_useful": "Use this route when equality preservation, signed terms, or the reason behind equation operations needs to be explicit.",
+          "check": "Every model action must change both sides equally, and the final value must make the original equation true."
+        },
+        {
+          "id": "inverse-operation-chain",
+          "title": "Inverse-operation chain route",
+          "steps": ["Define the variable and identify the operations applied to it in order.", "Write the inverse operations in reverse order.", "Apply each inverse to both sides and record a complete equation line.", "Simplify until the variable is isolated.", "Check by substitution, units, reasonableness, and contextual constraints."],
+          "when_useful": "Use this route when the variable expression has a clear nested operation chain and an efficient symbolic solution is appropriate.",
+          "check": "Composing the original operations with the reversed inverse chain must return the starting variable value."
+        }
+      ],
+      "representations": [
+        {"id": "labelled-balance", "label": "Labelled equation balance", "description": "Two sides display equal signed variable and constant quantities, with every removal, addition, or grouping shown on both sides.", "text_alternative": "Read the full left and right expressions, then state the identical operation applied to each side and the resulting equation."},
+        {"id": "context-equation-check", "label": "Context-equation-check chain", "description": "A three-column record links the variable definition and story, each inverse-operation equation line, and the final substitution check.", "text_alternative": "State the variable with unit, read each complete equation line in order, then substitute and interpret the result."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u4-l5-we1",
+          "prompt": "Three identical notebooks and a $6 delivery fee cost $30. Find the price of one notebook.",
+          "method_route_id": "balance-model-reasoning",
+          "steps": [
+            {"label": "Model", "explanation": "Let p be one notebook price in dollars; the equal-cost relationship is 3p + 6 = 30."},
+            {"label": "Preserve balance", "explanation": "Remove $6 from both sides to get 3p = 24, then divide both sides into 3 equal groups to get p = 8."},
+            {"label": "Verify and interpret", "explanation": "Three $8 notebooks plus $6 cost $24 + $6 = $30, and a positive $8 price fits the context."}
+          ],
+          "answer": "One notebook costs $8.",
+          "verification": "Substitution in the original equation gives 3(8) + 6 = 30, so both the equation and contextual total are satisfied."
+        },
+        {
+          "id": "mth1w-u4-l5-we2",
+          "prompt": "A temperature conversion follows F = 1.8C + 32. If F = 68, find C.",
+          "method_route_id": "inverse-operation-chain",
+          "steps": [
+            {"label": "Identify the chain", "explanation": "C is multiplied by 1.8 and then 32 is added, so reverse by subtracting 32 and then dividing by 1.8."},
+            {"label": "Apply inverses", "explanation": "From 68 = 1.8C + 32, subtract 32 to obtain 36 = 1.8C, then divide to get C = 20."},
+            {"label": "Check", "explanation": "Substitution gives 1.8(20) + 32 = 36 + 32 = 68, with temperature units retained."}
+          ],
+          "answer": "The temperature is 20 C.",
+          "verification": "The original formula maps 20 C to 68 F exactly, confirming both the algebra and interpretation."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "The equal sign means calculate the expression on its left.", "correction": "It states that the expressions on both sides represent the same value and must remain balanced."},
+        {"claim": "An operation can be applied to only one side if it helps isolate x.", "correction": "Changing one side alone generally creates a different equation; equality-preserving operations apply consistently to both sides."},
+        {"claim": "Reaching x = a number completes every contextual problem.", "correction": "The value must be substituted into the original equation and checked against units, constraints, and the question asked."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u4-l5-g1", "prompt": "What first operation isolates the variable term in 4x + 7 = 31?", "response": {"type": "selected", "options": ["Subtract 7 from both sides", "Divide only the left side by 4", "Add 7 to the left side", "Multiply both sides by 7"], "correct_answer": "Subtract 7 from both sides"}, "rationale": "Subtracting 7 from both sides undoes the added constant while preserving equality."},
+          {"id": "mth1w-u4-l5-g2", "prompt": "Solve 5x = 45.", "response": {"type": "short_text", "accepted_answers": ["9", "x=9", "x = 9"], "case_sensitive": false}, "rationale": "Dividing both sides by 5 gives x = 9, and 5(9) = 45 verifies it."},
+          {"id": "mth1w-u4-l5-g3", "prompt": "Model and solve: a $4 fee plus two equal tickets costs $26.", "response": {"type": "constructed", "criteria": ["defines a ticket-price variable", "writes 2t + 4 = 26", "uses equality-preserving steps", "finds 11", "checks the total"], "sample_response": "Let t be one ticket price in dollars. Then 2t + 4 = 26. Subtract 4 from both sides to get 2t = 22, then divide both sides by 2, so t = 11. The check is 2(11) + 4 = 26.", "educator_review_required": true}, "rationale": "A complete response links the context, equation, balanced solution, units, and original-total check."}
+        ],
+        "independent": [
+          {"id": "mth1w-u4-l5-i1", "prompt": "Solve 3x - 8 = 19.", "response": {"type": "selected", "options": ["x = 9", "x = 11", "x = 27", "x = 3"], "correct_answer": "x = 9"}, "rationale": "Add 8 to get 3x = 27, then divide by 3 to get x = 9."},
+          {"id": "mth1w-u4-l5-i2", "prompt": "Solve -2x + 5 = 17.", "response": {"type": "short_text", "accepted_answers": ["-6", "x=-6", "x = -6"], "case_sensitive": false}, "rationale": "Subtracting 5 gives -2x = 12, and dividing by -2 gives x = -6."},
+          {"id": "mth1w-u4-l5-i3", "prompt": "A gym charges $15 plus $8 per visit. Which equation finds visits v for a $71 total?", "response": {"type": "selected", "options": ["15 + 8v = 71", "15v + 8 = 71", "23v = 71", "8(v + 15) = 71"], "correct_answer": "15 + 8v = 71"}, "rationale": "The $15 fee occurs once and $8 is multiplied by the number of visits."},
+          {"id": "mth1w-u4-l5-i4", "prompt": "How many visits satisfy 15 + 8v = 71?", "response": {"type": "short_text", "accepted_answers": ["7", "7 visits", "v=7", "v = 7"], "case_sensitive": false}, "rationale": "Subtracting 15 gives 8v = 56, so v = 7 visits."},
+          {"id": "mth1w-u4-l5-i5", "prompt": "Create, solve, and verify a two-step equation for a real context, including one contextual constraint.", "response": {"type": "constructed", "criteria": ["defines a variable and unit", "writes a valid two-step equation", "shows equality-preserving solution steps", "verifies by substitution", "checks a contextual constraint"], "sample_response": "A taxi charges $5 plus $2 per kilometre for a $23 trip. Let k be non-negative whole kilometres: 2k + 5 = 23. Subtract 5 and divide by 2 to get k = 9. The check 2(9) + 5 = 23 works, and 9 satisfies the distance constraint.", "educator_review_required": true}, "rationale": "Modelling quality includes a correct relationship, valid transformations, verification, units, and meaningful domain restrictions."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u4-l5-r1", "prompt": "What value solves x + 12 = 5?", "response": {"type": "short_text", "accepted_answers": ["-7", "x=-7", "x = -7"], "case_sensitive": false}, "rationale": "Subtracting 12 from both sides gives x = -7, and -7 + 12 = 5."},
+          {"id": "mth1w-u4-l5-r2", "prompt": "Which action preserves 6x = 24?", "response": {"type": "selected", "options": ["Divide both sides by 6", "Subtract 6 from the left only", "Divide the right side by x", "Add 24 to one side"], "correct_answer": "Divide both sides by 6"}, "rationale": "Applying the same non-zero division to both sides preserves equality and isolates x."},
+          {"id": "mth1w-u4-l5-r3", "prompt": "Explain why substitution belongs in every equation solution.", "response": {"type": "constructed", "criteria": ["states that a solution makes the original equation true", "describes substitution", "mentions arithmetic or modelling errors", "includes context when relevant"], "sample_response": "A proposed solution is valid only if it makes the original equation true. Substitution independently checks the arithmetic and can expose a copied sign or modelling error; in a context, units and constraints must also still make sense.", "educator_review_required": true}, "rationale": "Verification tests the claimed solution against the unchanged relationship rather than trusting intermediate manipulation."}
+        ]
+      },
+      "reflection_prompt": "When did balance reasoning clarify why a step was valid, and when was the inverse-operation chain more efficient without losing the check?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every balance action is written as a complete equation and verbalized as the same operation on the left and right sides with units.",
+        "response_options": ["typed or handwritten equation chain", "spoken balance explanation", "physical balance with labelled bags and counters"]
+      }
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u4-quiz",
+      "title": "Unit 4 algebraic thinking check",
+      "estimated_minutes": 35,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {"id": "mth1w-u4-q1", "official_expectation_ids": ["C1.1"], "prompt": "Which statement is a careful historical mathematics claim?", "response": {"type": "selected", "options": ["Al-Khwarizmi's treatise taught verbal equation methods in the ninth century", "One person invented all algebra", "Every culture used modern symbols", "Similar methods prove direct copying"], "correct_answer": "Al-Khwarizmi's treatise taught verbal equation methods in the ninth century"}, "rationale": "The selected claim is bounded by a documented work, method, and time rather than an unsupported universal story."},
+        {"id": "mth1w-u4-q2", "official_expectation_ids": ["C1.1"], "prompt": "Explain one similarity and one limitation when comparing a historical verbal method with modern symbolic balancing.", "response": {"type": "constructed", "criteria": ["names a structural similarity", "names a representational or historical difference", "avoids a single-origin claim", "refers to evidence"], "sample_response": "Both methods may preserve a relationship while undoing an operation, but modern variable notation should not be projected onto a source that expressed problems in words. The comparison must stay within what the cited source supports.", "educator_review_required": true}, "rationale": "A responsible comparison connects mathematical structure while preserving historical difference and evidentiary limits."},
+        {"id": "mth1w-u4-q3", "official_expectation_ids": ["C1.2"], "prompt": "The outputs 9, 13, 17, 21 begin at n = 1. Which expression gives term n?", "response": {"type": "selected", "options": ["4n + 5", "4n + 9", "9n - 5", "5n + 4"], "correct_answer": "4n + 5"}, "rationale": "The constant difference gives coefficient 4, and the adjustment 5 produces the first value 9."},
+        {"id": "mth1w-u4-q4", "official_expectation_ids": ["C1.2"], "prompt": "A design has n groups of 5 tiles plus 2 fixed tiles. How many tiles are in term 7?", "response": {"type": "short_text", "accepted_answers": ["37", "37 tiles"], "case_sensitive": false}, "rationale": "The expression 5n + 2 gives 5(7) + 2 = 37 tiles."},
+        {"id": "mth1w-u4-q5", "official_expectation_ids": ["C1.3"], "prompt": "Which expression is equivalent to -2(x + 6)?", "response": {"type": "selected", "options": ["-2x - 12", "-2x + 12", "-2x + 6", "2x - 12"], "correct_answer": "-2x - 12"}, "rationale": "The factor -2 multiplies both x and 6."},
+        {"id": "mth1w-u4-q6", "official_expectation_ids": ["C1.3"], "prompt": "Disprove the claim 3(x - 2) = 3x - 2 with a counterexample.", "response": {"type": "constructed", "criteria": ["chooses an allowed input", "evaluates both expressions", "shows unequal outputs", "states the claim is false"], "sample_response": "Choose x = 0. The first expression is 3(0 - 2) = -6, while the second is 3(0) - 2 = -2. Since the outputs differ, the expressions are not equivalent.", "educator_review_required": true}, "rationale": "One allowed input with unequal outputs is enough to disprove a universal equivalence statement."},
+        {"id": "mth1w-u4-q7", "official_expectation_ids": ["C1.4"], "prompt": "Simplify 7x - 4 + 2x + 9.", "response": {"type": "selected", "options": ["9x + 5", "9x - 13", "5x + 5", "18x"], "correct_answer": "9x + 5"}, "rationale": "Combine like variable terms as 9x and constants as 5."},
+        {"id": "mth1w-u4-q8", "official_expectation_ids": ["C1.4"], "prompt": "Expand and simplify 4(2a - 3) - 5a.", "response": {"type": "short_text", "accepted_answers": ["3a - 12", "3a-12"], "case_sensitive": false}, "rationale": "Distribution gives 8a - 12 - 5a, and combining like terms gives 3a - 12."},
+        {"id": "mth1w-u4-q9", "official_expectation_ids": ["C1.5"], "prompt": "Solve 5x + 6 = 41.", "response": {"type": "selected", "options": ["x = 7", "x = 9", "x = 5", "x = 35"], "correct_answer": "x = 7"}, "rationale": "Subtract 6 to get 5x = 35, then divide by 5 to get x = 7."},
+        {"id": "mth1w-u4-q10", "official_expectation_ids": ["C1.5"], "prompt": "A rental costs $18 plus $7 per hour. The total is $60. Define a variable, solve, and verify the number of hours.", "response": {"type": "constructed", "criteria": ["defines hours", "writes 18 + 7h = 60", "uses valid equality-preserving steps", "finds 6 hours", "verifies the total and constraint"], "sample_response": "Let h be the non-negative number of rental hours. The equation is 18 + 7h = 60. Subtracting 18 gives 7h = 42, so h = 6. The check is 18 + 7(6) = 60, and 6 hours fits the context.", "educator_review_required": true}, "rationale": "A complete solution represents the fixed and hourly costs, preserves equality, and verifies the contextual answer."}
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u4-pattern-model",
+      "title": "Design, compare, and solve an algebraic pattern model",
+      "estimated_minutes": 150,
+      "official_expectation_ids": ["C1.1", "C1.2", "C1.3", "C1.4", "C1.5"],
+      "prompt": "Create a growing design or repeating service plan with a fixed part and a changing part. Give a source-checked note about one documented algebraic method from a specific historical context, without claiming a single cultural origin. Represent your own relationship visually, numerically, verbally, and symbolically; derive two equivalent expressions by different decompositions; simplify and justify their equivalence; then create and solve an equation for a meaningful target value. Verify every result and identify the limits of your historical comparison.",
+      "required_components": [
+        "a bounded historical claim with source, place, period, mathematical detail, and stated uncertainty",
+        "a clearly defined variable, units, and at least four accurate term-value cases",
+        "a visual or physical pattern with a complete nonvisual text description",
+        "two method routes leading to two equivalent general expressions",
+        "a property-based equivalence justification plus numerical checks",
+        "a correctly simplified form with labelled operation properties",
+        "a contextual target equation, equality-preserving solution, substitution check, and constraint check",
+        "a reflection comparing efficiency, clarity, and limitations of the chosen routes"
+      ],
+      "rubric": [
+        {"dimension": "Historical evidence and cultural care", "criteria": "Claims are accurately bounded, sourced, and separated from inference without a single-origin story or broad cultural stereotype."},
+        {"dimension": "Pattern generalization", "criteria": "Representations agree, variables and units are defined, and expression parts are connected to repeated and fixed structures."},
+        {"dimension": "Equivalence and simplification", "criteria": "Two expressions are justified through valid properties or models, simplified accurately, and checked at appropriate values."},
+        {"dimension": "Equation modelling and verification", "criteria": "The target equation fits the context, every transformation preserves equality, and the solution satisfies the original relationship and constraints."},
+        {"dimension": "Communication and accessibility", "criteria": "Work is organized, every visual has a usable text alternative, and method comparisons state both strengths and limitations."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}
