@@ -169,7 +169,10 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
     require(isinstance(authored, dict), "authored content evidence must be an object")
     require(
         authored.get("unit_content_paths")
-        == ["curriculum/content/mth1w/u1-number-systems.v1.json"],
+        == [
+            "curriculum/content/mth1w/u1-number-systems.v1.json",
+            "curriculum/content/mth1w/u2-powers.v1.json",
+        ],
         "authored unit content paths mismatch",
     )
     require(
@@ -185,13 +188,13 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
             "unit_quiz_items": authored.get("unit_quiz_items"),
         }
         == {
-            "machine_verified_draft_units": 1,
-            "machine_verified_draft_lessons": 3,
-            "worked_examples": 6,
-            "practice_items": 33,
-            "unit_quiz_items": 10,
+            "machine_verified_draft_units": 2,
+            "machine_verified_draft_lessons": 5,
+            "worked_examples": 10,
+            "practice_items": 55,
+            "unit_quiz_items": 20,
         },
-        "authored Unit 1 evidence counts are incorrect",
+        "authored unit evidence counts are incorrect",
     )
     require(
         authored.get("educator_review_status") == "required",

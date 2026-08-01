@@ -178,30 +178,41 @@ def verify(
     )
 
     authored_content = blueprint.get("authored_unit_content")
+    expected_authored_paths = {
+        "mth1w-u1": "curriculum/content/mth1w/u1-number-systems.v1.json",
+        "mth1w-u2": "curriculum/content/mth1w/u2-powers.v1.json",
+    }
     require(
-        isinstance(authored_content, list) and len(authored_content) == 1,
-        "exactly one authored draft unit must be declared at this milestone",
+        isinstance(authored_content, list) and len(authored_content) == 2,
+        "exactly two authored draft units must be declared at this milestone",
     )
-    authored_unit = authored_content[0]
-    require(isinstance(authored_unit, dict), "authored unit declaration invalid")
-    require(authored_unit.get("unit_id") == "mth1w-u1", "authored unit ID mismatch")
+    authored_unit_ids: set[str] = set()
+    for authored_unit in authored_content:
+        require(isinstance(authored_unit, dict), "authored unit declaration invalid")
+        unit_id = authored_unit.get("unit_id")
+        require(unit_id in expected_authored_paths, "authored unit ID mismatch")
+        require(unit_id not in authored_unit_ids, "authored unit ID duplicate")
+        authored_unit_ids.add(unit_id)
+        require(
+            authored_unit.get("path") == expected_authored_paths[unit_id],
+            "authored unit content path mismatch",
+        )
+        require(
+            authored_unit.get("status") == "machine_verified_draft",
+            "authored unit status must remain draft",
+        )
+        require(
+            authored_unit.get("educator_review_status") == "required",
+            "authored unit must still require educator review",
+        )
+        require(
+            authored_unit.get("student_availability")
+            == "draft_preview_with_adult_review_recommended",
+            "authored unit availability must remain a clearly labelled draft preview",
+        )
     require(
-        authored_unit.get("path")
-        == "curriculum/content/mth1w/u1-number-systems.v1.json",
-        "authored unit content path mismatch",
-    )
-    require(
-        authored_unit.get("status") == "machine_verified_draft",
-        "authored unit status must remain draft",
-    )
-    require(
-        authored_unit.get("educator_review_status") == "required",
-        "authored unit must still require educator review",
-    )
-    require(
-        authored_unit.get("student_availability")
-        == "draft_preview_with_adult_review_recommended",
-        "authored unit availability must remain a clearly labelled draft preview",
+        authored_unit_ids == set(expected_authored_paths),
+        "authored unit declarations are incomplete",
     )
 
     official_records = inventory.get("records")
@@ -311,7 +322,7 @@ def verify(
                 )
             expected_lesson_status = (
                 "machine_verified_draft"
-                if unit_id == "mth1w-u1"
+                if unit_id in authored_unit_ids
                 else "specified_not_implemented"
             )
             require(
@@ -344,7 +355,7 @@ def verify(
         )
         expected_assessment_status = (
             "machine_verified_draft"
-            if unit_id == "mth1w-u1"
+            if unit_id in authored_unit_ids
             else "specified_not_implemented"
         )
         require(

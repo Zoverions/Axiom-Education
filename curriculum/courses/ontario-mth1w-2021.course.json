@@ -38,6 +38,13 @@
       "status": "machine_verified_draft",
       "educator_review_status": "required",
       "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u2",
+      "path": "curriculum/content/mth1w/u2-powers.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
     }
   ],
   "units": [
@@ -131,7 +138,7 @@
             "independent": "Convert contextual measurements between standard and scientific notation and evaluate powers.",
             "retrieval": "Estimate the order of magnitude of unfamiliar quantities before calculating."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u2-l2",
@@ -148,14 +155,14 @@
             "independent": "Simplify numeric and algebraic power expressions and identify invalid shortcuts.",
             "retrieval": "Choose and justify an exponent relationship in a mixed review."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         }
       ],
       "assessment": {
         "quiz_id": "mth1w-u2-quiz",
         "performance_task_id": "mth1w-u2-scale-comparison",
         "expectation_ids": ["B2.1", "B2.2"],
-        "status": "specified_not_implemented"
+        "status": "machine_verified_draft"
       }
     },
     {

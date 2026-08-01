@@ -5,8 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/learning/mth1w_unit_content.dart';
 
 const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
+const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
 
 String source() => File(contentPath).readAsStringSync();
+String unitTwoSource() => File(unitTwoContentPath).readAsStringSync();
 
 void main() {
   group('MTH1W authored Unit 1 content', () {
@@ -81,6 +83,43 @@ void main() {
         () => Mth1wUnitContent.fromJson(payload),
         throwsA(isA<Mth1wUnitContentFormatException>()),
       );
+    });
+  });
+
+  group('MTH1W authored Unit 2 content', () {
+    test('loads the complete offline teaching package', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitTwoSource());
+
+      expect(unit.unitId, 'mth1w-u2');
+      expect(unit.lessons, hasLength(2));
+      expect(
+        unit.lessons.expand((lesson) => lesson.workedExamples),
+        hasLength(4),
+      );
+      expect(
+        unit.lessons.expand(
+          (lesson) => [
+            ...lesson.practiceSets.guided,
+            ...lesson.practiceSets.independent,
+            ...lesson.practiceSets.retrieval,
+          ],
+        ),
+        hasLength(22),
+      );
+      expect(unit.assessment.quiz.items, hasLength(10));
+      expect(unit.assessment.performanceTask.rubric, hasLength(5));
+    });
+
+    test('checks exact quiz responses and preserves written review', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitTwoSource());
+      final exact = unit.assessment.quiz.items[3].response;
+      final written = unit.assessment.quiz.items[4].response;
+
+      expect(exact.isCorrect('870,000'), isTrue);
+      expect(exact.isCorrect('87000'), isFalse);
+      expect(written.type, Mth1wResponseType.constructed);
+      expect(written.isAutoCheckable, isFalse);
+      expect(written.educatorReviewRequired, isTrue);
     });
   });
 }

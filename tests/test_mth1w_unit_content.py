@@ -25,11 +25,11 @@ def test_current_unit_has_teaching_practice_and_assessment_depth():
     counts = verify_all()
 
     assert counts == {
-        "lessons": 3,
-        "worked_examples": 6,
-        "practice_items": 33,
-        "quiz_items": 10,
-        "constructed_responses": 17,
+        "lessons": 5,
+        "worked_examples": 10,
+        "practice_items": 55,
+        "quiz_items": 20,
+        "constructed_responses": 25,
     }
 
 
@@ -98,4 +98,14 @@ def test_every_representation_requires_a_text_alternative(tmp_path):
     path = write_mutation(tmp_path, remove_alternative)
 
     with pytest.raises(UnitContentError, match="text alternative missing"):
+        verify_content(path)
+
+
+def test_performance_task_requires_a_bounded_time(tmp_path):
+    def remove_time(payload):
+        payload["unit_assessment"]["performance_task"].pop("estimated_minutes")
+
+    path = write_mutation(tmp_path, remove_time)
+
+    with pytest.raises(UnitContentError, match="performance-task time invalid"):
         verify_content(path)

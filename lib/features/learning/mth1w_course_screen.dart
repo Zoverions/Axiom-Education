@@ -96,6 +96,25 @@ class _CourseBody extends StatelessWidget {
                   'Unit 1 adds three draft lessons mapped to official B1.1-B1.3. Educator and cultural review remain required.',
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  key: const ValueKey('mth1w-open-draft-unit-2'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) =>
+                            const Mth1wDraftUnitScreen(unitNumber: 2),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.exposure_rounded),
+                  label: const Text('Open source-mapped draft Unit 2'),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Unit 2 adds two draft lessons mapped to official B2.1-B2.2, including powers, scientific notation, and exponent relationships.',
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   'Foundation lessons',
@@ -171,8 +190,8 @@ class _CourseOverviewCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'This is not a complete MTH1W course, credit, grade, transcript, '
-              'or Ministry-approved resource. Curriculum source review is '
-              'still pending, and no progress is saved.',
+              'or Ministry-approved resource. Official inventory mapping is '
+              'verified, human review is still pending, and no progress is saved.',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: colors.onPrimaryContainer),

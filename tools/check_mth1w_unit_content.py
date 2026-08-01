@@ -23,7 +23,10 @@ except ModuleNotFoundError:  # Direct execution from the tools directory.
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT_ROOT = ROOT / "curriculum" / "content" / "mth1w"
-CONTENT_PATHS = [CONTENT_ROOT / "u1-number-systems.v1.json"]
+CONTENT_PATHS = [
+    CONTENT_ROOT / "u1-number-systems.v1.json",
+    CONTENT_ROOT / "u2-powers.v1.json",
+]
 PRACTICE_MINIMUMS = {"guided": 3, "independent": 5, "retrieval": 3}
 ALLOWED_RESPONSE_TYPES = {"selected", "short_text", "constructed"}
 
@@ -501,6 +504,11 @@ def verify_content(
     require(
         task.get("id") == planned_assessment.get("performance_task_id"),
         f"{unit_id}: performance-task ID mismatch",
+    )
+    require(
+        isinstance(task.get("estimated_minutes"), int)
+        and 60 <= task["estimated_minutes"] <= 300,
+        f"{unit_id}: performance-task time invalid",
     )
     task_expectations = require_string_list(
         task.get("official_expectation_ids"),

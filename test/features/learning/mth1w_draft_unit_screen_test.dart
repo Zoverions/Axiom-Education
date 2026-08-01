@@ -8,15 +8,19 @@ import 'package:ontarioedai/core/providers/mth1w_unit_content_provider.dart';
 import 'package:ontarioedai/features/learning/mth1w_draft_unit_screen.dart';
 
 const contentPath = 'curriculum/content/mth1w/u1-number-systems.v1.json';
+const unitTwoContentPath = 'curriculum/content/mth1w/u2-powers.v1.json';
 
 Mth1wUnitContent loadUnit() {
   return Mth1wUnitContent.fromJsonString(File(contentPath).readAsStringSync());
 }
 
-Widget buildUnitScreen(Mth1wUnitContent unit) {
+Widget buildUnitScreen(Mth1wUnitContent unit, {int unitNumber = 1}) {
+  final provider = unitNumber == 1
+      ? mth1wUnitOneProvider
+      : mth1wUnitTwoProvider;
   return ProviderScope(
-    overrides: [mth1wUnitOneProvider.overrideWith((ref) async => unit)],
-    child: const MaterialApp(home: Mth1wDraftUnitScreen()),
+    overrides: [provider.overrideWith((ref) async => unit)],
+    child: MaterialApp(home: Mth1wDraftUnitScreen(unitNumber: unitNumber)),
   );
 }
 
@@ -67,6 +71,27 @@ void main() {
       );
     },
   );
+
+  testWidgets('presents the source-mapped draft Unit 2 path', (tester) async {
+    final unit = Mth1wUnitContent.fromJsonString(
+      File(unitTwoContentPath).readAsStringSync(),
+    );
+    await tester.pumpWidget(buildUnitScreen(unit, unitNumber: 2));
+    await tester.pumpAndSettle();
+
+    expect(find.text(unit.title), findsOneWidget);
+    expect(find.textContaining('B2.1, B2.2'), findsOneWidget);
+    expect(
+      find.text('Exponent patterns and scientific notation'),
+      findsOneWidget,
+    );
+    expect(find.text('Build the exponent laws from patterns'), findsOneWidget);
+    expect(find.byKey(const ValueKey('mth1w-u2-open-quiz')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('mth1w-u2-open-performance-task')),
+      findsOneWidget,
+    );
+  });
 
   testWidgets('teaches, accepts a response, and gives task-specific feedback', (
     tester,

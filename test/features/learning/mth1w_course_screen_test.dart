@@ -77,6 +77,33 @@ void main() {
     expect(find.text('Open mixed practice'), findsOneWidget);
     expect(find.text('Open home learning guide'), findsOneWidget);
     expect(find.text('Open source-mapped draft Unit 1'), findsOneWidget);
+    expect(find.text('Open source-mapped draft Unit 2'), findsOneWidget);
+  });
+
+  testWidgets('opens the bundled source-mapped Unit 2 package', (tester) async {
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    final unitTwoButton = find.byKey(const ValueKey('mth1w-open-draft-unit-2'));
+    await tester.scrollUntilVisible(
+      unitTwoButton,
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView).first,
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.tap(unitTwoButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Unit 2: Powers and scientific notation'), findsOneWidget);
+    expect(find.textContaining('B2.1, B2.2'), findsOneWidget);
+    expect(
+      find.text('Exponent patterns and scientific notation'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('teaches with a worked example before focused practice', (

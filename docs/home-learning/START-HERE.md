@@ -1,7 +1,7 @@
 # Start Here: Grade 9 Math Foundations Preview
 
 This is a short, non-AI learning routine for the four math foundation lessons
-and the source-mapped Unit 1 draft currently available in Axiom Education. It
+and the source-mapped Unit 1 and Unit 2 drafts currently available in Axiom Education. It
 can help a learner restart regular study while the complete MTH1W course is
 being built and reviewed.
 
@@ -40,6 +40,11 @@ use the correction attempt after reviewing the task-specific feedback. Written
 explanations and the performance task need an adult or qualified educator to
 review them against the visible criteria. Do not treat the app's exact-answer
 count as a grade.
+
+After Unit 1, open **Source-mapped draft Unit 2** for powers and scientific
+notation. Use the exponent-value pattern before relying on a memorized rule,
+and keep every written restriction when division or a negative exponent could
+make a zero base undefined.
 
 ## Starter week
 

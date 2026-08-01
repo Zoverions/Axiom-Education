@@ -15,6 +15,9 @@ claims.
   examples, 33 practice items, a delayed-feedback 10-item quiz with correction
   attempts, a transparent performance task, text alternatives, and explicit
   educator/cultural-review boundaries.
+- A bundled offline Unit 2 draft covering exponent patterns, scientific
+  notation, and exponent relationships through two method routes, four worked
+  examples, 22 practice items, a 10-item quiz, and a scale-comparison task.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

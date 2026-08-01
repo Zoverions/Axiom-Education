@@ -43,7 +43,7 @@ represented as course-complete:
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
 - a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, multiple reasoning routes and representations, misconception checks, and reflection prompts;
-- a source-mapped offline MTH1W Unit 1 draft with three full lessons, six worked examples, 33 practice items, a delayed-feedback 10-item quiz, correction attempt, and transparent performance task;
+- source-mapped offline MTH1W Units 1 and 2 with five full lessons, ten worked examples, 55 practice items, two delayed-feedback quizzes with correction attempts, and transparent performance tasks;
 - lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
@@ -53,11 +53,11 @@ represented as course-complete:
 - item-linked scaffolded hints, derived local topic references, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The foundations preview and Unit 1 draft do **not** use tutor inference or write a learner
+The foundations preview and source-mapped unit drafts do **not** use tutor inference or write a learner
 record. It is intentionally usable without AI. It is **not** a complete MTH1W
 course, credit, grade, transcript, Ministry-approved resource, school
 enrolment, or replacement for an authorized education provider. The
-Unit 1 has a draft quiz and performance task, but the application does **not**
+Each authored unit has a draft quiz and performance task, but the application does **not**
 currently provide complete-course quizzes or tests, governed learner progress,
 assignments, educator review and appeal, pack
 activation, portfolio export, or classroom synchronization. Those paths
@@ -141,7 +141,7 @@ Presently:
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
 - MTH1W-labelled A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to four derived topic references whose official mapping is under review;
 - the official MTH1W hierarchy is source-pinned at 14 overall and 43 specific expectations, while educator review, licensing, full lesson coverage, assessments, accessibility, progress, and teacher workflows remain incomplete;
-- a machine-verified 9-unit, 43-lesson, 110-hour MTH1W blueprint covers every official expectation exactly once; Unit 1 is the first authored offline draft and the other eight units remain unavailable;
+- a machine-verified 9-unit, 43-lesson, 110-hour MTH1W blueprint covers every official expectation exactly once; Units 1 and 2 are authored offline drafts and the other seven units remain unavailable;
 - the four-lesson Grade 9 Math Foundations Preview is experimental; it compares multiple valid reasoning routes but is not a complete MTH1W course;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;

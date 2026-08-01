@@ -1,6 +1,6 @@
 # MTH1W Coverage Ledger
 
-**Status:** official inventory and complete course blueprint verified; 1 of 9 units authored as a machine-verified draft
+**Status:** official inventory and complete course blueprint verified; 2 of 9 units authored as machine-verified drafts
 **Source audit date:** 2026-08-01
 **Course-complete claim:** blocked
 
@@ -50,6 +50,13 @@ quiz, and a performance task. Its student surface is clearly labelled as a
 draft preview; constructed responses and the complete unit still require
 qualified educator and cultural review.
 
+Unit 2 is delivered from `curriculum/content/mth1w/u2-powers.v1.json`. It adds
+2 lessons mapped to B2.1 and B2.2, 4 worked examples, 22 practice items, a
+10-item quiz, and a scale-comparison performance task. Its pattern-table and
+place-value routes build zero and negative exponents before scientific
+notation; its factor-expansion and operation-pattern routes derive exponent
+relationships while preserving non-zero restrictions.
+
 Run the evidence checks with:
 
 ```bash
@@ -77,10 +84,11 @@ They remain useful for study, but they do not mark any row above as covered
 until their exact official bindings and instructional interpretations pass
 educator review.
 
-The newer Unit 1 content binds to official inventory identifiers B1.1 through
-B1.3 and passes structural and answer-contract verification. It is authored
-coverage, but is not marked reviewed teaching coverage until the required
-human review evidence is recorded.
+The newer Unit 1 and Unit 2 content binds to official inventory identifiers
+B1.1 through B1.3 and B2.1 through B2.2 and passes structural and
+answer-contract verification. It is authored coverage, but is not marked
+reviewed teaching coverage until the required human review evidence is
+recorded.
 
 ## Evidence required per specific expectation
 
@@ -104,7 +112,7 @@ not independently prove coverage.
 ## Remaining course gates
 
 The official-inventory gate and complete-coverage blueprint are verified.
-Authored delivery is 3 of 43 primary lessons across 1 of 9 units. These gates
+Authored delivery is 5 of 43 primary lessons across 2 of 9 units. These gates
 remain blocked:
 
 - educator source and instructional review;

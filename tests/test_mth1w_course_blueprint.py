@@ -85,3 +85,13 @@ def test_unit_hours_must_preserve_the_110_hour_course(tmp_path):
 
     with pytest.raises(BlueprintError, match="sum to 110"):
         verify(path)
+
+
+def test_each_authored_unit_declaration_is_required(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["authored_unit_content"].pop(),
+    )
+
+    with pytest.raises(BlueprintError, match="exactly two authored draft units"):
+        verify(path)

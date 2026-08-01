@@ -689,6 +689,9 @@ class Mth1wUnitAssessmentContent {
 }
 
 class Mth1wUnitContent {
+  static const sourceInventoryRecordsSha256 =
+      'd023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766';
+
   const Mth1wUnitContent({
     required this.unitId,
     required this.title,
@@ -709,7 +712,20 @@ class Mth1wUnitContent {
         'unit content course must be MTH1W',
       );
     }
+    if (json['source_inventory_records_sha256'] !=
+        sourceInventoryRecordsSha256) {
+      throw const Mth1wUnitContentFormatException(
+        'unit content source inventory digest is invalid',
+      );
+    }
     final review = _map(json['review'], 'review');
+    if (review['authoring_status'] != 'machine_verified_draft' ||
+        review['educator_review_status'] != 'required' ||
+        review['cultural_review_status'] != 'required') {
+      throw const Mth1wUnitContentFormatException(
+        'unit content review boundary is invalid',
+      );
+    }
     if (review['student_availability'] !=
         'draft_preview_with_adult_review_recommended') {
       throw const Mth1wUnitContentFormatException(
@@ -724,6 +740,11 @@ class Mth1wUnitContent {
 
     final lessons = _list(json['lessons'], 'lessons');
     final sources = _list(json['source_notes'], 'source_notes');
+    if (lessons.isEmpty || sources.length < 2) {
+      throw const Mth1wUnitContentFormatException(
+        'unit content teaching or source evidence is incomplete',
+      );
+    }
     return Mth1wUnitContent(
       unitId: _string(json['unit_id'], 'unit_id'),
       title: _string(json['title'], 'title'),

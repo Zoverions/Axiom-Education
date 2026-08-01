@@ -5,18 +5,26 @@ import '../../core/learning/mth1w_unit_content.dart';
 import '../../core/providers/mth1w_unit_content_provider.dart';
 
 class Mth1wDraftUnitScreen extends ConsumerWidget {
-  const Mth1wDraftUnitScreen({super.key});
+  const Mth1wDraftUnitScreen({super.key, this.unitNumber = 1})
+    : assert(unitNumber == 1 || unitNumber == 2);
+
+  final int unitNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final unitAsync = ref.watch(mth1wUnitOneProvider);
+    final unitProvider = unitNumber == 1
+        ? mth1wUnitOneProvider
+        : mth1wUnitTwoProvider;
+    final unitAsync = ref.watch(unitProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('MTH1W draft Unit 1')),
+      appBar: AppBar(title: Text('MTH1W draft Unit $unitNumber')),
       body: SafeArea(
         child: unitAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) =>
-              _LoadError(onRetry: () => ref.invalidate(mth1wUnitOneProvider)),
+          error: (error, stackTrace) => _LoadError(
+            unitNumber: unitNumber,
+            onRetry: () => ref.invalidate(unitProvider),
+          ),
           data: (unit) => _UnitBody(unit: unit),
         ),
       ),
@@ -25,8 +33,9 @@ class Mth1wDraftUnitScreen extends ConsumerWidget {
 }
 
 class _LoadError extends StatelessWidget {
-  const _LoadError({required this.onRetry});
+  const _LoadError({required this.unitNumber, required this.onRetry});
 
+  final int unitNumber;
   final VoidCallback onRetry;
 
   @override
@@ -39,8 +48,8 @@ class _LoadError extends StatelessWidget {
           children: [
             const Icon(Icons.error_outline_rounded, size: 48),
             const SizedBox(height: 12),
-            const Text(
-              'Draft Unit 1 is unavailable because its bundled content did not load or validate.',
+            Text(
+              'Draft Unit $unitNumber is unavailable because its bundled content did not load or validate.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -60,6 +69,9 @@ class _UnitBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final expectationIds = unit.lessons
+        .expand((lesson) => lesson.officialExpectationIds)
+        .join(', ');
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
@@ -84,8 +96,8 @@ class _UnitBody extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Source-mapped draft preview. These lessons are original Axiom Education content bound to official references B1.1-B1.3. They still require educator and cultural review.',
+                        Text(
+                          'Source-mapped draft preview. These lessons are original Axiom Education content bound to official references $expectationIds. They still require educator and cultural review.',
                         ),
                         const SizedBox(height: 8),
                         const Text(
@@ -117,7 +129,7 @@ class _UnitBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 FilledButton.icon(
-                  key: const ValueKey('mth1w-u1-open-quiz'),
+                  key: ValueKey('${unit.unitId}-open-quiz'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
@@ -133,7 +145,7 @@ class _UnitBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 OutlinedButton.icon(
-                  key: const ValueKey('mth1w-u1-open-performance-task'),
+                  key: ValueKey('${unit.unitId}-open-performance-task'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
