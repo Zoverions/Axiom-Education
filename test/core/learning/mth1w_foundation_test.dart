@@ -25,11 +25,31 @@ void main() {
         expect(lesson.learningGoals.length, greaterThanOrEqualTo(2));
         expect(lesson.prerequisites.length, greaterThanOrEqualTo(2));
         expect(lesson.directInstruction, isNotEmpty);
+        expect(lesson.methodRoutes.length, greaterThanOrEqualTo(2));
+        expect(
+          lesson.methodRoutes.map((route) => route.approach).toSet().length,
+          lesson.methodRoutes.length,
+        );
+        for (final route in lesson.methodRoutes) {
+          expect(route.label, isNotEmpty);
+          expect(route.approach, isNotEmpty);
+          expect(route.explanation, isNotEmpty);
+        }
+        expect(lesson.representations.length, greaterThanOrEqualTo(2));
+        expect(lesson.compareMethodsPrompt, isNotEmpty);
         expect(lesson.workedExamplePrompt, isNotEmpty);
         expect(lesson.workedExampleSteps.length, greaterThanOrEqualTo(3));
         expect(lesson.commonMisconception, isNotEmpty);
         expect(lesson.reflectionPrompt, isNotEmpty);
       }
     });
+
+    test(
+      'method choice is framed as a strategy rather than a learner label',
+      () {
+        expect(mth1wMethodChoiceNote, contains('strategy choices'));
+        expect(mth1wMethodChoiceNote, contains('not fixed learner types'));
+      },
+    );
   });
 }

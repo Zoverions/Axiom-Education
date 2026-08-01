@@ -1,0 +1,691 @@
+{
+  "schema": "axiom-education-official-course-inventory.v1",
+  "course": {
+    "code": "MTH1W",
+    "name": "Mathematics, Grade 9, De-streamed",
+    "jurisdiction": "Ontario, Canada",
+    "credit_value": 1.0,
+    "prerequisite": null
+  },
+  "source": {
+    "authority": "Ontario Ministry of Education",
+    "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+    "url": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/9f57c5ea-424b-42de-9152-68b4181655de/The%20Ontario%20Curriculum%20-%20Mathematics%20Grade%209%20De-streamed%20Course%202021_with%20Teacher%20Supports.pdf",
+    "sha256": "a153c03a809551770403376db606815ee10577c36c425533495ef1abb8da91aa",
+    "pdf_page_count": 222,
+    "copyright": "Crown copyright, King's Printer for Ontario",
+    "copyright_url": "https://www.ontario.ca/page/copyright-information",
+    "verbatim_expectation_text_included": false
+  },
+  "review": {
+    "extraction_status": "source-digest-and-layout-verified",
+    "educator_review_status": "required",
+    "commercial_reproduction_permission": "unconfirmed"
+  },
+  "strands": [
+    {
+      "id": "AA",
+      "title": "Social-Emotional Learning Skills in Mathematics"
+    },
+    {
+      "id": "A",
+      "title": "Mathematical Thinking and Making Connections"
+    },
+    {
+      "id": "B",
+      "title": "Number"
+    },
+    {
+      "id": "C",
+      "title": "Algebra"
+    },
+    {
+      "id": "D",
+      "title": "Data"
+    },
+    {
+      "id": "E",
+      "title": "Geometry and Measurement"
+    },
+    {
+      "id": "F",
+      "title": "Financial Literacy"
+    }
+  ],
+  "counts": {
+    "strands": 7,
+    "overall_expectations": 14,
+    "specific_expectations": 43,
+    "expectations_total": 57
+  },
+  "records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "records": [
+    {
+      "id": "AA1",
+      "kind": "overall",
+      "strand_id": "AA",
+      "parent_id": null,
+      "title": "Social-Emotional Learning Skills",
+      "official_page": 62,
+      "pdf_page": 63,
+      "description_length": 180,
+      "description_sha256": "c2775717f386a3fa5babfbbf3178b6736ab66ddbef821b935a4edcc5a43c097d"
+    },
+    {
+      "id": "A1",
+      "kind": "overall",
+      "strand_id": "A",
+      "parent_id": null,
+      "title": "Mathematical Processes",
+      "official_page": 70,
+      "pdf_page": 71,
+      "description_length": 137,
+      "description_sha256": "dfe5bf0fa835a845860b6155f8e5459d5d88d5527d25952c4979f7b721e63552"
+    },
+    {
+      "id": "A2",
+      "kind": "overall",
+      "strand_id": "A",
+      "parent_id": null,
+      "title": "Making Connections",
+      "official_page": 74,
+      "pdf_page": 75,
+      "description_length": 161,
+      "description_sha256": "9c84c07f60fee92121104edbade21981900eb0ca755502616c976742560a85fe"
+    },
+    {
+      "id": "B1",
+      "kind": "overall",
+      "strand_id": "B",
+      "parent_id": null,
+      "title": "Development of Numbers and Number Sets",
+      "official_page": 78,
+      "pdf_page": 79,
+      "description_length": 112,
+      "description_sha256": "94a1262f1e57153bc9822c829aa27b04541b1995b5644cae33a03385567aba1c"
+    },
+    {
+      "id": "B1.1",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B1",
+      "title": "Development and Use of Numbers",
+      "official_page": 78,
+      "pdf_page": 79,
+      "description_length": 142,
+      "description_sha256": "cbc8a7d847a4c7dbe19fa4a93c90de95d6431a3e8ef74d50bb647bb7194442bf"
+    },
+    {
+      "id": "B1.2",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B1",
+      "title": "Number Sets",
+      "official_page": 80,
+      "pdf_page": 81,
+      "description_length": 124,
+      "description_sha256": "cc2281f1eb7c4029888cd72602e0d4be7214742e11f2964f07f5a61104e46ea8"
+    },
+    {
+      "id": "B1.3",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B1",
+      "title": "Number Sets",
+      "official_page": 82,
+      "pdf_page": 83,
+      "description_length": 107,
+      "description_sha256": "a5eacf3a50890771c39096945f00662a943dcb3fb7edaf1882b3c432e0e31689"
+    },
+    {
+      "id": "B2",
+      "kind": "overall",
+      "strand_id": "B",
+      "parent_id": null,
+      "title": "Powers",
+      "official_page": 87,
+      "pdf_page": 88,
+      "description_length": 138,
+      "description_sha256": "b95bcd6a42ceaf79d3c0daf2d0121b7dedd93c6294ca4b665101df01387edbee"
+    },
+    {
+      "id": "B2.1",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B2",
+      "title": "Powers",
+      "official_page": 87,
+      "pdf_page": 88,
+      "description_length": 211,
+      "description_sha256": "8c9076b46cb40ecbbbb2aca0bde72930d4b01e74362ce7937dff17d0d4df2f03"
+    },
+    {
+      "id": "B2.2",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B2",
+      "title": "Powers",
+      "official_page": 90,
+      "pdf_page": 91,
+      "description_length": 195,
+      "description_sha256": "245ba323138c78f3cd12c5a380012b4ce42ca751851daf2351b6e34969471fe6"
+    },
+    {
+      "id": "B3",
+      "kind": "overall",
+      "strand_id": "B",
+      "parent_id": null,
+      "title": "Number Sense and Operations",
+      "official_page": 92,
+      "pdf_page": 93,
+      "description_length": 144,
+      "description_sha256": "5e63da7588f01c4f8f27edc99b0be321c6a7d9dc7b55820db7f55bf7151fdc6a"
+    },
+    {
+      "id": "B3.1",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B3",
+      "title": "Rational Numbers",
+      "official_page": 92,
+      "pdf_page": 93,
+      "description_length": 124,
+      "description_sha256": "e5af4ebdc26d9b49af221024c149d988dc1af4569b04913ce5d7526144a3f9d9"
+    },
+    {
+      "id": "B3.2",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B3",
+      "title": "Rational Numbers",
+      "official_page": 94,
+      "pdf_page": 95,
+      "description_length": 150,
+      "description_sha256": "c6f19b2090398b96f9cf9439c85aebf3ea7e5abd9efb2eb77edc0ca2e4ffa1d0"
+    },
+    {
+      "id": "B3.3",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B3",
+      "title": "Rational Numbers",
+      "official_page": 97,
+      "pdf_page": 98,
+      "description_length": 172,
+      "description_sha256": "f27af055f573becbcea4a47af0a44f992584715e0727789b17f10fea5a4cd724"
+    },
+    {
+      "id": "B3.4",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B3",
+      "title": "Applications",
+      "official_page": 99,
+      "pdf_page": 100,
+      "description_length": 200,
+      "description_sha256": "ccd0cec611f8e29e6b111ba3797fb7ab86d3005d944c2c79957765c075c0996f"
+    },
+    {
+      "id": "B3.5",
+      "kind": "specific",
+      "strand_id": "B",
+      "parent_id": "B3",
+      "title": "Applications",
+      "official_page": 101,
+      "pdf_page": 102,
+      "description_length": 218,
+      "description_sha256": "bf4ab21ab156a99c04a0a03e4802329d5be756452dc0ac247795f0bab74ed210"
+    },
+    {
+      "id": "C1",
+      "kind": "overall",
+      "strand_id": "C",
+      "parent_id": null,
+      "title": "Algebraic Expressions and Equations",
+      "official_page": 105,
+      "pdf_page": 106,
+      "description_length": 153,
+      "description_sha256": "0defd4655637671d8bef8db8665acac14be2d5742076ffd83a98396ff9a1fef0"
+    },
+    {
+      "id": "C1.1",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C1",
+      "title": "Development and Use of Algebra",
+      "official_page": 105,
+      "pdf_page": 106,
+      "description_length": 146,
+      "description_sha256": "0c0bb85f2f81327a503caceed9dc80bbd946f3602823b0204e39ce9195aecaa2"
+    },
+    {
+      "id": "C1.2",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C1",
+      "title": "Algebraic Expressions and Equations",
+      "official_page": 107,
+      "pdf_page": 108,
+      "description_length": 133,
+      "description_sha256": "321ac2ba6635f721fd92c2e8e48d353499eba3cd2288259e7737b5230dfdeb5f"
+    },
+    {
+      "id": "C1.3",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C1",
+      "title": "Algebraic Expressions and Equations",
+      "official_page": 111,
+      "pdf_page": 112,
+      "description_length": 154,
+      "description_sha256": "a893f7341d197749bd6398cee9c6f9b43b1f47a10a944085f16e6cdafccc4ce6"
+    },
+    {
+      "id": "C1.4",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C1",
+      "title": "Algebraic Expressions and Equations",
+      "official_page": 116,
+      "pdf_page": 117,
+      "description_length": 142,
+      "description_sha256": "074415fd67566e9233bdc434e98ac6ac6e48311c47afede3b88bc9ef048916df"
+    },
+    {
+      "id": "C1.5",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C1",
+      "title": "Algebraic Expressions and Equations",
+      "official_page": 118,
+      "pdf_page": 119,
+      "description_length": 75,
+      "description_sha256": "c1179a622ab631cd6b0e6ae2f87e4b2037ae3930828f6f6bc00167311ddedb70"
+    },
+    {
+      "id": "C2",
+      "kind": "overall",
+      "strand_id": "C",
+      "parent_id": null,
+      "title": "Coding",
+      "official_page": 121,
+      "pdf_page": 122,
+      "description_length": 148,
+      "description_sha256": "d004def742454a5de9a58b4ecdb3ed705f05e35ce0345632834c92cdc3cf3e72"
+    },
+    {
+      "id": "C2.1",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C2",
+      "title": "Coding",
+      "official_page": 121,
+      "pdf_page": 122,
+      "description_length": 125,
+      "description_sha256": "9cf8e22e091e90e8e67554da1f05f0d0a2634d561fa5596ea58434e9643c6d0e"
+    },
+    {
+      "id": "C2.2",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C2",
+      "title": "Coding",
+      "official_page": 124,
+      "pdf_page": 125,
+      "description_length": 147,
+      "description_sha256": "7e2669ef5e8829d3455b454e19fc63291c7d49f105ceb6ec7aa177866ec0046a"
+    },
+    {
+      "id": "C2.3",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C2",
+      "title": "Coding",
+      "official_page": 127,
+      "pdf_page": 128,
+      "description_length": 149,
+      "description_sha256": "b77cb8462e16a4128606288f996303782a9a0e59747ab1dd738614991c2e690a"
+    },
+    {
+      "id": "C3",
+      "kind": "overall",
+      "strand_id": "C",
+      "parent_id": null,
+      "title": "Application of Relations",
+      "official_page": 131,
+      "pdf_page": 132,
+      "description_length": 136,
+      "description_sha256": "0bb2d93a53b4c0c5f3aa758b599d735cfd7ca248cfe6b87e9fbb89e94c341d2c"
+    },
+    {
+      "id": "C3.1",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C3",
+      "title": "Application of Linear and Non-Linear Relations",
+      "official_page": 131,
+      "pdf_page": 132,
+      "description_length": 177,
+      "description_sha256": "3d99e3f3567a4f95ee253cfd78eea44ff772f50a9449d8ae41d63081296baec8"
+    },
+    {
+      "id": "C3.2",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C3",
+      "title": "Application of Linear and Non-Linear Relations",
+      "official_page": 136,
+      "pdf_page": 137,
+      "description_length": 220,
+      "description_sha256": "ae53804b79a15388f43a9d7a55c2392496c30ea58865c62fafdbd07bbaed3d8b"
+    },
+    {
+      "id": "C3.3",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C3",
+      "title": "Application of Linear and Non-Linear Relations",
+      "official_page": 139,
+      "pdf_page": 140,
+      "description_length": 167,
+      "description_sha256": "ac3f1190d0787db40cc9ab2117d47c3d15045f0fba6483f688e7b49f1050e4df"
+    },
+    {
+      "id": "C4",
+      "kind": "overall",
+      "strand_id": "C",
+      "parent_id": null,
+      "title": "Characteristics of Relations",
+      "official_page": 141,
+      "pdf_page": 142,
+      "description_length": 161,
+      "description_sha256": "564c1d1f67ad1c742eb1cc32586ae7caccf7ce303d5bdbab1497305f94836358"
+    },
+    {
+      "id": "C4.1",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C4",
+      "title": "Characteristics of Linear and Non-Linear Relations",
+      "official_page": 141,
+      "pdf_page": 142,
+      "description_length": 101,
+      "description_sha256": "e515659b11e2e641f20d47431aeaf3ab575d52833a4ca62087142d2683d97c80"
+    },
+    {
+      "id": "C4.2",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C4",
+      "title": "Characteristics of Linear and Non-Linear Relations",
+      "official_page": 143,
+      "pdf_page": 144,
+      "description_length": 302,
+      "description_sha256": "ef701a7a71c87a0c9d23a66d56e8e1354160179e44614562ebb92896b6eaead6"
+    },
+    {
+      "id": "C4.3",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C4",
+      "title": "Characteristics of Linear and Non-Linear Relations",
+      "official_page": 147,
+      "pdf_page": 148,
+      "description_length": 169,
+      "description_sha256": "60bf25a88e0ce2325bac9e9a72a23da8fd0bcb7464924901d06efdcc399cc6f4"
+    },
+    {
+      "id": "C4.4",
+      "kind": "specific",
+      "strand_id": "C",
+      "parent_id": "C4",
+      "title": "Characteristics of Linear and Non-Linear Relations",
+      "official_page": 151,
+      "pdf_page": 152,
+      "description_length": 258,
+      "description_sha256": "0fab3e361cabeedb5791770c439cc04d7222ea0b96824f6bba7f3dd95e25c3dc"
+    },
+    {
+      "id": "D1",
+      "kind": "overall",
+      "strand_id": "D",
+      "parent_id": null,
+      "title": "Collection, Representation, and Analysis of Data",
+      "official_page": 156,
+      "pdf_page": 157,
+      "description_length": 103,
+      "description_sha256": "4edf5722897c2ee82e8287da788b092dc0f3f397213ce360dbf7b154ffb12a46"
+    },
+    {
+      "id": "D1.1",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D1",
+      "title": "Application of Data",
+      "official_page": 156,
+      "pdf_page": 157,
+      "description_length": 165,
+      "description_sha256": "bc2d3a4e140a2ac61a01a9c014ef9d88837729b44a4e963b6de065d423e2618e"
+    },
+    {
+      "id": "D1.2",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D1",
+      "title": "Representation and Analysis of Data",
+      "official_page": 158,
+      "pdf_page": 159,
+      "description_length": 163,
+      "description_sha256": "af151dc4ff4d43f7e79b8cdc2daf0917adab2e997f179d6f7ac9b3d09a75bb34"
+    },
+    {
+      "id": "D1.3",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D1",
+      "title": "Representation and Analysis of Data",
+      "official_page": 162,
+      "pdf_page": 163,
+      "description_length": 234,
+      "description_sha256": "3426fe5e9208a0b9c900d79e3f286b322754dc7b9b78665fb8d773f0efdd5e39"
+    },
+    {
+      "id": "D2",
+      "kind": "overall",
+      "strand_id": "D",
+      "parent_id": null,
+      "title": "Mathematical Modelling",
+      "official_page": 166,
+      "pdf_page": 167,
+      "description_length": 188,
+      "description_sha256": "21167d2246576b5c647586fdaab9e1f8126d06e17c14e7f8b334750b442172e5"
+    },
+    {
+      "id": "D2.1",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D2",
+      "title": "Application of Mathematical Modelling",
+      "official_page": 166,
+      "pdf_page": 167,
+      "description_length": 96,
+      "description_sha256": "adba3045921186917b39d0330bf3c970eec9b00064e322aec80bd8019ebfc246"
+    },
+    {
+      "id": "D2.2",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D2",
+      "title": "Process of Mathematical Modelling",
+      "official_page": 167,
+      "pdf_page": 168,
+      "description_length": 137,
+      "description_sha256": "34a3efcf8035ca27e066fba62d9d90d45e52859f7725fc304cc60278a6a39963"
+    },
+    {
+      "id": "D2.3",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D2",
+      "title": "Process of Mathematical Modelling",
+      "official_page": 170,
+      "pdf_page": 171,
+      "description_length": 219,
+      "description_sha256": "444a1992b21855cc37966518a098430dd516e9a83c0029fffcf25f15f1bc8184"
+    },
+    {
+      "id": "D2.4",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D2",
+      "title": "Process of Mathematical Modelling",
+      "official_page": 172,
+      "pdf_page": 173,
+      "description_length": 213,
+      "description_sha256": "a454852b1f9996ecd07c0388e5a3af32653a2541282aac20ccd51dbbd23ec528"
+    },
+    {
+      "id": "D2.5",
+      "kind": "specific",
+      "strand_id": "D",
+      "parent_id": "D2",
+      "title": "Process of Mathematical Modelling",
+      "official_page": 174,
+      "pdf_page": 175,
+      "description_length": 193,
+      "description_sha256": "2f5a61eda82ec9440176bb6de126a4915f901b9592d438a788356d6c9f8947ef"
+    },
+    {
+      "id": "E1",
+      "kind": "overall",
+      "strand_id": "E",
+      "parent_id": null,
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 176,
+      "pdf_page": 177,
+      "description_length": 198,
+      "description_sha256": "fca677c10bf71987b6506436e1512209a061d8550e436df88bdd51054749a97f"
+    },
+    {
+      "id": "E1.1",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 176,
+      "pdf_page": 177,
+      "description_length": 211,
+      "description_sha256": "4795d38f4270584cab02b23ac93703b774a3c19f497cd877cd7fcf1a3330975e"
+    },
+    {
+      "id": "E1.2",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 178,
+      "pdf_page": 179,
+      "description_length": 116,
+      "description_sha256": "bfea4817ef28cb465360e9c6611e419077de02578214e8016f7e5356e56698d6"
+    },
+    {
+      "id": "E1.3",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 185,
+      "pdf_page": 186,
+      "description_length": 218,
+      "description_sha256": "50cd60b6434b9d38f64bc3f78b7acd155cc317b845eb61f2b298e79368e626d2"
+    },
+    {
+      "id": "E1.4",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 188,
+      "pdf_page": 189,
+      "description_length": 197,
+      "description_sha256": "71ae1c84d4a001c6160da1e573f584a90efedc07d4db81eda58a2608ee17571a"
+    },
+    {
+      "id": "E1.5",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 191,
+      "pdf_page": 192,
+      "description_length": 147,
+      "description_sha256": "cfb377fa8925eef046ee99051c2b03e2bbf5967899e1063e9a719a161826aabc"
+    },
+    {
+      "id": "E1.6",
+      "kind": "specific",
+      "strand_id": "E",
+      "parent_id": "E1",
+      "title": "Geometric and Measurement Relationships",
+      "official_page": 195,
+      "pdf_page": 196,
+      "description_length": 162,
+      "description_sha256": "7b8a0cb9cf5bc7c79bff5cdef481a983d49afe36232aa3826ffe29569961cfb2"
+    },
+    {
+      "id": "F1",
+      "kind": "overall",
+      "strand_id": "F",
+      "parent_id": null,
+      "title": "Financial Decisions",
+      "official_page": 199,
+      "pdf_page": 200,
+      "description_length": 80,
+      "description_sha256": "e3b6cc377453ea04db2252bd4efd03b0c84f0cead9e98d377d3c9bf700108f44"
+    },
+    {
+      "id": "F1.1",
+      "kind": "specific",
+      "strand_id": "F",
+      "parent_id": "F1",
+      "title": "Financial Decisions",
+      "official_page": 199,
+      "pdf_page": 200,
+      "description_length": 193,
+      "description_sha256": "4f61ed6ac76b9bc605165b59b2e72441c29ca5c029afdf863b235629cbe7b163"
+    },
+    {
+      "id": "F1.2",
+      "kind": "specific",
+      "strand_id": "F",
+      "parent_id": "F1",
+      "title": "Financial Decisions",
+      "official_page": 201,
+      "pdf_page": 202,
+      "description_length": 127,
+      "description_sha256": "0b03b92c61d1a51eb9668192986b35988116a767aa60434173f1644cb07d483e"
+    },
+    {
+      "id": "F1.3",
+      "kind": "specific",
+      "strand_id": "F",
+      "parent_id": "F1",
+      "title": "Financial Decisions",
+      "official_page": 204,
+      "pdf_page": 205,
+      "description_length": 240,
+      "description_sha256": "cb1fa218ba692ea95d646f72597f28d5ad8984ef461db94ede107ded128f6a88"
+    },
+    {
+      "id": "F1.4",
+      "kind": "specific",
+      "strand_id": "F",
+      "parent_id": "F1",
+      "title": "Financial Decisions",
+      "official_page": 206,
+      "pdf_page": 207,
+      "description_length": 132,
+      "description_sha256": "f2639c2c7e8c74e1c06588c2fdcbc48f61344b3d154589cc3b8d1fc4127e43ab"
+    }
+  ]
+}

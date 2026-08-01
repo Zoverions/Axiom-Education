@@ -18,6 +18,11 @@ PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
 HIGH_SCHOOL_FOUNDATION_PATH = ROOT / "docs" / "rebuild" / "HIGH-SCHOOL-FOUNDATION.md"
 COURSE_ROADMAP_PATH = ROOT / "docs" / "rebuild" / "COURSE-COMPLETION-ROADMAP.md"
 MTH1W_SOURCE_AUDIT_PATH = ROOT / "docs" / "curriculum" / "MTH1W-SOURCE-AUDIT.md"
+MTH1W_COVERAGE_LEDGER_PATH = ROOT / "docs" / "curriculum" / "MTH1W-COVERAGE-LEDGER.md"
+GLOBAL_METHODS_PATH = ROOT / "docs" / "research" / "GLOBAL-INSTRUCTIONAL-METHODS.md"
+MTH1W_OFFICIAL_INVENTORY_PATH = (
+    ROOT / "curriculum" / "official" / "ontario-mth1w-2021.inventory.json"
+)
 HOME_LEARNING_PATH = ROOT / "docs" / "home-learning" / "START-HERE.md"
 CURRICULUM_READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
@@ -210,6 +215,9 @@ def verify() -> Counter[str]:
         HIGH_SCHOOL_FOUNDATION_PATH,
         COURSE_ROADMAP_PATH,
         MTH1W_SOURCE_AUDIT_PATH,
+        MTH1W_COVERAGE_LEDGER_PATH,
+        GLOBAL_METHODS_PATH,
+        MTH1W_OFFICIAL_INVENTORY_PATH,
         HOME_LEARNING_PATH,
         CURRICULUM_READINESS_PATH,
         DEPRECATIONS_PATH,
@@ -229,6 +237,14 @@ def verify() -> Counter[str]:
     require(
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md" in readme,
         "README does not link the high-school foundation strategy",
+    )
+    require(
+        "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md" in readme,
+        "README does not link the global instructional methods baseline",
+    )
+    require(
+        "docs/curriculum/MTH1W-COVERAGE-LEDGER.md" in readme,
+        "README does not link the MTH1W coverage ledger",
     )
     require("not production-ready" in readme, "README production boundary is missing")
     require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")

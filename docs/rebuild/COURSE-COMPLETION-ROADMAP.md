@@ -23,7 +23,7 @@ coverage.
 | Stage | State | Exit condition |
 |---|---|---|
 | Grade 9 Math Foundations Preview | usable experimental slice | four lessons and deterministic practice remain available with accurate limits |
-| Ontario MTH1W | source review blocked | official inventory and all course-completion evidence pass |
+| Ontario MTH1W | official inventory verified; course evidence blocked | educator, licensing, lesson, practice, assessment, accessibility, and workflow gates pass |
 | Remaining Grade 9 courses | queued | begin only after MTH1W is complete; finish each selected course before the next |
 | Grades 10–12 | queued | begin only after the Grade 9 catalogue is complete and reviewed |
 | Adaptive/AI enhancements | deferred | conventional no-AI course paths remain complete and available |

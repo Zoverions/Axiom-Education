@@ -42,7 +42,7 @@ represented as course-complete:
 - pull-to-refresh and explicit retry states;
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
-- a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, misconception checks, and reflection prompts;
+- a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, multiple reasoning routes and representations, misconception checks, and reflection prompts;
 - lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
@@ -65,10 +65,16 @@ remain experimental, disabled, specified, or adapter-required in
 The source conflict and blocked completion claim are documented in the
 [MTH1W Source Audit](docs/curriculum/MTH1W-SOURCE-AUDIT.md) and enforced by
 [`config/curriculum-readiness.json`](config/curriculum-readiness.json). The
+[source-pinned official inventory](curriculum/official/ontario-mth1w-2021.inventory.json)
+contains all 57 expectation references without redistributing their verbatim
+descriptions; the [MTH1W Coverage Ledger](docs/curriculum/MTH1W-COVERAGE-LEDGER.md)
+records what remains. The
 [Home Learning Guide](docs/home-learning/START-HERE.md) describes safe current
 use. Product sequencing is MTH1W first, then every remaining Grade 9 course,
 then later grades, as defined in the
 [Course Completion Roadmap](docs/rebuild/COURSE-COMPLETION-ROADMAP.md).
+The [Global Instructional Methods Baseline](docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md)
+requires multiple valid routes without assigning fixed learning-style labels.
 
 ## First five minutes
 
@@ -132,7 +138,8 @@ Presently:
 - the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
 - MTH1W-labelled A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to four derived topic references whose official mapping is under review;
-- the four-lesson Grade 9 Math Foundations Preview is experimental; it is not a complete MTH1W course, and full-course source mapping, instruction, quizzes, unit tests, assignments, progress, and teacher workflows remain incomplete;
+- the official MTH1W hierarchy is source-pinned at 14 overall and 43 specific expectations, while educator review, licensing, full lesson coverage, assessments, accessibility, progress, and teacher workflows remain incomplete;
+- the four-lesson Grade 9 Math Foundations Preview is experimental; it compares multiple valid reasoning routes but is not a complete MTH1W course;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;

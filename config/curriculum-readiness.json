@@ -16,6 +16,13 @@
     "url": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/9f57c5ea-424b-42de-9152-68b4181655de/The%20Ontario%20Curriculum%20-%20Mathematics%20Grade%209%20De-streamed%20Course%202021_with%20Teacher%20Supports.pdf",
     "sha256": "a153c03a809551770403376db606815ee10577c36c425533495ef1abb8da91aa"
   },
+  "official_inventory": {
+    "path": "curriculum/official/ontario-mth1w-2021.inventory.json",
+    "verification_status": "source-digest-and-layout-verified",
+    "counts": {"overall": 14, "specific": 43, "total": 57},
+    "records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+    "verbatim_expectation_text_included": false
+  },
   "local_snapshot": {
     "record_count": 11,
     "review_status": "machine-transcription-requires-course-review",
@@ -36,7 +43,7 @@
     }
   ],
   "required_gates": [
-    {"id": "official-expectation-inventory", "status": "blocked"},
+    {"id": "official-expectation-inventory", "status": "verified"},
     {"id": "educator-source-review", "status": "blocked"},
     {"id": "licensing-and-redistribution-review", "status": "blocked"},
     {"id": "lesson-and-practice-coverage", "status": "blocked"},

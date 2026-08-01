@@ -109,6 +109,16 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
         ),
         ("Verify capability registry", [python, "tools/check_capabilities.py"]),
         (
+            "Verify official MTH1W expectation inventory",
+            [
+                python,
+                "tools/mth1w_official_inventory.py",
+                "verify",
+                "--inventory",
+                "curriculum/official/ontario-mth1w-2021.inventory.json",
+            ],
+        ),
+        (
             "Verify curriculum readiness boundary",
             [python, "tools/check_curriculum_readiness.py"],
         ),

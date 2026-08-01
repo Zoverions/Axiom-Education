@@ -310,6 +310,44 @@ class Mth1wLessonScreen extends StatelessWidget {
                     ),
                     _WorkedExampleCard(lesson: lesson),
                     _LessonSection(
+                      icon: Icons.alt_route_rounded,
+                      title: 'Compare methods',
+                      children: [
+                        const Text(mth1wMethodChoiceNote),
+                        const SizedBox(height: 14),
+                        for (final route in lesson.methodRoutes)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${route.label}: ${route.approach}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(route.explanation),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                    _LessonSection(
+                      icon: Icons.hub_rounded,
+                      title: 'Represent it more than one way',
+                      children: [
+                        for (final representation in lesson.representations)
+                          _BulletText(representation),
+                        const SizedBox(height: 6),
+                        Text(
+                          lesson.compareMethodsPrompt,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    _LessonSection(
                       icon: Icons.warning_amber_rounded,
                       title: 'Common mistake to avoid',
                       children: [Text(lesson.commonMisconception)],

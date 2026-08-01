@@ -5,6 +5,22 @@ class WorkedExampleStep {
   final String explanation;
 }
 
+class Mth1wMethodRoute {
+  const Mth1wMethodRoute({
+    required this.label,
+    required this.approach,
+    required this.explanation,
+  });
+
+  final String label;
+  final String approach;
+  final String explanation;
+}
+
+const mth1wMethodChoiceNote =
+    'These are strategy choices for the task, not fixed learner types. Compare '
+    'the routes and use the one that makes the relationship clearest.';
+
 class Mth1wFoundationLesson {
   const Mth1wFoundationLesson({
     required this.sequence,
@@ -15,6 +31,9 @@ class Mth1wFoundationLesson {
     required this.learningGoals,
     required this.prerequisites,
     required this.directInstruction,
+    required this.methodRoutes,
+    required this.representations,
+    required this.compareMethodsPrompt,
     required this.workedExamplePrompt,
     required this.workedExampleSteps,
     required this.commonMisconception,
@@ -29,6 +48,9 @@ class Mth1wFoundationLesson {
   final List<String> learningGoals;
   final List<String> prerequisites;
   final String directInstruction;
+  final List<Mth1wMethodRoute> methodRoutes;
+  final List<String> representations;
+  final String compareMethodsPrompt;
   final String workedExamplePrompt;
   final List<WorkedExampleStep> workedExampleSteps;
   final String commonMisconception;
@@ -57,6 +79,32 @@ const List<Mth1wFoundationLesson> mth1wFoundationLessons = [
         'multiplication and division from left to right, followed by addition '
         'and subtraction from left to right. Record each intermediate line so '
         'that signs and operation order remain visible.',
+    methodRoutes: [
+      Mth1wMethodRoute(
+        label: 'Route 1',
+        approach: 'Rule-and-line method',
+        explanation:
+            'Mark the grouping, exponent, multiplication or division, and '
+            'addition or subtraction stages. Rewrite the whole expression '
+            'after completing one stage so every sign remains visible.',
+      ),
+      Mth1wMethodRoute(
+        label: 'Route 2',
+        approach: 'Expression-tree method',
+        explanation:
+            'Draw the expression as nested operations. Evaluate the deepest '
+            'group first, then move outward through the branches until one '
+            'value remains.',
+      ),
+    ],
+    representations: [
+      'An annotated symbolic expression with the next operation marked.',
+      'An expression tree showing which operations are nested inside others.',
+      'A verbal justification for the order of each calculation.',
+    ],
+    compareMethodsPrompt:
+        'Use both routes on the worked example. Where does each route show '
+        'that multiplication happens before the final subtraction?',
     workedExamplePrompt: 'Evaluate 18 − 3 × (4 − 6).',
     workedExampleSteps: [
       WorkedExampleStep(
@@ -99,6 +147,31 @@ const List<Mth1wFoundationLesson> mth1wFoundationLessons = [
         'A percent is a rate per 100. Convert p% to p ÷ 100 before multiplying '
         'by the whole amount. For a missing value in a proportion, keep the '
         'units aligned and apply the same scale factor to both quantities.',
+    methodRoutes: [
+      Mth1wMethodRoute(
+        label: 'Route 1',
+        approach: 'Decimal-multiplier method',
+        explanation:
+            'Convert the percent to a decimal and multiply by the whole. This '
+            'is efficient when the decimal multiplication is manageable.',
+      ),
+      Mth1wMethodRoute(
+        label: 'Route 2',
+        approach: 'Proportion and benchmark method',
+        explanation:
+            'Build from friendly percentages such as 10%, 5%, or 1%, or write '
+            'an equivalent rate over 100. Combine scaled parts to reach the '
+            'required percent.',
+      ),
+    ],
+    representations: [
+      'A 100-square or area model connecting part, whole, and percent.',
+      'A double number line aligning percent values with quantities.',
+      'An equation such as 0.18 × 250 = 45.',
+    ],
+    compareMethodsPrompt:
+        'Find 18% of 250 with both routes. Which route makes the reasonableness '
+        'of 45 easiest to see, and why?',
     workedExamplePrompt: 'Find 18% of 250.',
     workedExampleSteps: [
       WorkedExampleStep(
@@ -143,6 +216,30 @@ const List<Mth1wFoundationLesson> mth1wFoundationLessons = [
         'operation to both sides, undoing addition or subtraction before '
         'multiplication or division. Keep the original equation available for '
         'a final substitution check.',
+    methodRoutes: [
+      Mth1wMethodRoute(
+        label: 'Route 1',
+        approach: 'Balance-model method',
+        explanation:
+            'Picture both sides as equal sides of a scale. Remove or divide '
+            'equal amounts on both sides so the scale remains balanced.',
+      ),
+      Mth1wMethodRoute(
+        label: 'Route 2',
+        approach: 'Inverse-operation chain',
+        explanation:
+            'Read the operations applied to the unknown, then undo them in '
+            'reverse order while recording the same operation on both sides.',
+      ),
+    ],
+    representations: [
+      'A balance diagram with equal changes shown on both sides.',
+      'Aligned algebraic lines that preserve the equality symbol.',
+      'A substitution check comparing the left and right values.',
+    ],
+    compareMethodsPrompt:
+        'Solve the example with a balance drawing and with inverse operations. '
+        'How does each route justify adding 7 to both sides?',
     workedExamplePrompt: 'Solve 4x − 7 = 21.',
     workedExampleSteps: [
       WorkedExampleStep(
@@ -186,6 +283,31 @@ const List<Mth1wFoundationLesson> mth1wFoundationLessons = [
         'm = (y₂ − y₁) ÷ (x₂ − x₁). Keep the subtraction order consistent in '
         'the numerator and denominator. Substitute either point into '
         'y = mx + b to find b, then verify the other point.',
+    methodRoutes: [
+      Mth1wMethodRoute(
+        label: 'Route 1',
+        approach: 'Change-table and graph method',
+        explanation:
+            'Plot the points and record the horizontal and vertical changes in '
+            'a table. Use rise per run for the slope, then extend the pattern '
+            'to the y-axis to identify the intercept.',
+      ),
+      Mth1wMethodRoute(
+        label: 'Route 2',
+        approach: 'Slope-formula and substitution method',
+        explanation:
+            'Calculate the slope from paired differences, substitute either '
+            'point into y = mx + b, and solve algebraically for the intercept.',
+      ),
+    ],
+    representations: [
+      'A coordinate graph showing the two points, rise, run, and intercept.',
+      'A change table with consistent x- and y-differences.',
+      'The symbolic equation y = mx + b checked with both points.',
+    ],
+    compareMethodsPrompt:
+        'Use the graph-table route and the formula route. Which details in '
+        'each representation confirm that the slope is 2 and the intercept is 1?',
     workedExamplePrompt: 'Find the line through (1, 3) and (4, 9).',
     workedExampleSteps: [
       WorkedExampleStep(

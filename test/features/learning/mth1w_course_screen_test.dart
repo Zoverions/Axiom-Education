@@ -91,11 +91,28 @@ void main() {
     expect(find.text('Before you begin'), findsOneWidget);
     expect(find.text('Worked example'), findsOneWidget);
     expect(find.text('Evaluate 18 − 3 × (4 − 6).'), findsOneWidget);
+
+    await tester.ensureVisible(find.text('Compare methods'));
+    await tester.pumpAndSettle();
+    expect(find.text('Compare methods'), findsOneWidget);
+    expect(find.textContaining('not fixed learner types'), findsOneWidget);
+    expect(find.textContaining('Rule-and-line method'), findsOneWidget);
+    expect(find.textContaining('Expression-tree method'), findsOneWidget);
+
+    await tester.ensureVisible(find.text('Represent it more than one way'));
+    await tester.pumpAndSettle();
+    expect(find.text('Represent it more than one way'), findsOneWidget);
+    expect(find.textContaining('expression tree'), findsWidgets);
+
+    await tester.ensureVisible(find.text('Common mistake to avoid'));
+    await tester.pumpAndSettle();
     expect(find.text('Common mistake to avoid'), findsOneWidget);
 
     final practiceButton = find.byKey(
       const ValueKey('mth1w-start-practice-MTH1W-A1'),
     );
+    await tester.ensureVisible(practiceButton);
+    await tester.pumpAndSettle();
     final focusedPracticeButton = tester
         .widgetList<FilledButton>(practiceButton)
         .first;

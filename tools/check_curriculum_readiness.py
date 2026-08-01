@@ -11,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+EXPECTED_INVENTORY_RECORDS_SHA256 = (
+    "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766"
+)
 REQUIRED_GATES = {
     "official-expectation-inventory",
     "educator-source-review",
@@ -19,6 +22,15 @@ REQUIRED_GATES = {
     "assessment-and-cumulative-review",
     "accessible-alternatives",
     "governed-progress-and-educator-workflow",
+}
+EXPECTED_GATE_STATUS = {
+    "official-expectation-inventory": "verified",
+    "educator-source-review": "blocked",
+    "licensing-and-redistribution-review": "blocked",
+    "lesson-and-practice-coverage": "blocked",
+    "assessment-and-cumulative-review": "blocked",
+    "accessible-alternatives": "blocked",
+    "governed-progress-and-educator-workflow": "blocked",
 }
 REQUIRED_SEQUENCE = [
     "complete-and-verify-mth1w",
@@ -83,6 +95,38 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
         "official source SHA-256 is missing or invalid",
     )
 
+    inventory = payload.get("official_inventory")
+    require(isinstance(inventory, dict), "official inventory evidence must be an object")
+    require(
+        inventory.get("path")
+        == "curriculum/official/ontario-mth1w-2021.inventory.json",
+        "official inventory path mismatch",
+    )
+    require(
+        inventory.get("verification_status")
+        == "source-digest-and-layout-verified",
+        "official inventory is not source verified",
+    )
+    require(
+        inventory.get("counts")
+        == {"overall": 14, "specific": 43, "total": 57},
+        "official inventory counts are incorrect",
+    )
+    inventory_sha = inventory.get("records_sha256")
+    require(
+        isinstance(inventory_sha, str)
+        and SHA256_RE.fullmatch(inventory_sha) is not None,
+        "official inventory records digest is missing or invalid",
+    )
+    require(
+        inventory_sha == EXPECTED_INVENTORY_RECORDS_SHA256,
+        "official inventory records digest mismatch",
+    )
+    require(
+        inventory.get("verbatim_expectation_text_included") is False,
+        "readiness inventory must not claim verbatim text redistribution",
+    )
+
     local_snapshot = payload.get("local_snapshot")
     require(isinstance(local_snapshot, dict), "local snapshot must be an object")
     require(local_snapshot.get("record_count") == 11, "local snapshot count changed")
@@ -108,8 +152,8 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
     }
     require(set(gate_status) == REQUIRED_GATES, "curriculum readiness gates are incomplete")
     require(
-        all(status == "blocked" for status in gate_status.values()),
-        "a curriculum gate was opened without the required completion evidence",
+        gate_status == EXPECTED_GATE_STATUS,
+        "a curriculum gate status does not match the available evidence",
     )
     require(
         payload.get("delivery_sequence") == REQUIRED_SEQUENCE,

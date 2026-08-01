@@ -37,8 +37,10 @@ The baseline student experience must include:
 10. dependable offline operation for downloaded courses.
 
 Items 1–6 have an executable first slice for four Grade 9 math foundation
-topics. Their local identifiers are not yet verified official MTH1W bindings;
-the [source audit](../curriculum/MTH1W-SOURCE-AUDIT.md) records known conflicts.
+topics. Each lesson now exposes two valid reasoning routes and multiple
+representations, while keeping one outcome and one quality standard. Their
+local identifiers are not yet verified official MTH1W bindings; the
+[source audit](../curriculum/MTH1W-SOURCE-AUDIT.md) records known conflicts.
 Items 7–9 remain product requirements rather than current capability claims.
 Durable progress remains disabled until the governed learner-record path is
 available.
@@ -49,10 +51,10 @@ The course screen now presents four sequenced lessons:
 
 | Lesson | Derived local topic reference | Conventional instruction |
 |---|---|---|
-| Order of operations with rational numbers | `MTH1W-A1` | goals, prerequisites, explicit operation order, worked example, misconception, reflection, focused practice |
-| Percentages and proportional reasoning | `MTH1W-A2` | goals, prerequisites, percent conversion, worked example, reasonableness check, focused practice |
-| Solving linear equations | `MTH1W-B2` | balance model, inverse operations, substitution check, misconception, focused practice |
-| Equation of a line from two points | `MTH1W-B4` | slope and intercept method, worked example, sign check, focused practice |
+| Order of operations with rational numbers | `MTH1W-A1` | rule-and-line and expression-tree routes; symbolic, tree, and verbal representations |
+| Percentages and proportional reasoning | `MTH1W-A2` | decimal-multiplier and proportion routes; grid, double-number-line, and equation representations |
+| Solving linear equations | `MTH1W-B2` | balance-model and inverse-operation routes; balance, algebraic-line, and substitution representations |
+| Equation of a line from two points | `MTH1W-B4` | change-table and slope-formula routes; graph, table, and equation representations |
 
 The instructional notes are version-controlled, human-authored application
 content. Each lesson is joined at runtime to a topic record loaded from the
@@ -65,6 +67,11 @@ items and offers three as a practical stopping cue. Session results are
 ephemeral and are not grades, mastery claims, or learner records. The preview
 also includes an in-app home-learning routine for two learners sharing a
 device.
+
+The [Global Instructional Methods Baseline](../research/GLOBAL-INSTRUCTIONAL-METHODS.md)
+defines the production lesson contract. Multiple methods are task strategies,
+not fixed learner types; a student may compare them and choose the route that
+makes the current relationship clearest.
 
 ## Product patterns used as inspiration
 
@@ -132,8 +139,10 @@ The full ledger and definition of course completion are in
 
 ### Foundation A — teach and practise
 
-- Replace the preliminary MTH1W snapshot with a reviewed official expectation
-  inventory before expanding the lesson map.
+- Preserve and verify the complete official MTH1W inventory recorded in the
+  [coverage ledger](../curriculum/MTH1W-COVERAGE-LEDGER.md).
+- Complete educator and licensing review before binding lessons to official
+  expectations or redistributing official wording.
 - Complete all `MTH1W` lessons with reviewed instructional content.
 - Add examples, diagrams where materially useful, guided practice, mixed
   review, and independent exercises.
