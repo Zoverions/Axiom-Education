@@ -27,8 +27,8 @@ def test_current_readiness_blocks_complete_course_claims():
         "specific_expectations_planned": 43,
         "student_available_course": False,
     }
-    assert payload["authored_content"]["machine_verified_draft_units"] == 4
-    assert payload["authored_content"]["machine_verified_draft_lessons"] == 15
+    assert payload["authored_content"]["machine_verified_draft_units"] == 5
+    assert payload["authored_content"]["machine_verified_draft_lessons"] == 18
     assert len(payload["required_gates"]) == 7
     statuses = {gate["id"]: gate["status"] for gate in payload["required_gates"]}
     assert statuses["official-expectation-inventory"] == "verified"
@@ -113,7 +113,7 @@ def test_authored_unit_count_drift_is_rejected(tmp_path):
     path = write_mutation(
         tmp_path,
         lambda payload: payload["authored_content"].update(
-            {"machine_verified_draft_units": 5}
+            {"machine_verified_draft_units": 6}
         ),
     )
 

@@ -10,11 +10,14 @@ const unitThreeContentPath =
     'curriculum/content/mth1w/u3-rational-applications.v1.json';
 const unitFourContentPath =
     'curriculum/content/mth1w/u4-algebraic-thinking.v1.json';
+const unitFiveContentPath =
+    'curriculum/content/mth1w/u5-coding-relationships.v1.json';
 
 String source() => File(contentPath).readAsStringSync();
 String unitTwoSource() => File(unitTwoContentPath).readAsStringSync();
 String unitThreeSource() => File(unitThreeContentPath).readAsStringSync();
 String unitFourSource() => File(unitFourContentPath).readAsStringSync();
+String unitFiveSource() => File(unitFiveContentPath).readAsStringSync();
 
 void main() {
   group('MTH1W authored Unit 1 content', () {
@@ -173,6 +176,31 @@ void main() {
           ],
         ),
         hasLength(55),
+      );
+      expect(unit.assessment.quiz.items, hasLength(10));
+      expect(unit.assessment.performanceTask.rubric, hasLength(5));
+    });
+  });
+
+  group('MTH1W authored Unit 5 content', () {
+    test('loads the complete mathematical-coding package', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitFiveSource());
+
+      expect(unit.unitId, 'mth1w-u5');
+      expect(unit.lessons, hasLength(3));
+      expect(
+        unit.lessons.expand((lesson) => lesson.workedExamples),
+        hasLength(6),
+      );
+      expect(
+        unit.lessons.expand(
+          (lesson) => [
+            ...lesson.practiceSets.guided,
+            ...lesson.practiceSets.independent,
+            ...lesson.practiceSets.retrieval,
+          ],
+        ),
+        hasLength(33),
       );
       expect(unit.assessment.quiz.items, hasLength(10));
       expect(unit.assessment.performanceTask.rubric, hasLength(5));

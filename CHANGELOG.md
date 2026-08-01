@@ -26,6 +26,10 @@ claims.
   equivalence proofs, property-labelled simplification, balance and inverse
   equation methods, 10 worked examples, 55 practice items, a 10-item quiz, and
   a design-and-equation performance task.
+- A bundled offline Unit 5 draft covering mathematical variables and
+  conditions, algorithm decomposition, prediction, tracing, debugging, and
+  controlled revision through 6 worked examples, 33 practice items, a 10-item
+  quiz, and a paper-usable algorithm audit task.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

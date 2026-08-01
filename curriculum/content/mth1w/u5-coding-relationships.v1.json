@@ -1,0 +1,398 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u5",
+  "title": "Unit 5: Coding mathematical relationships",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+      "publisher": "Ontario Ministry of Education",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary-mathematics/courses/mth1w",
+      "use": "Official course context for variables, conditions, decomposition, prediction, testing, and revising mathematical code."
+    },
+    {
+      "title": "Our computing pedagogy",
+      "publisher": "Raspberry Pi Foundation",
+      "url": "https://www.raspberrypi.org/teach/pedagogy",
+      "use": "Research-informed teacher background for reading and tracing code before writing, worked modelling, unplugged tasks, and gradual independence."
+    },
+    {
+      "title": "Using PRIMM to teach programming",
+      "publisher": "Raspberry Pi Foundation Training Hub",
+      "url": "https://training-hub.raspberrypi.org/en/courses/using-primm-to-teach-programming",
+      "use": "Teacher background for the Predict, Run, Investigate, Modify, and Make sequence adapted here to readable offline pseudocode."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u5-l1",
+      "title": "Variables and conditions in code",
+      "official_expectation_ids": ["C2.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Use variables and parameters in readable pseudocode to represent algebraic quantities and relationships.",
+        "Trace assignment, comparison, and conditional branches by hand before checking an output.",
+        "Translate an equation or inequality between algebraic notation and bounded pseudocode."
+      ],
+      "success_criteria": [
+        "I distinguish assignment from mathematical equality and record each variable update in order.",
+        "I evaluate a condition as true or false before selecting exactly one branch.",
+        "I test boundary values and explain how the code represents the intended equation or inequality."
+      ],
+      "vocabulary": [
+        {"term": "variable", "meaning": "a named storage location whose current value may be read or updated"},
+        {"term": "parameter", "meaning": "a named input controlling how an algorithm behaves for a particular case"},
+        {"term": "assignment", "meaning": "an instruction that stores a computed value in a named variable"},
+        {"term": "condition", "meaning": "a comparison evaluated as true or false to control which instructions run"},
+        {"term": "branch", "meaning": "one of the alternative instruction paths selected by a condition"}
+      ],
+      "why_it_matters": "Variables and conditions let a mathematical rule respond to different inputs, from checking a budget to classifying measurements. Hand tracing makes the relationship visible without requiring a device, programming language, AI system, or trust in an unexplained output.",
+      "direct_instruction": [
+        {"heading": "Read assignment in time", "body": "In pseudocode, SET total TO total + 3 means evaluate the right side using the old total, then store the result as the new total. It is not the impossible algebraic equation total = total + 3. A trace table records the value after each line so time and state remain visible."},
+        {"heading": "Treat conditions as questions", "body": "A condition such as score >= 70 asks whether the current score is at least 70. Evaluate the comparison first, including equality at the boundary, then follow the true or false branch. Do not run both branches unless the pseudocode explicitly contains two separate conditions."},
+        {"heading": "Translate relationships both ways", "body": "Algebra can describe a value directly, such as cost = 5h + 12, while pseudocode can compute the same output with SET cost TO 5 * h + 12. An inequality becomes a condition used to select a message or action. Define units and test values below, at, and above a boundary."}
+      ],
+      "method_routes": [
+        {
+          "id": "hand-trace-table",
+          "title": "Hand trace-table route",
+          "steps": ["List every variable as a column and record the supplied input values.", "Read one pseudocode line at a time without skipping ahead.", "Evaluate the right side or condition using current values.", "Record an updated value or selected branch in a new row.", "Compare the final output with an independent algebraic calculation."],
+          "when_useful": "Use this route to predict outputs, expose assignment order, and debug branches without running any software.",
+          "check": "Every executed line must have a trace row, while lines in an unselected branch must not change the state."
+        },
+        {
+          "id": "algebra-to-pseudocode",
+          "title": "Algebra-to-pseudocode route",
+          "steps": ["Define each input, variable, parameter, unit, and permitted range.", "Write the algebraic equation or inequality that expresses the relationship.", "Translate operations into a readable assignment or condition.", "Add explicit true and false outcomes when a condition controls a branch.", "Test one ordinary input and the exact boundary value."],
+          "when_useful": "Use this route when turning a known formula, equation, or constraint into readable and testable instructions.",
+          "check": "For every tested input, algebra and pseudocode must produce the same output and use the same boundary convention."
+        }
+      ],
+      "representations": [
+        {"id": "line-state-trace", "label": "Line-and-state trace table", "description": "Rows show the executed line, current variable values, condition result, chosen branch, and any printed output in sequence.", "text_alternative": "Read each executed line followed by all current values, the true or false decision, and the output before moving on."},
+        {"id": "algebra-pseudocode-pair", "label": "Algebra and pseudocode pair", "description": "An equation or inequality is aligned with variable definitions, a readable instruction, and below-boundary, boundary, and above-boundary tests.", "text_alternative": "State the algebraic relationship, then read the matching pseudocode and each input-output boundary test in order."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u5-l1-we1",
+          "prompt": "Trace: SET x TO 4; SET y TO 3*x + 2; IF y >= 14 THEN PRINT 'limit' ELSE PRINT y.",
+          "method_route_id": "hand-trace-table",
+          "steps": [
+            {"label": "Store x", "explanation": "After the first line x is 4 and y has not yet been assigned."},
+            {"label": "Compute and store y", "explanation": "Use current x: 3(4) + 2 = 14, so y becomes 14."},
+            {"label": "Choose the branch", "explanation": "The condition 14 >= 14 is true because equality is included, so the program prints limit."}
+          ],
+          "answer": "The output is 'limit', with final state x = 4 and y = 14.",
+          "verification": "The paired algebraic rule y = 3x + 2 gives 14 at x = 4, and the boundary inequality includes 14."
+        },
+        {
+          "id": "mth1w-u5-l1-we2",
+          "prompt": "Write pseudocode for a $12 fixed fee plus $5 per hour h, printing 'over budget' when cost exceeds $42.",
+          "method_route_id": "algebra-to-pseudocode",
+          "steps": [
+            {"label": "Define the algebra", "explanation": "Let h be non-negative hours and cost = 5h + 12 dollars."},
+            {"label": "Translate", "explanation": "Use SET cost TO 5 * h + 12, then IF cost > 42 PRINT 'over budget' ELSE PRINT cost."},
+            {"label": "Test the boundary", "explanation": "At h = 6, cost is exactly 42 and the condition is false; at h = 7, cost is 47 and the condition is true."}
+          ],
+          "answer": "INPUT h; SET cost TO 5*h + 12; IF cost > 42 THEN PRINT 'over budget' ELSE PRINT cost.",
+          "verification": "The tests h = 6 and h = 7 distinguish greater than from greater than or equal and match the equation cost = 5h + 12."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "Assignment and algebraic equality always mean the same thing.", "correction": "Assignment updates stored state over time, while an algebraic equal sign states that two expressions have the same value."},
+        {"claim": "Both IF and ELSE branches run in order.", "correction": "A single IF-ELSE selects exactly one branch according to whether the condition is true or false."},
+        {"claim": "Testing one ordinary value is enough for an inequality condition.", "correction": "Boundary errors require tests below, exactly at, and above the threshold, including the intended equality rule."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u5-l1-g1", "prompt": "Trace SET a TO 5; SET b TO 2*a - 1. What is b?", "response": {"type": "short_text", "accepted_answers": ["9", "b=9", "b = 9"], "case_sensitive": false}, "rationale": "Using the stored value a = 5 gives b = 2(5) - 1 = 9."},
+          {"id": "mth1w-u5-l1-g2", "prompt": "For IF score >= 80, which input follows the true branch?", "response": {"type": "selected", "options": ["80", "79", "0", "-80"], "correct_answer": "80"}, "rationale": "The greater-than-or-equal comparison includes the exact boundary value 80."},
+          {"id": "mth1w-u5-l1-g3", "prompt": "Explain the difference between SET x TO x + 2 and the equation x = x + 2.", "response": {"type": "constructed", "criteria": ["describes old and new state", "distinguishes assignment from equality", "gives a trace example"], "sample_response": "SET x TO x + 2 reads the old stored x, adds 2, and replaces x with the new value; if x was 3, it becomes 5. The algebraic equation x = x + 2 has no real solution because equal values cannot differ by 2.", "educator_review_required": true}, "rationale": "The response must distinguish a time-ordered state update from a simultaneous equality statement."}
+        ],
+        "independent": [
+          {"id": "mth1w-u5-l1-i1", "prompt": "Trace SET x TO -2; SET x TO 3*x + 1. What is final x?", "response": {"type": "short_text", "accepted_answers": ["-5", "x=-5", "x = -5"], "case_sensitive": false}, "rationale": "The update uses the old x = -2, so the new x is 3(-2) + 1 = -5."},
+          {"id": "mth1w-u5-l1-i2", "prompt": "Which pseudocode matches y = 4n - 7?", "response": {"type": "selected", "options": ["SET y TO 4*n - 7", "SET y TO 4*(n - 7)", "SET n TO 4*y - 7", "IF y = 4 THEN n - 7"], "correct_answer": "SET y TO 4*n - 7"}, "rationale": "The assignment preserves the coefficient, variable, subtraction, and output role of the equation."},
+          {"id": "mth1w-u5-l1-i3", "prompt": "Which condition means temperature is below but not equal to zero?", "response": {"type": "selected", "options": ["temperature < 0", "temperature <= 0", "temperature > 0", "temperature = 0"], "correct_answer": "temperature < 0"}, "rationale": "The strict less-than comparison excludes the boundary zero."},
+          {"id": "mth1w-u5-l1-i4", "prompt": "A branch uses IF amount <= 25. Which three tests best check its boundary?", "response": {"type": "selected", "options": ["24, 25, 26", "1, 2, 3", "20, 21, 22", "25, 25, 25"], "correct_answer": "24, 25, 26"}, "rationale": "Values immediately below, at, and above the threshold expose errors in the comparison operator."},
+          {"id": "mth1w-u5-l1-i5", "prompt": "Write and test pseudocode for fare = 2.5d + 4, printing 'long trip' when d is at least 10 km.", "response": {"type": "constructed", "criteria": ["defines distance and fare units", "assigns 2.5*d + 4", "uses d >= 10", "includes both branches or output", "tests 9, 10, and 11"], "sample_response": "INPUT non-negative distance d in kilometres; SET fare TO 2.5*d + 4 dollars; IF d >= 10 THEN PRINT 'long trip' ELSE PRINT fare. Tests d = 9, 10, 11 produce fares 26.5, 29, 31.5 and select false, true, true.", "educator_review_required": true}, "rationale": "A complete translation preserves the formula, parameter meaning, inclusive condition, units, and boundary behaviour."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u5-l1-r1", "prompt": "What does a condition evaluate to before a branch is chosen?", "response": {"type": "selected", "options": ["True or false", "A variable name", "Both branches", "A source citation"], "correct_answer": "True or false"}, "rationale": "A condition is a comparison whose Boolean result selects the branch."},
+          {"id": "mth1w-u5-l1-r2", "prompt": "Trace SET p TO 3; SET q TO p*p. What is q?", "response": {"type": "short_text", "accepted_answers": ["9", "q=9", "q = 9"], "case_sensitive": false}, "rationale": "The stored p is 3, so q receives 3 times 3, which is 9."},
+          {"id": "mth1w-u5-l1-r3", "prompt": "Explain why the exact boundary must be tested for <= or >=.", "response": {"type": "constructed", "criteria": ["mentions inclusion of equality", "describes an off-by-one or boundary error", "gives a concrete test"], "sample_response": "The symbols <= and >= include equality, and a mistaken strict comparison may behave correctly for every non-boundary test. Testing score = 70 distinguishes score >= 70 from score > 70 because only the first is true there.", "educator_review_required": true}, "rationale": "The boundary is the unique input that distinguishes inclusive from strict comparison operators."}
+        ]
+      },
+      "reflection_prompt": "Which trace-table entry made the relationship between algebraic value and stored program state clearest, and which boundary test mattered most?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "All pseudocode is plain ordered text, and trace tables can be read line by line with every current value and branch decision stated.",
+        "response_options": ["typed or handwritten trace table", "spoken line-by-line execution", "physical variable cards and true-false branch cards"]
+      }
+    },
+    {
+      "id": "mth1w-u5-l2",
+      "title": "Decompose a mathematical process",
+      "official_expectation_ids": ["C2.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Break a mathematical situation into ordered input, processing, decision, and output steps.",
+        "Represent the same algorithm with a flowchart route and a worked-example extraction route.",
+        "Test a decomposed process with ordinary, boundary, and invalid or exceptional inputs."
+      ],
+      "success_criteria": [
+        "I name every required input, unit, output, and constraint before choosing operations.",
+        "I order steps so each value is defined before another step uses it.",
+        "I use edge cases to find missing decisions, division-by-zero risks, or ambiguous outputs."
+      ],
+      "vocabulary": [
+        {"term": "algorithm", "meaning": "a finite ordered set of unambiguous steps for completing a task or solving a problem"},
+        {"term": "decomposition", "meaning": "breaking a complex process into smaller steps with clear responsibilities"},
+        {"term": "input", "meaning": "a supplied value that the algorithm reads before or during processing"},
+        {"term": "output", "meaning": "a value, message, or decision produced by the completed algorithm"},
+        {"term": "edge case", "meaning": "an unusual, limiting, or boundary input used to test whether the process remains valid"}
+      ],
+      "why_it_matters": "Decomposition turns a vague problem into inspectable steps that can be followed by a person, spreadsheet, calculator, or program. It also makes assumptions and failure cases visible before automation hides them behind a polished output.",
+      "direct_instruction": [
+        {"heading": "Start with a contract", "body": "Write what the process receives, what it must produce, the units, and any forbidden or constrained inputs. A formula alone is not a complete algorithm if the learner does not know where its values come from or what to do when an input is invalid."},
+        {"heading": "Sequence before selection", "body": "Place calculations in dependency order: a value must be computed before it is used. Add a decision only where different valid cases need different actions, such as rejecting a zero denominator or choosing a discount bracket. Every branch should eventually reach a clear output or stop message."},
+        {"heading": "Extract and test", "body": "A worked example can be stripped into reusable steps by replacing its numbers with named inputs. Test the extracted algorithm on the original example, a different ordinary case, a boundary, and an edge case. A failure identifies a missing assumption or decision to revise."}
+      ],
+      "method_routes": [
+        {
+          "id": "flowchart-decomposition",
+          "title": "Flowchart decomposition route",
+          "steps": ["Write start, named inputs with units, and the required output.", "Add processing steps in dependency order using one action per box.", "Use a yes-no decision only when the next action genuinely depends on a condition.", "Connect every branch to an output, error message, or later shared step.", "Trace at least one path for an ordinary case and every path created by decisions."],
+          "when_useful": "Use this route when a process contains decisions, repeated structure, or several paths whose completeness must be visible.",
+          "check": "No value may be used before definition, and every possible decision outcome must lead to a declared result or safe stop."
+        },
+        {
+          "id": "example-to-algorithm",
+          "title": "Worked-example extraction route",
+          "steps": ["Solve one representative problem with all quantities and units shown.", "Replace each specific number with a descriptive input or parameter name.", "Rewrite the calculation as short ordered pseudocode instructions.", "State assumptions and insert checks for invalid or boundary inputs.", "Retest the original example and two contrasting cases."],
+          "when_useful": "Use this route when learners understand a concrete calculation and need to generalize it into a reusable process.",
+          "check": "The generalized steps must reproduce the original answer and remain correct for the contrasting valid cases."
+        }
+      ],
+      "representations": [
+        {"id": "text-labelled-flowchart", "label": "Text-labelled flowchart", "description": "Start, input, process, decision, output, and safe-stop nodes are connected with numbered arrows and explicit yes-no labels.", "text_alternative": "Read numbered nodes and arrows in order, stating each decision question and following the named yes or no destination."},
+        {"id": "example-algorithm-tests", "label": "Example, algorithm, and test table", "description": "Columns align the concrete worked line, generalized pseudocode step, required input, produced value, and contrasting test results.", "text_alternative": "For each row, read the worked calculation, generalized instruction, and output for the original and contrasting tests."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u5-l2-we1",
+          "prompt": "Design an algorithm that converts a part and whole into a percentage while handling an invalid zero whole.",
+          "method_route_id": "flowchart-decomposition",
+          "steps": [
+            {"label": "Define the contract", "explanation": "Inputs are part and whole in the same unit; output is a percentage or an invalid-whole message."},
+            {"label": "Add the decision", "explanation": "If whole = 0, stop and print invalid whole because division by zero is undefined."},
+            {"label": "Process and test", "explanation": "Otherwise set percent to 100*part/whole and print it; tests (18, 24) and (0, 0) produce 75% and the safe message."}
+          ],
+          "answer": "INPUT part, whole; IF whole = 0 THEN PRINT 'invalid whole' ELSE SET percent TO 100*part/whole; PRINT percent.",
+          "verification": "For part 18 and whole 24, the algorithm gives 75, matching 18/24 = 0.75; the zero-whole path avoids undefined division."
+        },
+        {
+          "id": "mth1w-u5-l2-we2",
+          "prompt": "Generalize a worked sale calculation into an algorithm for original price, discount percent, and tax percent.",
+          "method_route_id": "example-to-algorithm",
+          "steps": [
+            {"label": "Extract quantities", "explanation": "Replace the example's dollar amount and rates with price, discountRate, and taxRate, each with stated units or decimal form."},
+            {"label": "Preserve order", "explanation": "Compute discount, then subtotal after discount, then tax on that subtotal, and finally the total."},
+            {"label": "Test cases", "explanation": "For price 100, discount 20%, tax 10%, the total is 88; for zero discount it becomes 110, showing the steps adapt."}
+          ],
+          "answer": "SET subtotal TO price*(1 - discountRate); SET tax TO subtotal*taxRate; SET total TO subtotal + tax; PRINT total.",
+          "verification": "The $100 test gives subtotal 80, tax 8, and total 88, matching a direct calculation with discount before tax."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A list of correct operations works in any order.", "correction": "Later steps depend on earlier values, and changing order can change the mathematical base or use an undefined quantity."},
+        {"claim": "Edge cases are optional once an ordinary example works.", "correction": "Boundary and invalid inputs expose missing branches, undefined operations, and assumptions that ordinary values do not reveal."},
+        {"claim": "A flowchart decision may leave one branch unconnected.", "correction": "Every possible outcome must reach a defined next step, output, or safe stop for the algorithm to be complete."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u5-l2-g1", "prompt": "Which value must be computed before tax = subtotal * rate?", "response": {"type": "selected", "options": ["subtotal", "final output only", "the print message", "a second tax"], "correct_answer": "subtotal"}, "rationale": "The tax step uses subtotal, so dependency order requires subtotal to exist first."},
+          {"id": "mth1w-u5-l2-g2", "prompt": "Which input needs a safe check before computing distance/time?", "response": {"type": "selected", "options": ["time = 0", "distance = 10", "time = 2", "distance = 0"], "correct_answer": "time = 0"}, "rationale": "A zero denominator makes the rate undefined, so the algorithm must branch before division."},
+          {"id": "mth1w-u5-l2-g3", "prompt": "Explain why discount must be applied before tax when the policy says tax is charged on the sale price.", "response": {"type": "constructed", "criteria": ["identifies the sale-price dependency", "states the correct order", "shows a numerical contrast"], "sample_response": "The sale price must be computed first because it is the input base for tax. On $100 with 20% discount and 10% tax, discount then tax gives 80 + 8 = 88; taxing the original first would use the wrong policy base.", "educator_review_required": true}, "rationale": "The step order follows the dependency stated in the policy and changes which quantity the percentage acts on."}
+        ],
+        "independent": [
+          {"id": "mth1w-u5-l2-i1", "prompt": "Which sequence correctly computes the mean of three inputs a, b, c?", "response": {"type": "selected", "options": ["sum = a+b+c; mean = sum/3", "mean = a+b+c; sum = mean/3", "mean = a+b; mean = c/3", "sum = 3; mean = sum/(a+b+c)"], "correct_answer": "sum = a+b+c; mean = sum/3"}, "rationale": "The total must be formed before it is divided by the count of three values."},
+          {"id": "mth1w-u5-l2-i2", "prompt": "For percentage = 100*part/whole, which test is an edge case?", "response": {"type": "selected", "options": ["part = 2, whole = 0", "part = 2, whole = 5", "part = 5, whole = 10", "part = 3, whole = 4"], "correct_answer": "part = 2, whole = 0"}, "rationale": "A zero whole would cause division by zero and needs a safe branch."},
+          {"id": "mth1w-u5-l2-i3", "prompt": "An algorithm sets subtotal = price - discount, then total = subtotal + tax. What must tax depend on if tax is a percentage of subtotal?", "response": {"type": "selected", "options": ["subtotal and tax rate", "original price only", "discount only", "the final total"], "correct_answer": "subtotal and tax rate"}, "rationale": "Tax is computed as subtotal multiplied by the tax rate before it can be added to subtotal."},
+          {"id": "mth1w-u5-l2-i4", "prompt": "How many output paths must a yes-no decision connect to at minimum?", "response": {"type": "short_text", "accepted_answers": ["2", "two", "two paths"], "case_sensitive": false}, "rationale": "Both the yes and no outcomes need defined destinations, even if they later rejoin."},
+          {"id": "mth1w-u5-l2-i5", "prompt": "Design and test an algorithm for unit price = total cost / quantity, including invalid and boundary cases.", "response": {"type": "constructed", "criteria": ["defines cost and quantity units", "checks quantity greater than zero", "computes unit price", "tests an ordinary case", "tests zero and a boundary valid case"], "sample_response": "INPUT totalCost in dollars and quantity in items. IF quantity <= 0 PRINT 'invalid quantity'; ELSE SET unitPrice TO totalCost/quantity and PRINT unitPrice dollars per item. Tests (12, 3), (12, 0), and (0, 1) give 4, invalid, and 0.", "educator_review_required": true}, "rationale": "The algorithm makes the division contract, safe guard, units, and contrasting paths explicit."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u5-l2-r1", "prompt": "What is decomposition?", "response": {"type": "selected", "options": ["Breaking a process into smaller ordered parts", "Running every branch", "Deleting all constraints", "Changing units without recording them"], "correct_answer": "Breaking a process into smaller ordered parts"}, "rationale": "Decomposition assigns clear roles and order to manageable steps within a larger process."},
+          {"id": "mth1w-u5-l2-r2", "prompt": "Which comes first when computing speed from known distance and time?", "response": {"type": "selected", "options": ["Check time is non-zero", "Divide by time immediately", "Print speed before reading inputs", "Change distance to speed"], "correct_answer": "Check time is non-zero"}, "rationale": "The safety condition must be evaluated before any division that could use a zero denominator."},
+          {"id": "mth1w-u5-l2-r3", "prompt": "Explain why an algorithm needs units in its input-output contract.", "response": {"type": "constructed", "criteria": ["mentions interpretation", "identifies incompatible-unit risk", "gives an input-output example"], "sample_response": "Units define what each number represents and prevent incompatible quantities from being combined. A speed algorithm using kilometres and hours produces kilometres per hour; entering minutes without conversion would create a numerically plausible but mislabelled result.", "educator_review_required": true}, "rationale": "A reusable mathematical process is incomplete if its numeric inputs and outputs lack compatible meanings and units."}
+        ]
+      },
+      "reflection_prompt": "Which missing dependency or edge case was hardest to notice before drawing the process, and how did the second representation expose it?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every flowchart has numbered nodes and explicit yes-no destinations in linear text, with no meaning carried only by shape or arrow position.",
+        "response_options": ["typed or handwritten numbered algorithm", "spoken input-process-output explanation", "physical step and branch cards arranged in order"]
+      }
+    },
+    {
+      "id": "mth1w-u5-l3",
+      "title": "Predict, test, and revise code",
+      "official_expectation_ids": ["C2.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Predict the output of readable mathematical pseudocode before testing it.",
+        "Locate the first divergence between an intended relationship and an incorrect trace or algorithm.",
+        "Revise a parameter, condition, or operation and justify the new mathematical outcome."
+      ],
+      "success_criteria": [
+        "I commit to a line-by-line prediction and identify an invariant or boundary before checking.",
+        "I compare expected and observed values to locate the earliest causal error rather than only the final mismatch.",
+        "I change one purposeful feature at a time and retest cases that distinguish old from new behaviour."
+      ],
+      "vocabulary": [
+        {"term": "prediction", "meaning": "a reasoned statement of expected state or output made before a test is checked"},
+        {"term": "invariant", "meaning": "a relationship or property expected to remain true throughout specified algorithm steps"},
+        {"term": "debug", "meaning": "locate, explain, and correct the cause of behaviour that differs from the intended result"},
+        {"term": "revision", "meaning": "a purposeful change to code, parameter, or constraint followed by renewed testing"},
+        {"term": "test case", "meaning": "a chosen input with an expected result used to evaluate algorithm behaviour"}
+      ],
+      "why_it_matters": "Prediction, tracing, and controlled revision build mathematical agency: a learner can explain why a process works rather than repeatedly running guesses. The same habits support formulas, spreadsheets, simulations, data checks, and safe decision systems even when no code runner is available.",
+      "direct_instruction": [
+        {"heading": "Predict before checking", "body": "Read the input, variables, and condition, then trace every executed line on paper. State the expected output and one relationship that should remain true. Checking afterward becomes evidence about the reasoning instead of a substitute for reasoning."},
+        {"heading": "Find the first divergence", "body": "Compare an expected trace with the observed or supplied trace row by row. The final wrong output may be far from its cause; the first row that differs identifies the line, current inputs, and assumption to investigate. Explain the mathematical error before changing text."},
+        {"heading": "Revise one feature and retest", "body": "Change a parameter to explore a related situation, a condition to alter a boundary, or an operation to correct the relationship. Predict which cases should change and which should remain invariant, then rerun the original, boundary, and distinguishing tests."}
+      ],
+      "method_routes": [
+        {
+          "id": "trace-invariant-debug",
+          "title": "Line trace and invariant route",
+          "steps": ["Write the intended mathematical relationship and a property that should remain true.", "Predict each executed line and record state in a trace table.", "Compare with the supplied or checked trace one row at a time.", "Mark the first divergence and explain its mathematical cause.", "Correct the line and retest the original plus a boundary case."],
+          "when_useful": "Use this route when a result is wrong and the earliest causal error must be separated from later consequences.",
+          "check": "The correction must restore the invariant or intended relationship for all selected tests, not just the first example."
+        },
+        {
+          "id": "input-output-revision",
+          "title": "Input-output pattern revision route",
+          "steps": ["Build an input-output table for the original algorithm using contrasting tests.", "Describe the mathematical pattern and boundary shown by the table.", "Select one parameter, condition, or operation to revise for a stated new situation.", "Predict the new table before evaluating the revised steps.", "Compare old and new outputs and justify every changed or unchanged row."],
+          "when_useful": "Use this route when adapting working code to a related formula, rate, threshold, or constraint and explaining the effect globally.",
+          "check": "A revision is accepted only when the new input-output pattern matches the stated relationship and all boundary expectations."
+        }
+      ],
+      "representations": [
+        {"id": "expected-observed-trace", "label": "Expected-observed trace", "description": "Parallel rows display predicted state, observed state, equality or divergence, and the suspected cause for every executed line.", "text_alternative": "Read the line number, expected values, observed values, and match status, stopping at the first stated difference."},
+        {"id": "code-diff-output-table", "label": "Revision diff and output table", "description": "The original and revised line are shown beside old and new outputs for ordinary, boundary, and distinguishing inputs.", "text_alternative": "State the one changed instruction, then read each input with its old output, new output, and reason for any difference."}
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u5-l3-we1",
+          "prompt": "Debug pseudocode intended to compute y = 2x + 5: SET y TO 2*(x + 5). Use x = 0 and x = 3.",
+          "method_route_id": "trace-invariant-debug",
+          "steps": [
+            {"label": "Predict intended values", "explanation": "The equation gives y = 5 when x = 0 and y = 11 when x = 3."},
+            {"label": "Trace observed values", "explanation": "The code gives 10 and 16 because the factor 2 incorrectly multiplies the constant 5."},
+            {"label": "Correct and retest", "explanation": "Revise the line to SET y TO 2*x + 5; both tests now match the intended relationship."}
+          ],
+          "answer": "Replace SET y TO 2*(x + 5) with SET y TO 2*x + 5.",
+          "verification": "The corrected line produces 5 and 11 at x = 0 and x = 3, and the constant difference for each x-step is 2."
+        },
+        {
+          "id": "mth1w-u5-l3-we2",
+          "prompt": "A rule prints 'eligible' when points >= 100. Revise it for a new threshold of more than 120 and compare boundary outputs.",
+          "method_route_id": "input-output-revision",
+          "steps": [
+            {"label": "Describe old behaviour", "explanation": "Inputs 99, 100, and 120 produce false, true, and true under points >= 100."},
+            {"label": "Revise one condition", "explanation": "Change only the condition to points > 120, which raises the threshold and excludes equality."},
+            {"label": "Predict and test", "explanation": "Inputs 100, 120, and 121 now produce false, false, and true, distinguishing the new boundary."}
+          ],
+          "answer": "Use IF points > 120 THEN PRINT 'eligible' ELSE PRINT 'not eligible'.",
+          "verification": "The new condition is false at 120 and true at 121, exactly matching the phrase more than 120."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "Running code repeatedly is the same as debugging.", "correction": "Debugging requires a prediction, evidence about the first divergence, a causal explanation, a purposeful correction, and retesting."},
+        {"claim": "Only the final incorrect line can be the cause.", "correction": "Later values inherit earlier state, so the first divergent trace row usually identifies the causal line."},
+        {"claim": "A revision that fixes one test is complete.", "correction": "The change must also preserve intended ordinary cases and handle boundary and edge cases according to the revised relationship."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u5-l3-g1", "prompt": "Intended y = 3x - 2; code uses y = 3*(x - 2). At x = 0, what does the code output?", "response": {"type": "short_text", "accepted_answers": ["-6", "y=-6", "y = -6"], "case_sensitive": false}, "rationale": "The code evaluates 3(0 - 2) = -6, while the intended formula would give -2."},
+          {"id": "mth1w-u5-l3-g2", "prompt": "Which test best distinguishes amount > 50 from amount >= 50?", "response": {"type": "selected", "options": ["amount = 50", "amount = 49", "amount = 51", "amount = 100"], "correct_answer": "amount = 50"}, "rationale": "Only at the exact boundary do the strict and inclusive comparisons produce different results."},
+          {"id": "mth1w-u5-l3-g3", "prompt": "Explain how to locate the first divergence in two trace tables.", "response": {"type": "constructed", "criteria": ["compares rows in order", "stops at first mismatch", "links the mismatch to a line and current inputs", "distinguishes cause from later effects"], "sample_response": "Compare the expected and observed states after line 1, then line 2, and continue only while they match. At the first mismatch, inspect that executed line using the prior matching state; later mismatches are consequences until evidence shows otherwise.", "educator_review_required": true}, "rationale": "Row-order comparison preserves causal sequence and prevents later corrupted values from being mistaken for the original error."}
+        ],
+        "independent": [
+          {"id": "mth1w-u5-l3-i1", "prompt": "Code intended for cost = 4h + 10 uses cost = 4*(h + 10). Which corrected line is valid?", "response": {"type": "selected", "options": ["cost = 4*h + 10", "cost = 4*h + 40", "cost = h + 14", "cost = 10*h + 4"], "correct_answer": "cost = 4*h + 10"}, "rationale": "The hourly coefficient applies to h only, and the fixed fee remains 10."},
+          {"id": "mth1w-u5-l3-i2", "prompt": "A parameter rate changes from 2.5 to 3 while output = rate*d + 4. How much does output increase when d = 8?", "response": {"type": "short_text", "accepted_answers": ["4", "$4", "4 dollars"], "case_sensitive": false}, "rationale": "The rate increases by 0.5 per unit, so at d = 8 the output increases by 0.5(8) = 4."},
+          {"id": "mth1w-u5-l3-i3", "prompt": "Which tests should be rerun after changing limit >= 20 to limit > 20?", "response": {"type": "selected", "options": ["19, 20, 21", "1, 2, 3", "20 only", "100, 200, 300"], "correct_answer": "19, 20, 21"}, "rationale": "Below, at, and above the boundary confirm what stays the same and what changes under the new strict comparison."},
+          {"id": "mth1w-u5-l3-i4", "prompt": "The expected trace first differs from observed after line 3. Which line should be inspected first?", "response": {"type": "selected", "options": ["Line 3", "The final line only", "Line 1 even though it matched", "Every line in random order"], "correct_answer": "Line 3"}, "rationale": "The prior state matched, so line 3 is the earliest instruction capable of causing the divergence."},
+          {"id": "mth1w-u5-l3-i5", "prompt": "Revise a >= 70 pass condition to represent a strict score above 75, then design distinguishing tests and explain the outcome.", "response": {"type": "constructed", "criteria": ["changes condition to score > 75", "tests below, at, and above 75", "predicts outputs", "identifies changed old cases", "states why equality is excluded"], "sample_response": "Use IF score > 75. Tests 74, 75, and 76 produce false, false, and true. Under the old score >= 70 condition all three passed, so these cases expose both the raised threshold and the exclusion of equality at 75.", "educator_review_required": true}, "rationale": "A controlled revision is justified by tests that separate the old boundary from the new strict boundary."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u5-l3-r1", "prompt": "What should happen before code is checked or run in this lesson sequence?", "response": {"type": "selected", "options": ["Predict and trace", "Delete constraints", "Change several lines", "Trust the final output"], "correct_answer": "Predict and trace"}, "rationale": "Prediction and tracing make the learner's model visible so checked behaviour can confirm or challenge it."},
+          {"id": "mth1w-u5-l3-r2", "prompt": "For y = 2x + 1, what output is expected at x = -3?", "response": {"type": "short_text", "accepted_answers": ["-5", "y=-5", "y = -5"], "case_sensitive": false}, "rationale": "Substitution gives y = 2(-3) + 1 = -6 + 1 = -5."},
+          {"id": "mth1w-u5-l3-r3", "prompt": "Explain why changing several lines at once weakens a debugging conclusion.", "response": {"type": "constructed", "criteria": ["mentions causal attribution", "states one-change-at-a-time control", "requires retesting"], "sample_response": "If several lines change together, a successful output does not show which change fixed the cause and a new failure cannot be assigned clearly. Changing one purposeful feature at a time and rerunning the same tests preserves causal evidence.", "educator_review_required": true}, "rationale": "Controlled revision isolates the effect of a change and makes the debugging explanation reproducible."}
+        ]
+      },
+      "reflection_prompt": "How did making a prediction before checking change the way you interpreted a mismatch, and which test best separated the old and revised rule?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Expected and observed traces, code changes, and output comparisons are all stated in ordered text with line numbers and explicit match status.",
+        "response_options": ["typed or handwritten debug log", "spoken prediction-and-divergence report", "physical state cards revised one line at a time"]
+      }
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u5-quiz",
+      "title": "Unit 5 mathematical coding check",
+      "estimated_minutes": 35,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {"id": "mth1w-u5-q1", "official_expectation_ids": ["C2.1"], "prompt": "Trace SET x TO 3; SET y TO 4*x - 2. What is y?", "response": {"type": "short_text", "accepted_answers": ["10", "y=10", "y = 10"], "case_sensitive": false}, "rationale": "Using x = 3 gives y = 4(3) - 2 = 10."},
+        {"id": "mth1w-u5-q2", "official_expectation_ids": ["C2.1"], "prompt": "Which condition includes the exact threshold 25?", "response": {"type": "selected", "options": ["value >= 25", "value > 25", "value < 25", "value != 25"], "correct_answer": "value >= 25"}, "rationale": "Greater than or equal includes values above 25 and the boundary value itself."},
+        {"id": "mth1w-u5-q3", "official_expectation_ids": ["C2.1"], "prompt": "Explain why SET n TO n + 1 is valid pseudocode but n = n + 1 has no real algebraic solution.", "response": {"type": "constructed", "criteria": ["distinguishes assignment and equality", "uses old and new state", "explains algebraic contradiction"], "sample_response": "The assignment reads an old stored n and replaces it with a value one larger, so state changes over time. Algebraic equality compares simultaneous values; subtracting n from both sides of n = n + 1 gives 0 = 1, which is false.", "educator_review_required": true}, "rationale": "Coding assignment is a time-ordered update, while algebraic equality asserts an unchanging relationship between expressions."},
+        {"id": "mth1w-u5-q4", "official_expectation_ids": ["C2.2"], "prompt": "What check must occur before unitRate = total/quantity?", "response": {"type": "selected", "options": ["quantity is greater than zero", "total equals quantity", "unitRate is printed already", "quantity is always negative"], "correct_answer": "quantity is greater than zero"}, "rationale": "A positive-quantity check prevents division by zero or a contextually invalid item count."},
+        {"id": "mth1w-u5-q5", "official_expectation_ids": ["C2.2"], "prompt": "Place the sale steps in order: compute tax on subtotal; compute subtotal after discount; compute total.", "response": {"type": "selected", "options": ["subtotal, tax, total", "tax, subtotal, total", "total, subtotal, tax", "subtotal, total, tax"], "correct_answer": "subtotal, tax, total"}, "rationale": "Tax depends on subtotal and total depends on both, so dependency order is subtotal, tax, then total."},
+        {"id": "mth1w-u5-q6", "official_expectation_ids": ["C2.2"], "prompt": "Design a safe algorithm for speed = distance/time and give one ordinary and one invalid test.", "response": {"type": "constructed", "criteria": ["defines input units", "checks time is non-zero or positive", "computes and labels speed", "includes ordinary test", "includes invalid zero-time test"], "sample_response": "INPUT distance in kilometres and time in hours. IF time <= 0 PRINT 'invalid time'; ELSE SET speed TO distance/time and PRINT speed in km/h. Tests (120, 2) and (120, 0) produce 60 km/h and the safe invalid message.", "educator_review_required": true}, "rationale": "A complete algorithm states units, guards the denominator, calculates the relationship, and tests both execution paths."},
+        {"id": "mth1w-u5-q7", "official_expectation_ids": ["C2.3"], "prompt": "Intended y = 5x + 2; code uses y = 5*(x + 2). What does the code output at x = 0?", "response": {"type": "short_text", "accepted_answers": ["10", "y=10", "y = 10"], "case_sensitive": false}, "rationale": "The incorrect code multiplies both x and 2 by 5, producing 5(0 + 2) = 10 rather than 2."},
+        {"id": "mth1w-u5-q8", "official_expectation_ids": ["C2.3"], "prompt": "Which corrected line represents y = 5x + 2?", "response": {"type": "selected", "options": ["SET y TO 5*x + 2", "SET y TO 5*(x + 2)", "SET x TO 5*y + 2", "SET y TO x + 7"], "correct_answer": "SET y TO 5*x + 2"}, "rationale": "The factor 5 applies to x and the fixed constant 2 is then added once."},
+        {"id": "mth1w-u5-q9", "official_expectation_ids": ["C2.3"], "prompt": "Which tests best distinguish limit >= 40 from limit > 40?", "response": {"type": "selected", "options": ["39, 40, 41", "1, 2, 3", "40 only", "100, 200, 300"], "correct_answer": "39, 40, 41"}, "rationale": "Testing below, at, and above the boundary shows that only the exact value 40 changes between inclusive and strict comparisons."},
+        {"id": "mth1w-u5-q10", "official_expectation_ids": ["C2.1", "C2.2", "C2.3"], "prompt": "A learner revises two lines at once and one test passes. Explain what evidence is still missing before accepting the revision.", "response": {"type": "constructed", "criteria": ["identifies unclear causal attribution", "requires one purposeful change at a time", "requires ordinary and boundary retests", "connects tests to intended mathematics"], "sample_response": "The passing test does not show which line caused the improvement or whether another case was broken. Revert, change one justified feature, predict the affected cases, and rerun the original, boundary, and distinguishing tests against the intended relationship.", "educator_review_required": true}, "rationale": "Controlled changes and a planned test set are required to establish cause and preserve the full mathematical contract."}
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u5-math-algorithm",
+      "title": "Build and audit an offline mathematical algorithm",
+      "estimated_minutes": 120,
+      "official_expectation_ids": ["C2.1", "C2.2", "C2.3"],
+      "prompt": "Choose a bounded mathematical decision such as a unit-price comparison, trip cost, percentage calculation, or measurement conversion. Define inputs, outputs, units, constraints, variables, parameters, and at least one meaningful condition. Decompose the process as both a numbered flowchart description and readable pseudocode. Before checking any result, predict and hand-trace ordinary, boundary, and edge cases. Include one intentionally flawed version, locate its first divergence, revise one feature, and show through old-new output evidence that the corrected or adapted algorithm represents the intended mathematics. The artifact must remain usable on paper without a live code runner.",
+      "required_components": [
+        "a precise input-output contract with units, constraints, variables, and parameters",
+        "the intended equations or inequalities beside matching pseudocode",
+        "a numbered nonvisual flowchart description with every branch connected",
+        "at least one ordinary, one exact-boundary, and one edge or invalid test",
+        "predicted trace tables completed before outputs are checked",
+        "an intentionally flawed version with the first divergence and causal explanation",
+        "one controlled revision with old-new outputs and invariant or relationship checks",
+        "a reflection on when hand tracing, flowcharting, and input-output comparison were most useful"
+      ],
+      "rubric": [
+        {"dimension": "Mathematical representation", "criteria": "Variables, parameters, equations, inequalities, units, and boundaries accurately represent the selected relationship."},
+        {"dimension": "Algorithm decomposition", "criteria": "Steps follow dependency order, inputs precede use, and every decision path reaches a valid output or safe stop."},
+        {"dimension": "Prediction and testing", "criteria": "Trace predictions are complete and the test set includes ordinary, boundary, and edge cases with justified expected results."},
+        {"dimension": "Debugging and revision", "criteria": "The first divergence is located, its cause is explained, one controlled change is made, and retesting supports the conclusion."},
+        {"dimension": "Communication and offline access", "criteria": "Pseudocode and flow descriptions are readable without software, and every representation has a complete ordered text alternative."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}

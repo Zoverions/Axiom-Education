@@ -24,7 +24,7 @@ coverage.
 |---|---|---|
 | Grade 9 Math Foundations Preview | usable experimental slice | four lessons and deterministic practice remain available with accurate limits |
 | Ontario MTH1W blueprint | verified | 9 units, 43 primary lessons, and 110 hours cover every official expectation |
-| Ontario MTH1W authored course | Units 1 through 4 machine-verified drafts; 5 units remain | educator, licensing, lesson, practice, assessment, accessibility, and workflow gates pass |
+| Ontario MTH1W authored course | Units 1 through 5 machine-verified drafts; 4 units remain | educator, licensing, lesson, practice, assessment, accessibility, and workflow gates pass |
 | Remaining Grade 9 courses | queued | begin only after MTH1W is complete; finish each selected course before the next |
 | Grades 10–12 | queued | begin only after the Grade 9 catalogue is complete and reviewed |
 | Adaptive/AI enhancements | deferred | conventional no-AI course paths remain complete and available |
@@ -49,11 +49,11 @@ tests alone do not satisfy this definition.
 
 ## Current implementation milestone
 
-The app now exposes source-mapped Units 1 through 4 as offline draft previews
-with 15 lessons, two or more reasoning routes per lesson, 30 worked examples,
-165 practice items, delayed unit-quiz feedback, correction attempts, and
+The app now exposes source-mapped Units 1 through 5 as offline draft previews
+with 18 lessons, two or more reasoning routes per lesson, 36 worked examples,
+198 practice items, delayed unit-quiz feedback, correction attempts, and
 transparent performance-task rubrics. The full-course route remains closed
-because the remaining five units are specifications, not delivered lessons, and the
+because the remaining four units are specifications, not delivered lessons, and the
 external educator and licensing gates have not passed.
 
 ## Grade 9 catalogue gate

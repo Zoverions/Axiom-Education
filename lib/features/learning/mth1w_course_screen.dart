@@ -33,6 +33,12 @@ const _draftUnits = <_DraftUnitLink>[
     description:
         'Five draft lessons mapped to official C1.1-C1.5: algebraic histories, patterns, equivalence, simplification, and equations.',
   ),
+  _DraftUnitLink(
+    unitNumber: 5,
+    icon: Icons.code_rounded,
+    description:
+        'Three draft lessons mapped to official C2.1-C2.3: variables, conditions, algorithm decomposition, prediction, testing, and revision.',
+  ),
 ];
 
 class _DraftUnitLink {

@@ -28,6 +28,7 @@ CONTENT_PATHS = [
     CONTENT_ROOT / "u2-powers.v1.json",
     CONTENT_ROOT / "u3-rational-applications.v1.json",
     CONTENT_ROOT / "u4-algebraic-thinking.v1.json",
+    CONTENT_ROOT / "u5-coding-relationships.v1.json",
 ]
 PRACTICE_MINIMUMS = {"guided": 3, "independent": 5, "retrieval": 3}
 ALLOWED_RESPONSE_TYPES = {"selected", "short_text", "constructed"}

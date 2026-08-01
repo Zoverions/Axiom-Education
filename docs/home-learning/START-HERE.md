@@ -1,7 +1,7 @@
 # Start Here: Grade 9 Math Foundations Preview
 
 This is a short, non-AI learning routine for the four math foundation lessons
-and the source-mapped Units 1 through 4 currently available in Axiom Education. It
+and the source-mapped Units 1 through 5 currently available in Axiom Education. It
 can help a learner restart regular study while the complete MTH1W course is
 being built and reviewed.
 
@@ -55,6 +55,11 @@ Next open **Source-mapped draft Unit 4** for algebraic histories, growing
 patterns, equivalent expressions, simplification, and equations. Keep source
 evidence separate from historical inference, connect every expression term to
 a pattern feature, and verify every transformation or equation by substitution.
+
+Then open **Source-mapped draft Unit 5** for mathematical coding. Predict and
+hand-trace readable pseudocode before checking it, draw or narrate each
+algorithm branch, test exact boundaries, and revise only one purposeful feature
+at a time. A live code runner and AI tutor are not required.
 
 ## Starter week
 

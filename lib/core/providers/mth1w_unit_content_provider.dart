@@ -10,12 +10,15 @@ const mth1wUnitThreeAssetPath =
     'curriculum/content/mth1w/u3-rational-applications.v1.json';
 const mth1wUnitFourAssetPath =
     'curriculum/content/mth1w/u4-algebraic-thinking.v1.json';
+const mth1wUnitFiveAssetPath =
+    'curriculum/content/mth1w/u5-coding-relationships.v1.json';
 
 const mth1wUnitAssetPaths = <int, String>{
   1: mth1wUnitOneAssetPath,
   2: mth1wUnitTwoAssetPath,
   3: mth1wUnitThreeAssetPath,
   4: mth1wUnitFourAssetPath,
+  5: mth1wUnitFiveAssetPath,
 };
 
 final mth1wUnitProvider = FutureProvider.family<Mth1wUnitContent, int>((
@@ -35,6 +38,7 @@ final mth1wUnitOneProvider = mth1wUnitProvider(1);
 final mth1wUnitTwoProvider = mth1wUnitProvider(2);
 final mth1wUnitThreeProvider = mth1wUnitProvider(3);
 final mth1wUnitFourProvider = mth1wUnitProvider(4);
+final mth1wUnitFiveProvider = mth1wUnitProvider(5);
 
 Future<Mth1wUnitContent> _loadUnit(String path, String expectedUnitId) async {
   final source = await rootBundle.loadString(path);

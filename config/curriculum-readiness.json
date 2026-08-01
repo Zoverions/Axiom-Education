@@ -38,13 +38,14 @@
       "curriculum/content/mth1w/u1-number-systems.v1.json",
       "curriculum/content/mth1w/u2-powers.v1.json",
       "curriculum/content/mth1w/u3-rational-applications.v1.json",
-      "curriculum/content/mth1w/u4-algebraic-thinking.v1.json"
+      "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
+      "curriculum/content/mth1w/u5-coding-relationships.v1.json"
     ],
-    "machine_verified_draft_units": 4,
-    "machine_verified_draft_lessons": 15,
-    "worked_examples": 30,
-    "practice_items": 165,
-    "unit_quiz_items": 40,
+    "machine_verified_draft_units": 5,
+    "machine_verified_draft_lessons": 18,
+    "worked_examples": 36,
+    "practice_items": 198,
+    "unit_quiz_items": 50,
     "educator_review_status": "required",
     "student_availability": "draft_preview_with_adult_review_recommended"
   },
