@@ -1,8 +1,9 @@
 # Start Here: Grade 9 Math Foundations Preview
 
 This is a short, non-AI learning routine for the four math foundation lessons
-currently available in Axiom Education. It can help a learner restart regular
-study while the complete MTH1W course is being built and reviewed.
+and the source-mapped Unit 1 draft currently available in Axiom Education. It
+can help a learner restart regular study while the complete MTH1W course is
+being built and reviewed.
 
 It is **not** a complete MTH1W course, school enrolment, a credit, a grade, or a
 Ministry-approved resource. Keep the learner connected with their school,
@@ -29,6 +30,16 @@ assessment, accommodations, and graduation planning.
 The three-item message is a stopping cue, not proof of mastery. A learner who
 is stuck should record the exact step that caused trouble and ask a qualified
 teacher or tutor for help.
+
+## Source-mapped Unit 1 option
+
+From the Grade 9 Math course screen, open **Source-mapped draft Unit 1**. Work
+through its three lessons in order, keeping written steps and corrections in a
+notebook. The unit quiz reveals feedback only after every response is entered;
+use the correction attempt after reviewing the task-specific feedback. Written
+explanations and the performance task need an adult or qualified educator to
+review them against the visible criteria. Do not treat the app's exact-answer
+count as a grade.
 
 ## Starter week
 

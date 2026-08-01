@@ -17,6 +17,18 @@ def test_current_readiness_blocks_complete_course_claims():
     payload = verify()
 
     assert payload["course"]["complete_course_claim_allowed"] is False
+    assert payload["course_blueprint"] == {
+        "path": "curriculum/courses/ontario-mth1w-2021.course.json",
+        "verification_status": "machine-verified-complete-coverage-plan",
+        "units": 9,
+        "primary_lessons": 43,
+        "estimated_hours": 110,
+        "overall_expectations_planned": 14,
+        "specific_expectations_planned": 43,
+        "student_available_course": False,
+    }
+    assert payload["authored_content"]["machine_verified_draft_units"] == 1
+    assert payload["authored_content"]["machine_verified_draft_lessons"] == 3
     assert len(payload["required_gates"]) == 7
     statuses = {gate["id"]: gate["status"] for gate in payload["required_gates"]}
     assert statuses["official-expectation-inventory"] == "verified"
@@ -84,4 +96,26 @@ def test_inventory_evidence_digest_is_pinned(tmp_path):
     )
 
     with pytest.raises(ReadinessError, match="records digest mismatch"):
+        verify(path)
+
+
+def test_course_blueprint_coverage_drift_is_rejected(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["course_blueprint"].update({"primary_lessons": 42}),
+    )
+
+    with pytest.raises(ReadinessError, match="blueprint coverage counts"):
+        verify(path)
+
+
+def test_authored_unit_count_drift_is_rejected(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["authored_content"].update(
+            {"machine_verified_draft_units": 2}
+        ),
+    )
+
+    with pytest.raises(ReadinessError, match="Unit 1 evidence counts"):
         verify(path)

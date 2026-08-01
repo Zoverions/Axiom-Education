@@ -76,6 +76,7 @@ void main() {
     expect(find.text('Percentages and proportional reasoning'), findsOneWidget);
     expect(find.text('Open mixed practice'), findsOneWidget);
     expect(find.text('Open home learning guide'), findsOneWidget);
+    expect(find.text('Open source-mapped draft Unit 1'), findsOneWidget);
   });
 
   testWidgets('teaches with a worked example before focused practice', (
@@ -84,7 +85,19 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Order of operations with rational numbers'));
+    final firstLesson = find.text('Order of operations with rational numbers');
+    await tester.scrollUntilVisible(
+      firstLesson,
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView).first,
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(firstLesson);
     await tester.pumpAndSettle();
 
     expect(find.text('Learning goals'), findsOneWidget);

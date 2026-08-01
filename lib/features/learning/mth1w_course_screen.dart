@@ -6,6 +6,7 @@ import '../../core/practice/mth1w_practice_provider.dart';
 import '../../core/providers/curriculum_provider.dart';
 import '../practice/mth1w_practice_screen.dart';
 import 'home_learning_guide_screen.dart';
+import 'mth1w_draft_unit_screen.dart';
 
 class Mth1wCourseScreen extends ConsumerWidget {
   const Mth1wCourseScreen({super.key});
@@ -76,6 +77,24 @@ class _CourseBody extends StatelessWidget {
                   },
                   icon: const Icon(Icons.home_work_rounded),
                   label: const Text('Open home learning guide'),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  key: const ValueKey('mth1w-open-draft-unit-1'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => const Mth1wDraftUnitScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.construction_rounded),
+                  label: const Text('Open source-mapped draft Unit 1'),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Unit 1 adds three draft lessons mapped to official B1.1-B1.3. Educator and cultural review remain required.',
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(

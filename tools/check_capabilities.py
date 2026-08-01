@@ -23,6 +23,12 @@ GLOBAL_METHODS_PATH = ROOT / "docs" / "research" / "GLOBAL-INSTRUCTIONAL-METHODS
 MTH1W_OFFICIAL_INVENTORY_PATH = (
     ROOT / "curriculum" / "official" / "ontario-mth1w-2021.inventory.json"
 )
+MTH1W_COURSE_BLUEPRINT_PATH = (
+    ROOT / "curriculum" / "courses" / "ontario-mth1w-2021.course.json"
+)
+MTH1W_UNIT_1_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u1-number-systems.v1.json"
+)
 HOME_LEARNING_PATH = ROOT / "docs" / "home-learning" / "START-HERE.md"
 CURRICULUM_READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
@@ -218,6 +224,8 @@ def verify() -> Counter[str]:
         MTH1W_COVERAGE_LEDGER_PATH,
         GLOBAL_METHODS_PATH,
         MTH1W_OFFICIAL_INVENTORY_PATH,
+        MTH1W_COURSE_BLUEPRINT_PATH,
+        MTH1W_UNIT_1_CONTENT_PATH,
         HOME_LEARNING_PATH,
         CURRICULUM_READINESS_PATH,
         DEPRECATIONS_PATH,

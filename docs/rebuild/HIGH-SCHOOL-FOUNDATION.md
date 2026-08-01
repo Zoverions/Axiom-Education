@@ -37,13 +37,35 @@ The baseline student experience must include:
 10. dependable offline operation for downloaded courses.
 
 Items 1–6 have an executable first slice for four Grade 9 math foundation
-topics. Each lesson now exposes two valid reasoning routes and multiple
-representations, while keeping one outcome and one quality standard. Their
-local identifiers are not yet verified official MTH1W bindings; the
-[source audit](../curriculum/MTH1W-SOURCE-AUDIT.md) records known conflicts.
-Items 7–9 remain product requirements rather than current capability claims.
+topics and a separately source-mapped Unit 1 draft. Each lesson exposes two
+valid reasoning routes and multiple representations, while keeping one outcome
+and one quality standard. The older foundation topics retain preliminary local
+identifiers; the newer Unit 1 binds to B1.1 through B1.3 in the verified
+official inventory. The [source audit](../curriculum/MTH1W-SOURCE-AUDIT.md)
+records the distinction and known legacy conflicts. Item 7 now has a unit-quiz
+and performance-task slice, while items 8 and 9 remain product requirements.
 Durable progress remains disabled until the governed learner-record path is
 available.
+
+## Source-mapped MTH1W build
+
+The complete conventional course blueprint defines 9 units, 43 primary
+lessons, and 110 estimated hours. Unit 1 is the first implemented unit:
+
+- B1.1: number ideas in cultural and historical context, with source-quality
+  and anti-stereotyping checks;
+- B1.2: nested real-number sets using classification and counterexample routes;
+- B1.3: density, infinity, and approaching a limit using number-line and
+  sequence routes;
+- 6 worked examples and 33 practice items across guided, independent, and
+  retrieval phases;
+- a 10-item quiz that withholds feedback until full submission and supports a
+  correction attempt; and
+- an educator-reviewed performance task with a visible rubric.
+
+This is a machine-verified draft preview, not a reviewed or complete course.
+The remaining eight units, human educator review, cultural review, licensing,
+printable alternatives, and governed progress are still open gates.
 
 ## Current Grade 9 math foundations preview
 

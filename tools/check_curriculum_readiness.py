@@ -70,8 +70,9 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
         "student label must disclose the foundations preview",
     )
     require(
-        course.get("claim_status") == "blocked_pending_source_review",
-        "course claim must remain blocked pending source review",
+        course.get("claim_status")
+        == "blocked_pending_human_review_and_course_completion",
+        "course claim must remain blocked pending human review and completion",
     )
     require(
         course.get("complete_course_claim_allowed") is False,
@@ -125,6 +126,81 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
     require(
         inventory.get("verbatim_expectation_text_included") is False,
         "readiness inventory must not claim verbatim text redistribution",
+    )
+
+    blueprint = payload.get("course_blueprint")
+    require(isinstance(blueprint, dict), "course blueprint evidence must be an object")
+    require(
+        blueprint.get("path") == "curriculum/courses/ontario-mth1w-2021.course.json",
+        "course blueprint path mismatch",
+    )
+    require(
+        blueprint.get("verification_status")
+        == "machine-verified-complete-coverage-plan",
+        "course blueprint is not machine verified",
+    )
+    require(
+        {
+            "units": blueprint.get("units"),
+            "primary_lessons": blueprint.get("primary_lessons"),
+            "estimated_hours": blueprint.get("estimated_hours"),
+            "overall_expectations_planned": blueprint.get(
+                "overall_expectations_planned"
+            ),
+            "specific_expectations_planned": blueprint.get(
+                "specific_expectations_planned"
+            ),
+        }
+        == {
+            "units": 9,
+            "primary_lessons": 43,
+            "estimated_hours": 110,
+            "overall_expectations_planned": 14,
+            "specific_expectations_planned": 43,
+        },
+        "course blueprint coverage counts are incorrect",
+    )
+    require(
+        blueprint.get("student_available_course") is False,
+        "course blueprint must not open the incomplete course to students",
+    )
+
+    authored = payload.get("authored_content")
+    require(isinstance(authored, dict), "authored content evidence must be an object")
+    require(
+        authored.get("unit_content_paths")
+        == ["curriculum/content/mth1w/u1-number-systems.v1.json"],
+        "authored unit content paths mismatch",
+    )
+    require(
+        {
+            "machine_verified_draft_units": authored.get(
+                "machine_verified_draft_units"
+            ),
+            "machine_verified_draft_lessons": authored.get(
+                "machine_verified_draft_lessons"
+            ),
+            "worked_examples": authored.get("worked_examples"),
+            "practice_items": authored.get("practice_items"),
+            "unit_quiz_items": authored.get("unit_quiz_items"),
+        }
+        == {
+            "machine_verified_draft_units": 1,
+            "machine_verified_draft_lessons": 3,
+            "worked_examples": 6,
+            "practice_items": 33,
+            "unit_quiz_items": 10,
+        },
+        "authored Unit 1 evidence counts are incorrect",
+    )
+    require(
+        authored.get("educator_review_status") == "required",
+        "authored content must preserve educator review",
+    )
+    require(
+        authored.get("student_availability")
+        == "draft_preview_with_adult_review_recommended",
+        "authored content must remain a clearly labelled draft preview",
     )
 
     local_snapshot = payload.get("local_snapshot")

@@ -1,6 +1,6 @@
 # MTH1W Coverage Ledger
 
-**Status:** official expectation inventory verified; instructional coverage incomplete
+**Status:** official inventory and complete course blueprint verified; 1 of 9 units authored as a machine-verified draft
 **Source audit date:** 2026-08-01
 **Course-complete claim:** blocked
 
@@ -27,6 +27,36 @@ python tools/mth1w_official_inventory.py verify \
 Supplying the exact source PDF with `--source-pdf` additionally proves that the
 checked-in inventory can be reproduced from the pinned document.
 
+## Course blueprint and authored milestone
+
+The machine-verified blueprint at
+`curriculum/courses/ontario-mth1w-2021.course.json` specifies the conventional
+no-AI path before adaptive features:
+
+- 9 ordered units and 110 estimated hours;
+- 43 primary lessons, covering each of the 43 specific expectations exactly
+  once;
+- all 14 overall expectations plus the course-wide AA1, A1, and A2 practices;
+- at least two task-appropriate method routes and two representations in every
+  lesson specification;
+- unit quizzes and performance tasks; and
+- cumulative diagnostic, checkpoint, final assessment, accessibility, and
+  offline-delivery plans.
+
+Unit 1 is now delivered from the bundled offline content file
+`curriculum/content/mth1w/u1-number-systems.v1.json`. It contains 3 lessons, 6
+worked examples, 33 guided/independent/retrieval practice items, a 10-item unit
+quiz, and a performance task. Its student surface is clearly labelled as a
+draft preview; constructed responses and the complete unit still require
+qualified educator and cultural review.
+
+Run the evidence checks with:
+
+```bash
+python tools/check_mth1w_course_blueprint.py
+python tools/check_mth1w_unit_content.py
+```
+
 ## Base-coverage matrix
 
 "Inventory verified" means only that the official reference is present and
@@ -46,6 +76,11 @@ The four existing foundation lessons use preliminary local topic identifiers.
 They remain useful for study, but they do not mark any row above as covered
 until their exact official bindings and instructional interpretations pass
 educator review.
+
+The newer Unit 1 content binds to official inventory identifiers B1.1 through
+B1.3 and passes structural and answer-contract verification. It is authored
+coverage, but is not marked reviewed teaching coverage until the required
+human review evidence is recorded.
 
 ## Evidence required per specific expectation
 
@@ -68,7 +103,9 @@ not independently prove coverage.
 
 ## Remaining course gates
 
-The official-inventory gate is verified. These gates remain blocked:
+The official-inventory gate and complete-coverage blueprint are verified.
+Authored delivery is 3 of 43 primary lessons across 1 of 9 units. These gates
+remain blocked:
 
 - educator source and instructional review;
 - licensing and redistribution disposition;

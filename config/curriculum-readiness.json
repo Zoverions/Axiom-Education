@@ -6,7 +6,7 @@
     "jurisdiction": "Ontario, Canada",
     "official_name": "Mathematics, Grade 9, De-streamed",
     "student_label": "Grade 9 Math Foundations Preview",
-    "claim_status": "blocked_pending_source_review",
+    "claim_status": "blocked_pending_human_review_and_course_completion",
     "complete_course_claim_allowed": false
   },
   "official_source": {
@@ -22,6 +22,28 @@
     "counts": {"overall": 14, "specific": 43, "total": 57},
     "records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
     "verbatim_expectation_text_included": false
+  },
+  "course_blueprint": {
+    "path": "curriculum/courses/ontario-mth1w-2021.course.json",
+    "verification_status": "machine-verified-complete-coverage-plan",
+    "units": 9,
+    "primary_lessons": 43,
+    "estimated_hours": 110,
+    "overall_expectations_planned": 14,
+    "specific_expectations_planned": 43,
+    "student_available_course": false
+  },
+  "authored_content": {
+    "unit_content_paths": [
+      "curriculum/content/mth1w/u1-number-systems.v1.json"
+    ],
+    "machine_verified_draft_units": 1,
+    "machine_verified_draft_lessons": 3,
+    "worked_examples": 6,
+    "practice_items": 33,
+    "unit_quiz_items": 10,
+    "educator_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended"
   },
   "local_snapshot": {
     "record_count": 11,

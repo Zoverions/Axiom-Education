@@ -8,6 +8,15 @@ claims.
 
 ### Added
 
+- A machine-verified MTH1W course blueprint with 9 units, 43 primary lessons,
+  110 estimated hours, complete official-expectation coverage, multi-method
+  lesson contracts, unit assessments, and a cumulative assessment plan.
+- A bundled offline Unit 1 draft with three source-mapped lessons, six worked
+  examples, 33 practice items, a delayed-feedback 10-item quiz with correction
+  attempts, a transparent performance task, text alternatives, and explicit
+  educator/cultural-review boundaries.
+- Fail-closed Python and Flutter content loaders plus model, claim, and widget
+  tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the
   official 2021 source digest, known identifier conflicts, required completion
   evidence, and MTH1W-first delivery sequence.

@@ -91,20 +91,27 @@
       "id": "instruction.mth1w-foundation",
       "family": "instruction",
       "status": "experimental",
-      "summary": "A four-lesson Grade 9 Math Foundations Preview provides topic-linked goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes and multiple representations, metacognitive prompts, and focused deterministic practice without an AI tutor; it is not a complete MTH1W course and exact lesson mapping remains under review.",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview and a separately source-mapped MTH1W Unit 1 draft provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and focused offline practice without an AI tutor; eight official units and human review remain incomplete.",
       "evidence": [
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
         "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
         "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md",
         "docs/curriculum/MTH1W-COVERAGE-LEDGER.md",
         "curriculum/official/ontario-mth1w-2021.inventory.json",
+        "curriculum/courses/ontario-mth1w-2021.course.json",
+        "curriculum/content/mth1w/u1-number-systems.v1.json",
         "docs/home-learning/START-HERE.md",
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "lib/core/learning/mth1w_foundation.dart",
+        "lib/core/learning/mth1w_unit_content.dart",
+        "lib/core/providers/mth1w_unit_content_provider.dart",
         "lib/features/learning/home_learning_guide_screen.dart",
         "lib/features/learning/mth1w_course_screen.dart",
+        "lib/features/learning/mth1w_draft_unit_screen.dart",
         "test/features/learning/home_learning_guide_screen_test.dart",
         "test/core/learning/mth1w_foundation_test.dart",
+        "test/core/learning/mth1w_unit_content_test.dart",
+        "test/features/learning/mth1w_draft_unit_screen_test.dart",
         "test/features/learning/mth1w_course_screen_test.dart"
       ]
     },
@@ -112,7 +119,7 @@
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "Four derived Grade 9 math topic references have deterministic seed-based practice items, local scaffolded hints, digest evidence, actual answer entry, fail-closed exact verification, and an ephemeral session summary with a distinct-item stopping cue; official MTH1W mapping, learner records, tutor inference, review, and export remain unavailable.",
+      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; the source-mapped Unit 1 draft adds 33 authored practice items, a 10-item delayed-feedback quiz with a correction attempt, and an educator-reviewed performance task. These are not grades or mastery records, and full-course assessment remains unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",
@@ -123,7 +130,9 @@
         "lib/features/practice/mth1w_practice_screen.dart",
         "test/core/practice/math_practice_generator_test.dart",
         "test/core/practice/math_answer_verifier_test.dart",
-        "test/features/practice/mth1w_practice_screen_test.dart"
+        "test/features/practice/mth1w_practice_screen_test.dart",
+        "curriculum/content/mth1w/u1-number-systems.v1.json",
+        "test/features/learning/mth1w_draft_unit_screen_test.dart"
       ]
     },
     {
@@ -240,8 +249,8 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
-    "The current four-lesson Grade 9 Math Foundations Preview is not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
-    "Known conflicts between preliminary local MTH1W identifiers and the official 2021 course block curriculum-aligned and course-completion claims pending full source and educator review.",
+    "The current four-lesson Grade 9 Math Foundations Preview and source-mapped Unit 1 draft are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "Known conflicts remain in preliminary local MTH1W identifiers; the newer official inventory and blueprint do not authorize a complete-course claim without the remaining authored content and human review.",
     "The deterministic practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
