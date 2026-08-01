@@ -184,10 +184,11 @@ def verify(
         "mth1w-u3": "curriculum/content/mth1w/u3-rational-applications.v1.json",
         "mth1w-u4": "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
         "mth1w-u5": "curriculum/content/mth1w/u5-coding-relationships.v1.json",
+        "mth1w-u6": "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
     }
     require(
-        isinstance(authored_content, list) and len(authored_content) == 5,
-        "exactly five authored draft units must be declared at this milestone",
+        isinstance(authored_content, list) and len(authored_content) == 6,
+        "exactly six authored draft units must be declared at this milestone",
     )
     authored_unit_ids: set[str] = set()
     for authored_unit in authored_content:

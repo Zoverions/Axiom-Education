@@ -1,6 +1,6 @@
 # MTH1W Coverage Ledger
 
-**Status:** official inventory and complete course blueprint verified; 5 of 9 units authored as machine-verified drafts
+**Status:** official inventory and complete course blueprint verified; 6 of 9 units authored as machine-verified drafts
 **Source audit date:** 2026-08-01
 **Course-complete claim:** blocked
 
@@ -80,6 +80,15 @@ quiz, and an offline mathematical-algorithm audit. Hand tracing,
 algebra-to-pseudocode translation, flowchart decomposition, example extraction,
 invariant checks, and input-output revision support device-optional coding.
 
+Unit 6 is delivered from
+`curriculum/content/mth1w/u6-relations-linear-models.v1.json`. Its 7 lessons
+map to C3.1 through C4.4 and add 14 worked examples, 77 practice items, a
+10-item quiz, and an offline linear-model comparison. Successive differences,
+concrete-pattern analysis, graph and table translations, graphical and
+algebraic intersections, feature matrices, test points, coordinate
+transformations, and slope construction provide multiple routes through
+relations and analytic geometry.
+
 Run the evidence checks with:
 
 ```bash
@@ -107,8 +116,8 @@ They remain useful for study, but they do not mark any row above as covered
 until their exact official bindings and instructional interpretations pass
 educator review.
 
-The newer Units 1 through 5 bind to official inventory identifiers B1.1
-through C2.3 and pass structural and
+The newer Units 1 through 6 bind to official inventory identifiers B1.1
+through C4.4 and pass structural and
 answer-contract verification. It is authored coverage, but is not marked
 reviewed teaching coverage until the required human review evidence is
 recorded.
@@ -135,7 +144,7 @@ not independently prove coverage.
 ## Remaining course gates
 
 The official-inventory gate and complete-coverage blueprint are verified.
-Authored delivery is 18 of 43 primary lessons across 5 of 9 units. These gates
+Authored delivery is 25 of 43 primary lessons across 6 of 9 units. These gates
 remain blocked:
 
 - educator source and instructional review;

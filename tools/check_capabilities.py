@@ -41,6 +41,9 @@ MTH1W_UNIT_4_CONTENT_PATH = (
 MTH1W_UNIT_5_CONTENT_PATH = (
     ROOT / "curriculum" / "content" / "mth1w" / "u5-coding-relationships.v1.json"
 )
+MTH1W_UNIT_6_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u6-relations-linear-models.v1.json"
+)
 HOME_LEARNING_PATH = ROOT / "docs" / "home-learning" / "START-HERE.md"
 CURRICULUM_READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
@@ -242,6 +245,7 @@ def verify() -> Counter[str]:
         MTH1W_UNIT_3_CONTENT_PATH,
         MTH1W_UNIT_4_CONTENT_PATH,
         MTH1W_UNIT_5_CONTENT_PATH,
+        MTH1W_UNIT_6_CONTENT_PATH,
         HOME_LEARNING_PATH,
         CURRICULUM_READINESS_PATH,
         DEPRECATIONS_PATH,

@@ -66,6 +66,13 @@
       "status": "machine_verified_draft",
       "educator_review_status": "required",
       "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u6",
+      "path": "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
     }
   ],
   "units": [
@@ -478,7 +485,7 @@
             "independent": "Classify unfamiliar relations and make bounded predictions.",
             "retrieval": "Distinguish constant rate from changing rate using sparse evidence."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l2",
@@ -495,7 +502,7 @@
             "independent": "Construct missing representations from any supplied form.",
             "retrieval": "Recover rate and initial value from a new table or graph."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l3",
@@ -512,7 +519,7 @@
             "independent": "Compare contextual options and explain when each is preferable.",
             "retrieval": "Estimate an intersection before solving exactly."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l4",
@@ -529,7 +536,7 @@
             "independent": "Compare relations and identify what each representation reveals or hides.",
             "retrieval": "Infer a missing characteristic from partial information."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l5",
@@ -546,7 +553,7 @@
             "independent": "Graph mixed equations and inequalities and explain the solution set.",
             "retrieval": "Predict graph orientation or shape from equation structure."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l6",
@@ -563,7 +570,7 @@
             "independent": "Describe and create transformations that meet stated conditions.",
             "retrieval": "Match equation changes to transformations and justify the match."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u6-l7",
@@ -580,14 +587,14 @@
             "independent": "Build and use equations for unfamiliar linear situations.",
             "retrieval": "Recover slope and intercept from a sparse table or graph."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         }
       ],
       "assessment": {
         "quiz_id": "mth1w-u6-quiz",
         "performance_task_id": "mth1w-u6-linear-model-comparison",
         "expectation_ids": ["C3.1", "C3.2", "C3.3", "C4.1", "C4.2", "C4.3", "C4.4"],
-        "status": "specified_not_implemented"
+        "status": "machine_verified_draft"
       }
     },
     {

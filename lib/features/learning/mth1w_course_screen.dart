@@ -39,6 +39,12 @@ const _draftUnits = <_DraftUnitLink>[
     description:
         'Three draft lessons mapped to official C2.1-C2.3: variables, conditions, algorithm decomposition, prediction, testing, and revision.',
   ),
+  _DraftUnitLink(
+    unitNumber: 6,
+    icon: Icons.show_chart_rounded,
+    description:
+        'Seven draft lessons mapped to official C3.1-C4.4: relations, representations, intersections, graph features, solution regions, transformations, and linear equations.',
+  ),
 ];
 
 class _DraftUnitLink {

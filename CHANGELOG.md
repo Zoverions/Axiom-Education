@@ -30,6 +30,11 @@ claims.
   conditions, algorithm decomposition, prediction, tracing, debugging, and
   controlled revision through 6 worked examples, 33 practice items, a 10-item
   quiz, and a paper-usable algorithm audit task.
+- A bundled offline Unit 6 draft covering linear and non-linear change,
+  connected representations, model comparison, graph characteristics,
+  equations and inequality regions, line transformations, and equation
+  construction through 14 worked examples, 77 practice items, a 10-item quiz,
+  and a paper-usable linear-model comparison task.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

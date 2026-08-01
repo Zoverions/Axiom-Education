@@ -81,6 +81,7 @@ void main() {
     expect(find.text('Open source-mapped draft Unit 3'), findsOneWidget);
     expect(find.text('Open source-mapped draft Unit 4'), findsOneWidget);
     expect(find.text('Open source-mapped draft Unit 5'), findsOneWidget);
+    expect(find.text('Open source-mapped draft Unit 6'), findsOneWidget);
   });
 
   testWidgets('opens the bundled source-mapped Unit 2 package', (tester) async {

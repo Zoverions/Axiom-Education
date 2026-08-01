@@ -15,6 +15,8 @@ const unitFourContentPath =
     'curriculum/content/mth1w/u4-algebraic-thinking.v1.json';
 const unitFiveContentPath =
     'curriculum/content/mth1w/u5-coding-relationships.v1.json';
+const unitSixContentPath =
+    'curriculum/content/mth1w/u6-relations-linear-models.v1.json';
 
 Mth1wUnitContent loadUnit() {
   return Mth1wUnitContent.fromJsonString(File(contentPath).readAsStringSync());
@@ -140,6 +142,23 @@ void main() {
     expect(find.text('Variables and conditions in code'), findsOneWidget);
     expect(find.text('Predict, test, and revise code'), findsOneWidget);
     expect(find.byKey(const ValueKey('mth1w-u5-open-quiz')), findsOneWidget);
+  });
+
+  testWidgets('presents the source-mapped draft Unit 6 path', (tester) async {
+    final unit = Mth1wUnitContent.fromJsonString(
+      File(unitSixContentPath).readAsStringSync(),
+    );
+    await tester.pumpWidget(buildUnitScreen(unit, unitNumber: 6));
+    await tester.pumpAndSettle();
+
+    expect(find.text(unit.title), findsOneWidget);
+    expect(
+      find.textContaining('C3.1, C3.2, C3.3, C4.1, C4.2, C4.3, C4.4'),
+      findsOneWidget,
+    );
+    expect(find.text('Linear and non-linear change'), findsOneWidget);
+    expect(find.text('Build a line equation from data'), findsOneWidget);
+    expect(find.byKey(const ValueKey('mth1w-u6-open-quiz')), findsOneWidget);
   });
 
   testWidgets('teaches, accepts a response, and gives task-specific feedback', (

@@ -93,5 +93,5 @@ def test_each_authored_unit_declaration_is_required(tmp_path):
         lambda payload: payload["authored_unit_content"].pop(),
     )
 
-    with pytest.raises(BlueprintError, match="exactly five authored draft units"):
+    with pytest.raises(BlueprintError, match="exactly six authored draft units"):
         verify(path)

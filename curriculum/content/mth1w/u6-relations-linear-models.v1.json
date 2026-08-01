@@ -1,0 +1,559 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u6",
+  "title": "Unit 6: Relations, graphs, and linear models",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+      "publisher": "Ontario Ministry of Education",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary-mathematics/courses/mth1w",
+      "use": "Official course context for comparing relations, connecting representations, graphing solution sets, transforming lines, and determining linear equations."
+    },
+    {
+      "title": "Graph Linear Equations in Two Variables",
+      "publisher": "OpenStax",
+      "url": "https://openstax.org/books/elementary-algebra-2e/pages/4-2-graph-linear-equations-in-two-variables",
+      "use": "Open educational reference for generating ordered pairs, using intercepts, and checking whether points satisfy linear equations."
+    },
+    {
+      "title": "Graphs of Linear Inequalities",
+      "publisher": "OpenStax",
+      "url": "https://openstax.org/books/elementary-algebra-2e/pages/4-7-graphs-of-linear-inequalities",
+      "use": "Open educational reference for boundary lines, test points, and interpreting a shaded half-plane as a set of satisfying coordinate pairs."
+    },
+    {
+      "title": "Solve Systems of Linear Equations with Two Variables",
+      "publisher": "OpenStax",
+      "url": "https://openstax.org/books/intermediate-algebra-2e/pages/4-1-solve-systems-of-linear-equations-with-two-variables",
+      "use": "Open educational reference for relating graphical intersections to equal outputs and checking a solution in both linear equations."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u6-l1",
+      "title": "Linear and non-linear change",
+      "official_expectation_ids": ["C3.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Compare linear and non-linear relations using first differences, graph shape, and rate language.",
+        "Connect growing or shrinking patterns to corresponding tables and graphs.",
+        "Make bounded predictions and state why extrapolation beyond observed data may be unreliable."
+      ],
+      "success_criteria": [
+        "I calculate successive changes in the correct order and decide whether the rate is constant.",
+        "I describe how a straight or curved graph communicates constant or changing rate.",
+        "I justify a prediction with evidence and identify the interval where my rule is supported."
+      ],
+      "vocabulary": [
+        {"term": "relation", "meaning": "a rule or association connecting input values with output values"},
+        {"term": "first difference", "meaning": "the change between consecutive output values for equal input steps"},
+        {"term": "constant rate", "meaning": "an equal output change for every equal change in the input"},
+        {"term": "non-linear relation", "meaning": "a relation whose rate of change is not constant across its domain"},
+        {"term": "extrapolation", "meaning": "a prediction made beyond the interval represented by available evidence"}
+      ],
+      "why_it_matters": "Recognizing constant and changing rates helps learners judge claims about cost, growth, motion, and resources. Comparing tables, graph shapes, and verbal patterns prevents a single picture or isolated data pair from being mistaken for a dependable model.",
+      "direct_instruction": [
+        {"heading": "Compare equal input steps", "body": "First differences only provide a fair rate comparison when the input steps are equal. Subtract each output from the next output in order and attach units. Equal first differences support a linear relation over the displayed domain; changing first differences show that the displayed relation is not linear."},
+        {"heading": "Read shape as rate evidence", "body": "A non-vertical straight line has one constant slope: equal horizontal moves produce equal vertical changes. A curve changes steepness, so its rate changes. A graph drawn from too few or inaccurately scaled points can mislead, so confirm the shape against a table or rule when possible."},
+        {"heading": "Predict within evidence", "body": "A constant pattern can support interpolation between observed inputs and a cautious nearby prediction when the context remains stable. State the domain, assumptions, and units before extending it. A mathematically valid line may still become unrealistic when capacity, time, or other contextual limits are crossed."}
+      ],
+      "method_routes": [
+        {"id": "u6l1-difference-table", "title": "Successive-difference table route", "steps": ["Order the input-output pairs and confirm that input steps are equal.", "Subtract each output from the next output and record the sign and unit.", "Compare all first differences for equality or change.", "Classify the displayed relation and describe growth or shrinkage.", "Test any prediction against the rule, domain, and context."], "when_useful": "Use this route when a table or discrete pattern makes consecutive changes easy to calculate and compare.", "check": "Recreate each output by adding its recorded difference to the preceding output."},
+        {"id": "u6l1-shape-rate", "title": "Graph-shape and steepness route", "steps": ["Read axis variables, units, scale, and displayed domain.", "Compare vertical changes over equal horizontal intervals.", "Decide whether the plotted path keeps one steepness or bends.", "Describe the sign and behaviour of the rate in words.", "Check the conclusion with at least three plotted points or a table."], "when_useful": "Use this route when a graph reveals overall direction and whether steepness remains constant across an interval.", "check": "A linear classification must be supported by equal rise for equal run, not merely by an upward-looking graph."}
+      ],
+      "representations": [
+        {"id": "u6l1-difference-representation", "label": "Table with first differences", "description": "An ordered input-output table includes a third column stating each output change for equal consecutive input steps.", "text_alternative": "Read each input and output pair in order, then read the signed change from that output to the next one."},
+        {"id": "u6l1-shape-representation", "label": "Straight and curved graph comparison", "description": "Two coordinate plots share a scale so constant steepness on a line can be compared with changing steepness on a curve.", "text_alternative": "List representative coordinates at equal input intervals and describe whether their vertical changes stay equal or change."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l1-we1", "prompt": "Classify the relation x: 0, 1, 2, 3 and y: 12, 9, 6, 3, then predict y at x = 4.", "method_route_id": "u6l1-difference-table", "steps": [{"label": "Check input steps", "explanation": "The input increases by one each time, so consecutive output differences are comparable."}, {"label": "Compute differences", "explanation": "The changes are 9 - 12 = -3, 6 - 9 = -3, and 3 - 6 = -3."}, {"label": "Classify and extend", "explanation": "The constant difference -3 supports a linear decreasing rule; one more step gives 3 - 3 = 0."}], "answer": "The displayed relation is linear with rate -3 per input unit, and the bounded next-step prediction is y = 0 at x = 4.", "verification": "The rule y = 12 - 3x reproduces all five values for x from 0 through 4."},
+        {"id": "mth1w-u6-l1-we2", "prompt": "Compare points (0, 1), (1, 2), (2, 5), and (3, 10) and explain the expected graph shape.", "method_route_id": "u6l1-shape-rate", "steps": [{"label": "Use equal runs", "explanation": "Each consecutive point moves one unit to the right, so compare its vertical change."}, {"label": "Compare rises", "explanation": "The rises are 1, 3, and 5 rather than one repeated value."}, {"label": "Describe the shape", "explanation": "Increasing rises make the plotted path progressively steeper, so the points do not lie on one straight line."}], "answer": "The relation is non-linear on the displayed domain and its graph curves upward with increasing steepness.", "verification": "The points satisfy y = x^2 + 1, whose consecutive first differences 1, 3, and 5 agree with the table evidence."}
+      ],
+      "misconceptions": [
+        {"claim": "Any relation that increases is linear.", "correction": "A linear relation requires a constant rate for equal input changes; many curved relations also increase."},
+        {"claim": "Equal output differences prove linearity even when input gaps differ.", "correction": "First differences are comparable only across equal input steps; otherwise compare change per input unit."},
+        {"claim": "A pattern that fits four points must remain valid forever.", "correction": "The pattern supports the observed domain, while distant extrapolation needs contextual evidence and stated assumptions."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l1-g1", "prompt": "Find the first differences of y-values 5, 9, 13, 17 for equal x-steps.", "response": {"type": "short_text", "accepted_answers": ["4, 4, 4", "+4, +4, +4", "4 4 4"], "case_sensitive": false}, "rationale": "Each consecutive subtraction gives the same positive difference of four."},
+          {"id": "mth1w-u6-l1-g2", "prompt": "Which evidence best supports a linear relation?", "response": {"type": "selected", "options": ["equal rises for equal runs", "all outputs are positive", "the graph starts at zero", "there are exactly three points"], "correct_answer": "equal rises for equal runs"}, "rationale": "A repeated rise for an equal run expresses constant rate, the defining feature of a non-vertical linear relation."},
+          {"id": "mth1w-u6-l1-g3", "prompt": "Explain whether y-values 2, 4, 8, 16 at consecutive inputs are linear.", "response": {"type": "constructed", "criteria": ["computes differences 2, 4, 8", "states that the rate changes", "classifies the relation as non-linear"], "sample_response": "The first differences are 2, 4, and 8 for equal input steps. Because those changes are not constant, the displayed relation is non-linear even though every output increases.", "educator_review_required": true}, "rationale": "Changing first differences show that equal input steps do not create equal output changes."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l1-i1", "prompt": "Classify y-values 20, 15, 10, 5 at consecutive inputs.", "response": {"type": "selected", "options": ["linear decreasing", "linear increasing", "non-linear increasing", "cannot compare"], "correct_answer": "linear decreasing"}, "rationale": "The repeated difference is -5, so the displayed relation has a constant negative rate."},
+          {"id": "mth1w-u6-l1-i2", "prompt": "What is the next y-value after 7, 10, 13, 16 if the linear pattern continues one step?", "response": {"type": "short_text", "accepted_answers": ["19", "y=19", "y = 19"], "case_sensitive": false}, "rationale": "The constant first difference is positive three, so the next bounded value is nineteen."},
+          {"id": "mth1w-u6-l1-i3", "prompt": "Which set has changing first differences?", "response": {"type": "selected", "options": ["1, 4, 9, 16", "2, 5, 8, 11", "12, 10, 8, 6", "0, 7, 14, 21"], "correct_answer": "1, 4, 9, 16"}, "rationale": "Its differences are 3, 5, and 7, whereas every other option has one repeated difference."},
+          {"id": "mth1w-u6-l1-i4", "prompt": "A curve becomes less steep while rising. What happens to its positive rate?", "response": {"type": "selected", "options": ["it decreases", "it stays constant", "it becomes negative immediately", "it cannot be described"], "correct_answer": "it decreases"}, "rationale": "A rising curve with diminishing steepness still has positive change, but less output change per input unit."},
+          {"id": "mth1w-u6-l1-i5", "prompt": "A tank table is linear from hour 0 to 6. Explain why predicting hour 100 may be unsafe.", "response": {"type": "constructed", "criteria": ["identifies extrapolation", "states a contextual limit such as capacity or emptying", "restricts the supported domain"], "sample_response": "Hour 100 is far beyond the observed 0-to-6-hour domain, so the prediction is extrapolation. The tank may become full or empty before then, meaning capacity changes the process and the linear rule may no longer apply.", "educator_review_required": true}, "rationale": "A numerical pattern does not remove physical capacity limits or justify conclusions far outside the evidence."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l1-r1", "prompt": "What change is compared in a first-difference table?", "response": {"type": "selected", "options": ["consecutive outputs for equal input steps", "only the first and last input", "the axis labels", "the number of table rows"], "correct_answer": "consecutive outputs for equal input steps"}, "rationale": "First differences compare neighboring output values while holding the input step constant."},
+          {"id": "mth1w-u6-l1-r2", "prompt": "For y = -4x + 9, state the constant rate.", "response": {"type": "short_text", "accepted_answers": ["-4", "negative 4", "-4 per input unit"], "case_sensitive": false}, "rationale": "The coefficient of x is -4, which gives the constant output change per one input unit."},
+          {"id": "mth1w-u6-l1-r3", "prompt": "Explain one way a graph and table can cross-check a linear claim.", "response": {"type": "constructed", "criteria": ["mentions equal table differences", "mentions equal rises for equal runs", "connects both to constant rate"], "sample_response": "The table should show equal output differences for equal input steps. On the graph, the corresponding points should make equal rises for equal runs and lie on one straight line, so both show the same constant rate.", "educator_review_required": true}, "rationale": "Agreement between numeric differences and graphical steepness provides independent evidence for constant rate."}
+        ]
+      },
+      "reflection_prompt": "Which representation made changing rate easiest to notice, and what evidence limited the prediction you were willing to make?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Every graph comparison is paired with ordered coordinates, equal-run changes, scale information, and a spoken or written shape description.", "response_options": ["annotated difference table", "verbal rate comparison from coordinates", "paper graph with an ordered text description"]}
+    },
+    {
+      "id": "mth1w-u6-l2",
+      "title": "Connect tables, graphs, materials, and equations",
+      "official_expectation_ids": ["C3.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Represent one linear relation with a concrete or verbal pattern, table, graph, and equation.",
+        "Locate rate of change and initial value consistently in every representation.",
+        "Translate from any supplied representation and verify that the resulting forms describe the same relation."
+      ],
+      "success_criteria": [
+        "I identify what remains fixed and what repeats when a pattern grows or shrinks.",
+        "I label variables and units and connect the table value at zero to the equation intercept.",
+        "I substitute at least two inputs to confirm that my equation, table, and plotted points agree."
+      ],
+      "vocabulary": [
+        {"term": "initial value", "meaning": "the output value associated with an input of zero in a relation"},
+        {"term": "rate of change", "meaning": "the output change divided by the corresponding input change"},
+        {"term": "y-intercept", "meaning": "the coordinate where a graph crosses the vertical axis and x equals zero"},
+        {"term": "slope-intercept form", "meaning": "the linear equation form y = mx + b showing slope m and intercept b"},
+        {"term": "equivalent representations", "meaning": "different forms that produce the same output for every input in their shared domain"}
+      ],
+      "why_it_matters": "A linear model can be encountered as a fee description, a growing arrangement, a data table, a graph, or an equation. Moving reliably among these forms lets a learner choose the most useful route and catches errors that one representation alone may hide.",
+      "direct_instruction": [
+        {"heading": "Separate fixed and repeated parts", "body": "In a build-and-count pattern, identify the amount present at stage zero and the equal group added at every new stage. The stage-zero amount is the initial value b. The repeated change per stage is the rate m, producing the structure output = rate times input + initial value."},
+        {"heading": "Track features across forms", "body": "In a table, rate is the output change per input change and initial value is the output at input zero. On a graph, rate is rise divided by run and initial value is the vertical-axis crossing. In y = mx + b, the same features appear as m and b, with their contextual units retained."},
+        {"heading": "Verify equivalence", "body": "Matching labels are not enough to establish that representations agree. Choose at least two input values, including zero when the domain permits it. Compute the equation outputs, locate the table pairs, and confirm the graph contains those coordinates. Also check that all forms use the same scale, units, and domain."}
+      ],
+      "method_routes": [
+        {"id": "u6l2-build-count", "title": "Build-and-count route", "steps": ["Describe or construct stages zero, one, and two using repeatable units.", "Count the fixed stage-zero amount separately from added groups.", "Record stage and total in an input-output table.", "Plot the ordered pairs using labelled axes and a consistent scale.", "Write output = repeated amount times stage + fixed amount and verify it."], "when_useful": "Use this route when tiles, counters, gestures, or a precise verbal construction make a growing pattern tangible.", "check": "The equation must reproduce every counted stage, including stage zero, without recounting the fixed part."},
+        {"id": "u6l2-rate-initial", "title": "Rate-and-initial-value route", "steps": ["Define the independent input and dependent output with units.", "Calculate output change divided by input change from two reliable pairs.", "Find the output at input zero directly or work backward using the rate.", "Write y = mx + b with the identified values and state the domain.", "Substitute two inputs and compare with the source representation."], "when_useful": "Use this route when a table, graph, or verbal rule already reveals two points or a rate and an initial value.", "check": "Every checked pair must satisfy the equation and retain the same variables, units, and contextual domain."}
+      ],
+      "representations": [
+        {"id": "u6l2-pattern-representation", "label": "Concrete or described stage pattern", "description": "A fixed group and equal repeated groups are shown or described for stages zero through three with totals attached.", "text_alternative": "State the fixed amount first, then for each stage state the number of repeated groups, size of each group, and total."},
+        {"id": "u6l2-four-form-map", "label": "Table, graph, and equation feature map", "description": "Colour-independent labels link repeated change and initial value across a table, selected graph coordinates, and y = mx + b.", "text_alternative": "Read the rate and initial value in the table, then the matching graph coordinates, equation parameters, units, and domain."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l2-we1", "prompt": "A border pattern has 6 fixed tiles and adds 4 tiles for each stage n. Create its table and equation.", "method_route_id": "u6l2-build-count", "steps": [{"label": "Separate parts", "explanation": "The six fixed tiles form stage zero, while every stage contributes another group of four."}, {"label": "Count stages", "explanation": "For n = 0, 1, 2, 3, totals are 6, 10, 14, and 18 tiles."}, {"label": "Write and verify", "explanation": "The structure gives T = 4n + 6; substituting n = 3 produces 18, matching the count."}], "answer": "The pairs are (0, 6), (1, 10), (2, 14), (3, 18), and the equation is T = 4n + 6 for whole-number stages n >= 0.", "verification": "The table increases by four per stage and its value at zero is six, exactly matching the equation parameters."},
+        {"id": "mth1w-u6-l2-we2", "prompt": "A table contains (2, 11), (4, 17), and (6, 23). Determine its linear equation and two graph points.", "method_route_id": "u6l2-rate-initial", "steps": [{"label": "Find the rate", "explanation": "From (2, 11) to (4, 17), output changes 6 while input changes 2, so m = 3."}, {"label": "Find the initial value", "explanation": "Use 11 = 3(2) + b, giving b = 5 and therefore y = 3x + 5."}, {"label": "Generate checks", "explanation": "At x = 0 the point is (0, 5), and at x = 6 the point is (6, 23), matching the source table."}], "answer": "The equation is y = 3x + 5, with graph points including (0, 5) and (6, 23).", "verification": "Substitution of x = 2, 4, and 6 produces 11, 17, and 23, so all supplied pairs agree."}
+      ],
+      "misconceptions": [
+        {"claim": "The first row of any table is automatically the initial value.", "correction": "Initial value means the output at input zero, which may require extending the relation if zero is not shown."},
+        {"claim": "The rate is found by output change alone.", "correction": "Rate is output change divided by input change; ignoring a non-unit input gap changes the slope."},
+        {"claim": "A graph and equation agree if they both look increasing.", "correction": "Equivalent forms must share exact input-output pairs, rate, intercept, units, and domain."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l2-g1", "prompt": "A pattern begins with 3 counters and adds 5 each stage. What is the stage-two total?", "response": {"type": "short_text", "accepted_answers": ["13", "13 counters", "T=13"], "case_sensitive": false}, "rationale": "The fixed three plus two groups of five gives 3 + 10 = 13 counters."},
+          {"id": "mth1w-u6-l2-g2", "prompt": "Which graph feature represents b in y = mx + b?", "response": {"type": "selected", "options": ["vertical-axis intercept", "horizontal-axis label", "number of points", "largest displayed output"], "correct_answer": "vertical-axis intercept"}, "rationale": "At x = 0 the equation gives y = b, locating the vertical-axis crossing."},
+          {"id": "mth1w-u6-l2-g3", "prompt": "Explain how T = 6n + 2 appears in a table and a stage pattern.", "response": {"type": "constructed", "criteria": ["identifies fixed amount 2", "identifies repeated amount 6", "gives matching table values"], "sample_response": "The pattern has two fixed objects at stage zero and adds one group of six for every stage. A table starts (0, 2), (1, 8), and (2, 14), so its output increases by six each step.", "educator_review_required": true}, "rationale": "The constant and coefficient connect the fixed and repeating parts to stage-zero value and first differences."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l2-i1", "prompt": "State the initial value in y = -3x + 8.", "response": {"type": "short_text", "accepted_answers": ["8", "b=8", "b = 8"], "case_sensitive": false}, "rationale": "The constant term eight is the output value when the input x equals zero."},
+          {"id": "mth1w-u6-l2-i2", "prompt": "A table contains (1, 7), (3, 15), (5, 23). What is its rate?", "response": {"type": "short_text", "accepted_answers": ["4", "4 per input unit", "m=4"], "case_sensitive": false}, "rationale": "The output rises eight while the input rises two, giving a rate of 8 divided by 2, or 4."},
+          {"id": "mth1w-u6-l2-i3", "prompt": "Which equation matches points (0, 7), (1, 5), and (2, 3)?", "response": {"type": "selected", "options": ["y = -2x + 7", "y = 2x + 7", "y = -2x + 5", "y = 7x - 2"], "correct_answer": "y = -2x + 7"}, "rationale": "The output begins at seven and decreases by two for every increase of one in x."},
+          {"id": "mth1w-u6-l2-i4", "prompt": "For C = 2.5d + 4, which ordered pair is on the graph?", "response": {"type": "selected", "options": ["(2, 9)", "(2, 6.5)", "(4, 2.5)", "(0, 2.5)"], "correct_answer": "(2, 9)"}, "rationale": "Substituting d = 2 gives C = 2.5(2) + 4 = 9, so the coordinate is (2, 9)."},
+          {"id": "mth1w-u6-l2-i5", "prompt": "Build an equation from (0, -3), (2, 7), and (4, 17), then describe a matching pattern.", "response": {"type": "constructed", "criteria": ["calculates rate 5", "identifies initial value -3", "writes y = 5x - 3", "describes fixed and repeated parts"], "sample_response": "The output changes 10 over an input change of 2, so the rate is 5. Since y = -3 at x = 0, the equation is y = 5x - 3. A matching pattern starts at -3 and adds five each stage.", "educator_review_required": true}, "rationale": "The rate and value at zero determine both the equation and a consistent stage-by-stage description."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l2-r1", "prompt": "What equation form displays rate and initial value directly?", "response": {"type": "selected", "options": ["y = mx + b", "xy = 0", "x + y = 1 only", "y = b/x"], "correct_answer": "y = mx + b"}, "rationale": "Slope-intercept form displays the rate as m and the initial or vertical intercept as b."},
+          {"id": "mth1w-u6-l2-r2", "prompt": "If outputs rise 12 while inputs rise 3, what is the rate?", "response": {"type": "short_text", "accepted_answers": ["4", "12/3", "4 per input unit"], "case_sensitive": false}, "rationale": "Rate equals output change divided by input change, so 12 divided by 3 is 4."},
+          {"id": "mth1w-u6-l2-r3", "prompt": "Explain why checking x = 0 is useful when comparing a table and y = mx + b.", "response": {"type": "constructed", "criteria": ["connects x = 0 to b", "connects b to initial value", "notes domain when zero is meaningful"], "sample_response": "When zero belongs to the domain, substituting x = 0 makes mx vanish and leaves y = b. The table's output at zero should therefore equal the equation's initial value and the graph's vertical intercept.", "educator_review_required": true}, "rationale": "The zero-input check isolates the constant term and reveals a mismatched initial value immediately."}
+        ]
+      },
+      "reflection_prompt": "Which translation between pattern, table, graph, and equation felt most reliable, and what cross-check exposed or prevented an error?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Concrete patterns include precise stage-by-stage verbal counts, while every graph is duplicated as labelled ordered pairs with rate and intercept statements.", "response_options": ["physical or drawn pattern with counts", "typed or handwritten four-form table", "spoken feature map with ordered coordinates"]}
+    },
+    {
+      "id": "mth1w-u6-l3",
+      "title": "Compare two linear models and interpret intersection",
+      "official_expectation_ids": ["C3.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Estimate the intersection of two linear models from a shared graph or comparison table.",
+        "Solve an intersection exactly by equating expressions and verify the result in both models.",
+        "Interpret equality and preference intervals within a stated contextual domain."
+      ],
+      "success_criteria": [
+        "I explain that an intersection has one input for which both models have the same output.",
+        "I preserve equality while solving and check the ordered pair in both original equations.",
+        "I compare which model is greater or less on each side and avoid conclusions outside the valid domain."
+      ],
+      "vocabulary": [
+        {"term": "intersection", "meaning": "an ordered pair that belongs to both relations at the same time"},
+        {"term": "break-even point", "meaning": "a contextual intersection where two compared amounts have equal value"},
+        {"term": "system of equations", "meaning": "two or more equations considered together under shared variable meanings"},
+        {"term": "estimate", "meaning": "a reasoned approximate value whose precision is limited by available evidence"},
+        {"term": "preference interval", "meaning": "a domain segment on which one contextual option better meets a stated criterion"}
+      ],
+      "why_it_matters": "Many decisions compare a high starting cost with a lower ongoing rate or the reverse. Graphical estimates build intuition, while algebra supplies a precise equality point; using both helps learners explain not only when plans match but when each option is preferable.",
+      "direct_instruction": [
+        {"heading": "Give intersection two meanings", "body": "On a shared graph, the intersection is the coordinate lying on both lines. Algebraically, its input makes both output expressions equal. In context, the coordinate must be read with units: the input states when or how many, and the output states the shared cost, distance, amount, or other quantity."},
+        {"heading": "Estimate before solving", "body": "Create a common-axis graph or comparison table using the same scale and domain. Locate where the output order reverses and estimate the crossing between or at displayed inputs. Record the precision of the estimate; a thick line or coarse scale cannot support more decimal places than the graph shows."},
+        {"heading": "Solve and compare intervals", "body": "Set the two output expressions equal because their values match at an intersection. Solve for the shared input, substitute it into both models, and confirm a common output. Then test one valid input on each side to decide which relation is above or below, cheaper or more expensive, as the context requires."}
+      ],
+      "method_routes": [
+        {"id": "u6l3-graph-estimate", "title": "Graphical intersection route", "steps": ["Define shared input and output variables, units, scale, and domain.", "Plot at least two accurate points for each model on the same axes.", "Locate where the lines cross or where a comparison table changes order.", "Read an estimated input and output with appropriate precision.", "Test nearby values and state which model is above or below on each side."], "when_useful": "Use this route to see the whole comparison, estimate quickly, and identify preference intervals before exact calculation.", "check": "The estimated coordinate should produce nearly equal outputs in both equations at the graph's stated precision."},
+        {"id": "u6l3-equate-solve", "title": "Equate-and-solve route", "steps": ["Write both output expressions using the same input and compatible units.", "Set the expressions equal to represent a shared output.", "Use inverse operations to isolate the input while preserving equality.", "Substitute the input into both original models to find and check the output.", "Test a domain value on each side and interpret the result."], "when_useful": "Use this route when equations are known and an exact intersection is needed, including crossings between table or graph marks.", "check": "A valid intersection input must give exactly the same output in both original equations and belong to both domains."}
+      ],
+      "representations": [
+        {"id": "u6l3-two-line-graph", "label": "Shared two-line graph", "description": "Two labelled lines use common axes, units, scale, valid domain, intersection estimate, and one comparison point on each side.", "text_alternative": "List points for each line, the estimated shared coordinate, and which model has the greater output before and after it."},
+        {"id": "u6l3-comparison-equations", "label": "Comparison table and paired equations", "description": "A table places both outputs beside selected shared inputs and aligns each column with its defining linear equation.", "text_alternative": "Read each input with both outputs, identify the row of equality or order reversal, then read the exact equation solution."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l3-we1", "prompt": "Compare plans A = 2n + 20 and B = 5n + 5 for whole numbers 0 <= n <= 10.", "method_route_id": "u6l3-equate-solve", "steps": [{"label": "Equate outputs", "explanation": "At break-even, 2n + 20 = 5n + 5 because both plan costs are the same."}, {"label": "Solve and check", "explanation": "Subtracting 2n and then 5 gives 15 = 3n, so n = 5; both models produce 30."}, {"label": "Compare sides", "explanation": "At n = 0, B costs 5 versus A at 20; at n = 10, A costs 40 versus B at 55."}], "answer": "The plans meet at (5, 30). Plan B is cheaper for n < 5, they tie at 5, and Plan A is cheaper for n > 5 within the domain.", "verification": "Substitution produces A(5) = 30 and B(5) = 30, while the side tests confirm the stated intervals."},
+        {"id": "mth1w-u6-l3-we2", "prompt": "A graph represents y = 3x + 4 and y = x + 10. Estimate, then determine, their intersection.", "method_route_id": "u6l3-graph-estimate", "steps": [{"label": "Plot common inputs", "explanation": "At x = 0 the outputs are 4 and 10; at x = 4 they are 16 and 14, so the lines cross between."}, {"label": "Refine the estimate", "explanation": "At x = 3 both expressions give 13, so the graph should show a crossing at approximately (3, 13)."}, {"label": "Confirm algebraically", "explanation": "Solving 3x + 4 = x + 10 gives 2x = 6 and x = 3, with common output 13."}], "answer": "The estimated and exact intersection is (3, 13).", "verification": "The point satisfies both equations because 3(3) + 4 = 13 and 3 + 10 = 13."}
+      ],
+      "misconceptions": [
+        {"claim": "The intersection is only the x-value.", "correction": "An intersection is an ordered pair; the x-value is the shared input and the y-value is the shared output."},
+        {"claim": "The plan with the smaller slope is always cheaper.", "correction": "Starting values and domain matter; the smaller slope may begin above the other model and become preferable only after crossing."},
+        {"claim": "A graph estimate should be reported as an exact value.", "correction": "Graph precision is limited by scale and line thickness, so exactness requires algebra or sufficiently exact data."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l3-g1", "prompt": "Solve the shared input for y = 2x + 7 and y = 4x + 1.", "response": {"type": "short_text", "accepted_answers": ["3", "x=3", "x = 3"], "case_sensitive": false}, "rationale": "Equating gives 2x + 7 = 4x + 1, so six equals two x and x equals three."},
+          {"id": "mth1w-u6-l3-g2", "prompt": "What does the y-coordinate of a break-even point represent?", "response": {"type": "selected", "options": ["the shared output amount", "the first plan's slope", "the domain maximum", "the number of graph lines"], "correct_answer": "the shared output amount"}, "rationale": "At the intersection, the y-coordinate is the common value produced by both models."},
+          {"id": "mth1w-u6-l3-g3", "prompt": "Compare A = x + 12 and B = 3x + 4 at and around their intersection.", "response": {"type": "constructed", "criteria": ["solves x = 4", "finds shared output 16", "compares one input below and above"], "sample_response": "Setting x + 12 = 3x + 4 gives x = 4, and both outputs are 16. At x = 0, B is lower at 4; at x = 6, A is lower at 18 compared with 22.", "educator_review_required": true}, "rationale": "The equality point separates intervals, and test inputs determine the ordering on each side."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l3-i1", "prompt": "Find the intersection input of y = -x + 12 and y = 2x + 3.", "response": {"type": "short_text", "accepted_answers": ["3", "x=3", "x = 3"], "case_sensitive": false}, "rationale": "Solving -x + 12 = 2x + 3 gives nine equals three x, so x is three."},
+          {"id": "mth1w-u6-l3-i2", "prompt": "At x = 3, which model is greater: P = 4x + 2 or Q = 2x + 10?", "response": {"type": "selected", "options": ["Q", "P", "they are equal", "there is no output"], "correct_answer": "Q"}, "rationale": "P(3) is 14 and Q(3) is 16, so Q has the greater output at that input."},
+          {"id": "mth1w-u6-l3-i3", "prompt": "Models agree at (6, 25). What does 6 represent?", "response": {"type": "selected", "options": ["the shared input", "the shared output", "both slopes", "the vertical scale"], "correct_answer": "the shared input"}, "rationale": "Ordered-pair convention places the common input first and the shared output second."},
+          {"id": "mth1w-u6-l3-i4", "prompt": "Which check validates intersection (2, 9) for two equations?", "response": {"type": "selected", "options": ["both equations produce 9 at input 2", "one equation has slope 2", "both lines are increasing", "the axes start at zero"], "correct_answer": "both equations produce 9 at input 2"}, "rationale": "A shared coordinate must satisfy each equation with the same input and output."},
+          {"id": "mth1w-u6-l3-i5", "prompt": "Plans C = 8h + 4 and D = 5h + 19 apply for 0 <= h <= 8. Determine and interpret the crossing.", "response": {"type": "constructed", "criteria": ["solves h = 5", "finds common cost 44", "compares valid intervals", "states the domain"], "sample_response": "Equating 8h + 4 and 5h + 19 gives 3h = 15, so h = 5 and both cost 44. C is cheaper below 5, D is cheaper above 5, and the claim is restricted to 0 <= h <= 8.", "educator_review_required": true}, "rationale": "Exact equality plus side tests and the shared domain creates a complete contextual comparison."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l3-r1", "prompt": "What algebraic action represents equal outputs?", "response": {"type": "selected", "options": ["set the two expressions equal", "add both slopes only", "set both inputs to zero", "divide each equation by its intercept"], "correct_answer": "set the two expressions equal"}, "rationale": "An intersection requires that both output expressions have the same value for one shared input."},
+          {"id": "mth1w-u6-l3-r2", "prompt": "If both models output 18 at x = 7, state their intersection.", "response": {"type": "short_text", "accepted_answers": ["(7, 18)", "7,18", "x=7, y=18"], "case_sensitive": false}, "rationale": "The common input seven and common output eighteen form the shared ordered pair."},
+          {"id": "mth1w-u6-l3-r3", "prompt": "Explain why one side test is needed after solving a break-even point.", "response": {"type": "constructed", "criteria": ["states equality alone does not order models", "uses a valid input on a side", "connects output order to context"], "sample_response": "The break-even calculation shows only where outputs are equal. Testing a valid input on each relevant side reveals which output is smaller or larger there, allowing a contextual claim such as which plan is cheaper.", "educator_review_required": true}, "rationale": "An equality point separates intervals but does not by itself state the ordering away from the crossing."}
+        ]
+      },
+      "reflection_prompt": "How did the graphical estimate influence your algebraic work, and which domain or side test changed the contextual conclusion?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Every two-line graph includes equations, ordered points, scale, intersection estimate, and before-after output comparisons in linear reading order.", "response_options": ["shared paper graph and text alternative", "comparison table with algebra", "spoken interval comparison using checked values"]}
+    },
+    {
+      "id": "mth1w-u6-l4",
+      "title": "Read characteristics across representations",
+      "official_expectation_ids": ["C4.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Identify domain, range, intercepts, rate behaviour, and extrema when visible or inferable.",
+        "Compare what graphs, tables, equations, and contextual descriptions reveal or conceal.",
+        "Translate a characteristic across representations and audit the forms for consistency."
+      ],
+      "success_criteria": [
+        "I distinguish allowable inputs from resulting outputs and write restrictions with correct units.",
+        "I locate intercepts and describe increasing, decreasing, or constant behaviour from evidence.",
+        "I mark unknown features as not determined instead of inventing information from a partial display."
+      ],
+      "vocabulary": [
+        {"term": "domain", "meaning": "the set of input values permitted by a relation or its context"},
+        {"term": "range", "meaning": "the set of output values produced over the stated domain"},
+        {"term": "x-intercept", "meaning": "a point where the graph meets the horizontal axis and the output is zero"},
+        {"term": "extremum", "meaning": "a maximum or minimum output value over a specified domain"},
+        {"term": "discrete relation", "meaning": "a relation whose domain consists of separated allowable input values"}
+      ],
+      "why_it_matters": "A model is more than its formula. Its allowable inputs, possible outputs, intercepts, and direction determine whether a conclusion is meaningful. Comparing representations helps learners notice missing restrictions, misleading scales, and claims that the available evidence cannot support.",
+      "direct_instruction": [
+        {"heading": "Start with domain and range", "body": "Domain answers which inputs are allowed; range answers which outputs occur for those inputs. Context may restrict an otherwise all-real equation to non-negative time, whole-number items, or a closed interval. State whether endpoints are included and whether values are continuous or discrete before listing other characteristics."},
+        {"heading": "Locate common features", "body": "The y-intercept occurs at input zero, while an x-intercept occurs where output is zero. A graph may show these immediately; a table shows them only if the needed row appears; an equation can reveal or calculate them. Increasing or decreasing behaviour comes from output order as input increases, not from where the graph sits vertically."},
+        {"heading": "Respect partial evidence", "body": "A finite table displays only selected pairs, and a cropped graph may hide intercepts or extrema. An equation without a context may not disclose a realistic domain. Use a feature matrix with entries known, inferred with work, or not determined. Do not turn a missing value into a claimed characteristic."}
+      ],
+      "method_routes": [
+        {"id": "u6l4-feature-matrix", "title": "Feature-by-feature matrix route", "steps": ["Record the variable meanings, units, domain, and whether inputs are discrete or continuous.", "Create rows for range, intercepts, rate behaviour, and any extrema.", "Read or calculate each feature separately from every representation.", "Mark each entry as shown, inferred, inconsistent, or not determined.", "Resolve inconsistencies by substituting points and checking restrictions."], "when_useful": "Use this route when several relations or representations need a systematic, evidence-conscious comparison.", "check": "Every claimed feature must cite a coordinate, calculation, equation parameter, or contextual restriction."},
+        {"id": "u6l4-translate-check", "title": "Representation translation route", "steps": ["Select one characteristic and state its meaning in words and units.", "Locate or compute it in the source representation.", "Predict how it should appear in a second representation.", "Create or inspect the second form and compare the evidence.", "Repeat with a second characteristic to test overall consistency."], "when_useful": "Use this route to understand a feature deeply by following it from a table or context into a graph and equation.", "check": "The translated forms must preserve the same variable meaning, ordered pairs, domain, and endpoint rules."}
+      ],
+      "representations": [
+        {"id": "u6l4-annotated-graph", "label": "Characteristic-annotated graph", "description": "A coordinate graph labels axes, scale, domain endpoints, intercepts, direction, selected points, and any visible maximum or minimum.", "text_alternative": "State the domain and range first, then list intercepts, direction on each interval, extrema, endpoints, and selected coordinates."},
+        {"id": "u6l4-feature-table", "label": "Table-equation feature matrix", "description": "Rows for each characteristic compare evidence from an input-output table, an equation, and a contextual restriction statement.", "text_alternative": "Read each feature row across the three forms, including shown, inferred, inconsistent, or not-determined labels and supporting work."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l4-we1", "prompt": "Describe y = -2x + 8 for the contextual domain 0 <= x <= 4, with all real x in that interval.", "method_route_id": "u6l4-feature-matrix", "steps": [{"label": "Set the domain", "explanation": "The allowed inputs form the continuous closed interval from zero through four."}, {"label": "Find outputs and intercepts", "explanation": "At x = 0, y = 8; at x = 4, y = 0, giving intercepts (0, 8) and (4, 0)."}, {"label": "State behaviour and range", "explanation": "Slope -2 makes the output decrease continuously, so outputs run from 8 down to 0 and the range is 0 <= y <= 8."}], "answer": "Domain 0 <= x <= 4; range 0 <= y <= 8; y-intercept (0, 8); x-intercept (4, 0); decreasing throughout; maximum 8 and minimum 0.", "verification": "Endpoint substitution and intermediate values all follow the equation's constant negative rate and stay in the stated intervals."},
+        {"id": "mth1w-u6-l4-we2", "prompt": "A table lists (1, 5), (2, 8), (3, 11), and (4, 14). State what is known and not determined.", "method_route_id": "u6l4-translate-check", "steps": [{"label": "Read shown evidence", "explanation": "The displayed domain is 1, 2, 3, 4, the displayed range is 5, 8, 11, 14, and outputs rise by three."}, {"label": "Infer cautiously", "explanation": "The listed points fit y = 3x + 2, but the table alone may be only a sample of a larger relation."}, {"label": "Separate unknowns", "explanation": "Neither an intended full domain nor whether intermediate inputs are allowed is supplied, so continuity and extrapolated intercepts are not determined."}], "answer": "The displayed relation increases with difference 3 over the four listed inputs; its broader domain, continuity, and actual intercepts are not determined without a rule or context.", "verification": "The answer reports every visible pair while labelling the extension y = 3x + 2 as a possible fit rather than guaranteed intent."}
+      ],
+      "misconceptions": [
+        {"claim": "Domain and range are always all real numbers for an equation with x and y.", "correction": "A context or stated interval can restrict inputs and therefore restrict outputs even when the formula accepts more values."},
+        {"claim": "A line above the x-axis is increasing.", "correction": "Increasing describes output change as input rises; a line can stay above the axis while decreasing."},
+        {"claim": "A missing intercept in a cropped graph means no intercept exists.", "correction": "The intercept may lie outside the displayed window, so use the rule or state that it is not visible."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l4-g1", "prompt": "For y = 4x - 12, state the y-intercept.", "response": {"type": "short_text", "accepted_answers": ["(0, -12)", "0,-12", "y-intercept -12"], "case_sensitive": false}, "rationale": "Setting x to zero gives y = -12, so the graph crosses the vertical axis at (0, -12)."},
+          {"id": "mth1w-u6-l4-g2", "prompt": "Which characteristic is not determined by a short table unless input zero is included or a rule is known?", "response": {"type": "selected", "options": ["y-intercept", "displayed pairs", "number of listed rows", "listed output order"], "correct_answer": "y-intercept"}, "rationale": "Without input zero or a dependable rule, the output at zero cannot be read or inferred uniquely."},
+          {"id": "mth1w-u6-l4-g3", "prompt": "Describe the key characteristics of y = x + 2 on discrete domain x = 0, 1, 2, 3.", "response": {"type": "constructed", "criteria": ["states the four-value domain", "states range 2, 3, 4, 5", "identifies y-intercept", "describes increase"], "sample_response": "The domain is the discrete set 0, 1, 2, 3 and the range is 2, 3, 4, 5. The y-intercept is (0, 2), and the output increases by one at each permitted input step.", "educator_review_required": true}, "rationale": "The discrete restriction controls which points and outputs belong to the otherwise linear rule."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l4-i1", "prompt": "Find the x-intercept of y = 3x - 9.", "response": {"type": "short_text", "accepted_answers": ["(3, 0)", "3,0", "x=3"], "case_sensitive": false}, "rationale": "Setting y to zero gives 0 = 3x - 9, so x = 3 and the coordinate is (3, 0)."},
+          {"id": "mth1w-u6-l4-i2", "prompt": "Which domain matches a count of whole tickets from 0 through 50?", "response": {"type": "selected", "options": ["integers 0 through 50", "all real numbers", "negative integers", "real numbers above 50"], "correct_answer": "integers 0 through 50"}, "rationale": "Tickets are countable whole items, and the context includes only counts from zero to fifty."},
+          {"id": "mth1w-u6-l4-i3", "prompt": "A relation has slope 0 and y-intercept 7. How does it behave?", "response": {"type": "selected", "options": ["constant at y = 7", "increasing by 7", "decreasing by 7", "undefined everywhere"], "correct_answer": "constant at y = 7"}, "rationale": "Zero slope produces no output change, so every allowed input maps to the constant value seven."},
+          {"id": "mth1w-u6-l4-i4", "prompt": "For y = -x + 5 on 1 <= x <= 4, what is the range?", "response": {"type": "selected", "options": ["1 <= y <= 4", "-4 <= y <= -1", "all real y", "5 <= y <= 9"], "correct_answer": "1 <= y <= 4"}, "rationale": "Endpoint outputs are four and one, and the continuous decreasing line produces every value between them."},
+          {"id": "mth1w-u6-l4-i5", "prompt": "A graph window shows a decreasing segment but no axes crossing. Explain what can and cannot be claimed.", "response": {"type": "constructed", "criteria": ["states decreasing on displayed interval", "does not claim absent intercepts", "identifies scale or domain evidence needed"], "sample_response": "The segment is decreasing over the displayed interval because y falls as x rises. The window does not prove that intercepts do not exist; their locations require a wider labelled graph, coordinates, or an equation.", "educator_review_required": true}, "rationale": "Cropped visual evidence supports local direction but not global absence of features outside the viewing window."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l4-r1", "prompt": "What set does range describe?", "response": {"type": "selected", "options": ["produced output values", "permitted input values", "axis titles only", "equation symbols"], "correct_answer": "produced output values"}, "rationale": "Range contains the outputs generated when allowed domain inputs are applied to the relation."},
+          {"id": "mth1w-u6-l4-r2", "prompt": "For y = 2x + 6, give the output when x = 0.", "response": {"type": "short_text", "accepted_answers": ["6", "y=6", "y = 6"], "case_sensitive": false}, "rationale": "Substituting zero removes the variable term and leaves the initial output six."},
+          {"id": "mth1w-u6-l4-r3", "prompt": "Explain the difference between discrete and continuous domain in a graph description.", "response": {"type": "constructed", "criteria": ["describes separated allowed inputs", "describes all interval values", "connects to points versus connected path"], "sample_response": "A discrete domain permits separated inputs such as whole item counts, so only corresponding points belong. A continuous domain permits every real input in an interval, so the graph includes the connected path between points.", "educator_review_required": true}, "rationale": "Domain type determines whether unlisted intermediate coordinate pairs are members of the relation."}
+        ]
+      },
+      "reflection_prompt": "Which characteristic was easiest to misread from a partial representation, and how did the evidence labels change your conclusion?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Graph features are delivered in a fixed reading order: variables, units, scale, domain, range, intercepts, direction, extrema, endpoints, then selected points.", "response_options": ["feature comparison matrix", "annotated graph plus ordered description", "spoken characteristic audit with calculations"]}
+    },
+    {
+      "id": "mth1w-u6-l5",
+      "title": "Graph equations and inequalities as points and regions",
+      "official_expectation_ids": ["C4.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Generate and plot ordered pairs satisfying selected linear and non-linear equations.",
+        "Represent a two-variable inequality with the correct boundary and solution region.",
+        "Test points algebraically and connect the truth value to graph membership."
+      ],
+      "success_criteria": [
+        "I choose useful inputs, calculate outputs accurately, and check plotted coordinates in the equation.",
+        "I use a solid boundary for inclusive inequality and a dashed boundary for strict inequality.",
+        "I test a point not on the boundary and describe the satisfying region without depending on colour."
+      ],
+      "vocabulary": [
+        {"term": "solution set", "meaning": "all ordered pairs that make an equation or inequality true"},
+        {"term": "boundary line", "meaning": "the related equality graph separating two half-planes for a linear inequality"},
+        {"term": "inclusive inequality", "meaning": "an inequality using less-than-or-equal or greater-than-or-equal so boundary points belong"},
+        {"term": "strict inequality", "meaning": "an inequality using less-than or greater-than so boundary points do not belong"},
+        {"term": "test point", "meaning": "a point substituted into an inequality to determine whether its side satisfies the relation"}
+      ],
+      "why_it_matters": "Equations describe exact coordinate relationships, while inequalities describe every permitted point in a region. Understanding the difference supports constraints, feasible choices, and later optimization without turning a shaded picture into an unexplained visual convention.",
+      "direct_instruction": [
+        {"heading": "Build equation solution sets", "body": "Choose input values suited to the scale, calculate the corresponding output, and record ordered pairs. A linear equation produces collinear points; a non-linear equation such as y = x^2 produces changing differences and a curved pattern. The smooth connection is justified only when all intermediate real inputs are allowed."},
+        {"heading": "Draw and classify the boundary", "body": "Replace the inequality symbol with equality to graph its boundary. Use a solid line when equality is included by <= or >=, and a dashed line when < or > excludes the boundary. This line style must be stated in words as well as shown visually, so membership is not communicated by appearance alone."},
+        {"heading": "Test a side algebraically", "body": "Choose a test point not on the boundary, often the origin when it is not on the line. Substitute its coordinates into the original inequality. If the statement is true, the entire half-plane containing that point is the solution region; otherwise the opposite half-plane is. Describe the region relative to the boundary."}
+      ],
+      "method_routes": [
+        {"id": "u6l5-pairs-plot", "title": "Generate-and-plot pairs route", "steps": ["Read the equation and decide a safe, useful set of input values.", "Calculate outputs and organize all ordered pairs in a value table.", "Substitute each pair back into the original equation.", "Plot using labelled axes, consistent scale, and stated domain.", "Connect only when the domain and relation justify intermediate points, then describe the shape."], "when_useful": "Use this route for linear or non-linear equations when intercepts are inconvenient or the graph shape needs several points.", "check": "Every plotted point must satisfy the original equation, and any connection must match the permitted domain."},
+        {"id": "u6l5-boundary-test", "title": "Boundary-and-test-point route", "steps": ["Graph the related equality as the boundary using points or intercepts.", "Classify the boundary as solid for inclusive or dashed for strict inequality.", "Select and state a point that is not on the boundary.", "Substitute it into the original inequality and evaluate truth.", "Identify the satisfying side and describe whether boundary points belong."], "when_useful": "Use this route for a linear inequality in two variables when the complete solution is a half-plane rather than one line.", "check": "Verify one point inside and one point outside the claimed region, plus a boundary point when equality is included."}
+      ],
+      "representations": [
+        {"id": "u6l5-region-graph", "label": "Boundary and solution-region graph", "description": "A coordinate graph identifies a solid or dashed boundary, a labelled test point, the satisfying side, and axis scale without colour dependence.", "text_alternative": "State the boundary equation and line style, test-point substitution, truth result, satisfying side relative to the line, and boundary membership."},
+        {"id": "u6l5-equation-table", "label": "Equation and verified value table", "description": "Selected linear or non-linear equations sit beside input-output pairs and explicit substitution checks for every plotted coordinate.", "text_alternative": "Read the equation, domain, each input-output pair, verification statement, and resulting straight or curved shape in order."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l5-we1", "prompt": "Graph y = x^2 for -2 <= x <= 2 using whole-number inputs and describe the solution set.", "method_route_id": "u6l5-pairs-plot", "steps": [{"label": "Generate pairs", "explanation": "For x = -2, -1, 0, 1, 2, squaring gives y = 4, 1, 0, 1, 4."}, {"label": "Plot and connect", "explanation": "Plot (-2, 4), (-1, 1), (0, 0), (1, 1), and (2, 4); real inputs permit a smooth upward-curving path."}, {"label": "Verify and describe", "explanation": "Each coordinate satisfies y = x^2, and the graph has minimum (0, 0) with symmetry across the y-axis."}], "answer": "The displayed solution is the upward-curving portion through the five verified points for every real x from -2 through 2.", "verification": "Substituting each listed x gives the plotted y, including equal outputs for opposite inputs and zero at the origin."},
+        {"id": "mth1w-u6-l5-we2", "prompt": "Graph and describe the solution of y >= 2x - 1.", "method_route_id": "u6l5-boundary-test", "steps": [{"label": "Graph the boundary", "explanation": "The equality y = 2x - 1 passes through (0, -1) and (1, 1)."}, {"label": "Choose line style", "explanation": "The >= symbol includes equality, so the boundary is solid and its points satisfy the inequality."}, {"label": "Test and select a side", "explanation": "At (0, 0), the statement 0 >= -1 is true, so the region containing the origin, on or above the line, satisfies."}], "answer": "Use the solid line y = 2x - 1 and include the half-plane on or above it, including the origin.", "verification": "The inside point (0, 0) gives a true statement, while (0, -2) gives -2 >= -1, which is false."}
+      ],
+      "misconceptions": [
+        {"claim": "One plotted point is enough to graph any equation.", "correction": "A single point cannot determine a line or reveal a non-linear shape; choose enough verified points for the relation."},
+        {"claim": "Every inequality boundary is part of the solution.", "correction": "Only <= and >= include equality; strict < and > use a dashed, excluded boundary."},
+        {"claim": "Shading above always means greater than.", "correction": "Test a point because rearranged equations, unusual axes, and boundary orientation can make visual shortcuts unreliable."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l5-g1", "prompt": "Which point satisfies y = -x + 3?", "response": {"type": "selected", "options": ["(1, 2)", "(1, 3)", "(0, 0)", "(3, 3)"], "correct_answer": "(1, 2)"}, "rationale": "Substituting x = 1 gives y = -1 + 3 = 2, matching the selected coordinate."},
+          {"id": "mth1w-u6-l5-g2", "prompt": "What boundary style represents y < 4x + 1?", "response": {"type": "short_text", "accepted_answers": ["dashed", "dashed line", "excluded dashed boundary"], "case_sensitive": false}, "rationale": "Strict less-than excludes equality, so points on y = 4x + 1 are not solutions."},
+          {"id": "mth1w-u6-l5-g3", "prompt": "Explain how to use (0, 0) to test y <= -x + 2.", "response": {"type": "constructed", "criteria": ["substitutes zero for both variables", "evaluates 0 <= 2 as true", "selects the side containing the origin", "states boundary is solid"], "sample_response": "Substituting (0, 0) gives 0 <= -0 + 2, or 0 <= 2, which is true. Therefore the solution is the side containing the origin, and the boundary y = -x + 2 is solid because equality is included.", "educator_review_required": true}, "rationale": "The truth of the substituted test point identifies the satisfying side and the symbol identifies boundary membership."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l5-i1", "prompt": "For y = x^2, what output corresponds to x = -3?", "response": {"type": "short_text", "accepted_answers": ["9", "y=9", "y = 9"], "case_sensitive": false}, "rationale": "Squaring negative three gives positive nine, so the solution coordinate is (-3, 9)."},
+          {"id": "mth1w-u6-l5-i2", "prompt": "Which point lies on the boundary y = 3x - 2?", "response": {"type": "selected", "options": ["(1, 1)", "(1, 3)", "(0, 0)", "(2, 2)"], "correct_answer": "(1, 1)"}, "rationale": "At x = 1 the boundary output is 3(1) - 2 = 1, giving the point (1, 1)."},
+          {"id": "mth1w-u6-l5-i3", "prompt": "For y > 2x + 5, does (0, 6) satisfy the inequality?", "response": {"type": "selected", "options": ["yes", "no", "only if the boundary is solid", "cannot substitute points"], "correct_answer": "yes"}, "rationale": "Substitution gives 6 > 5, which is true, so the point belongs to the solution region."},
+          {"id": "mth1w-u6-l5-i4", "prompt": "Which statement describes x = -2?", "response": {"type": "selected", "options": ["a vertical line through x = -2", "a horizontal line through y = -2", "a parabola", "all points with y = x"], "correct_answer": "a vertical line through x = -2"}, "rationale": "Every solution has horizontal coordinate -2 while the vertical coordinate may vary."},
+          {"id": "mth1w-u6-l5-i5", "prompt": "Graph y > -2x + 4 in words, including boundary, test point, and solution side.", "response": {"type": "constructed", "criteria": ["states dashed boundary y = -2x + 4", "uses a non-boundary test point", "evaluates truth", "describes satisfying side"], "sample_response": "Draw the dashed boundary y = -2x + 4 through (0, 4) and (2, 0). The origin gives 0 > 4, which is false, so choose the side not containing the origin: points above the line, excluding the boundary.", "educator_review_required": true}, "rationale": "The strict symbol, accurate boundary points, and an algebraic test fully determine the half-plane."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l5-r1", "prompt": "What is graphed first for a linear inequality?", "response": {"type": "selected", "options": ["the related equality boundary", "a random curve", "only the origin", "the answer key"], "correct_answer": "the related equality boundary"}, "rationale": "Replacing the inequality with equality creates the line separating its two possible half-planes."},
+          {"id": "mth1w-u6-l5-r2", "prompt": "State one point on y = 2x when x = 3.", "response": {"type": "short_text", "accepted_answers": ["(3, 6)", "3,6", "x=3, y=6"], "case_sensitive": false}, "rationale": "Substituting three gives y = 2 times 3 = 6, so the point is (3, 6)."},
+          {"id": "mth1w-u6-l5-r3", "prompt": "Explain why a region, rather than only a line, represents a two-variable linear inequality.", "response": {"type": "constructed", "criteria": ["states many ordered pairs satisfy", "identifies a half-plane", "distinguishes boundary inclusion"], "sample_response": "A linear inequality is true for many ordered pairs on one side of its equality boundary, so its solution is a half-plane. The boundary joins the region only when the symbol includes equality.", "educator_review_required": true}, "rationale": "The inequality compares outputs over an area of coordinates instead of requiring exact equality on a one-dimensional line."}
+        ]
+      },
+      "reflection_prompt": "Which algebraic check made the graph membership decision clearest, and how did you communicate boundary and region without relying on colour?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "All graphs include equations, ordered boundary points, solid-or-dashed wording, test substitution, truth result, and a relative description such as above or below.", "response_options": ["paper plot with hatch-pattern region", "ordered coordinate and substitution table", "spoken boundary-and-region description"]}
+    },
+    {
+      "id": "mth1w-u6-l6",
+      "title": "Transform lines and track equation changes",
+      "official_expectation_ids": ["C4.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Translate and reflect a line by transforming representative points and identifying invariants.",
+        "Connect vertical translations and origin-based reflections with changes in a line equation.",
+        "Explore rotations of through-origin lines while recognizing vertical-line and angle limitations."
+      ],
+      "success_criteria": [
+        "I apply the same coordinate rule to enough points to determine the transformed line.",
+        "I distinguish changing intercept from changing slope and verify the new equation with transformed points.",
+        "I describe a rotation by angle and direction and handle vertical results without assigning a false finite slope."
+      ],
+      "vocabulary": [
+        {"term": "transformation", "meaning": "a rule mapping every point of a figure or graph to a new position"},
+        {"term": "translation", "meaning": "a shift moving every point the same horizontal and vertical distance"},
+        {"term": "reflection", "meaning": "a flip mapping each point across a specified mirror line"},
+        {"term": "rotation", "meaning": "a turn of every point through a stated angle and direction about a centre"},
+        {"term": "invariant", "meaning": "a property that remains unchanged under the transformation being considered"}
+      ],
+      "why_it_matters": "Transformations show how equation parameters control a graph instead of treating formulas as static symbols. Point rules provide a paper-based foundation, while an optional graphing tool can rapidly check conjectures about slope, intercept, reflection, and rotation.",
+      "direct_instruction": [
+        {"heading": "Transform points first", "body": "Select at least two distinct points from a line and apply the same transformation to both. A vertical translation by k maps (x, y) to (x, y + k), preserving slope and changing the y-intercept by k. This coordinate evidence explains why y = mx becomes y = mx + k rather than relying on memorized appearance."},
+        {"heading": "Track reflections", "body": "Reflection across the x-axis maps (x, y) to (x, -y). For y = mx + b, this gives y = -mx - b. Reflection across the y-axis maps (x, y) to (-x, y), giving y = -mx + b. For lines through the origin, either axis reflection changes the slope sign, though the point mappings differ."},
+        {"heading": "Rotate with care", "body": "A rotation needs a centre, angle, and direction. For a through-origin line, rotation about the origin changes its direction angle while keeping the origin fixed. A quarter-turn maps slope m to -1/m when m is non-zero, but horizontal lines become vertical and vertical lines become horizontal, so not every result has y = mx form."}
+      ],
+      "method_routes": [
+        {"id": "u6l6-coordinate-transform", "title": "Coordinate-transformation route", "steps": ["Choose two or three distinct points on the original line and verify them.", "Write the translation, reflection, or rotation rule before applying it.", "Map each point carefully and list the before-after pairs.", "Determine the transformed line from the new coordinates.", "Check all mapped points and compare slope, intercept, and other invariants."], "when_useful": "Use this route for a dependable paper solution when the geometric transformation rule is known or can be constructed.", "check": "Every transformed point must satisfy the new equation, and all points must follow exactly the same mapping rule."},
+        {"id": "u6l6-parameter-compare", "title": "Parameter-comparison route", "steps": ["Write the original line in a form that displays slope and intercept.", "Predict which parameter should change and which should remain invariant.", "Write the candidate transformed equation and generate two points.", "Compare its graph or coordinates with the intended movement.", "Revise the conjecture if a point rule or optional dynamic check disagrees."], "when_useful": "Use this route to connect families of equations with repeated translations or reflections and to test parameter conjectures efficiently.", "check": "A parameter claim is accepted only when at least two transformed coordinates and the stated geometric movement agree."}
+      ],
+      "representations": [
+        {"id": "u6l6-before-after-graphs", "label": "Before-and-after line graphs", "description": "Original and transformed lines share axes and include labelled corresponding points, movement arrows or words, equations, and stated invariants.", "text_alternative": "List each original point and mapped point, then state the transformation rule, old and new equations, slopes, intercepts, and invariants."},
+        {"id": "u6l6-transformation-table", "label": "Transformation and equation table", "description": "Rows compare coordinate rule, representative mappings, original equation, transformed equation, slope, intercept, and special cases.", "text_alternative": "Read each transformation row from mapping rule through point evidence to equation change and any vertical-line exception."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l6-we1", "prompt": "Translate y = 2x upward by 3 units and verify the result using two points.", "method_route_id": "u6l6-coordinate-transform", "steps": [{"label": "Choose and map points", "explanation": "Points (0, 0) and (2, 4) map under (x, y) to (x, y + 3), becoming (0, 3) and (2, 7)."}, {"label": "Determine the line", "explanation": "The mapped points retain rise 4 over run 2, so slope remains 2, and the new y-intercept is 3."}, {"label": "Write and verify", "explanation": "The equation y = 2x + 3 gives 3 at x = 0 and 7 at x = 2, matching both transformed points."}], "answer": "The translated line is y = 2x + 3; its slope stays 2 and its y-intercept changes from 0 to 3.", "verification": "Subtracting 3 from every new output recovers corresponding points on the original line y = 2x."},
+        {"id": "mth1w-u6-l6-we2", "prompt": "Reflect y = -3x + 2 across the x-axis and describe the equation change.", "method_route_id": "u6l6-parameter-compare", "steps": [{"label": "Map sample points", "explanation": "The original points (0, 2) and (1, -1) reflect to (0, -2) and (1, 1) under (x, y) to (x, -y)."}, {"label": "Compare parameters", "explanation": "The reflected points have slope (1 - (-2))/(1 - 0) = 3 and vertical intercept -2."}, {"label": "State the rule", "explanation": "Negating every original output changes y = -3x + 2 into y = 3x - 2."}], "answer": "The x-axis reflection is y = 3x - 2; both the slope and intercept signs change.", "verification": "Each reflected coordinate satisfies y = 3x - 2, and reflecting a second time returns the original coordinates."}
+      ],
+      "misconceptions": [
+        {"claim": "Adding 4 to y = mx makes the line four times as steep.", "correction": "Adding 4 to the output translates every point upward four units and leaves slope unchanged."},
+        {"claim": "Reflecting across the x-axis changes only the slope sign.", "correction": "For y = mx + b, every output is negated, so both m and b change sign."},
+        {"claim": "Every rotated line has a finite slope-intercept equation.", "correction": "A rotation can produce a vertical line, which has undefined slope and is written x = constant."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l6-g1", "prompt": "Map (2, 5) under a translation 3 units downward.", "response": {"type": "short_text", "accepted_answers": ["(2, 2)", "2,2", "x=2, y=2"], "case_sensitive": false}, "rationale": "A downward translation keeps x equal to two and subtracts three from y, giving two."},
+          {"id": "mth1w-u6-l6-g2", "prompt": "Which equation is y = -2x translated upward by 6?", "response": {"type": "selected", "options": ["y = -2x + 6", "y = 4x", "y = 2x + 6", "y = -8x"], "correct_answer": "y = -2x + 6"}, "rationale": "Vertical translation adds six to every output while preserving the original slope negative two."},
+          {"id": "mth1w-u6-l6-g3", "prompt": "Explain the x-axis reflection of y = 4x - 1 using a point rule and equation.", "response": {"type": "constructed", "criteria": ["states (x, y) maps to (x, -y)", "negates both terms", "gives y = -4x + 1", "checks a point"], "sample_response": "Reflection across the x-axis maps (x, y) to (x, -y), negating every output. Therefore y = 4x - 1 becomes y = -(4x - 1) = -4x + 1; for example, (0, -1) maps to (0, 1).", "educator_review_required": true}, "rationale": "The coordinate mapping explains why all output terms, including the intercept, are negated."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l6-i1", "prompt": "Translate y = 5x - 2 downward by 4 units.", "response": {"type": "short_text", "accepted_answers": ["y=5x-6", "y = 5x - 6", "y=5x - 6"], "case_sensitive": false}, "rationale": "Subtracting four from every output keeps slope five and changes the intercept from -2 to -6."},
+          {"id": "mth1w-u6-l6-i2", "prompt": "Reflect point (-3, 7) across the y-axis.", "response": {"type": "short_text", "accepted_answers": ["(3, 7)", "3,7", "x=3, y=7"], "case_sensitive": false}, "rationale": "A y-axis reflection negates the horizontal coordinate and leaves the vertical coordinate unchanged."},
+          {"id": "mth1w-u6-l6-i3", "prompt": "Which property is invariant when y = 3x + 1 is translated vertically?", "response": {"type": "selected", "options": ["slope", "y-intercept", "every y-coordinate", "x-axis crossing"], "correct_answer": "slope"}, "rationale": "A vertical translation adds one constant to all outputs, preserving rise over run and therefore slope."},
+          {"id": "mth1w-u6-l6-i4", "prompt": "A 90-degree rotation of the horizontal line y = 0 about the origin produces what line?", "response": {"type": "selected", "options": ["x = 0", "y = 1", "y = x", "x = 90"], "correct_answer": "x = 0"}, "rationale": "The horizontal x-axis rotates onto the vertical y-axis, whose equation is x = 0 and slope is undefined."},
+          {"id": "mth1w-u6-l6-i5", "prompt": "Transform y = x through reflection across the x-axis and then translation up 2; verify two points.", "response": {"type": "constructed", "criteria": ["reflects to y = -x", "translates to y = -x + 2", "maps and checks two points", "states order"], "sample_response": "Reflecting first maps (x, y) to (x, -y), so y = x becomes y = -x. Translating upward gives y = -x + 2. Original points (0, 0) and (1, 1) finish at (0, 2) and (1, 1), and both satisfy the result.", "educator_review_required": true}, "rationale": "Applying coordinate transformations in order produces point evidence for both the slope sign and final intercept."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l6-r1", "prompt": "What point remains fixed when a line rotates about the origin?", "response": {"type": "selected", "options": ["(0, 0)", "(1, 1)", "every y-intercept", "every point on the line"], "correct_answer": "(0, 0)"}, "rationale": "The centre of rotation does not move, so the origin remains fixed under an origin-centred turn."},
+          {"id": "mth1w-u6-l6-r2", "prompt": "Reflect (4, -2) across the x-axis.", "response": {"type": "short_text", "accepted_answers": ["(4, 2)", "4,2", "x=4, y=2"], "case_sensitive": false}, "rationale": "An x-axis reflection keeps x equal to four and negates y from negative two to positive two."},
+          {"id": "mth1w-u6-l6-r3", "prompt": "Explain why two mapped points are needed to verify a transformed line.", "response": {"type": "constructed", "criteria": ["states one point does not determine a unique line", "uses two distinct points", "connects to slope and intercept or vertical line"], "sample_response": "One transformed point lies on infinitely many possible lines. Two distinct mapped points determine a unique line, allowing its slope and intercept, or its vertical equation, to be checked against the intended transformation.", "educator_review_required": true}, "rationale": "A line requires at least two distinct points, so one mapped coordinate cannot verify the full transformed relation."}
+        ]
+      },
+      "reflection_prompt": "Which transformation was easiest to justify with point mappings, and where did equation parameters or a vertical-line exception require extra care?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Transformation diagrams are duplicated as ordered original-to-image coordinate pairs, mapping rules, equations, parameter comparisons, and stated special cases.", "response_options": ["before-after coordinate table", "paper graph with mapped points", "spoken transformation proof using equations"]}
+    },
+    {
+      "id": "mth1w-u6-l7",
+      "title": "Build a line equation from data",
+      "official_expectation_ids": ["C4.4"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Determine a line's rate and initial value from a graph, table, or concrete relation.",
+        "Use either change-table reasoning or the slope formula and substitution to build an equation.",
+        "Verify the equation against all available data and state units, domain, and modelling limits."
+      ],
+      "success_criteria": [
+        "I calculate signed output change per input change without assuming that input steps equal one.",
+        "I determine the intercept directly or by substituting a reliable point into y = mx + b.",
+        "I check more than the points used to construct the line and explain what the parameters mean."
+      ],
+      "vocabulary": [
+        {"term": "slope", "meaning": "the signed vertical change divided by horizontal change between two line points"},
+        {"term": "rise", "meaning": "the signed difference between two output or vertical-coordinate values"},
+        {"term": "run", "meaning": "the signed difference between the corresponding input or horizontal-coordinate values"},
+        {"term": "linear model", "meaning": "a constant-rate relation used to represent data within stated assumptions and domain"},
+        {"term": "residual check", "meaning": "a comparison of observed outputs with model outputs to reveal disagreement"}
+      ],
+      "why_it_matters": "Turning measured or described change into an equation makes a pattern usable for prediction, comparison, and explanation. Multiple construction routes reduce reliance on a single memorized procedure, while verification prevents two convenient points from hiding inconsistent data.",
+      "direct_instruction": [
+        {"heading": "Read change before symbols", "body": "From a table, compare output change with its matching input change and simplify the ratio with sign and units. From a graph, choose two exact grid points and count signed rise and run. From a concrete pattern, separate the repeated amount per stage from the fixed amount at stage zero."},
+        {"heading": "Recover the intercept", "body": "If the relation includes input zero, its output gives b directly. Otherwise, substitute a known point (x, y) and the calculated slope m into y = mx + b, then solve for b. Working backward in a constant-rate table is an equivalent route, provided every input step is handled correctly."},
+        {"heading": "Verify beyond construction", "body": "Write the resulting equation with variable meanings, rate units, initial-value units, and domain. Substitute every available point, especially one not used to build the equation. A nonzero difference between observed and predicted output signals arithmetic error, data variation, or an unsuitable exact linear model."}
+      ],
+      "method_routes": [
+        {"id": "u6l7-change-graph", "title": "Change-table and graph route", "steps": ["Order the data and calculate output changes over their matching input changes.", "Confirm the rate is constant and record its units and sign.", "Find or extend to the output at input zero using the constant rate.", "Write output = rate times input + initial value.", "Graph or substitute an unused pair and state the supported domain."], "when_useful": "Use this route when a table has regular structure or a graph shows exact rise, run, and axis intercepts clearly.", "check": "The equation must reproduce every exact data point and the visible rise, run, and initial value."},
+        {"id": "u6l7-formula-substitute", "title": "Slope-formula and substitution route", "steps": ["Choose two distinct reliable points and keep their coordinate order consistent.", "Calculate m = (y2 - y1)/(x2 - x1), checking that the denominator is non-zero.", "Substitute one point and m into y = mx + b and solve for b.", "Write the complete equation with domain and parameter meanings.", "Verify using the second point and at least one additional datum when available."], "when_useful": "Use this route for irregular input gaps or when the line does not display its vertical intercept directly.", "check": "Swapping point order in both numerator and denominator must give the same slope, and all check residuals must be zero for exact data."}
+      ],
+      "representations": [
+        {"id": "u6l7-rise-run-graph", "label": "Graph with rise and run", "description": "A labelled line graph marks two exact points, a signed slope triangle, vertical intercept, domain, and equation with contextual units.", "text_alternative": "Read both coordinates, signed rise, signed run, simplified slope, intercept, equation, domain, and a checked third point."},
+        {"id": "u6l7-table-equation", "label": "Data-to-equation table", "description": "Input-output pairs include change columns, rate calculation, intercept work, model outputs, and residual checks against observations.", "text_alternative": "Read pairs in order, each matched change ratio, the intercept calculation, resulting equation, and observed-minus-predicted differences."}
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u6-l7-we1", "prompt": "Build an equation from the table (1, 7), (3, 15), (5, 23), then interpret its parameters.", "method_route_id": "u6l7-change-graph", "steps": [{"label": "Calculate rate", "explanation": "Output rises 8 when input rises 2 in both intervals, so the constant rate is 8/2 = 4."}, {"label": "Work back to zero", "explanation": "Moving from x = 1 to x = 0 subtracts one rate unit, so the output is 7 - 4 = 3."}, {"label": "Write and verify", "explanation": "The equation y = 4x + 3 gives 15 at x = 3 and 23 at x = 5, matching unused rows."}], "answer": "The equation is y = 4x + 3; the output grows four units per input unit and begins at three when the input is zero.", "verification": "All three supplied points have zero observed-minus-predicted difference under y = 4x + 3."},
+        {"id": "mth1w-u6-l7-we2", "prompt": "Find the equation of the line through (-2, 9) and (4, -3).", "method_route_id": "u6l7-formula-substitute", "steps": [{"label": "Find slope", "explanation": "Using consistent order, m = (-3 - 9)/(4 - (-2)) = -12/6 = -2."}, {"label": "Find intercept", "explanation": "Substitute (-2, 9): 9 = -2(-2) + b, so 9 = 4 + b and b = 5."}, {"label": "Write and check", "explanation": "The equation y = -2x + 5 gives -3 when x = 4, verifying the second point."}], "answer": "The line equation is y = -2x + 5.", "verification": "Both original coordinates satisfy the equation, and reversing both subtraction orders still gives slope -2."}
+      ],
+      "misconceptions": [
+        {"claim": "The first output in a table is always the intercept.", "correction": "The intercept is the output at input zero, which may not be the first displayed input."},
+        {"claim": "Slope is output change without considering input change.", "correction": "Slope is rise divided by run, especially important when input gaps are not one."},
+        {"claim": "Any two data points prove that every point follows one line.", "correction": "Two distinct points determine a line, but additional data must be checked before claiming the line models the full set."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u6-l7-g1", "prompt": "Find the slope between (1, 4) and (3, 10).", "response": {"type": "short_text", "accepted_answers": ["3", "6/2", "m=3"], "case_sensitive": false}, "rationale": "The rise is six and the run is two, so the slope is six divided by two, or three."},
+          {"id": "mth1w-u6-l7-g2", "prompt": "A line has slope 2 and contains (0, -5). Which equation represents it?", "response": {"type": "selected", "options": ["y = 2x - 5", "y = -5x + 2", "y = 2x + 5", "y = x - 3"], "correct_answer": "y = 2x - 5"}, "rationale": "The point at input zero supplies intercept -5 while the given rate is the coefficient two."},
+          {"id": "mth1w-u6-l7-g3", "prompt": "Build and verify the equation for (0, 6), (2, 12), and (5, 21).", "response": {"type": "constructed", "criteria": ["calculates slope 3", "identifies intercept 6", "writes y = 3x + 6", "checks the third point"], "sample_response": "From (0, 6) to (2, 12), the rate is 6/2 = 3 and the input-zero value is 6, so y = 3x + 6. At x = 5 the model gives 21, matching the third point.", "educator_review_required": true}, "rationale": "The slope and intercept construct the equation, while an unused point supplies an independent verification."}
+        ],
+        "independent": [
+          {"id": "mth1w-u6-l7-i1", "prompt": "Find the slope between (2, 11) and (6, 3).", "response": {"type": "short_text", "accepted_answers": ["-2", "-8/4", "m=-2"], "case_sensitive": false}, "rationale": "The output change is -8 and input change is 4, so the signed ratio is -2."},
+          {"id": "mth1w-u6-l7-i2", "prompt": "Which equation contains (2, 9) and has slope 4?", "response": {"type": "selected", "options": ["y = 4x + 1", "y = 4x + 9", "y = 2x + 5", "y = -4x + 17"], "correct_answer": "y = 4x + 1"}, "rationale": "Substituting (2, 9) into y = 4x + b gives 9 = 8 + b and therefore b = 1."},
+          {"id": "mth1w-u6-l7-i3", "prompt": "A table has (4, 2) and (10, 14). What is the rate?", "response": {"type": "short_text", "accepted_answers": ["2", "12/6", "2 per input unit"], "case_sensitive": false}, "rationale": "Output changes by twelve while input changes by six, giving a rate of two."},
+          {"id": "mth1w-u6-l7-i4", "prompt": "Which is the strongest exact-model verification?", "response": {"type": "selected", "options": ["all available points have zero residual", "the line looks close", "the slope is positive", "two axes have labels"], "correct_answer": "all available points have zero residual"}, "rationale": "Zero residual for every available exact datum shows that model outputs equal all observed outputs."},
+          {"id": "mth1w-u6-l7-i5", "prompt": "From points (3, -1), (7, 5), and (9, 8), construct a line equation and audit the third point.", "response": {"type": "constructed", "criteria": ["calculates slope 3/2", "finds intercept -11/2", "writes a correct equation", "verifies (9, 8)"], "sample_response": "Using the first two points gives m = 6/4 = 3/2. Substituting (3, -1) gives -1 = 9/2 + b, so b = -11/2 and y = (3/2)x - 11/2. At x = 9, y = 27/2 - 11/2 = 8, so the third point fits.", "educator_review_required": true}, "rationale": "Fractional slope and intercept are retained exactly, and the unused point confirms the same line."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u6-l7-r1", "prompt": "In m = rise/run, what does run measure?", "response": {"type": "selected", "options": ["signed input change", "signed output change", "vertical intercept", "number of table rows"], "correct_answer": "signed input change"}, "rationale": "Run is the horizontal difference, which corresponds to the signed change in input."},
+          {"id": "mth1w-u6-l7-r2", "prompt": "If m = -3 and point (0, 4) lies on the line, state b.", "response": {"type": "short_text", "accepted_answers": ["4", "b=4", "b = 4"], "case_sensitive": false}, "rationale": "At input zero, the output equals the intercept directly, so b is four regardless of slope."},
+          {"id": "mth1w-u6-l7-r3", "prompt": "Explain why subtracting coordinates in inconsistent orders gives a wrong slope sign.", "response": {"type": "constructed", "criteria": ["uses the same point order for rise and run", "explains sign cancellation when both reverse", "identifies inconsistent reversal error"], "sample_response": "Rise and run must both follow point two minus point one. Reversing both makes numerator and denominator change sign, leaving the same ratio; reversing only one changes the slope sign and no longer describes the points' direction.", "educator_review_required": true}, "rationale": "Consistent coordinate order preserves the signed ratio representing the line's direction and steepness."}
+        ]
+      },
+      "reflection_prompt": "Which equation-building route gave you the strongest error check, and what did the rate and initial value mean in the data context?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Slope triangles are paired with exact point coordinates, signed rise and run, equation work, units, domain, and residual checks in reading order.", "response_options": ["change table with equation", "paper graph and coordinate narration", "spoken slope-and-substitution proof"]}
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u6-quiz",
+      "title": "Unit 6 relations and linear models check",
+      "estimated_minutes": 45,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {"id": "mth1w-u6-q1", "official_expectation_ids": ["C3.1"], "prompt": "A table has y-values 4, 7, 10, 13 for consecutive x-values. What is its constant first difference?", "response": {"type": "short_text", "accepted_answers": ["3", "+3", "three"], "case_sensitive": false}, "rationale": "Each y-value increases by 3, so the relation has a constant first difference of positive three."},
+        {"id": "mth1w-u6-q2", "official_expectation_ids": ["C3.2"], "prompt": "Which equation has rate 4 and initial value -2?", "response": {"type": "selected", "options": ["y = 4x - 2", "y = -2x + 4", "y = 4x + 2", "y = x - 8"], "correct_answer": "y = 4x - 2"}, "rationale": "In y = mx + b, the coefficient m is the rate and b is the value when x equals zero."},
+        {"id": "mth1w-u6-q3", "official_expectation_ids": ["C3.3"], "prompt": "The models A = 3x + 10 and B = 5x + 2 intersect at what x-value?", "response": {"type": "short_text", "accepted_answers": ["4", "x=4", "x = 4"], "case_sensitive": false}, "rationale": "Equating the outputs gives 3x + 10 = 5x + 2, so 8 = 2x and x = 4."},
+        {"id": "mth1w-u6-q4", "official_expectation_ids": ["C4.1"], "prompt": "For y = -2x + 6 with all real x, identify the y-intercept and whether the relation increases or decreases.", "response": {"type": "constructed", "criteria": ["identifies intercept (0, 6)", "states the relation decreases", "connects decrease to slope -2"], "sample_response": "The y-intercept is (0, 6) because y is 6 when x is zero. The relation decreases by 2 units in y for every increase of 1 in x because its slope is -2.", "educator_review_required": true}, "rationale": "The constant term locates the y-intercept and the negative slope describes a decreasing relation."},
+        {"id": "mth1w-u6-q5", "official_expectation_ids": ["C4.2"], "prompt": "Which point satisfies both y = 2x + 1 and y > 0?", "response": {"type": "selected", "options": ["(1, 3)", "(1, 2)", "(0, 0)", "(-1, 1)"], "correct_answer": "(1, 3)"}, "rationale": "Substitution gives 3 = 2(1) + 1 and the y-coordinate 3 is also greater than zero."},
+        {"id": "mth1w-u6-q6", "official_expectation_ids": ["C4.3"], "prompt": "What equation translates y = 3x upward by 5 units?", "response": {"type": "selected", "options": ["y = 3x + 5", "y = 8x", "y = -3x + 5", "y = 3(x + 5)"], "correct_answer": "y = 3x + 5"}, "rationale": "Adding 5 to every output keeps the slope 3 and raises the vertical intercept from zero to five."},
+        {"id": "mth1w-u6-q7", "official_expectation_ids": ["C4.4"], "prompt": "Find the equation of the line through (0, -1) and (3, 5).", "response": {"type": "short_text", "accepted_answers": ["y=2x-1", "y = 2x - 1", "y=2x - 1"], "case_sensitive": false}, "rationale": "The slope is (5 - (-1))/(3 - 0) = 2 and the point at x = 0 gives intercept -1."},
+        {"id": "mth1w-u6-q8", "official_expectation_ids": ["C3.1", "C4.1"], "prompt": "Explain why the table x: 0, 1, 2, 3 and y: 1, 2, 5, 10 is not linear, and name one characteristic still visible.", "response": {"type": "constructed", "criteria": ["computes changing first differences", "concludes the relation is non-linear", "states a valid characteristic such as intercept or domain"], "sample_response": "The successive y-differences are 1, 3, and 5, so the rate is not constant and the relation is non-linear. The table also shows a y-intercept of (0, 1) and a displayed domain of 0, 1, 2, 3.", "educator_review_required": true}, "rationale": "Changing first differences disprove linearity, while domain and the value at zero can still be read from the table."},
+        {"id": "mth1w-u6-q9", "official_expectation_ids": ["C4.2", "C4.3"], "prompt": "For y < -x + 2, is the boundary solid or dashed, and is (0, 0) in the solution region?", "response": {"type": "constructed", "criteria": ["states the boundary is dashed", "tests 0 < 2", "includes (0, 0) in the region"], "sample_response": "The boundary is dashed because strict inequality excludes points on y = -x + 2. Testing (0, 0) gives 0 < 2, which is true, so the side containing the origin is the solution region.", "educator_review_required": true}, "rationale": "A strict inequality excludes its boundary, and a test point identifies which half-plane satisfies the comparison."},
+        {"id": "mth1w-u6-q10", "official_expectation_ids": ["C3.2", "C3.3", "C4.4"], "prompt": "Two plans are P = 2n + 18 and Q = 5n + 6 for 0 <= n <= 10. Compare them at their break-even point and explain one domain limit.", "response": {"type": "constructed", "criteria": ["solves n = 4", "finds common output 26", "interprets equality", "states that conclusions are limited to 0 through 10"], "sample_response": "Equating the plans gives 2n + 18 = 5n + 6, so n = 4 and both outputs are 26. This is the break-even input. The model only permits 0 <= n <= 10, so comparisons outside that interval are not supported.", "educator_review_required": true}, "rationale": "The intersection is a shared input-output pair, but contextual conclusions must stay inside the stated domain."}
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u6-linear-model-comparison",
+      "title": "Compare and audit two linear models",
+      "estimated_minutes": 150,
+      "official_expectation_ids": ["C3.1", "C3.2", "C3.3", "C4.1", "C4.2", "C4.3", "C4.4"],
+      "prompt": "Choose or use a supplied bounded context with two linear options, such as two transit passes, fundraising plans, or water-tank changes. Build each model from data, represent it with a concrete or verbal pattern, table, graph description, and equation, and compare its rate, initial value, intercepts, domain, and range. Estimate and then solve the intersection, interpret which option is preferable on each part of the valid domain, express one realistic constraint as an inequality region, and test a point. Finally, transform one line, explain the equation change, and audit every representation for consistency and unsupported extrapolation. The submission must be fully usable on paper; technology may check but may not replace the reasoning record.",
+      "required_components": [
+        "a documented context, units, assumptions, and meaningful restricted domain for both models",
+        "a source table or concrete-pattern description and a constant-rate check for each relation",
+        "paired equations derived from data with rate and initial value identified and verified",
+        "an accessible graph or ordered text plot description with intercepts and important points",
+        "a graphical intersection estimate followed by an exact algebraic solution checked in both models",
+        "a comparison explaining where each option is preferable and why conclusions stop at the domain boundary",
+        "one contextual inequality with boundary choice, test point, and verbal description of its solution region",
+        "one translation, reflection, or rotation of a line with before-after points and equation changes",
+        "a consistency audit and reflection comparing at least two solution routes"
+      ],
+      "rubric": [
+        {"dimension": "Model construction", "criteria": "Tables, graphs, equations, units, rates, and initial values agree and are justified from the supplied or collected data."},
+        {"dimension": "Characteristics and constraints", "criteria": "Domain, range, intercepts, rate behaviour, inequality boundary, and solution region are identified and interpreted accurately."},
+        {"dimension": "Comparison and intersection", "criteria": "Graphical and algebraic routes support a checked intersection and a contextual comparison on each valid interval."},
+        {"dimension": "Transformation reasoning", "criteria": "Before-after coordinates and equations consistently describe the selected translation, reflection, or permitted rotation."},
+        {"dimension": "Communication and access", "criteria": "Every visual has an ordered text alternative, claims avoid unsupported extrapolation, and the reasoning is reproducible without software."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}
