@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 /// Defines the roles in the development-only LAN mesh.
 enum MeshRole { teacherNode, studentNode }
@@ -50,12 +49,9 @@ class MeshNetworkService {
     this.allowLegacyMesh = false,
     String? meshSecret,
   }) : _meshSecret = _normalizeSecret(
-          meshSecret ??
-              const String.fromEnvironment(
-                'MESH_SECRET_KEY',
-                defaultValue: '',
-              ),
-        );
+         meshSecret ??
+             const String.fromEnvironment('MESH_SECRET_KEY', defaultValue: ''),
+       );
 
   static String? _normalizeSecret(String value) {
     final normalized = value.trim();
@@ -122,8 +118,7 @@ class MeshNetworkService {
       final now = DateTime.now().millisecondsSinceEpoch;
       _seenNonces.removeWhere((key, time) => now > time + 30000);
 
-      if (_seenNonces.containsKey(nonce) ||
-          (now - timestamp).abs() > 30000) {
+      if (_seenNonces.containsKey(nonce) || (now - timestamp).abs() > 30000) {
         return false;
       }
 
@@ -278,7 +273,9 @@ class MeshNetworkService {
             buffer = buffer.substring(newline + 1);
             if (message.isEmpty) continue;
             if (utf8.encode(message).length > _maxEncryptedMessageBytes) {
-              throw const FormatException('Encrypted mesh message is too large.');
+              throw const FormatException(
+                'Encrypted mesh message is too large.',
+              );
             }
 
             try {

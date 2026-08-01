@@ -27,7 +27,10 @@ class ParentDashboard extends StatelessWidget {
                         children: const [
                           Icon(Icons.timer, size: 40, color: Colors.blue),
                           SizedBox(height: 8),
-                          Text('Study Time', style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                            'Study Time',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           Text('45 mins today'),
                         ],
                       ),
@@ -40,9 +43,16 @@ class ParentDashboard extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: const [
-                          Icon(Icons.check_circle, size: 40, color: Colors.green),
+                          Icon(
+                            Icons.check_circle,
+                            size: 40,
+                            color: Colors.green,
+                          ),
                           SizedBox(height: 8),
-                          Text('Tasks Completed', style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                            'Tasks Completed',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           Text('5 / 7 tasks'),
                         ],
                       ),
@@ -57,7 +67,10 @@ class ParentDashboard extends StatelessWidget {
                         children: const [
                           Icon(Icons.star, size: 40, color: Colors.orange),
                           SizedBox(height: 8),
-                          Text('Current Level', style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                            'Current Level',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           Text('Level 3 (75%)'),
                         ],
                       ),
@@ -86,7 +99,9 @@ class ParentDashboard extends StatelessWidget {
                   Divider(),
                   ListTile(
                     leading: Icon(Icons.science),
-                    title: Text('Started Science Experiment: Chemical Reactions'),
+                    title: Text(
+                      'Started Science Experiment: Chemical Reactions',
+                    ),
                     subtitle: Text('Yesterday at 2:15 PM'),
                     trailing: Text('In Progress'),
                   ),

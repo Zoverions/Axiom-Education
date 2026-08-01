@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-07-30",
+  "verified_at": "2026-08-01",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -88,7 +88,7 @@
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "MTH1W A1, A2, B2, and B4 have deterministic seed-based practice items bound to exact expectation IDs, local scaffolded hints, digest evidence, actual answer entry, and fail-closed exact verification; learner records, tutor inference, review, and export remain unavailable.",
+      "summary": "MTH1W A1, A2, B2, and B4 have deterministic seed-based practice items bound to exact expectation IDs, local scaffolded hints, digest evidence, actual answer entry, fail-closed exact verification, and an ephemeral on-screen session summary that is never saved; learner records, tutor inference, review, and export remain unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",

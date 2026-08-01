@@ -27,6 +27,8 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
   int _expectationIndex = 0;
   int _itemSequence = 0;
   int _visibleHintCount = 0;
+  int _sessionCheckCount = 0;
+  int _sessionCorrectCount = 0;
   VerificationResult? _result;
 
   @override
@@ -56,8 +58,13 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
       return;
     }
 
+    final result = verifier.verify(item, _answerController.text);
     setState(() {
-      _result = verifier.verify(item, _answerController.text);
+      _result = result;
+      _sessionCheckCount += 1;
+      if (result.status == VerificationStatus.correct) {
+        _sessionCorrectCount += 1;
+      }
     });
   }
 
@@ -118,6 +125,8 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
                 answerController: _answerController,
                 result: _result,
                 visibleHintCount: _visibleHintCount,
+                sessionCheckCount: _sessionCheckCount,
+                sessionCorrectCount: _sessionCorrectCount,
                 verifierAvailable: widget.verifier != null,
                 onCheck: () => _checkAnswer(item),
                 onShowHint: () => _showNextHint(item),
@@ -145,6 +154,8 @@ class _PracticeBody extends StatelessWidget {
     required this.answerController,
     required this.result,
     required this.visibleHintCount,
+    required this.sessionCheckCount,
+    required this.sessionCorrectCount,
     required this.verifierAvailable,
     required this.onCheck,
     required this.onShowHint,
@@ -159,6 +170,8 @@ class _PracticeBody extends StatelessWidget {
   final TextEditingController answerController;
   final VerificationResult? result;
   final int visibleHintCount;
+  final int sessionCheckCount;
+  final int sessionCorrectCount;
   final bool verifierAvailable;
   final VoidCallback onCheck;
   final VoidCallback onShowHint;
@@ -177,6 +190,11 @@ class _PracticeBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _StatusBanner(verifierAvailable: verifierAvailable),
+                const SizedBox(height: 12),
+                _SessionSummary(
+                  checkCount: sessionCheckCount,
+                  correctCount: sessionCorrectCount,
+                ),
                 const SizedBox(height: 12),
                 LinearProgressIndicator(value: position / total),
                 const SizedBox(height: 6),
@@ -257,6 +275,44 @@ class _PracticeBody extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SessionSummary extends StatelessWidget {
+  const _SessionSummary({required this.checkCount, required this.correctCount});
+
+  final int checkCount;
+  final int correctCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final checks = checkCount == 1 ? '1 check' : '$checkCount checks';
+    final successes = correctCount == 1
+        ? '1 exact success'
+        : '$correctCount exact successes';
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Session summary',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 6),
+            Text('$checks • $successes'),
+            const SizedBox(height: 4),
+            Text(
+              'Temporary on-screen feedback only. Nothing is saved to a '
+              'learner record.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

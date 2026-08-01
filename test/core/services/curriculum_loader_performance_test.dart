@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
 import 'package:ontarioedai/core/providers/curriculum_provider.dart';
@@ -51,7 +52,11 @@ void main() {
 
     await db.transaction((txn) async {
       await txn.insert('Course', {'id': 'MTH1W', 'name': 'Mathematics'});
-      await txn.insert('Strand', {'id': 'S1', 'course_id': 'MTH1W', 'name': 'Strand A'});
+      await txn.insert('Strand', {
+        'id': 'S1',
+        'course_id': 'MTH1W',
+        'name': 'Strand A',
+      });
       for (var i = 0; i < numExpectations; i++) {
         final id = 'E$i';
         await txn.insert('Expectation', {
@@ -92,6 +97,8 @@ void main() {
     for (int i = 0; i < iterations; i++) {
       await CurriculumLoader.getExpectationsForCourse('MTH1W');
     }
-    print('CurriculumLoader.getExpectationsForCourse (100 exps, 500 tags): ${stopwatch.elapsedMilliseconds / iterations} ms per call');
+    print(
+      'CurriculumLoader.getExpectationsForCourse (100 exps, 500 tags): ${stopwatch.elapsedMilliseconds / iterations} ms per call',
+    );
   });
 }

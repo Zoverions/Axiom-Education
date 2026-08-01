@@ -81,6 +81,10 @@ The JSON contract is `schemas/practice-item.v1.schema.json`.
 - The practice screen uses actual answer entry, not learner self-report.
 - Hints are local, deterministic, and item-linked.
 - Feedback distinguishes correct, incorrect, malformed, and unavailable states.
+- The practice screen shows ephemeral counts of checks and exact successes for
+  the current screen session only.
+- Session counters reset when the screen closes and are never persisted or
+  represented as a learner record, assessment record, or mastery claim.
 - The interface states that difficulty is an uncalibrated heuristic and that no tutor or learner record is active.
 
 ## Negative-path gates

@@ -13,7 +13,7 @@ class HandwritingCanvas extends StatefulWidget {
 }
 
 class _HandwritingCanvasState extends State<HandwritingCanvas> {
-  List<List<Offset>> _strokes = [];
+  final List<List<Offset>> _strokes = [];
   List<Offset> _currentStroke = [];
 
   final HandwritingScorer _scorer = HandwritingScorer();
@@ -49,17 +49,20 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
           mockStrokeData.add({
             'x': point.dx,
             'y': point.dy,
-            'pressure': 0.5, // Replace with actual pressure if Stylus API allows
+            'pressure':
+                0.5, // Replace with actual pressure if Stylus API allows
           });
         }
       }
 
-      final (pressure, consistency) = await _scorer.scoreHandwriting(mockStrokeData);
+      final (pressure, consistency) = await _scorer.scoreHandwriting(
+        mockStrokeData,
+      );
 
       final imageBytes = await _captureCanvasAsImage();
       String parsedContent = "No drawing detected.";
       if (imageBytes != null) {
-          parsedContent = await _watcher.parseCanvas(imageBytes);
+        parsedContent = await _watcher.parseCanvas(imageBytes);
       }
 
       if (mounted) {
@@ -77,8 +80,8 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
     } catch (e) {
       if (mounted) {
         setState(() {
-           _parsedContent = "Evaluation failed: $e";
-           _isEvaluating = false;
+          _parsedContent = "Evaluation failed: $e";
+          _isEvaluating = false;
         });
       }
     }
@@ -92,7 +95,10 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
     const double height = 400;
 
     final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, Rect.fromPoints(Offset.zero, Offset(width, height)));
+    final canvas = Canvas(
+      recorder,
+      Rect.fromPoints(Offset.zero, Offset(width, height)),
+    );
 
     // Draw white background
     final bgPaint = Paint()..color = Colors.white;
@@ -156,8 +162,7 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
                 _currentStroke.add(details.localPosition);
               });
             },
-            onPanEnd: (details) {
-            },
+            onPanEnd: (details) {},
             child: CustomPaint(
               painter: _HandwritingPainter(_strokes),
               child: Container(), // Transparent container to receive gestures
@@ -170,13 +175,19 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
           children: [
             ElevatedButton.icon(
               onPressed: _isEvaluating ? null : _evaluateDrawing,
-              icon: _isEvaluating ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.analytics),
-              label: Text(_isEvaluating ? 'Evaluating...' : 'Evaluate Drawing')
+              icon: _isEvaluating
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.analytics),
+              label: Text(_isEvaluating ? 'Evaluating...' : 'Evaluate Drawing'),
             ),
             TextButton.icon(
               onPressed: _clearCanvas,
               icon: const Icon(Icons.clear),
-              label: const Text('Clear')
+              label: const Text('Clear'),
             ),
           ],
         ),
@@ -187,19 +198,26 @@ class _HandwritingCanvasState extends State<HandwritingCanvas> {
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300)
+              border: Border.all(color: Colors.grey.shade300),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Watcher Output: $_parsedContent', style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(
+                  'Watcher Output: $_parsedContent',
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
                 const SizedBox(height: 4),
-                Text('Pressure Score: ${(_pressureScore * 100).toStringAsFixed(1)}%'),
-                Text('Consistency Score: ${(_consistencyScore * 100).toStringAsFixed(1)}%'),
+                Text(
+                  'Pressure Score: ${(_pressureScore * 100).toStringAsFixed(1)}%',
+                ),
+                Text(
+                  'Consistency Score: ${(_consistencyScore * 100).toStringAsFixed(1)}%',
+                ),
               ],
             ),
-          )
-        ]
+          ),
+        ],
       ],
     );
   }
@@ -228,8 +246,8 @@ class _HandwritingPainter extends CustomPainter {
     for (var stroke in strokes) {
       if (stroke.isEmpty) continue;
       if (stroke.length == 1) {
-         canvas.drawPoints(ui.PointMode.points, [stroke.first], paint);
-         continue;
+        canvas.drawPoints(ui.PointMode.points, [stroke.first], paint);
+        continue;
       }
       for (int i = 0; i < stroke.length - 1; i++) {
         canvas.drawLine(stroke[i], stroke[i + 1], paint);

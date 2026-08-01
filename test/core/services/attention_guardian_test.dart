@@ -20,18 +20,21 @@ void main() {
       expect(guardian.focusedSeconds, 0);
     });
 
-    test('startMonitoring: sets isActive to true and increments focusedSeconds', () {
-      fakeAsync((async) {
-        guardian.startMonitoring();
-        expect(guardian.isActive, isTrue);
+    test(
+      'startMonitoring: sets isActive to true and increments focusedSeconds',
+      () {
+        fakeAsync((async) {
+          guardian.startMonitoring();
+          expect(guardian.isActive, isTrue);
 
-        async.elapse(const Duration(seconds: 1));
-        expect(guardian.focusedSeconds, 1);
+          async.elapse(const Duration(seconds: 1));
+          expect(guardian.focusedSeconds, 1);
 
-        async.elapse(const Duration(seconds: 59));
-        expect(guardian.focusedSeconds, 60);
-      });
-    });
+          async.elapse(const Duration(seconds: 59));
+          expect(guardian.focusedSeconds, 60);
+        });
+      },
+    );
 
     test('startMonitoring: duplicate calls do not create multiple timers', () {
       fakeAsync((async) {
@@ -105,17 +108,26 @@ void main() {
 
             // Advance by 1199 seconds - no focus check yet
             async.elapse(const Duration(seconds: 1199));
-            expect(logs.any((log) => log.contains('Focus check triggered!')), isFalse);
+            expect(
+              logs.any((log) => log.contains('Focus check triggered!')),
+              isFalse,
+            );
 
             // Advance by 1 more second - triggers focus check
             async.elapse(const Duration(seconds: 1));
-            expect(logs.any((log) => log.contains('Focus check triggered!')), isTrue);
+            expect(
+              logs.any((log) => log.contains('Focus check triggered!')),
+              isTrue,
+            );
 
             logs.clear();
 
             // Advance by another 1200 seconds - triggers focus check again
             async.elapse(const Duration(seconds: 1200));
-            expect(logs.any((log) => log.contains('Focus check triggered!')), isTrue);
+            expect(
+              logs.any((log) => log.contains('Focus check triggered!')),
+              isTrue,
+            );
           });
         },
         zoneSpecification: ZoneSpecification(

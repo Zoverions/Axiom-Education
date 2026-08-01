@@ -51,8 +51,10 @@ void main() {
     expect(decoded['contract_id'], AxiomEducationContract.id);
     expect(decoded['contract_version'], AxiomEducationContract.version);
     expect(decoded['install_grants_authority'], isFalse);
-    expect((decoded['actions'] as Map).keys.toSet(),
-        AxiomEducationContract.actions.keys.toSet());
+    expect(
+      (decoded['actions'] as Map).keys.toSet(),
+      AxiomEducationContract.actions.keys.toSet(),
+    );
   });
 
   test('curriculum query inserts the immutable contract pin', () async {
@@ -76,7 +78,10 @@ void main() {
     expect(transport.callCount, 1);
     expect(transport.action, AxiomEducationContract.curriculumQuery);
     expect(transport.idempotencyKey, 'education-query-0001');
-    expect(transport.input, containsPair('contract_id', AxiomEducationContract.id));
+    expect(
+      transport.input,
+      containsPair('contract_id', AxiomEducationContract.id),
+    );
     expect(
       transport.input,
       containsPair('contract_version', AxiomEducationContract.version),
@@ -170,56 +175,53 @@ void main() {
     expect(transport.callCount, 1);
   });
 
-  test('capability unavailable is surfaced without synthetic success', () async {
-    final transport = FakeAxiomTransport(
-      response: const AxiomTransportResponse(
-        statusCode: 503,
-        body: {
-          'error': {
-            'code': 'capability_unavailable',
-            'message': 'No verified education.tutor provider capsule is configured.',
+  test(
+    'capability unavailable is surfaced without synthetic success',
+    () async {
+      final transport = FakeAxiomTransport(
+        response: const AxiomTransportResponse(
+          statusCode: 503,
+          body: {
+            'error': {
+              'code': 'capability_unavailable',
+              'message':
+                  'No verified education.tutor provider capsule is configured.',
+            },
           },
-        },
-      ),
-    );
-    final client = AxiomEducationClient(
-      transport: transport,
-      idempotencyKeyFactory: () => 'education-tutor-0002',
-    );
+        ),
+      );
+      final client = AxiomEducationClient(
+        transport: transport,
+        idempotencyKeyFactory: () => 'education-tutor-0002',
+      );
 
-    await expectLater(
-      client.submit(
-        action: AxiomEducationContract.tutorRespond,
-        input: const {
-          'subject_id': 'learner:test',
-          'consent_id': 'consent:test',
-          'purpose': 'personalized-local-tutoring',
-          'active_pack_manifest_sha256': digest,
-          'expectation_ids': ['MTH1W-A1'],
-          'prompt': 'Explain slope.',
-        },
-      ),
-      throwsA(
-        isA<AxiomEducationCapabilityUnavailableException>()
-            .having((error) => error.statusCode, 'statusCode', 503)
-            .having(
-              (error) => error.code,
-              'code',
-              'capability_unavailable',
-            ),
-      ),
-    );
-  });
+      await expectLater(
+        client.submit(
+          action: AxiomEducationContract.tutorRespond,
+          input: const {
+            'subject_id': 'learner:test',
+            'consent_id': 'consent:test',
+            'purpose': 'personalized-local-tutoring',
+            'active_pack_manifest_sha256': digest,
+            'expectation_ids': ['MTH1W-A1'],
+            'prompt': 'Explain slope.',
+          },
+        ),
+        throwsA(
+          isA<AxiomEducationCapabilityUnavailableException>()
+              .having((error) => error.statusCode, 'statusCode', 503)
+              .having((error) => error.code, 'code', 'capability_unavailable'),
+        ),
+      );
+    },
+  );
 
   test('policy and approval errors retain AXIOM semantics', () async {
     final transport = FakeAxiomTransport(
       response: const AxiomTransportResponse(
         statusCode: 403,
         body: {
-          'error': {
-            'code': 'policy_denied',
-            'message': 'Denied by policy.',
-          },
+          'error': {'code': 'policy_denied', 'message': 'Denied by policy.'},
         },
       ),
     );
@@ -245,7 +247,9 @@ void main() {
         'error': {
           'code': 'independent_approval_required',
           'message': 'Independent approval is required.',
-          'details': {'required_confirmation_values': ['confirm:test']},
+          'details': {
+            'required_confirmation_values': ['confirm:test'],
+          },
         },
       },
     );

@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "config" / "capabilities.json"
 PUBSPEC_PATH = ROOT / "pubspec.yaml"
 README_PATH = ROOT / "README.md"
+CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
 MIGRATION_PATH = ROOT / "docs" / "REPOSITORY-MIGRATION.md"
@@ -198,6 +199,7 @@ def verify() -> Counter[str]:
 
     for document_path in (
         README_PATH,
+        CHANGELOG_PATH,
         PRODUCT_DEFINITION_PATH,
         DEPRECATIONS_PATH,
         MIGRATION_PATH,
@@ -212,6 +214,7 @@ def verify() -> Counter[str]:
     readme = README_PATH.read_text(encoding="utf-8")
     require("Zoverions/Axiom-Education" in readme, "README canonical repository is missing")
     require("config/capabilities.json" in readme, "README does not link the registry")
+    require("CHANGELOG.md" in readme, "README does not link the changelog")
     require("not production-ready" in readme, "README production boundary is missing")
     require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")
     require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration record")

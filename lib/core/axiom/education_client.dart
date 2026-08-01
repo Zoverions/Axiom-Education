@@ -14,15 +14,13 @@ class AxiomTransportResponse {
   final int statusCode;
   final Map<String, Object?> body;
 
-  const AxiomTransportResponse({
-    required this.statusCode,
-    required this.body,
-  });
+  const AxiomTransportResponse({required this.statusCode, required this.body});
 }
 
 class AxiomEducationClient {
-  static final RegExp _idempotencyPattern =
-      RegExp(r'^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$');
+  static final RegExp _idempotencyPattern = RegExp(
+    r'^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$',
+  );
   static final RegExp _sha256Pattern = RegExp(r'^[a-f0-9]{64}$');
 
   final AxiomIntentTransport transport;
@@ -91,7 +89,8 @@ class AxiomEducationClient {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.containsKey('error')) {
         throw const AxiomEducationProtocolException(
-          message: 'Successful AXIOM response must not contain an error object.',
+          message:
+              'Successful AXIOM response must not contain an error object.',
         );
       }
       return Map.unmodifiable(response.body);
@@ -245,10 +244,7 @@ class AxiomEducationValidationException extends AxiomEducationException {
 }
 
 class AxiomEducationTransportException extends AxiomEducationException {
-  const AxiomEducationTransportException({
-    required super.message,
-    super.cause,
-  });
+  const AxiomEducationTransportException({required super.message, super.cause});
 }
 
 class AxiomEducationProtocolException extends AxiomEducationException {

@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
 
 void main() {
@@ -34,6 +37,10 @@ void main() {
   });
 
   tearDownAll(() async {
+    await DatabaseService.resetForTesting();
+    const channel = MethodChannel('plugins.flutter.io/path_provider');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
     if (tempDir.existsSync()) {
       await tempDir.delete(recursive: true);
     }

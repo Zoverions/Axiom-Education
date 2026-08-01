@@ -1,7 +1,7 @@
 # Axiom Education Rebuild Requirements
 
 **Current build:** `0.5.0-dev.0`  
-**Updated:** 2026-07-30
+**Updated:** 2026-08-01
 
 The machine-readable status in `config/capabilities.json` is authoritative. A missing dependency, provider, permission, consent, source, verifier, or model artifact must produce an explicit unavailable or denied result, never synthetic success.
 
@@ -83,7 +83,7 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | ID | Requirement | Acceptance evidence |
 |---|---|---|
 | EDU-OPS-01 | Release interfaces MUST support keyboard operation, screen readers, text scaling, contrast, reduced motion, focus visibility, and accessible exports. | Automated and manual accessibility report. |
-| EDU-OPS-02 | One documented clean-setup command MUST install exact dependencies with scripts controlled and run the full verification suite. | Protected clean-checkout CI. |
+| EDU-OPS-02 | One documented clean-setup command MUST install exact dependencies with scripts controlled and run the full verification suite. | `python tools/verify.py` and protected clean-checkout CI. |
 | EDU-OPS-03 | Releases MUST include SBOM, provenance, curriculum manifest, model/provider inventory, migration and rollback plan, status registry, and evidence timestamps. | Release verifier. |
 | EDU-OPS-04 | Secrets, model binaries, generated indexes, databases containing learner data, caches, and build artifacts MUST NOT be tracked. | Repository hygiene gate. |
 | EDU-OPS-05 | Security, privacy, curriculum, accessibility, recovery, and model-evaluation findings MUST be tied to an owner and disposition. | Findings-ledger verifier. |

@@ -40,6 +40,7 @@ The runnable application provides a local Ontario curriculum browser and the fir
 - a read-only curriculum database and a separate local settings store;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
+- an ephemeral on-screen count of checks and exact successes that is never saved to a learner record;
 - item-linked scaffolded hints, exact expectation IDs, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
@@ -57,16 +58,16 @@ Supported rebuild toolchain:
 - OpenSSL 3.x for external-key Ed25519 curriculum-pack signing
 
 ```bash
-flutter pub get --enforce-lockfile
-python tools/check_capabilities.py
-python -m unittest discover -s tests -p 'test_curriculum_pack.py' -v
-python -m unittest discover -s tests -p 'test_mth1w_slice.py' -v
-dart format --output=none --set-exit-if-changed lib test
-flutter analyze
-flutter test
+python tools/verify.py
 flutter devices
 flutter run -d <device-id>
 ```
+
+The verification command validates the supported toolchain, installs the exact
+Python test dependencies and locked Dart dependencies, checks capability
+claims and formatting, runs static analysis, and runs the complete Python and
+Flutter test suites. Use an activated virtual environment if you do not want
+the Python development dependencies installed into your user environment.
 
 For an Android installation smoke build:
 
@@ -167,6 +168,7 @@ The source ledger records that upstream official-document digests have not yet b
 ## Canonical documents
 
 - [Product definition](docs/rebuild/PRODUCT-DEFINITION.md)
+- [Changelog](CHANGELOG.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
 - [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)

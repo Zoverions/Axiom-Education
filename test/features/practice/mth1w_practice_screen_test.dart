@@ -101,6 +101,39 @@ void main() {
     expect(find.textContaining('Correct.'), findsOneWidget);
   });
 
+  testWidgets('shows an ephemeral exact-verification session summary', (
+    tester,
+  ) async {
+    const generator = MathPracticeGenerator();
+    final item = generator.generate(
+      expectationId: expectations.first.id,
+      expectationText: expectations.first.expectation,
+      difficultyValue: expectations.first.irtB,
+      seed: 0,
+    );
+
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Session summary'), findsOneWidget);
+    expect(find.text('0 checks • 0 exact successes'), findsOneWidget);
+    expect(find.textContaining('Nothing is saved'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'not an answer');
+    tester
+        .widget<FilledButton>(find.widgetWithText(FilledButton, 'Check answer'))
+        .onPressed!();
+    await tester.pump();
+    expect(find.text('1 check • 0 exact successes'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), item.canonicalAnswer);
+    tester
+        .widget<FilledButton>(find.widgetWithText(FilledButton, 'Check answer'))
+        .onPressed!();
+    await tester.pump();
+    expect(find.text('2 checks • 1 exact success'), findsOneWidget);
+  });
+
   testWidgets('reveals deterministic scaffolded hints', (tester) async {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();

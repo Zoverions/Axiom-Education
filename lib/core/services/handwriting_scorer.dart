@@ -99,10 +99,7 @@ class HandwritingScorer {
 
     try {
       final inputTensor = preprocessStrokes(strokes);
-      final outputTensor = List.generate(
-        1,
-        (_) => List<double>.filled(2, 0.0),
-      );
+      final outputTensor = List.generate(1, (_) => List<double>.filled(2, 0.0));
       _interpreter!.run(inputTensor, outputTensor);
 
       return (

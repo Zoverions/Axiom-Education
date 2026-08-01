@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""Install pinned dependencies and run the complete repository verification."""
+
+from __future__ import annotations
+
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_FLUTTER = "3.41.1"
+EXPECTED_DART_PREFIX = "3.11."
+EXPECTED_PYTHON = (3, 12)
+EXPECTED_OPENSSL_MAJOR = 3
+
+
+class VerificationSetupError(RuntimeError):
+    """Raised when the pinned verification toolchain is unavailable."""
+
+
+def require_tool(name: str) -> str:
+    path = shutil.which(name)
+    if path is None:
+        raise VerificationSetupError(f"required command is unavailable: {name}")
+    return path
+
+
+def validate_flutter_payload(payload: dict[str, object]) -> None:
+    framework = payload.get("frameworkVersion")
+    dart = payload.get("dartSdkVersion")
+    if framework != EXPECTED_FLUTTER:
+        raise VerificationSetupError(
+            f"Flutter {EXPECTED_FLUTTER} is required; found {framework!r}"
+        )
+    if not isinstance(dart, str) or not dart.startswith(EXPECTED_DART_PREFIX):
+        raise VerificationSetupError(
+            f"Dart {EXPECTED_DART_PREFIX}x is required; found {dart!r}"
+        )
+
+
+def parse_openssl_major(output: str) -> int:
+    fields = output.strip().split()
+    if len(fields) < 2 or fields[0] != "OpenSSL":
+        raise VerificationSetupError(f"unexpected OpenSSL version output: {output!r}")
+    try:
+        return int(fields[1].split(".", 1)[0])
+    except ValueError as error:
+        raise VerificationSetupError(
+            f"unexpected OpenSSL version output: {output!r}"
+        ) from error
+
+
+def verify_toolchain() -> tuple[str, str]:
+    if sys.version_info[:2] != EXPECTED_PYTHON:
+        found = ".".join(str(part) for part in sys.version_info[:3])
+        raise VerificationSetupError(
+            f"Python {EXPECTED_PYTHON[0]}.{EXPECTED_PYTHON[1]} is required; "
+            f"found {found}"
+        )
+
+    flutter = require_tool("flutter")
+    dart = require_tool("dart")
+    openssl = require_tool("openssl")
+
+    flutter_output = subprocess.run(
+        [flutter, "--version", "--machine"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    try:
+        flutter_payload = json.loads(flutter_output)
+    except json.JSONDecodeError as error:
+        raise VerificationSetupError("Flutter returned invalid version metadata") from error
+    if not isinstance(flutter_payload, dict):
+        raise VerificationSetupError("Flutter returned invalid version metadata")
+    validate_flutter_payload(flutter_payload)
+
+    openssl_output = subprocess.run(
+        [openssl, "version"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    openssl_major = parse_openssl_major(openssl_output)
+    if openssl_major != EXPECTED_OPENSSL_MAJOR:
+        raise VerificationSetupError(
+            f"OpenSSL {EXPECTED_OPENSSL_MAJOR}.x is required; "
+            f"found major version {openssl_major}"
+        )
+
+    return flutter, dart
+
+
+def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]]:
+    python = sys.executable
+    return [
+        (
+            "Install pinned Python dependencies",
+            [python, "-m", "pip", "install", "--requirement", "requirements-dev.txt"],
+        ),
+        (
+            "Install locked Dart dependencies",
+            [flutter, "pub", "get", "--enforce-lockfile"],
+        ),
+        ("Verify capability registry", [python, "tools/check_capabilities.py"]),
+        ("Run complete Python test suite", [python, "-m", "pytest", "-q"]),
+        (
+            "Verify Dart formatting",
+            [dart, "format", "--output=none", "--set-exit-if-changed", "lib", "test"],
+        ),
+        ("Analyze Dart and Flutter", [flutter, "analyze", "--no-fatal-infos"]),
+        (
+            "Run complete Flutter test suite",
+            [flutter, "test", "--no-pub", "--reporter", "expanded"],
+        ),
+    ]
+
+
+def main() -> int:
+    try:
+        flutter, dart = verify_toolchain()
+        for label, command in verification_commands(flutter, dart):
+            print(f"\n==> {label}", flush=True)
+            subprocess.run(command, cwd=ROOT, check=True)
+    except VerificationSetupError as error:
+        print(f"verification setup failed: {error}", file=sys.stderr)
+        return 2
+    except subprocess.CalledProcessError as error:
+        print(
+            f"verification command failed with exit code {error.returncode}: "
+            f"{' '.join(error.cmd)}",
+            file=sys.stderr,
+        )
+        return error.returncode or 1
+
+    print("\nAxiom Education verification passed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
