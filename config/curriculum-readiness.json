@@ -1,0 +1,52 @@
+{
+  "schema": "axiom-education-curriculum-readiness.v1",
+  "verified_at": "2026-08-01",
+  "course": {
+    "code": "MTH1W",
+    "jurisdiction": "Ontario, Canada",
+    "official_name": "Mathematics, Grade 9, De-streamed",
+    "student_label": "Grade 9 Math Foundations Preview",
+    "claim_status": "blocked_pending_source_review",
+    "complete_course_claim_allowed": false
+  },
+  "official_source": {
+    "authority": "Ontario Ministry of Education",
+    "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+    "publication_year": 2021,
+    "url": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/9f57c5ea-424b-42de-9152-68b4181655de/The%20Ontario%20Curriculum%20-%20Mathematics%20Grade%209%20De-streamed%20Course%202021_with%20Teacher%20Supports.pdf",
+    "sha256": "a153c03a809551770403376db606815ee10577c36c425533495ef1abb8da91aa"
+  },
+  "local_snapshot": {
+    "record_count": 11,
+    "review_status": "machine-transcription-requires-course-review",
+    "allowed_use": "foundations_preview_only"
+  },
+  "known_conflicts": [
+    {
+      "local_id": "MTH1W-B2",
+      "local_topic": "linear equations and inequalities",
+      "official_id": "B2",
+      "official_topic": "Powers"
+    },
+    {
+      "local_id": "MTH1W-B4",
+      "local_topic": "equation of a line",
+      "official_id": null,
+      "official_topic": "The official Number strand has only B1 through B3 overall expectations"
+    }
+  ],
+  "required_gates": [
+    {"id": "official-expectation-inventory", "status": "blocked"},
+    {"id": "educator-source-review", "status": "blocked"},
+    {"id": "licensing-and-redistribution-review", "status": "blocked"},
+    {"id": "lesson-and-practice-coverage", "status": "blocked"},
+    {"id": "assessment-and-cumulative-review", "status": "blocked"},
+    {"id": "accessible-alternatives", "status": "blocked"},
+    {"id": "governed-progress-and-educator-workflow", "status": "blocked"}
+  ],
+  "delivery_sequence": [
+    "complete-and-verify-mth1w",
+    "complete-remaining-grade-9-courses",
+    "advance-through-later-grades-in-order"
+  ]
+}

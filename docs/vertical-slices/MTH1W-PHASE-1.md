@@ -1,13 +1,20 @@
 # MTH1W Vertical Slice — Phase 0, Phase 1, and Phase 2
 
-**Status:** Active implementation contract  
+**Status:** Active foundations-preview implementation contract
 **Course:** Ontario Grade 9 Mathematics, de-streamed (`MTH1W`)  
 **Application version:** `0.5.0-dev.0`  
-**Capability scope:** signed curriculum grounding, conventional local lessons, and deterministic local practice
+**Capability scope:** preliminary local topic grounding, conventional local lessons, and deterministic local practice
+
+> **Source boundary:** The official-source audit found that this preliminary
+> local snapshot is not a complete or correctly numbered transcription of the
+> official 2021 MTH1W course. This slice is displayed only as the **Grade 9 Math
+> Foundations Preview**. See `docs/curriculum/MTH1W-SOURCE-AUDIT.md` and
+> `config/curriculum-readiness.json`.
 
 ## Frozen curriculum scope
 
-The current Ontario curriculum corpus contains exactly 11 `MTH1W` records across four strands:
+The current experimental Ontario corpus contains exactly 11 locally labelled
+`MTH1W` records across four strands:
 
 - `MTH1W-A1` — integer and rational operations, including order of operations;
 - `MTH1W-A2` — rates, ratios, percentages, and proportional reasoning;
@@ -21,7 +28,15 @@ The current Ontario curriculum corpus contains exactly 11 `MTH1W` records across
 - `MTH1W-D1` — properties of triangles and quadrilaterals;
 - `MTH1W-D2` — surface area and volume of composite three-dimensional figures.
 
-The frozen subset is `curriculum/slices/mth1w.v1.json`. CI must prove that it remains an exact course-level projection of `assets/curriculum/ontario_curriculum_full.json` and that two pack builds from the subset are byte-identical.
+These are preliminary topic descriptions, not verified official expectation
+bindings. In particular, local B2 conflicts with official B2 (Powers), and
+local B4 is not an official Number-strand overall expectation. The snapshot
+also omits official course areas including Coding and Financial Literacy.
+
+The frozen subset is `curriculum/slices/mth1w.v1.json`. CI proves only that it
+remains an exact projection of the experimental local corpus and that two pack
+builds are byte-identical. That integrity evidence does not establish official
+curriculum accuracy.
 
 ## Phase 1 golden path
 
@@ -36,10 +51,10 @@ Unsupported expectation IDs fail closed and must not fall back to synthetic ques
 
 ## Phase 2 conventional course path
 
-The same four golden-path expectations form a sequenced, non-AI instructional
+The same four derived topic references form a sequenced, non-AI instructional
 path. Every lesson includes:
 
-- a student-visible title, expected duration, and exact expectation binding;
+- a student-visible title, expected duration, and derived topic reference;
 - learning goals and prerequisite knowledge;
 - teacher-authored direct instruction and a statement of relevance;
 - a fully worked example with visible intermediate reasoning;
@@ -57,7 +72,7 @@ Every generated practice item must include:
 
 - schema version;
 - immutable item identifier;
-- exact curriculum expectation identifier and text;
+- derived local topic identifier and text;
 - deterministic generator identifier, version, and seed;
 - learner-visible prompt;
 - answer kind and canonical answer specification;
@@ -71,10 +86,10 @@ The JSON contract is `schemas/practice-item.v1.schema.json`.
 
 ### Curriculum and provenance
 
-- The MTH1W subset contains all and only the 11 frozen records.
-- The subset preserves the source expectation IDs and text byte-for-byte after JSON decoding.
+- The MTH1W subset contains all and only the 11 frozen local records.
+- The subset preserves the experimental corpus IDs and text byte-for-byte after JSON decoding.
 - The curriculum-pack builder produces byte-identical manifest and record files on repeated builds.
-- The practice UI displays the exact expectation ID and the item digest prefix.
+- The practice UI displays a derived topic reference and the item digest prefix.
 
 ### Deterministic generation
 
@@ -94,7 +109,7 @@ The JSON contract is `schemas/practice-item.v1.schema.json`.
 
 ### User experience
 
-- `MTH1W` course detail exposes an **Open course lessons** action and a secondary **Quick practice** action.
+- `MTH1W` course detail exposes an **Open foundation lessons** action and a secondary **Quick practice** action.
 - The course screen teaches before asking the learner to practise and makes the four-lesson sequence visible.
 - Every lesson presents goals, prerequisites, instruction, a worked example, a misconception check, and a planning prompt before focused practice.
 - The practice screen uses actual answer entry, not learner self-report.
@@ -102,9 +117,14 @@ The JSON contract is `schemas/practice-item.v1.schema.json`.
 - Feedback distinguishes correct, incorrect, malformed, and unavailable states.
 - The practice screen shows ephemeral counts of checks and exact successes for
   the current screen session only.
+- The practice screen counts distinct checked items and offers three as a
+  non-assessment stopping cue; checking one item repeatedly does not increase
+  that count.
 - Session counters reset when the screen closes and are never persisted or
   represented as a learner record, assessment record, or mastery claim.
 - The interface states that difficulty is an uncalibrated heuristic and that no tutor or learner record is active.
+- The interface states that official curriculum mapping remains under review
+  and that the preview is not a complete course or grade.
 
 ## Negative-path gates
 
@@ -124,7 +144,8 @@ The tranche must test:
 This tranche does **not** promote or claim:
 
 - configured local tutor inference;
-- complete instruction for all 11 MTH1W expectations;
+- verified official MTH1W expectation coverage;
+- complete MTH1W course, credit, grade, transcript, Ministry approval, or school equivalency;
 - lesson quizzes, unit tests, cumulative review, or conventional grading;
 - durable or governed learner-event recording;
 - consent-bound learner-record mutation;

@@ -95,7 +95,11 @@ Every minor-related capability defaults to:
 
 ## First supported vertical slice
 
-The first complete course experience will be the Ontario `MTH1W` profile.
+The first complete course experience will be the Ontario `MTH1W` profile. The
+current four-lesson Grade 9 Math Foundations Preview is not that complete
+course: its preliminary local identifiers have known conflicts with the
+official 2021 curriculum and are gated by
+`config/curriculum-readiness.json`.
 
 Its conventional foundation must exercise before AI is introduced:
 
@@ -117,7 +121,10 @@ evidence for an optional configured local tutor provider and adaptive review
 recommendations. The conventional route must remain available when either is
 disabled or unavailable.
 
-Expansion to other courses or jurisdictions follows only after this slice passes its acceptance gates.
+Expansion follows a fixed sequence: complete and verify MTH1W, complete all
+remaining Grade 9 courses one at a time, then move through later grades in
+order. Expansion to another jurisdiction requires its own official source and
+review gates.
 
 ## Rebuild acceptance rule
 
@@ -140,6 +147,7 @@ Until independently demonstrated, Axiom Education does not claim:
 
 - production readiness;
 - complete coverage or currency of every Ontario secondary course;
+- that the current Grade 9 Math Foundations Preview is a complete MTH1W course, credit, grade, transcript, or Ministry-approved resource;
 - validated psychometric IRT parameters;
 - a complete local language-model tutor;
 - secure classroom federation from UDP, TCP, Bluetooth, WebRTC, or Wi-Fi discovery alone;

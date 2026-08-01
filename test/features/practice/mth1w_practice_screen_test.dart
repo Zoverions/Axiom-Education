@@ -86,7 +86,7 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    expect(find.text('MTH1W-A1'), findsOneWidget);
+    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
     expect(find.textContaining('uncalibrated'), findsOneWidget);
     expect(
       find.textContaining(item.itemDigest.substring(0, 12)),
@@ -121,6 +121,7 @@ void main() {
 
     expect(find.text('Session summary'), findsOneWidget);
     expect(find.text('0 checks • 0 exact successes'), findsOneWidget);
+    expect(find.text('0 of 3 different items checked'), findsOneWidget);
     expect(find.textContaining('Nothing is saved'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'not an answer');
@@ -136,7 +137,52 @@ void main() {
         .onPressed!();
     await tester.pump();
     expect(find.text('2 checks • 1 exact success'), findsOneWidget);
+    expect(find.text('1 of 3 different items checked'), findsOneWidget);
   });
+
+  testWidgets(
+    'counts distinct checked items and gives a non-mastery stop cue',
+    (tester) async {
+      await tester.pumpWidget(buildScreen());
+      await tester.pumpAndSettle();
+
+      for (var itemIndex = 0; itemIndex < 3; itemIndex += 1) {
+        await tester.enterText(find.byType(TextField), 'not an answer');
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Check answer'),
+            )
+            .onPressed!();
+        await tester.pump();
+
+        if (itemIndex == 0) {
+          await tester.enterText(find.byType(TextField), 'still not an answer');
+          tester
+              .widget<FilledButton>(
+                find.widgetWithText(FilledButton, 'Check answer'),
+              )
+              .onPressed!();
+          await tester.pump();
+          expect(find.text('1 of 3 different items checked'), findsOneWidget);
+        }
+
+        if (itemIndex < 2) {
+          tester
+              .widget<TextButton>(
+                find.widgetWithText(TextButton, 'New item, same expectation'),
+              )
+              .onPressed!();
+          await tester.pump();
+        }
+      }
+
+      expect(find.text('3 of 3 different items checked'), findsOneWidget);
+      expect(
+        find.textContaining('not a grade or mastery result'),
+        findsOneWidget,
+      );
+    },
+  );
 
   testWidgets('reveals deterministic scaffolded hints', (tester) async {
     await tester.pumpWidget(buildScreen());
@@ -157,8 +203,8 @@ void main() {
     await tester.pumpWidget(buildScreen(initialExpectationId: 'MTH1W-B2'));
     await tester.pumpAndSettle();
 
-    expect(find.text('MTH1W-B2'), findsOneWidget);
-    expect(find.text('Golden-path expectation 3 of 4'), findsOneWidget);
+    expect(find.textContaining('MTH1W-B2'), findsOneWidget);
+    expect(find.text('Foundations topic 3 of 4'), findsOneWidget);
   });
 
   testWidgets('fails closed when the verifier is unavailable', (tester) async {

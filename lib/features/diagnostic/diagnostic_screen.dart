@@ -343,9 +343,10 @@ class CourseDetailScreen extends ConsumerWidget {
                             if (courseId == 'MTH1W') ...[
                               const SizedBox(height: 16),
                               const Text(
-                                'Start with conventional lessons and worked '
-                                'examples for A1, A2, B2, and B4, then use '
-                                'deterministic practice with exact feedback.',
+                                'Open the four-lesson Grade 9 Math Foundations '
+                                'Preview, then use deterministic practice with '
+                                'exact feedback. It is not the complete MTH1W '
+                                'course; official curriculum mapping is under review.',
                               ),
                               const SizedBox(height: 12),
                               Wrap(
@@ -362,7 +363,9 @@ class CourseDetailScreen extends ConsumerWidget {
                                       );
                                     },
                                     icon: const Icon(Icons.school_rounded),
-                                    label: const Text('Open course lessons'),
+                                    label: const Text(
+                                      'Open foundation lessons',
+                                    ),
                                   ),
                                   OutlinedButton.icon(
                                     onPressed: () {

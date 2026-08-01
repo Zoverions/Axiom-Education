@@ -66,14 +66,16 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    expect(find.text('Traditional course foundation'), findsOneWidget);
+    expect(find.text('Foundations preview'), findsOneWidget);
     expect(find.textContaining('without an AI tutor'), findsOneWidget);
+    expect(find.textContaining('not a complete MTH1W course'), findsOneWidget);
     expect(
       find.text('Order of operations with rational numbers'),
       findsOneWidget,
     );
     expect(find.text('Percentages and proportional reasoning'), findsOneWidget);
     expect(find.text('Open mixed practice'), findsOneWidget);
+    expect(find.text('Open home learning guide'), findsOneWidget);
   });
 
   testWidgets('teaches with a worked example before focused practice', (
@@ -101,7 +103,7 @@ void main() {
     focusedPracticeButton.onPressed!();
     await tester.pumpAndSettle();
 
-    expect(find.text('MTH1W-A1'), findsOneWidget);
+    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
     expect(find.text('Practice item'), findsOneWidget);
   });
 
@@ -111,7 +113,10 @@ void main() {
     await tester.pumpWidget(buildScreen(items: expectations.take(3).toList()));
     await tester.pumpAndSettle();
 
-    expect(find.text('The MTH1W course path is unavailable'), findsOneWidget);
+    expect(
+      find.text('The math foundations preview is unavailable'),
+      findsOneWidget,
+    );
     expect(find.textContaining('No ungrounded lesson'), findsOneWidget);
   });
 }

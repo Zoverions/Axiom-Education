@@ -36,15 +36,18 @@ The baseline student experience must include:
 9. educator assignment, review, accommodation, and correction workflows; and
 10. dependable offline operation for downloaded courses.
 
-Items 1–6 have an executable first slice for four `MTH1W` expectations. Items
-7–9 remain product requirements rather than current capability claims. Durable
-progress remains disabled until the governed learner-record path is available.
+Items 1–6 have an executable first slice for four Grade 9 math foundation
+topics. Their local identifiers are not yet verified official MTH1W bindings;
+the [source audit](../curriculum/MTH1W-SOURCE-AUDIT.md) records known conflicts.
+Items 7–9 remain product requirements rather than current capability claims.
+Durable progress remains disabled until the governed learner-record path is
+available.
 
-## Current MTH1W foundation slice
+## Current Grade 9 math foundations preview
 
 The course screen now presents four sequenced lessons:
 
-| Lesson | Curriculum binding | Conventional instruction |
+| Lesson | Derived local topic reference | Conventional instruction |
 |---|---|---|
 | Order of operations with rational numbers | `MTH1W-A1` | goals, prerequisites, explicit operation order, worked example, misconception, reflection, focused practice |
 | Percentages and proportional reasoning | `MTH1W-A2` | goals, prerequisites, percent conversion, worked example, reasonableness check, focused practice |
@@ -52,12 +55,16 @@ The course screen now presents four sequenced lessons:
 | Equation of a line from two points | `MTH1W-B4` | slope and intercept method, worked example, sign check, focused practice |
 
 The instructional notes are version-controlled, human-authored application
-content. Each lesson is joined at runtime to the curriculum expectation loaded
-from the verified local curriculum database. A missing required expectation
-fails closed; the app does not substitute an ungrounded lesson.
+content. Each lesson is joined at runtime to a topic record loaded from the
+integrity-checked local curriculum database. This proves consistent local
+binding, not official curriculum accuracy. A missing required record fails
+closed; the app does not substitute an ungrounded lesson.
 
-The practice flow remains deterministic and local. Session results are
-ephemeral and are not grades, mastery claims, or learner records.
+The practice flow remains deterministic and local. It counts different checked
+items and offers three as a practical stopping cue. Session results are
+ephemeral and are not grades, mastery claims, or learner records. The preview
+also includes an in-app home-learning routine for two learners sharing a
+device.
 
 ## Product patterns used as inspiration
 
@@ -114,8 +121,19 @@ app does not claim to create school connectedness by itself.
 
 ## Delivery order
 
+The canonical content sequence is fixed:
+
+1. complete and verify the official MTH1W course;
+2. complete the remaining Grade 9 course catalogue one course at a time; and
+3. move through later grades in order.
+
+The full ledger and definition of course completion are in
+`docs/rebuild/COURSE-COMPLETION-ROADMAP.md`.
+
 ### Foundation A — teach and practise
 
+- Replace the preliminary MTH1W snapshot with a reviewed official expectation
+  inventory before expanding the lesson map.
 - Complete all `MTH1W` lessons with reviewed instructional content.
 - Add examples, diagrams where materially useful, guided practice, mixed
   review, and independent exercises.

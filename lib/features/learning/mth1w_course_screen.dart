@@ -5,6 +5,7 @@ import '../../core/learning/mth1w_foundation.dart';
 import '../../core/practice/mth1w_practice_provider.dart';
 import '../../core/providers/curriculum_provider.dart';
 import '../practice/mth1w_practice_screen.dart';
+import 'home_learning_guide_screen.dart';
 
 class Mth1wCourseScreen extends ConsumerWidget {
   const Mth1wCourseScreen({super.key});
@@ -14,7 +15,7 @@ class Mth1wCourseScreen extends ConsumerWidget {
     final expectationsAsync = ref.watch(mth1wGoldenPathProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('MTH1W Course')),
+      appBar: AppBar(title: const Text('Grade 9 Math Foundations')),
       body: SafeArea(
         child: expectationsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -64,6 +65,18 @@ class _CourseBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _CourseOverviewCard(),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => const HomeLearningGuideScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.home_work_rounded),
+                  label: const Text('Open home learning guide'),
+                ),
                 const SizedBox(height: 16),
                 Text(
                   'Foundation lessons',
@@ -123,7 +136,7 @@ class _CourseOverviewCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Traditional course foundation',
+              'Foundations preview',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: colors.onPrimaryContainer,
                 fontWeight: FontWeight.bold,
@@ -138,8 +151,9 @@ class _CourseOverviewCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'This phase does not save progress or create grades. Lessons and '
-              'practice remain available for independent review.',
+              'This is not a complete MTH1W course, credit, grade, transcript, '
+              'or Ministry-approved resource. Curriculum source review is '
+              'still pending, and no progress is saved.',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: colors.onPrimaryContainer),
@@ -197,7 +211,7 @@ class _LessonTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      '${lesson.expectationId} • About '
+                      'Derived topic reference ${lesson.expectationId} • About '
                       '${lesson.estimatedMinutes} minutes',
                     ),
                     const SizedBox(height: 10),
@@ -237,7 +251,7 @@ class Mth1wLessonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(lesson.expectationId)),
+      appBar: AppBar(title: const Text('Math foundations lesson')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
@@ -260,6 +274,11 @@ class Mth1wLessonScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text('About ${lesson.estimatedMinutes} minutes'),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Derived topic reference ${lesson.expectationId}; official curriculum mapping is under review.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     const SizedBox(height: 16),
                     _LessonSection(
                       icon: Icons.flag_rounded,
@@ -495,7 +514,7 @@ class _CourseConfigurationError extends StatelessWidget {
               const Icon(Icons.menu_book_outlined, size: 52),
               const SizedBox(height: 16),
               Text(
-                'The MTH1W course path is unavailable',
+                'The math foundations preview is unavailable',
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),

@@ -15,6 +15,7 @@ def test_verification_command_covers_pinned_install_and_complete_checks():
     assert any("requirements-dev.txt" in command for command in rendered)
     assert "flutter pub get --enforce-lockfile" in rendered
     assert any("tools/check_capabilities.py" in command for command in rendered)
+    assert any("tools/check_curriculum_readiness.py" in command for command in rendered)
     assert any("pytest -q" in command for command in rendered)
     assert any("format --output=none --set-exit-if-changed" in command for command in rendered)
     assert "flutter analyze --no-fatal-infos" in rendered

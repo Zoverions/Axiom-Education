@@ -30,7 +30,11 @@ Installing a curriculum or education capsule does not grant access to learner re
 
 ## Current usable surface
 
-The runnable application provides a local Ontario curriculum browser and the first bounded MTH1W conventional course slice:
+The runnable application provides a local Ontario curriculum browser and a
+bounded **Grade 9 Math Foundations Preview**. An official-source audit found
+that the current 11-record local snapshot is not a complete or correctly
+numbered transcription of Ontario's 2021 MTH1W course, so the preview is not
+represented as course-complete:
 
 - recoverable first-run initialization;
 - a searchable list of courses and expectation counts;
@@ -38,17 +42,33 @@ The runnable application provides a local Ontario curriculum browser and the fir
 - pull-to-refresh and explicit retry states;
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
-- a four-lesson MTH1W course path with explicit goals, prerequisites, direct instruction, worked examples, misconception checks, and reflection prompts;
+- a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, misconception checks, and reflection prompts;
 - lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
-- an ephemeral on-screen count of checks and exact successes that is never saved to a learner record;
-- item-linked scaffolded hints, exact expectation IDs, uncalibrated difficulty disclosure, and digest evidence;
+- an ephemeral on-screen count of checks, exact successes, and distinct items that is never saved to a learner record;
+- a three-different-item stopping cue that is explicitly not a grade or mastery result;
+- an in-app and written home-learning routine for two learners sharing a device;
+- item-linked scaffolded hints, derived local topic references, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The MTH1W lesson and practice phase does **not** use tutor inference or write a learner record. It is intentionally usable without AI. The application does **not** currently provide conventional quizzes or unit tests, governed learner progress, assignments, educator review and appeal, pack activation, portfolio export, or classroom synchronization. Those paths remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+The foundations preview does **not** use tutor inference or write a learner
+record. It is intentionally usable without AI. It is **not** a complete MTH1W
+course, credit, grade, transcript, Ministry-approved resource, school
+enrolment, or replacement for an authorized education provider. The
+application does **not** currently provide conventional quizzes or unit tests,
+governed learner progress, assignments, educator review and appeal, pack
+activation, portfolio export, or classroom synchronization. Those paths
+remain experimental, disabled, specified, or adapter-required in
+[`config/capabilities.json`](config/capabilities.json).
 
-The scope and negative-path gates are frozen in [MTH1W Phase 0 through Phase 2](docs/vertical-slices/MTH1W-PHASE-1.md). Product sequencing and the definition of a complete conventional platform are set by the [High-School Foundation Strategy](docs/rebuild/HIGH-SCHOOL-FOUNDATION.md).
+The source conflict and blocked completion claim are documented in the
+[MTH1W Source Audit](docs/curriculum/MTH1W-SOURCE-AUDIT.md) and enforced by
+[`config/curriculum-readiness.json`](config/curriculum-readiness.json). The
+[Home Learning Guide](docs/home-learning/START-HERE.md) describes safe current
+use. Product sequencing is MTH1W first, then every remaining Grade 9 course,
+then later grades, as defined in the
+[Course Completion Roadmap](docs/rebuild/COURSE-COMPLETION-ROADMAP.md).
 
 ## First five minutes
 
@@ -66,10 +86,11 @@ flutter run -d <device-id>
 ```
 
 The verification command validates the supported toolchain, installs the exact
-Python test dependencies and locked Dart dependencies, checks capability
-claims and formatting, runs static analysis, and runs the complete Python and
-Flutter test suites. Use an activated virtual environment if you do not want
-the Python development dependencies installed into your user environment.
+Python test dependencies and locked Dart dependencies, checks capability and
+curriculum-readiness claims, checks formatting, runs static analysis, and runs
+the complete Python and Flutter test suites. Use an activated virtual
+environment if you do not want the Python development dependencies installed
+into your user environment.
 
 For an Android installation smoke build:
 
@@ -110,8 +131,8 @@ Presently:
 - curriculum browsing from a schema-verified bundled SQLite database is implemented;
 - the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
-- MTH1W A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to those four expectations;
-- the four-lesson MTH1W traditional course path is experimental; full-course instruction, quizzes, unit tests, assignments, progress, and teacher workflows remain incomplete;
+- MTH1W-labelled A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to four derived topic references whose official mapping is under review;
+- the four-lesson Grade 9 Math Foundations Preview is experimental; it is not a complete MTH1W course, and full-course source mapping, instruction, quizzes, unit tests, assignments, progress, and teacher workflows remain incomplete;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;
@@ -166,7 +187,10 @@ A valid pack signature proves that the exact canonical manifest was signed by th
 - pedagogical quality;
 - safe application activation.
 
-The source ledger records that upstream official-document digests have not yet been captured and that course-by-course source and licensing review remains required.
+The MTH1W source audit pins the reviewed official PDF digest and documents known
+identifier conflicts. The broader source ledger still records that upstream
+official-document digests have not been captured for the corpus and that
+course-by-course source and licensing review remains required.
 
 ## Canonical documents
 
@@ -174,6 +198,9 @@ The source ledger records that upstream official-document digests have not yet b
 - [Changelog](CHANGELOG.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
 - [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md)
+- [MTH1W source audit](docs/curriculum/MTH1W-SOURCE-AUDIT.md)
+- [Home learning guide](docs/home-learning/START-HERE.md)
+- [Course completion roadmap](docs/rebuild/COURSE-COMPLETION-ROADMAP.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
 - [Repository rename record](docs/REPOSITORY-MIGRATION.md)
 - [Branch hygiene policy](docs/BRANCH-HYGIENE.md)

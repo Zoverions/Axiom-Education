@@ -61,11 +61,14 @@
       "id": "curriculum.ontario-data",
       "family": "curriculum",
       "status": "experimental",
-      "summary": "The current corpus deterministically produces 293 records across 21 courses, but upstream official-document digests, licensing review, and course-by-course human verification remain incomplete.",
+      "summary": "The current corpus deterministically produces 293 experimental records across 21 courses, but upstream official-document digests, licensing review, and course-by-course human verification remain incomplete; an official-source audit found known identifier conflicts in the preliminary MTH1W snapshot.",
       "evidence": [
         "assets/curriculum/ontario_curriculum_full.json",
         "assets/curriculum/ontario_curriculum.sqlite",
-        "curriculum/source-ledger.v1.json"
+        "curriculum/source-ledger.v1.json",
+        "config/curriculum-readiness.json",
+        "docs/curriculum/MTH1W-SOURCE-AUDIT.md",
+        "tools/check_curriculum_readiness.py"
       ]
     },
     {
@@ -88,12 +91,16 @@
       "id": "instruction.mth1w-foundation",
       "family": "instruction",
       "status": "experimental",
-      "summary": "A four-lesson MTH1W course path provides curriculum-bound learning goals, prerequisites, human-authored direct instruction, worked examples, misconception checks, metacognitive planning prompts, and focused deterministic practice without an AI tutor; full-course lessons, quizzes, grading, progress, and educator workflows remain incomplete.",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview provides topic-linked learning goals, prerequisites, human-authored direct instruction, worked examples, misconception checks, metacognitive planning prompts, and focused deterministic practice without an AI tutor; it is not a complete MTH1W course and official curriculum mapping remains under review.",
       "evidence": [
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
+        "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
+        "docs/home-learning/START-HERE.md",
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "lib/core/learning/mth1w_foundation.dart",
+        "lib/features/learning/home_learning_guide_screen.dart",
         "lib/features/learning/mth1w_course_screen.dart",
+        "test/features/learning/home_learning_guide_screen_test.dart",
         "test/core/learning/mth1w_foundation_test.dart",
         "test/features/learning/mth1w_course_screen_test.dart"
       ]
@@ -102,7 +109,7 @@
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "MTH1W A1, A2, B2, and B4 have deterministic seed-based practice items bound to exact expectation IDs, local scaffolded hints, digest evidence, actual answer entry, fail-closed exact verification, and an ephemeral on-screen session summary that is never saved; learner records, tutor inference, review, and export remain unavailable.",
+      "summary": "Four derived Grade 9 math topic references have deterministic seed-based practice items, local scaffolded hints, digest evidence, actual answer entry, fail-closed exact verification, and an ephemeral session summary with a distinct-item stopping cue; official MTH1W mapping, learner records, tutor inference, review, and export remain unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",
@@ -230,8 +237,9 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
-    "The current four-lesson MTH1W foundation does not yet provide complete course instruction, quizzes, unit tests, grades, governed progress, assignments, or educator workflows.",
-    "The MTH1W deterministic practice engine covers only A1, A2, B2, and B4 and does not complete the ten-outcome vertical slice.",
+    "The current four-lesson Grade 9 Math Foundations Preview is not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "Known conflicts between preliminary local MTH1W identifiers and the official 2021 course block curriculum-aligned and course-completion claims pending full source and educator review.",
+    "The deterministic practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",

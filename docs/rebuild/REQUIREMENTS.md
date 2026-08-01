@@ -26,6 +26,7 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | EDU-CUR-04 | Curriculum activation MUST require a valid signed manifest and MUST preserve the prior active pack for rollback. | Tamper, signer, downgrade, activation, and rollback tests. |
 | EDU-CUR-05 | Retrieval indexes MUST be disposable derived artifacts and MUST NOT replace authoritative curriculum records. | Rebuild and corruption tests. |
 | EDU-CUR-06 | Custom course codes MUST be visibly marked as Axiom Education extensions and MUST NOT imply jurisdictional authority recognition. | UI and export snapshot tests. |
+| EDU-CUR-07 | A known conflict between a local curriculum record and an official source MUST block course-complete, curriculum-aligned, credit, grade, transcript, approval, and school-equivalency claims until the full source and review gates pass. | `config/curriculum-readiness.json`, source audit, fail-closed checker, and student-facing boundary tests. |
 
 ## High-school instructional core
 

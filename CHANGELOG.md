@@ -8,10 +8,21 @@ claims.
 
 ### Added
 
-- A conventional MTH1W course path that teaches four curriculum-bound lessons
-  through explicit goals, prerequisites, direct instruction, worked examples,
-  misconception checks, reflection prompts, and focused deterministic
-  practice. The entire path works offline without an AI tutor.
+- A fail-closed MTH1W curriculum-readiness declaration and checker pinning the
+  official 2021 source digest, known identifier conflicts, required completion
+  evidence, and MTH1W-first delivery sequence.
+- An in-app and written home-learning routine for two learners sharing a device,
+  including a 45-minute session plan, starter week, and adult check-in prompts.
+- A distinct-item practice counter and three-item stopping cue that explicitly
+  does not represent a grade or mastery result.
+- Source-audit and course-completion roadmap documentation: finish verified
+  MTH1W, then the remaining Grade 9 courses, then later grades in order.
+
+- A conventional Grade 9 Math Foundations Preview that teaches four
+  topic-linked lessons through explicit goals, prerequisites, direct
+  instruction, worked examples, misconception checks, reflection prompts, and
+  focused deterministic practice. The entire path works offline without an AI
+  tutor; official MTH1W mapping remains under review.
 - A canonical high-school foundation strategy defining lessons, practice,
   assessment, progress, educator workflows, adolescent-learning principles,
   and the gates that must precede adaptive or tutor enhancements.
@@ -34,6 +45,11 @@ claims.
   removed.
 
 ### Changed
+
+- The four current lessons and practice generators are now labelled **Grade 9
+  Math Foundations Preview** with derived local topic references. Full MTH1W,
+  credit, grade, transcript, Ministry-approval, and school-equivalency claims
+  remain blocked after the official-source audit found identifier conflicts.
 
 - CI now runs the complete Python suite and the canonical verification command.
 - Dart formatting is enforced across the full `lib` and `test` trees.

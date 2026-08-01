@@ -108,6 +108,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [flutter, "pub", "get", "--enforce-lockfile"],
         ),
         ("Verify capability registry", [python, "tools/check_capabilities.py"]),
+        (
+            "Verify curriculum readiness boundary",
+            [python, "tools/check_curriculum_readiness.py"],
+        ),
         ("Run complete Python test suite", [python, "-m", "pytest", "-q"]),
         (
             "Verify Dart formatting",

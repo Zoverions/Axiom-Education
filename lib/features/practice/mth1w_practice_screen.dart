@@ -31,6 +31,7 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
   int _visibleHintCount = 0;
   int _sessionCheckCount = 0;
   int _sessionCorrectCount = 0;
+  final Set<String> _checkedItemIds = <String>{};
   VerificationResult? _result;
 
   @override
@@ -74,6 +75,7 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
     setState(() {
       _result = result;
       _sessionCheckCount += 1;
+      _checkedItemIds.add(item.itemId);
       if (result.status == VerificationStatus.correct) {
         _sessionCorrectCount += 1;
       }
@@ -105,7 +107,7 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
     final expectationsAsync = ref.watch(mth1wGoldenPathProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('MTH1W Verified Practice')),
+      appBar: AppBar(title: const Text('Grade 9 Math Practice Preview')),
       body: SafeArea(
         child: expectationsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -148,6 +150,7 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
                 visibleHintCount: _visibleHintCount,
                 sessionCheckCount: _sessionCheckCount,
                 sessionCorrectCount: _sessionCorrectCount,
+                distinctItemCount: _checkedItemIds.length,
                 verifierAvailable: widget.verifier != null,
                 onCheck: () => _checkAnswer(item),
                 onShowHint: () => _showNextHint(item),
@@ -177,6 +180,7 @@ class _PracticeBody extends StatelessWidget {
     required this.visibleHintCount,
     required this.sessionCheckCount,
     required this.sessionCorrectCount,
+    required this.distinctItemCount,
     required this.verifierAvailable,
     required this.onCheck,
     required this.onShowHint,
@@ -193,6 +197,7 @@ class _PracticeBody extends StatelessWidget {
   final int visibleHintCount;
   final int sessionCheckCount;
   final int sessionCorrectCount;
+  final int distinctItemCount;
   final bool verifierAvailable;
   final VoidCallback onCheck;
   final VoidCallback onShowHint;
@@ -215,12 +220,13 @@ class _PracticeBody extends StatelessWidget {
                 _SessionSummary(
                   checkCount: sessionCheckCount,
                   correctCount: sessionCorrectCount,
+                  distinctItemCount: distinctItemCount,
                 ),
                 const SizedBox(height: 12),
                 LinearProgressIndicator(value: position / total),
                 const SizedBox(height: 6),
                 Text(
-                  'Golden-path expectation $position of $total',
+                  'Foundations topic $position of $total',
                   textAlign: TextAlign.end,
                 ),
                 const SizedBox(height: 12),
@@ -301,10 +307,15 @@ class _PracticeBody extends StatelessWidget {
 }
 
 class _SessionSummary extends StatelessWidget {
-  const _SessionSummary({required this.checkCount, required this.correctCount});
+  const _SessionSummary({
+    required this.checkCount,
+    required this.correctCount,
+    required this.distinctItemCount,
+  });
 
   final int checkCount;
   final int correctCount;
+  final int distinctItemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +336,14 @@ class _SessionSummary extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text('$checks • $successes'),
+            const SizedBox(height: 4),
+            Text('$distinctItemCount of 3 different items checked'),
+            if (distinctItemCount >= 3) ...[
+              const SizedBox(height: 4),
+              const Text(
+                'Suggested practice set finished. This is not a grade or mastery result.',
+              ),
+            ],
             const SizedBox(height: 4),
             Text(
               'Temporary on-screen feedback only. Nothing is saved to a '
@@ -364,8 +383,10 @@ class _StatusBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 verifierAvailable
-                    ? 'Offline deterministic practice is active. No tutor '
-                          'provider or learner record is used in this phase.'
+                    ? 'Foundations preview: offline deterministic practice is '
+                          'active. Curriculum mapping is under review; this is '
+                          'not a complete course or grade. No tutor provider '
+                          'or learner record is used.'
                     : 'Fail-closed mode: the verifier is unavailable, so '
                           'answers cannot be submitted or treated as correct.',
               ),
@@ -392,7 +413,7 @@ class _ExpectationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              item.expectationId,
+              'Derived topic reference ${item.expectationId}',
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -557,7 +578,7 @@ class _ConfigurationError extends StatelessWidget {
               const Icon(Icons.gpp_bad_rounded, size: 52),
               const SizedBox(height: 16),
               Text(
-                'Verified MTH1W practice is unavailable',
+                'Math foundations practice is unavailable',
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
