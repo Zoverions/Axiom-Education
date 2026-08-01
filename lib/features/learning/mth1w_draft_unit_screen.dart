@@ -6,7 +6,7 @@ import '../../core/providers/mth1w_unit_content_provider.dart';
 
 class Mth1wDraftUnitScreen extends ConsumerWidget {
   const Mth1wDraftUnitScreen({super.key, this.unitNumber = 1})
-    : assert(unitNumber >= 1 && unitNumber <= 6);
+    : assert(unitNumber >= 1 && unitNumber <= 7);
 
   final int unitNumber;
 

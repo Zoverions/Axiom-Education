@@ -35,6 +35,10 @@ claims.
   equations and inequality regions, line transformations, and equation
   construction through 14 worked examples, 77 practice items, a 10-item quiz,
   and a paper-usable linear-model comparison task.
+- A bundled offline Unit 7 draft covering large-data consequences, one-variable
+  distributions, regression, safe source planning, model construction, fit,
+  limitations, and bounded prediction through 16 worked examples, 88 practice
+  items, a 10-item quiz, and a public-data-first modelling investigation.
 - Fail-closed Python and Flutter content loaders plus model, claim, and widget
   tests for the course blueprint and authored unit.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the

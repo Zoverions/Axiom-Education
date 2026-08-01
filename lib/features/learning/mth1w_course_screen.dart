@@ -45,6 +45,12 @@ const _draftUnits = <_DraftUnitLink>[
     description:
         'Seven draft lessons mapped to official C3.1-C4.4: relations, representations, intersections, graph features, solution regions, transformations, and linear equations.',
   ),
+  _DraftUnitLink(
+    unitNumber: 7,
+    icon: Icons.analytics_rounded,
+    description:
+        'Eight draft lessons mapped to official D1.1-D2.5: responsible data use, distributions, regression, and a safe evidence-to-model investigation cycle.',
+  ),
 ];
 
 class _DraftUnitLink {

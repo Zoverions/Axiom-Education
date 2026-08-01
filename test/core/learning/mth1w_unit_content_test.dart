@@ -14,6 +14,8 @@ const unitFiveContentPath =
     'curriculum/content/mth1w/u5-coding-relationships.v1.json';
 const unitSixContentPath =
     'curriculum/content/mth1w/u6-relations-linear-models.v1.json';
+const unitSevenContentPath =
+    'curriculum/content/mth1w/u7-data-modelling.v1.json';
 
 String source() => File(contentPath).readAsStringSync();
 String unitTwoSource() => File(unitTwoContentPath).readAsStringSync();
@@ -21,6 +23,7 @@ String unitThreeSource() => File(unitThreeContentPath).readAsStringSync();
 String unitFourSource() => File(unitFourContentPath).readAsStringSync();
 String unitFiveSource() => File(unitFiveContentPath).readAsStringSync();
 String unitSixSource() => File(unitSixContentPath).readAsStringSync();
+String unitSevenSource() => File(unitSevenContentPath).readAsStringSync();
 
 void main() {
   group('MTH1W authored Unit 1 content', () {
@@ -229,6 +232,31 @@ void main() {
           ],
         ),
         hasLength(77),
+      );
+      expect(unit.assessment.quiz.items, hasLength(10));
+      expect(unit.assessment.performanceTask.rubric, hasLength(5));
+    });
+  });
+
+  group('MTH1W authored Unit 7 content', () {
+    test('loads the complete data-analysis and modelling package', () {
+      final unit = Mth1wUnitContent.fromJsonString(unitSevenSource());
+
+      expect(unit.unitId, 'mth1w-u7');
+      expect(unit.lessons, hasLength(8));
+      expect(
+        unit.lessons.expand((lesson) => lesson.workedExamples),
+        hasLength(16),
+      );
+      expect(
+        unit.lessons.expand(
+          (lesson) => [
+            ...lesson.practiceSets.guided,
+            ...lesson.practiceSets.independent,
+            ...lesson.practiceSets.retrieval,
+          ],
+        ),
+        hasLength(88),
       );
       expect(unit.assessment.quiz.items, hasLength(10));
       expect(unit.assessment.performanceTask.rubric, hasLength(5));

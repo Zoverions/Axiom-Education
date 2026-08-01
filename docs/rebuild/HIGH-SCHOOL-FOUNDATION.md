@@ -37,10 +37,10 @@ The baseline student experience must include:
 10. dependable offline operation for downloaded courses.
 
 Items 1–6 have an executable first slice for four Grade 9 math foundation
-topics and separately source-mapped Units 1 through 6. Each lesson exposes two
+topics and separately source-mapped Units 1 through 7. Each lesson exposes two
 valid reasoning routes and multiple representations, while keeping one outcome
 and one quality standard. The older foundation topics retain preliminary local
-identifiers; the newer units bind to B1.1 through C4.4 in the verified
+identifiers; the newer units bind to B1.1 through D2.5 in the verified
 official inventory. The [source audit](../curriculum/MTH1W-SOURCE-AUDIT.md)
 records the distinction and known legacy conflicts. Item 7 now has a unit-quiz
 and performance-task slice, while items 8 and 9 remain product requirements.
@@ -93,8 +93,16 @@ graphical and algebraic routes compare models; and feature matrices, test
 points, coordinate mappings, and slope construction support graph analysis.
 Every visual route includes an ordered nonvisual equivalent.
 
+Unit 7 adds eight data-analysis and modelling lessons for D1.1 through D2.5.
+Lifecycle maps and stakeholder scenarios examine data consequences; ordered
+lists, aligned plots, technology output, and residual tables support one- and
+two-variable analysis; and question, source, candidate-model, and reporting
+routes complete a safe iterative modelling process. Direct collection is
+adult-approved, minimized, non-sensitive, and optional because a reviewed
+public-data route is always provided.
+
 These are machine-verified draft previews, not reviewed or complete courses.
-The remaining three units, human educator review, cultural review, licensing,
+The remaining two units, human educator review, cultural review, licensing,
 printable alternatives, and governed progress are still open gates.
 
 ## Current Grade 9 math foundations preview

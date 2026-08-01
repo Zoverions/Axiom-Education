@@ -54,5 +54,6 @@ flutter:
     - curriculum/content/mth1w/u4-algebraic-thinking.v1.json
     - curriculum/content/mth1w/u5-coding-relationships.v1.json
     - curriculum/content/mth1w/u6-relations-linear-models.v1.json
+    - curriculum/content/mth1w/u7-data-modelling.v1.json
     - config/capabilities.json
     - contracts/axiom-education.v1.json

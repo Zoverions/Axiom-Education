@@ -73,6 +73,13 @@
       "status": "machine_verified_draft",
       "educator_review_status": "required",
       "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u7",
+      "path": "curriculum/content/mth1w/u7-data-modelling.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
     }
   ],
   "units": [
@@ -620,7 +627,7 @@
             "independent": "Evaluate one current context with sourced benefits, risks, and mitigations.",
             "retrieval": "Explain why a technically accurate graph can still cause harm or mislead."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l2",
@@ -637,7 +644,7 @@
             "independent": "Compare real distributions and write claims supported by centre and spread.",
             "retrieval": "Estimate quartile position and detect unsupported claims from a box plot."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l3",
@@ -654,7 +661,7 @@
             "independent": "Fit and evaluate a model for a real two-variable data set and bound a prediction.",
             "retrieval": "Identify interpolation, extrapolation, outliers, and causal overclaiming."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l4",
@@ -671,7 +678,7 @@
             "independent": "Critique the value and limits of a model used in a public decision.",
             "retrieval": "State one useful purpose and one limitation of a remembered model."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l5",
@@ -688,7 +695,7 @@
             "independent": "Propose a question with named variables, population, timeframe, and needed information.",
             "retrieval": "Diagnose what information is missing from a new model question."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l6",
@@ -705,7 +712,7 @@
             "independent": "Carry out an approved low-risk plan or use a reviewed public data set.",
             "retrieval": "Identify a hidden assumption and predict its effect on a result."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l7",
@@ -722,7 +729,7 @@
             "independent": "Build and test a model linked to the approved question.",
             "retrieval": "Explain why an attractive display may be a poor fit for a question."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         },
         {
           "id": "mth1w-u7-l8",
@@ -739,14 +746,14 @@
             "independent": "Present an answer, fit judgment, limitations, and bounded predictions for the modelling project.",
             "retrieval": "Name the most consequential assumption and how it could change the conclusion."
           },
-          "status": "specified_not_implemented"
+          "status": "machine_verified_draft"
         }
       ],
       "assessment": {
         "quiz_id": "mth1w-u7-quiz",
         "performance_task_id": "mth1w-u7-modelling-investigation",
         "expectation_ids": ["D1.1", "D1.2", "D1.3", "D2.1", "D2.2", "D2.3", "D2.4", "D2.5"],
-        "status": "specified_not_implemented"
+        "status": "machine_verified_draft"
       }
     },
     {

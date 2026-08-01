@@ -17,6 +17,8 @@ const unitFiveContentPath =
     'curriculum/content/mth1w/u5-coding-relationships.v1.json';
 const unitSixContentPath =
     'curriculum/content/mth1w/u6-relations-linear-models.v1.json';
+const unitSevenContentPath =
+    'curriculum/content/mth1w/u7-data-modelling.v1.json';
 
 Mth1wUnitContent loadUnit() {
   return Mth1wUnitContent.fromJsonString(File(contentPath).readAsStringSync());
@@ -159,6 +161,26 @@ void main() {
     expect(find.text('Linear and non-linear change'), findsOneWidget);
     expect(find.text('Build a line equation from data'), findsOneWidget);
     expect(find.byKey(const ValueKey('mth1w-u6-open-quiz')), findsOneWidget);
+  });
+
+  testWidgets('presents the source-mapped draft Unit 7 path', (tester) async {
+    final unit = Mth1wUnitContent.fromJsonString(
+      File(unitSevenContentPath).readAsStringSync(),
+    );
+    await tester.pumpWidget(buildUnitScreen(unit, unitNumber: 7));
+    await tester.pumpAndSettle();
+
+    expect(find.text(unit.title), findsOneWidget);
+    expect(
+      find.textContaining('D1.1, D1.2, D1.3, D2.1, D2.2, D2.3, D2.4, D2.5'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Data at scale: value, risk, and consequence'),
+      findsOneWidget,
+    );
+    expect(find.text('Report fit, limits, and predictions'), findsOneWidget);
+    expect(find.byKey(const ValueKey('mth1w-u7-open-quiz')), findsOneWidget);
   });
 
   testWidgets('teaches, accepts a response, and gives task-specific feedback', (
