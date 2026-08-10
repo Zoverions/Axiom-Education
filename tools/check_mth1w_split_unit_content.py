@@ -4,13 +4,17 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 from collections import Counter
 from pathlib import Path
 
-from tools.check_mth1w_unit_content import verify_content
-
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.check_mth1w_unit_content import verify_content  # noqa: E402
+
 MANIFEST_PATHS = [
     ROOT / "curriculum/content/mth1w/u8/manifest.v1.json",
 ]
@@ -57,6 +61,10 @@ def materialize_manifest(manifest_path: Path) -> dict[str, object]:
         raise SplitUnitContentError(
             f"{manifest_path}: lesson_assets must be a non-empty array"
         )
+    if not all(isinstance(item, str) for item in raw_assets):
+        raise SplitUnitContentError(
+            f"{manifest_path}: lesson assets must all be repository paths"
+        )
     if len(raw_assets) != len(set(raw_assets)):
         raise SplitUnitContentError(f"{manifest_path}: lesson assets must be unique")
 
@@ -100,7 +108,7 @@ def verify_all_split(paths: list[Path] = MANIFEST_PATHS) -> dict[str, int]:
     for path in paths:
         materialized = materialize_manifest(path)
         unit_id = materialized.get("unit_id")
-        if not isinstance(unit_id, str) or unit_id in seen_units:
+        if not isinstance(unit_id, str) or not unit_id or unit_id in seen_units:
             raise SplitUnitContentError(f"{path}: duplicate or invalid unit id")
         seen_units.add(unit_id)
         totals.update(verify_split_manifest(path))
