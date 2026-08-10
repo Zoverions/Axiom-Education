@@ -55,5 +55,12 @@ flutter:
     - curriculum/content/mth1w/u5-coding-relationships.v1.json
     - curriculum/content/mth1w/u6-relations-linear-models.v1.json
     - curriculum/content/mth1w/u7-data-modelling.v1.json
+    - curriculum/content/mth1w/u8/manifest.v1.json
+    - curriculum/content/mth1w/u8/l1.v1.json
+    - curriculum/content/mth1w/u8/l2.v1.json
+    - curriculum/content/mth1w/u8/l3.v1.json
+    - curriculum/content/mth1w/u8/l4.v1.json
+    - curriculum/content/mth1w/u8/l5.v1.json
+    - curriculum/content/mth1w/u8/l6.v1.json
     - config/capabilities.json
     - contracts/axiom-education.v1.json
