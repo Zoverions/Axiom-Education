@@ -1,6 +1,6 @@
 {
   "schema": "axiom-education-curriculum-readiness.v1",
-  "verified_at": "2026-08-01",
+  "verified_at": "2026-08-10",
   "course": {
     "code": "MTH1W",
     "jurisdiction": "Ontario, Canada",
@@ -41,13 +41,15 @@
       "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
       "curriculum/content/mth1w/u5-coding-relationships.v1.json",
       "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
-      "curriculum/content/mth1w/u7-data-modelling.v1.json"
+      "curriculum/content/mth1w/u7-data-modelling.v1.json",
+      "curriculum/content/mth1w/u8/manifest.v1.json",
+      "curriculum/content/mth1w/u9/manifest.v1.json"
     ],
-    "machine_verified_draft_units": 7,
-    "machine_verified_draft_lessons": 33,
-    "worked_examples": 66,
-    "practice_items": 363,
-    "unit_quiz_items": 70,
+    "machine_verified_draft_units": 9,
+    "machine_verified_draft_lessons": 43,
+    "worked_examples": 86,
+    "practice_items": 473,
+    "unit_quiz_items": 90,
     "educator_review_status": "required",
     "student_availability": "draft_preview_with_adult_review_recommended"
   },
