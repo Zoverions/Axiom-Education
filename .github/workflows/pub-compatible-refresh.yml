@@ -29,6 +29,10 @@ concurrency:
 env:
   AXIOM_FLUTTER_VERSION: "3.41.1"
   AXIOM_FLUTTER_CONSTRAINT: ">=3.41.1 <3.42.0"
+  AXIOM_PUB_AUTOMATION_PACKAGES: >-
+    uuid path crypto meta fake_async intl image encrypt hive pdf
+    flutter_riverpod riverpod_annotation hive_generator build_runner
+    riverpod_generator flutter_lints
 
 jobs:
   validate:
@@ -43,6 +47,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up pinned Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
@@ -51,43 +56,81 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Resolve only versions allowed by the committed pubspec
+      - name: Select one lock-only compatible direct-package refresh
+        id: refresh
         shell: bash
         run: |
           set -euo pipefail
+          baseline="$(git rev-parse HEAD)"
           cp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
-          flutter pub upgrade
-          cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
-          python - <<'PY'
+          attempted=0
+          solver_successes=0
+          selected=''
+
+          for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
+            attempted=$((attempted + 1))
+            git reset --hard "$baseline" >/dev/null
+            echo "Trying compatible refresh for ${package}"
+            if ! flutter pub upgrade "$package"; then
+              echo "Solver rejected ${package}; deferring it."
+              continue
+            fi
+            solver_successes=$((solver_successes + 1))
+            cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+            python - <<'PY'
           from pathlib import Path
-          import subprocess
 
           expected = '  flutter: ">=3.41.1 <3.42.0"'
           lock = Path('pubspec.lock').read_text(encoding='utf-8')
           if expected not in lock.splitlines():
               raise SystemExit('pinned Flutter lockfile ceiling drifted')
-          changed = set(subprocess.check_output(
-              ['git', 'diff', '--name-only'], text=True
-          ).splitlines())
-          unexpected = changed - {'pubspec.lock'}
-          if unexpected:
-              raise SystemExit(
-                  'compatible Pub refresh changed files outside pubspec.lock: '
-                  + ', '.join(sorted(unexpected))
-              )
-          print('compatible Pub refresh scope verified')
           PY
 
+            mapfile -t changed < <(git diff --name-only)
+            if ((${#changed[@]} == 0)); then
+              echo "${package} is already at the newest version allowed by current constraints."
+              continue
+            fi
+            if ((${#changed[@]} != 1)) || [[ "${changed[0]}" != 'pubspec.lock' ]]; then
+              echo "Deferring ${package}: targeted refresh changes tracked files beyond pubspec.lock:"
+              printf '  %s\n' "${changed[@]}"
+              continue
+            fi
+
+            selected="$package"
+            break
+          done
+
+          if ((solver_successes == 0)); then
+            echo "All ${attempted} allowlisted targeted solves failed." >&2
+            exit 1
+          fi
+
+          if [[ -z "$selected" ]]; then
+            git reset --hard "$baseline" >/dev/null
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'No lock-only compatible direct-package refresh is available.'
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            echo "package=${selected}" >> "$GITHUB_OUTPUT"
+            echo "Selected ${selected}; only pubspec.lock changed."
+            git diff --stat -- pubspec.lock
+          fi
+
       - name: Enforce regenerated lock with the same toolchain
+        if: steps.refresh.outputs.changed == 'true'
         run: flutter pub get --enforce-lockfile
 
-      - name: Analyze
+      - name: Analyze selected dependency graph
+        if: steps.refresh.outputs.changed == 'true'
         run: flutter analyze --no-fatal-infos
 
-      - name: Test
+      - name: Test selected dependency graph
+        if: steps.refresh.outputs.changed == 'true'
         run: flutter test --reporter expanded
 
       - name: Build Android debug APK
+        if: steps.refresh.outputs.changed == 'true'
         run: flutter build apk --debug --no-pub
 
   propose:
@@ -133,8 +176,7 @@ jobs:
                   'automation/pub-compatible-refresh-'
               )
           ]
-          output = os.environ['GITHUB_OUTPUT']
-          with open(output, 'a', encoding='utf-8') as handle:
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
               handle.write(f"open={'true' if existing else 'false'}\n")
           if existing:
               print(
@@ -153,39 +195,65 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Resolve compatible lock refresh
+      - name: Select one lock-only compatible direct-package refresh
         id: refresh
         if: steps.preflight.outputs.open != 'true'
         shell: bash
         run: |
           set -euo pipefail
+          baseline="$(git rev-parse HEAD)"
           cp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
-          flutter pub upgrade
-          cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
-          python - <<'PY'
+          attempted=0
+          solver_successes=0
+          selected=''
+
+          for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
+            attempted=$((attempted + 1))
+            git reset --hard "$baseline" >/dev/null
+            echo "Trying compatible refresh for ${package}"
+            if ! flutter pub upgrade "$package"; then
+              echo "Solver rejected ${package}; deferring it."
+              continue
+            fi
+            solver_successes=$((solver_successes + 1))
+            cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+            python - <<'PY'
           from pathlib import Path
-          import subprocess
 
           expected = '  flutter: ">=3.41.1 <3.42.0"'
           lock = Path('pubspec.lock').read_text(encoding='utf-8')
           if expected not in lock.splitlines():
               raise SystemExit('pinned Flutter lockfile ceiling drifted')
-          changed = set(subprocess.check_output(
-              ['git', 'diff', '--name-only'], text=True
-          ).splitlines())
-          unexpected = changed - {'pubspec.lock'}
-          if unexpected:
-              raise SystemExit(
-                  'compatible Pub refresh changed files outside pubspec.lock: '
-                  + ', '.join(sorted(unexpected))
-              )
-          print('compatible Pub refresh scope verified')
           PY
-          if git diff --quiet -- pubspec.lock; then
+
+            mapfile -t changed < <(git diff --name-only)
+            if ((${#changed[@]} == 0)); then
+              echo "${package} is already at the newest version allowed by current constraints."
+              continue
+            fi
+            if ((${#changed[@]} != 1)) || [[ "${changed[0]}" != 'pubspec.lock' ]]; then
+              echo "Deferring ${package}: targeted refresh changes tracked files beyond pubspec.lock:"
+              printf '  %s\n' "${changed[@]}"
+              continue
+            fi
+
+            selected="$package"
+            break
+          done
+
+          if ((solver_successes == 0)); then
+            echo "All ${attempted} allowlisted targeted solves failed." >&2
+            exit 1
+          fi
+
+          if [[ -z "$selected" ]]; then
+            git reset --hard "$baseline" >/dev/null
             echo 'changed=false' >> "$GITHUB_OUTPUT"
-            echo 'No compatible Pub lock updates under Flutter 3.41.1.'
+            echo 'No lock-only compatible direct-package refresh is available.'
           else
             echo 'changed=true' >> "$GITHUB_OUTPUT"
+            echo "package=${selected}" >> "$GITHUB_OUTPUT"
+            echo "Selected ${selected}; only pubspec.lock changed."
             git diff --stat -- pubspec.lock
           fi
 
@@ -209,15 +277,17 @@ jobs:
         id: branch
         if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
         shell: bash
+        env:
+          UPDATE_PACKAGE: ${{ steps.refresh.outputs.package }}
         run: |
           set -euo pipefail
-          branch="automation/pub-compatible-refresh-${GITHUB_RUN_ID}"
+          branch="automation/pub-compatible-refresh-${UPDATE_PACKAGE}-${GITHUB_RUN_ID}"
           git config user.name 'axiom-education-automation[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add pubspec.lock
           git diff --cached --name-only | grep -Fx 'pubspec.lock'
           test "$(git diff --cached --name-only | wc -l)" -eq 1
-          git commit -m 'chore: refresh compatible Pub lock'
+          git commit -m "chore: refresh compatible Pub lock for ${UPDATE_PACKAGE}"
           git push origin "HEAD:refs/heads/${branch}"
           echo "name=${branch}" >> "$GITHUB_OUTPUT"
 
@@ -227,6 +297,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           UPDATE_BRANCH: ${{ steps.branch.outputs.name }}
+          UPDATE_PACKAGE: ${{ steps.refresh.outputs.package }}
         run: |
           python - <<'PY'
           import json
@@ -236,23 +307,28 @@ jobs:
           api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
           repo = os.environ['GITHUB_REPOSITORY']
           branch = os.environ['UPDATE_BRANCH']
+          package = os.environ['UPDATE_PACKAGE']
           payload = json.dumps({
-              'title': 'chore: refresh Pub lock under Flutter 3.41.1',
+              'title': f'chore: refresh {package} under Flutter 3.41.1',
               'head': branch,
               'base': 'main',
               'body': (
                   'Automated review proposal generated by the pinned-Flutter '
                   'compatible refresh workflow.\n\n'
+                  f'- Target direct package: `{package}`\n'
                   '- Solver: Flutter 3.41.1\n'
                   '- `pubspec.yaml`: unchanged by policy\n'
+                  '- Only `pubspec.lock` changed\n'
                   '- Flutter lock ceiling: `>=3.41.1 <3.42.0` preserved\n'
                   '- `flutter pub get --enforce-lockfile`: passed before commit\n'
                   '- `flutter analyze --no-fatal-infos`: passed before commit\n'
                   '- complete Flutter tests: passed before commit\n'
                   '- Android debug APK smoke build: passed before commit\n\n'
-                  'This workflow never widens dependency constraints and never '
-                  'auto-merges. Major/platform migrations that require changing '
-                  '`pubspec.yaml` remain separate manual work.'
+                  'The automation evaluates one allowlisted direct dependency '
+                  'per proposal, never widens dependency constraints, and never '
+                  'auto-merges. Native/plugin/platform-sensitive packages and '
+                  'updates that regenerate tracked platform files remain '
+                  'separate manual review work.'
               ),
               'maintainer_can_modify': True,
           }).encode()
@@ -271,7 +347,7 @@ jobs:
               pull = json.load(response)
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
               handle.write(f"number={pull['number']}\n")
-          print(f"opened review PR #{pull['number']}")
+          print(f"opened review PR #{pull['number']} for {package}")
           PY
 
       - name: Dispatch canonical Axiom Education CI on proposal branch
