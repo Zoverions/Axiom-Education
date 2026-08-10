@@ -6,12 +6,7 @@ on:
       - tools/repository_branch_cleanup.py
       - tests/test_repository_branch_cleanup.py
       - .github/workflows/branch-hygiene.yml
-  push:
-    branches:
-      - main
-    paths:
-      - tools/repository_branch_cleanup.py
-      - .github/workflows/branch-hygiene.yml
+  workflow_dispatch:
 
 permissions: {}
 
@@ -46,7 +41,7 @@ jobs:
         run: python tools/repository_branch_cleanup.py --help
 
   cleanup:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch'
     name: Archive unique refs and delete stale branches
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -117,11 +112,10 @@ jobs:
 
               number = int(pull['number'])
               comment = (
-                  'Closed as part of the repository branch-hygiene migration. '
-                  'This automated dependency update is being superseded by a '
-                  'single controlled dependency-upgrade tranche. Its exact head '
-                  'commit will be preserved under the dated archival-tag namespace '
-                  'before the branch ref is deleted.'
+                  'Closed as part of an explicitly dispatched repository branch-hygiene run. '
+                  'This dependency update is being superseded by a controlled '
+                  'dependency-upgrade tranche. Its exact head commit will be preserved '
+                  'under the run-scoped archival-tag namespace before the branch ref is deleted.'
               )
               request(
                   'POST',
@@ -157,14 +151,14 @@ jobs:
           python tools/repository_branch_cleanup.py
           --repository "$GITHUB_REPOSITORY"
           --default-branch main
-          --archive-prefix archive/branches/2026-07-30
+          --archive-prefix "archive/branches/manual-${GITHUB_RUN_ID}"
           --apply
           --report /tmp/axiom-education-branch-cleanup.json
 
       - name: Publish durable cleanup evidence
         env:
           GH_TOKEN: ${{ github.token }}
-          EVIDENCE_TITLE: Repository branch cleanup evidence — 2026-07-30
+          EVIDENCE_TITLE: Repository branch cleanup evidence — run ${{ github.run_id }}
         run: |
           python - <<'PY'
           import json
@@ -184,7 +178,7 @@ jobs:
           )
           body = (
               '# Repository branch cleanup evidence\n\n'
-              'This issue is maintained by the protected branch-hygiene workflow. '
+              'This issue is maintained by the explicitly dispatched branch-hygiene workflow. '
               'It records the exact post-cleanup branch state and the reversible '
               'disposition of removed branch refs.\n\n'
               '```json\n'
@@ -200,7 +194,7 @@ jobs:
             gh issue list \
               --repo "$GITHUB_REPOSITORY" \
               --state all \
-              --search '"Repository branch cleanup evidence — 2026-07-30" in:title' \
+              --search "${EVIDENCE_TITLE} in:title" \
               --json number,title \
               --jq '.[] | select(.title == env.EVIDENCE_TITLE) | .number' \
               | head -n 1
