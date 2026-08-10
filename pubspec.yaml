@@ -14,7 +14,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  path_provider: ^2.1.4
+  path_provider: ^2.1.6
   onnxruntime: ^1.4.0
   tflite_flutter: ^0.11.0
   camera: ^0.11.0
