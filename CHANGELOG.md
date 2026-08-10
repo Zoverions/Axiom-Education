@@ -39,8 +39,21 @@ claims.
   distributions, regression, safe source planning, model construction, fit,
   limitations, and bounded prediction through 16 worked examples, 88 practice
   items, a 10-item quiz, and a public-data-first modelling investigation.
-- Fail-closed Python and Flutter content loaders plus model, claim, and widget
-  tests for the course blueprint and authored unit.
+- A split, offline Unit 8 draft covering E1.1 through E1.6 geometry and
+  measurement through six source-mapped lessons, 12 worked examples, 66
+  guided/independent/retrieval practice items, a delayed-feedback 10-item quiz,
+  and an accessible-design performance task.
+- A split, offline Unit 9 draft covering F1.1 through F1.4 financial literacy
+  through four source-mapped lessons, 8 worked examples, 44 practice items, a
+  delayed-feedback 10-item quiz, and a fictional financial-scenario evidence
+  dossier. Financial activities compare disclosed classroom scenarios and do
+  not recommend products or personal financial actions.
+- A repo-bounded split-unit materializer for Units 8 and 9. Python assembles
+  the lesson assets and passes them through the same canonical unit validator
+  used for Units 1 through 7; Flutter independently assembles the same bundled
+  assets through the existing `Mth1wUnitContent` model.
+- Fail-closed Python and Flutter content loaders plus model, claim, mutation,
+  provider, and widget tests for the course blueprint and authored units.
 - A fail-closed MTH1W curriculum-readiness declaration and checker pinning the
   official 2021 source digest, known identifier conflicts, required completion
   evidence, and MTH1W-first delivery sequence.
@@ -83,6 +96,11 @@ claims.
   Math Foundations Preview** with derived local topic references. Full MTH1W,
   credit, grade, transcript, Ministry-approval, and school-equivalency claims
   remain blocked after the official-source audit found identifier conflicts.
+- Authored MTH1W delivery now fills all 9 planned unit slots and all 43 primary
+  lesson slots, but this is an authoring milestone only. Educator and cultural
+  review, licensing/redistribution disposition, assessment review, accessible
+  alternatives, governed progress, and educator workflows still block any
+  complete-course claim.
 
 - CI now runs the complete Python suite and the canonical verification command.
 - Dart formatting is enforced across the full `lib` and `test` trees.
