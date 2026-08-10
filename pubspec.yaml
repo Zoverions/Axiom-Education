@@ -62,5 +62,10 @@ flutter:
     - curriculum/content/mth1w/u8/l4.v1.json
     - curriculum/content/mth1w/u8/l5.v1.json
     - curriculum/content/mth1w/u8/l6.v1.json
+    - curriculum/content/mth1w/u9/manifest.v1.json
+    - curriculum/content/mth1w/u9/l1.v1.json
+    - curriculum/content/mth1w/u9/l2.v1.json
+    - curriculum/content/mth1w/u9/l3.v1.json
+    - curriculum/content/mth1w/u9/l4.v1.json
     - config/capabilities.json
     - contracts/axiom-education.v1.json
