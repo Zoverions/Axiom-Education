@@ -139,6 +139,12 @@ jobs:
       - name: Run canonical repository verification
         run: python tools/verify.py
 
+      - name: Show Dart formatting diff after verification failure
+        if: failure()
+        run: |
+          dart format lib test
+          git diff -- lib test
+
       - name: Build Android debug APK
         run: flutter build apk --debug --no-pub
 
