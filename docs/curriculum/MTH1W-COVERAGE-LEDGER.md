@@ -1,7 +1,8 @@
 # MTH1W Coverage Ledger
 
-**Status:** official inventory and complete course blueprint verified; 7 of 9 units authored as machine-verified drafts
+**Status:** official inventory and complete course blueprint verified; 9 of 9 units authored as machine-verified drafts
 **Source audit date:** 2026-08-01
+**Authored milestone verified:** 2026-08-10
 **Course-complete claim:** blocked
 
 ## Inventory baseline
@@ -43,7 +44,7 @@ no-AI path before adaptive features:
 - cumulative diagnostic, checkpoint, final assessment, accessibility, and
   offline-delivery plans.
 
-Unit 1 is now delivered from the bundled offline content file
+Unit 1 is delivered from the bundled offline content file
 `curriculum/content/mth1w/u1-number-systems.v1.json`. It contains 3 lessons, 6
 worked examples, 33 guided/independent/retrieval practice items, a 10-item unit
 quiz, and a performance task. Its student surface is clearly labelled as a
@@ -99,17 +100,46 @@ stress tests support data literacy without requiring an AI tutor. Direct data
 collection is adult-approved, minimized, non-sensitive, and replaceable by a
 reviewed public-data route.
 
+Unit 8 is delivered as a repo-bounded split package rooted at
+`curriculum/content/mth1w/u8/manifest.v1.json`. Its 6 lessons map to E1.1
+through E1.6 and add 12 worked examples, 66 practice items, a 10-item quiz, and
+an accessible-design performance task. Source-aware cultural geometry,
+constrained construction, unit-aware measurement, similarity and scale,
+Pythagorean reasoning, and composite/three-dimensional measurement are kept
+reviewable lesson by lesson. The split manifest is materialized and passed
+through the same canonical unit validator as Units 1 through 7.
+
+Unit 9 is delivered as a repo-bounded split package rooted at
+`curriculum/content/mth1w/u9/manifest.v1.json`. Its 4 lessons map to F1.1
+through F1.4 and add 8 worked examples, 44 practice items, a 10-item quiz, and
+a fictional financial-scenario evidence dossier. Bank of Canada and Financial
+Consumer Agency of Canada sources ground historical context, value-over-time,
+borrowing-cost, and budgeting examples. Classroom scenarios expose assumptions,
+fees, time ranges, and uncertainty and do not recommend a financial product or
+personal financial action.
+
+Across all nine authored draft units, the current machine-verified delivery
+contains 43 lessons, 86 worked examples, 473 guided/independent/retrieval
+practice items, 90 unit-quiz items, and nine performance tasks. These are
+**authored and machine-verified draft counts**, not reviewed teaching coverage
+or a course-completion claim.
+
 Run the evidence checks with:
 
 ```bash
 python tools/check_mth1w_course_blueprint.py
 python tools/check_mth1w_unit_content.py
+python tools/check_mth1w_split_unit_content.py
+python tools/check_curriculum_readiness.py
 ```
+
+The canonical `python tools/verify.py` command runs these checks as part of the
+full repository verification path.
 
 ## Base-coverage matrix
 
 "Inventory verified" means only that the official reference is present and
-source-pinned. It is not a lesson-coverage or course-completion claim.
+source-pinned. It is not a reviewed lesson-coverage or course-completion claim.
 
 | Strand | Overall expectations | Specific expectations | Inventory | Reviewed teaching coverage |
 |---|---|---|---|---|
@@ -122,15 +152,16 @@ source-pinned. It is not a lesson-coverage or course-completion claim.
 | F — Financial Literacy | `F1` | `F1.1`–`F1.4` | verified | not started |
 
 The four existing foundation lessons use preliminary local topic identifiers.
-They remain useful for study, but they do not mark any row above as covered
+They remain useful for study, but they do not mark any row above as reviewed
 until their exact official bindings and instructional interpretations pass
 educator review.
 
-The newer Units 1 through 7 bind to official inventory identifiers B1.1
-through D2.5 and pass structural and
-answer-contract verification. It is authored coverage, but is not marked
-reviewed teaching coverage until the required human review evidence is
-recorded.
+The nine authored unit drafts bind to official inventory identifiers B1.1
+through F1.4 and pass structural, source-boundary, answer-contract, and runtime
+verification. That is authored coverage, but it is not marked reviewed teaching
+coverage until the required human review evidence is recorded. Course-wide AA1,
+A1, and A2 evidence also remains a separate review obligation rather than being
+inferred automatically from the lesson count.
 
 ## Evidence required per specific expectation
 
@@ -153,15 +184,17 @@ not independently prove coverage.
 
 ## Remaining course gates
 
-The official-inventory gate and complete-coverage blueprint are verified.
-Authored delivery is 33 of 43 primary lessons across 7 of 9 units. These gates
-remain blocked:
+The official-inventory gate, complete-coverage blueprint, and authored lesson
+slots are now machine verified. Authored delivery is 43 of 43 primary lessons
+across 9 of 9 units. These gates remain blocked:
 
 - educator source and instructional review;
+- cultural review where applicable;
 - licensing and redistribution disposition;
-- complete lesson and practice coverage;
+- reviewed lesson and practice coverage, including course-wide expectation
+  evidence;
 - assessments and cumulative review;
-- accessible alternatives; and
+- accessible and printable alternatives; and
 - governed progress and educator workflow.
 
 Only after every gate passes may MTH1W be represented as complete. Work then
