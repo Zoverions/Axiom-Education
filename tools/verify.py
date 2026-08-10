@@ -127,6 +127,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_mth1w_unit_content.py"],
         ),
         (
+            "Verify split MTH1W unit content",
+            [python, "tools/check_mth1w_split_unit_content.py"],
+        ),
+        (
             "Verify curriculum readiness boundary",
             [python, "tools/check_curriculum_readiness.py"],
         ),
