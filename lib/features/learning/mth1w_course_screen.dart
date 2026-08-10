@@ -7,6 +7,7 @@ import '../../core/providers/curriculum_provider.dart';
 import '../practice/mth1w_practice_screen.dart';
 import 'home_learning_guide_screen.dart';
 import 'mth1w_draft_unit_screen.dart';
+import 'mth1w_split_draft_unit_screen.dart';
 
 const _draftUnits = <_DraftUnitLink>[
   _DraftUnitLink(
@@ -50,6 +51,18 @@ const _draftUnits = <_DraftUnitLink>[
     icon: Icons.analytics_rounded,
     description:
         'Eight draft lessons mapped to official D1.1-D2.5: responsible data use, distributions, regression, and a safe evidence-to-model investigation cycle.',
+  ),
+  _DraftUnitLink(
+    unitNumber: 8,
+    icon: Icons.straighten_rounded,
+    description:
+        'Six split draft lessons mapped to official E1.1-E1.6: geometry, construction, measurement, scale, Pythagorean reasoning, and composite measurement.',
+  ),
+  _DraftUnitLink(
+    unitNumber: 9,
+    icon: Icons.account_balance_wallet_rounded,
+    description:
+        'Four split draft lessons mapped to official F1.1-F1.4: financial context, value over time, borrowing scenarios, and budget revision without product recommendations.',
   ),
 ];
 
@@ -192,8 +205,9 @@ class _DraftUnitEntry extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) =>
-                      Mth1wDraftUnitScreen(unitNumber: unit.unitNumber),
+                  builder: (context) => unit.unitNumber >= 8
+                      ? Mth1wSplitDraftUnitScreen(unitNumber: unit.unitNumber)
+                      : Mth1wDraftUnitScreen(unitNumber: unit.unitNumber),
                 ),
               );
             },
