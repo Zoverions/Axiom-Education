@@ -2,7 +2,7 @@
 
 **Status:** Canonical product sequencing decision
 **Initial course:** Ontario Grade 9 Mathematics (`MTH1W`)
-**Updated:** 2026-08-01
+**Updated:** 2026-08-10
 
 ## Decision
 
@@ -36,78 +36,75 @@ The baseline student experience must include:
 9. educator assignment, review, accommodation, and correction workflows; and
 10. dependable offline operation for downloaded courses.
 
-Items 1–6 have an executable first slice for four Grade 9 math foundation
-topics and separately source-mapped Units 1 through 7. Each lesson exposes two
-valid reasoning routes and multiple representations, while keeping one outcome
-and one quality standard. The older foundation topics retain preliminary local
-identifiers; the newer units bind to B1.1 through D2.5 in the verified
-official inventory. The [source audit](../curriculum/MTH1W-SOURCE-AUDIT.md)
-records the distinction and known legacy conflicts. Item 7 now has a unit-quiz
-and performance-task slice, while items 8 and 9 remain product requirements.
-Durable progress remains disabled until the governed learner-record path is
-available.
+Items 1–6 now have executable authored slices for the four Grade 9 math
+foundation topics and all nine source-mapped MTH1W unit drafts. Each authored
+unit lesson exposes multiple valid reasoning routes and representations while
+keeping one outcome and one quality standard. The older foundation topics retain
+preliminary local identifiers; the nine authored units bind to B1.1 through
+F1.4 in the verified official inventory. The
+[source audit](../curriculum/MTH1W-SOURCE-AUDIT.md) records the distinction and
+known legacy conflicts. Item 7 has a unit-quiz and performance-task slice for
+all nine authored units, but cumulative assessment review remains open. Items 8
+and 9 remain product requirements. Durable progress remains disabled until the
+governed learner-record path is available.
 
 ## Source-mapped MTH1W build
 
 The complete conventional course blueprint defines 9 units, 43 primary
-lessons, and 110 estimated hours. Unit 1 is the first implemented unit:
+lessons, and 110 estimated hours. All nine planned unit slots are now authored
+as machine-verified drafts:
 
-- B1.1: number ideas in cultural and historical context, with source-quality
-  and anti-stereotyping checks;
-- B1.2: nested real-number sets using classification and counterexample routes;
-- B1.3: density, infinity, and approaching a limit using number-line and
-  sequence routes;
-- 6 worked examples and 33 practice items across guided, independent, and
-  retrieval phases;
-- a 10-item quiz that withholds feedback until full submission and supports a
-  correction attempt; and
-- an educator-reviewed performance task with a visible rubric.
+- Unit 1 maps B1.1 through B1.3 and contains 3 lessons, 6 worked examples, 33
+  practice items, a delayed-feedback 10-item quiz, and an educator-reviewed
+  performance-task contract.
+- Unit 2 maps B2.1 through B2.2 and adds exponent-pattern, place-value,
+  factor-expansion, and operation-pattern routes through 2 lessons, 4 worked
+  examples, 22 practice items, a 10-item quiz, and a scale-comparison task.
+- Unit 3 maps B3.1 through B3.5 through five rational-number lessons. Number-line,
+  measurement, exact-computation, unit-rate, percentage, and equivalent-ratio
+  routes connect signed quantities, fractions, rates, and proportions.
+- Unit 4 maps C1.1 through C1.5 through five algebra lessons using bounded
+  historical-source evidence, pattern tables, visual decomposition, area
+  models, counterexamples, algebra tiles, labelled properties, balance models,
+  and inverse operations.
+- Unit 5 maps C2.1 through C2.3 through three device-optional mathematical-coding
+  lessons using hand tracing, pseudocode, flowcharts, invariant checks,
+  prediction, debugging, and controlled revision.
+- Unit 6 maps C3.1 through C4.4 through seven relations and analytic-geometry
+  lessons using difference tables, connected representations, graphical and
+  algebraic model comparison, test points, coordinate mappings, and slope
+  construction. Every visual route includes a nonvisual equivalent.
+- Unit 7 maps D1.1 through D2.5 through eight data-analysis and modelling lessons.
+  Lifecycle maps, stakeholder scenarios, ordered plots, residuals, source
+  audits, candidate-model comparison, and prediction stress tests support a
+  safe iterative modelling process. Direct collection is adult-approved,
+  minimized, non-sensitive, and optional because a public-data route exists.
+- Unit 8 maps E1.1 through E1.6 through six geometry and measurement lessons.
+  Source-aware cultural geometry, constrained construction, measurement units,
+  similarity and scale, Pythagorean reasoning, and composite/three-dimensional
+  measurement use individually reviewable split lesson assets. Python and
+  Flutter materialize the split package through the same canonical unit-content
+  model used by the earlier units.
+- Unit 9 maps F1.1 through F1.4 through four financial-literacy lessons grounded
+  in Ontario curriculum context plus Bank of Canada and Financial Consumer
+  Agency of Canada sources. Learners analyse sourced financial context,
+  appreciation/depreciation, disclosed borrowing scenarios, and budget changes.
+  The activities compare fictional classroom scenarios and explicitly do not
+  recommend financial products or personal financial action.
 
-Unit 2 adds exponent-pattern and place-value routes for B2.1 and
-factor-expansion and operation-pattern routes for B2.2, with 4 worked examples,
-22 practice items, a 10-item quiz, and a scale-comparison task.
+Across the nine authored draft units there are 43 lessons, 86 worked examples,
+473 guided/independent/retrieval practice items, 90 unit-quiz items, and nine
+performance tasks. These are machine-verified draft artifacts, not reviewed
+course-completion evidence.
 
-Unit 3 adds five rational-number lessons for B3.1 through B3.5. Number-line
-and signed-change routes connect position and change; unit-fraction iteration
-connects measurement and scaling; sign-tracking connects ratios, rates,
-fractions, and decimals; exact and technology-supported routes verify signed
-fraction operations; and unit-rate and equivalent-ratio routes support
-proportional decisions.
-
-Unit 4 adds five algebra lessons for C1.1 through C1.5. Source-evidence and
-historical-modern comparison routes keep cultural claims bounded; table and
-visual-decomposition routes generalize patterns; area models, counterexamples,
-algebra tiles, labelled properties, balance models, and inverse operations
-support equivalence, simplification, and verified equation solving.
-
-Unit 5 adds three mathematical-coding lessons for C2.1 through C2.3. Hand
-tracing and algebra-to-pseudocode translation develop variables and conditions;
-flowcharts and worked-example extraction develop decomposition; and invariant
-traces plus input-output comparisons develop prediction, debugging, and
-controlled revision. Every route remains usable on paper without a live runner.
-
-Unit 6 adds seven relations and analytic-geometry lessons for C3.1 through
-C4.4. Difference tables and graph-shape analysis compare rate behaviour;
-concrete patterns, tables, graphs, and equations connect representations;
-graphical and algebraic routes compare models; and feature matrices, test
-points, coordinate mappings, and slope construction support graph analysis.
-Every visual route includes an ordered nonvisual equivalent.
-
-Unit 7 adds eight data-analysis and modelling lessons for D1.1 through D2.5.
-Lifecycle maps and stakeholder scenarios examine data consequences; ordered
-lists, aligned plots, technology output, and residual tables support one- and
-two-variable analysis; and question, source, candidate-model, and reporting
-routes complete a safe iterative modelling process. Direct collection is
-adult-approved, minimized, non-sensitive, and optional because a reviewed
-public-data route is always provided.
-
-These are machine-verified draft previews, not reviewed or complete courses.
-The remaining two units, human educator review, cultural review, licensing,
-printable alternatives, and governed progress are still open gates.
+Human educator review, cultural review where applicable, licensing and
+redistribution disposition, reviewed course-wide expectation coverage,
+cumulative assessment review, printable/accessibility alternatives, governed
+progress, and educator workflows are still open gates.
 
 ## Current Grade 9 math foundations preview
 
-The course screen now presents four sequenced lessons:
+The course screen separately presents four sequenced foundation lessons:
 
 | Lesson | Derived local topic reference | Conventional instruction |
 |---|---|---|
@@ -201,13 +198,15 @@ The full ledger and definition of course completion are in
 
 - Preserve and verify the complete official MTH1W inventory recorded in the
   [coverage ledger](../curriculum/MTH1W-COVERAGE-LEDGER.md).
-- Complete educator and licensing review before binding lessons to official
-  expectations or redistributing official wording.
-- Complete all `MTH1W` lessons with reviewed instructional content.
-- Add examples, diagrams where materially useful, guided practice, mixed
-  review, and independent exercises.
-- Add conventional lesson checks, quizzes, unit tests, answer rationales, and
-  printable/offline alternatives.
+- Complete educator, cultural where applicable, and licensing review before
+  representing authored lessons as reviewed official coverage or redistributing
+  official wording.
+- Review all `MTH1W` authored lessons against the official bindings,
+  instructional scope, and source evidence.
+- Complete mixed review and cumulative assessment evidence across the course,
+  not only unit-level quizzes and tasks.
+- Complete printable/offline and accessible alternatives for every required
+  learning and assessment action.
 
 ### Foundation B — school workflow
 
@@ -234,8 +233,8 @@ The full ledger and definition of course completion are in
 ## Foundation completion gate
 
 The high-school foundation is not complete until a student can finish a full
-course without AI: navigate every unit, receive instruction, study examples,
-complete practice and assessments, understand feedback, review prior material,
-and use accessible alternatives; and an educator can assign, inspect, correct,
-and review that work through governed records. Passing isolated generated-item
-tests is necessary but not sufficient.
+course without AI: navigate every unit, receive reviewed instruction, study
+examples, complete practice and assessments, understand feedback, review prior
+material, and use accessible alternatives; and an educator can assign, inspect,
+correct, and review that work through governed records. Passing authored-content
+and software verification is necessary but not sufficient.
