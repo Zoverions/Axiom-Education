@@ -32,10 +32,7 @@ class Mth1wSplitDraftUnitScreen extends ConsumerWidget {
 }
 
 class _SplitUnitLoadError extends StatelessWidget {
-  const _SplitUnitLoadError({
-    required this.unitNumber,
-    required this.onRetry,
-  });
+  const _SplitUnitLoadError({required this.unitNumber, required this.onRetry});
 
   final int unitNumber;
   final VoidCallback onRetry;
