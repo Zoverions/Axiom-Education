@@ -1,0 +1,384 @@
+name: Pinned Flutter Pub Refresh
+
+on:
+  pull_request:
+    paths:
+      - ".github/dependabot.yml"
+      - ".github/workflows/pub-compatible-refresh.yml"
+      - ".github/workflows/rebuild.yml"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/dependabot.yml"
+      - ".github/workflows/pub-compatible-refresh.yml"
+      - ".github/workflows/rebuild.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "31 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axiom-education-pub-refresh-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  AXIOM_FLUTTER_VERSION: "3.41.1"
+  AXIOM_FLUTTER_CONSTRAINT: ">=3.41.1 <3.42.0"
+  AXIOM_PUB_AUTOMATION_PACKAGES: >-
+    uuid path crypto meta fake_async intl image encrypt hive pdf
+    flutter_riverpod riverpod_annotation hive_generator build_runner
+    riverpod_generator flutter_lints
+
+jobs:
+  validate:
+    name: Validate pinned-Flutter compatible refresh
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source without write credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up pinned Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.AXIOM_FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Select one lock-only compatible direct-package refresh
+        id: refresh
+        shell: bash
+        run: |
+          set -euo pipefail
+          baseline="$(git rev-parse HEAD)"
+          cp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+          attempted=0
+          solver_successes=0
+          selected=''
+
+          for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
+            attempted=$((attempted + 1))
+            git reset --hard "$baseline" >/dev/null
+            echo "Trying compatible refresh for ${package}"
+            if ! flutter pub upgrade "$package"; then
+              echo "Solver rejected ${package}; deferring it."
+              continue
+            fi
+            solver_successes=$((solver_successes + 1))
+            cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+            python - <<'PY'
+          from pathlib import Path
+
+          expected = '  flutter: ">=3.41.1 <3.42.0"'
+          lock = Path('pubspec.lock').read_text(encoding='utf-8')
+          if expected not in lock.splitlines():
+              raise SystemExit('pinned Flutter lockfile ceiling drifted')
+          PY
+
+            mapfile -t changed < <(git diff --name-only)
+            if ((${#changed[@]} == 0)); then
+              echo "${package} is already at the newest version allowed by current constraints."
+              continue
+            fi
+            if ((${#changed[@]} != 1)) || [[ "${changed[0]}" != 'pubspec.lock' ]]; then
+              echo "Deferring ${package}: targeted refresh changes tracked files beyond pubspec.lock:"
+              printf '  %s\n' "${changed[@]}"
+              continue
+            fi
+
+            selected="$package"
+            break
+          done
+
+          if ((solver_successes == 0)); then
+            echo "All ${attempted} allowlisted targeted solves failed." >&2
+            exit 1
+          fi
+
+          if [[ -z "$selected" ]]; then
+            git reset --hard "$baseline" >/dev/null
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'No lock-only compatible direct-package refresh is available.'
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            echo "package=${selected}" >> "$GITHUB_OUTPUT"
+            echo "Selected ${selected}; only pubspec.lock changed."
+            git diff --stat -- pubspec.lock
+          fi
+
+      - name: Enforce regenerated lock with the same toolchain
+        if: steps.refresh.outputs.changed == 'true'
+        run: flutter pub get --enforce-lockfile
+
+      - name: Analyze selected dependency graph
+        if: steps.refresh.outputs.changed == 'true'
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test selected dependency graph
+        if: steps.refresh.outputs.changed == 'true'
+        run: flutter test --reporter expanded
+
+      - name: Build Android debug APK
+        if: steps.refresh.outputs.changed == 'true'
+        run: flutter build apk --debug --no-pub
+
+  propose:
+    name: Propose compatible pinned-Flutter lock refresh
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Check out current trusted branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Refuse duplicate automation proposals
+        id: preflight
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
+          repo = os.environ['GITHUB_REPOSITORY']
+          request = urllib.request.Request(
+              f'{api}/repos/{repo}/pulls?state=open&base=main&per_page=100',
+              headers={
+                  'Accept': 'application/vnd.github+json',
+                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              pulls = json.load(response)
+          existing = [
+              pull for pull in pulls
+              if pull.get('head', {}).get('ref', '').startswith(
+                  'automation/pub-compatible-refresh-'
+              )
+          ]
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
+              handle.write(f"open={'true' if existing else 'false'}\n")
+          if existing:
+              print(
+                  'compatible Pub refresh already has an open review PR: '
+                  + ', '.join(f"#{pull['number']}" for pull in existing)
+              )
+          else:
+              print('no existing compatible Pub refresh PR')
+          PY
+
+      - name: Set up pinned Flutter
+        if: steps.preflight.outputs.open != 'true'
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.AXIOM_FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Select one lock-only compatible direct-package refresh
+        id: refresh
+        if: steps.preflight.outputs.open != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          baseline="$(git rev-parse HEAD)"
+          cp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+          attempted=0
+          solver_successes=0
+          selected=''
+
+          for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
+            attempted=$((attempted + 1))
+            git reset --hard "$baseline" >/dev/null
+            echo "Trying compatible refresh for ${package}"
+            if ! flutter pub upgrade "$package"; then
+              echo "Solver rejected ${package}; deferring it."
+              continue
+            fi
+            solver_successes=$((solver_successes + 1))
+            cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
+            python - <<'PY'
+          from pathlib import Path
+
+          expected = '  flutter: ">=3.41.1 <3.42.0"'
+          lock = Path('pubspec.lock').read_text(encoding='utf-8')
+          if expected not in lock.splitlines():
+              raise SystemExit('pinned Flutter lockfile ceiling drifted')
+          PY
+
+            mapfile -t changed < <(git diff --name-only)
+            if ((${#changed[@]} == 0)); then
+              echo "${package} is already at the newest version allowed by current constraints."
+              continue
+            fi
+            if ((${#changed[@]} != 1)) || [[ "${changed[0]}" != 'pubspec.lock' ]]; then
+              echo "Deferring ${package}: targeted refresh changes tracked files beyond pubspec.lock:"
+              printf '  %s\n' "${changed[@]}"
+              continue
+            fi
+
+            selected="$package"
+            break
+          done
+
+          if ((solver_successes == 0)); then
+            echo "All ${attempted} allowlisted targeted solves failed." >&2
+            exit 1
+          fi
+
+          if [[ -z "$selected" ]]; then
+            git reset --hard "$baseline" >/dev/null
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'No lock-only compatible direct-package refresh is available.'
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            echo "package=${selected}" >> "$GITHUB_OUTPUT"
+            echo "Selected ${selected}; only pubspec.lock changed."
+            git diff --stat -- pubspec.lock
+          fi
+
+      - name: Enforce regenerated lock with the same toolchain
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        run: flutter pub get --enforce-lockfile
+
+      - name: Analyze regenerated dependency graph
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test regenerated dependency graph
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        run: flutter test --reporter expanded
+
+      - name: Build Android debug APK from regenerated lock
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        run: flutter build apk --debug --no-pub
+
+      - name: Commit and push review branch
+        id: branch
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        shell: bash
+        env:
+          UPDATE_PACKAGE: ${{ steps.refresh.outputs.package }}
+        run: |
+          set -euo pipefail
+          branch="automation/pub-compatible-refresh-${UPDATE_PACKAGE}-${GITHUB_RUN_ID}"
+          git config user.name 'axiom-education-automation[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pubspec.lock
+          git diff --cached --name-only | grep -Fx 'pubspec.lock'
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "chore: refresh compatible Pub lock for ${UPDATE_PACKAGE}"
+          git push origin "HEAD:refs/heads/${branch}"
+          echo "name=${branch}" >> "$GITHUB_OUTPUT"
+
+      - name: Open review-only pull request
+        id: pull
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPDATE_BRANCH: ${{ steps.branch.outputs.name }}
+          UPDATE_PACKAGE: ${{ steps.refresh.outputs.package }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
+          repo = os.environ['GITHUB_REPOSITORY']
+          branch = os.environ['UPDATE_BRANCH']
+          package = os.environ['UPDATE_PACKAGE']
+          payload = json.dumps({
+              'title': f'chore: refresh {package} under Flutter 3.41.1',
+              'head': branch,
+              'base': 'main',
+              'body': (
+                  'Automated review proposal generated by the pinned-Flutter '
+                  'compatible refresh workflow.\n\n'
+                  f'- Target direct package: `{package}`\n'
+                  '- Solver: Flutter 3.41.1\n'
+                  '- `pubspec.yaml`: unchanged by policy\n'
+                  '- Only `pubspec.lock` changed\n'
+                  '- Flutter lock ceiling: `>=3.41.1 <3.42.0` preserved\n'
+                  '- `flutter pub get --enforce-lockfile`: passed before commit\n'
+                  '- `flutter analyze --no-fatal-infos`: passed before commit\n'
+                  '- complete Flutter tests: passed before commit\n'
+                  '- Android debug APK smoke build: passed before commit\n\n'
+                  'The automation evaluates one allowlisted direct dependency '
+                  'per proposal, never widens dependency constraints, and never '
+                  'auto-merges. Native/plugin/platform-sensitive packages and '
+                  'updates that regenerate tracked platform files remain '
+                  'separate manual review work.'
+              ),
+              'maintainer_can_modify': True,
+          }).encode()
+          request = urllib.request.Request(
+              f'{api}/repos/{repo}/pulls',
+              data=payload,
+              method='POST',
+              headers={
+                  'Accept': 'application/vnd.github+json',
+                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                  'Content-Type': 'application/json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              pull = json.load(response)
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
+              handle.write(f"number={pull['number']}\n")
+          print(f"opened review PR #{pull['number']} for {package}")
+          PY
+
+      - name: Dispatch canonical Axiom Education CI on proposal branch
+        if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPDATE_BRANCH: ${{ steps.branch.outputs.name }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
+          repo = os.environ['GITHUB_REPOSITORY']
+          payload = json.dumps({'ref': os.environ['UPDATE_BRANCH']}).encode()
+          request = urllib.request.Request(
+              f'{api}/repos/{repo}/actions/workflows/rebuild.yml/dispatches',
+              data=payload,
+              method='POST',
+              headers={
+                  'Accept': 'application/vnd.github+json',
+                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                  'Content-Type': 'application/json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              if response.status != 204:
+                  raise SystemExit(
+                      f'canonical CI dispatch returned HTTP {response.status}'
+                  )
+          print('canonical Axiom Education CI dispatched')
+          PY
