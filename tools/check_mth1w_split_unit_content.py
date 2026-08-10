@@ -17,6 +17,7 @@ from tools.check_mth1w_unit_content import verify_content  # noqa: E402
 
 MANIFEST_PATHS = [
     ROOT / "curriculum/content/mth1w/u8/manifest.v1.json",
+    ROOT / "curriculum/content/mth1w/u9/manifest.v1.json",
 ]
 
 
