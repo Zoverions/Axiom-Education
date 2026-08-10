@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-08-01",
+  "verified_at": "2026-08-10",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -91,7 +91,7 @@
       "id": "instruction.mth1w-foundation",
       "family": "instruction",
       "status": "experimental",
-      "summary": "A four-lesson Grade 9 Math Foundations Preview and separately source-mapped MTH1W Units 1 through 7 provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and focused offline practice without an AI tutor; two official units and human review remain incomplete.",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview and all nine source-mapped MTH1W unit drafts provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and offline practice without an AI tutor. All 43 planned primary lesson slots are authored and machine verified, while educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, governed progress, and educator workflows remain incomplete.",
       "evidence": [
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
         "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
@@ -106,6 +106,10 @@
         "curriculum/content/mth1w/u5-coding-relationships.v1.json",
         "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
         "curriculum/content/mth1w/u7-data-modelling.v1.json",
+        "curriculum/content/mth1w/u8/manifest.v1.json",
+        "curriculum/content/mth1w/u9/manifest.v1.json",
+        "tools/check_mth1w_split_unit_content.py",
+        "tests/test_mth1w_split_unit_content.py",
         "docs/home-learning/START-HERE.md",
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "lib/core/learning/mth1w_foundation.dart",
@@ -114,9 +118,11 @@
         "lib/features/learning/home_learning_guide_screen.dart",
         "lib/features/learning/mth1w_course_screen.dart",
         "lib/features/learning/mth1w_draft_unit_screen.dart",
+        "lib/features/learning/mth1w_split_draft_unit_screen.dart",
         "test/features/learning/home_learning_guide_screen_test.dart",
         "test/core/learning/mth1w_foundation_test.dart",
         "test/core/learning/mth1w_unit_content_test.dart",
+        "test/core/providers/mth1w_unit_content_provider_test.dart",
         "test/features/learning/mth1w_draft_unit_screen_test.dart",
         "test/features/learning/mth1w_course_screen_test.dart"
       ]
@@ -125,7 +131,7 @@
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; source-mapped Units 1 through 7 add 363 authored practice items, seven 10-item delayed-feedback quizzes with correction attempts, and educator-reviewed performance tasks. These are not grades or mastery records, and full-course assessment remains unavailable.",
+      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; the nine source-mapped unit drafts add 473 authored guided/independent/retrieval practice items, nine 10-item delayed-feedback quizzes with correction attempts, and nine educator-reviewable performance tasks. These are not grades or mastery records, and reviewed full-course and cumulative assessment remain unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",
@@ -144,7 +150,12 @@
         "curriculum/content/mth1w/u5-coding-relationships.v1.json",
         "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
         "curriculum/content/mth1w/u7-data-modelling.v1.json",
-        "test/features/learning/mth1w_draft_unit_screen_test.dart"
+        "curriculum/content/mth1w/u8/manifest.v1.json",
+        "curriculum/content/mth1w/u9/manifest.v1.json",
+        "tools/check_mth1w_split_unit_content.py",
+        "tests/test_mth1w_split_unit_content.py",
+        "test/features/learning/mth1w_draft_unit_screen_test.dart",
+        "test/features/learning/mth1w_course_screen_test.dart"
       ]
     },
     {
@@ -261,9 +272,9 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
-    "The current four-lesson Grade 9 Math Foundations Preview and source-mapped Units 1 through 7 are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
-    "Known conflicts remain in preliminary local MTH1W identifiers; the newer official inventory and blueprint do not authorize a complete-course claim without the remaining authored content and human review.",
-    "The deterministic practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
+    "The current four-lesson Grade 9 Math Foundations Preview and the nine source-mapped authored unit drafts are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "Known conflicts remain in preliminary local MTH1W identifiers; the official inventory, complete blueprint, and authored lesson slots do not authorize a complete-course claim without educator/cultural review, licensing, reviewed course-wide evidence, cumulative assessment review, accessibility alternatives, governed progress, and educator workflows.",
+    "The deterministic foundation practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
