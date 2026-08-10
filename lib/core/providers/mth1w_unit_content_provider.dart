@@ -20,6 +20,8 @@ const mth1wUnitSevenAssetPath =
     'curriculum/content/mth1w/u7-data-modelling.v1.json';
 const mth1wUnitEightManifestAssetPath =
     'curriculum/content/mth1w/u8/manifest.v1.json';
+const mth1wUnitNineManifestAssetPath =
+    'curriculum/content/mth1w/u9/manifest.v1.json';
 
 const mth1wUnitAssetPaths = <int, String>{
   1: mth1wUnitOneAssetPath,
@@ -33,6 +35,7 @@ const mth1wUnitAssetPaths = <int, String>{
 
 const mth1wSplitUnitManifestPaths = <int, String>{
   8: mth1wUnitEightManifestAssetPath,
+  9: mth1wUnitNineManifestAssetPath,
 };
 
 final mth1wUnitProvider = FutureProvider.family<Mth1wUnitContent, int>((
@@ -62,6 +65,7 @@ final mth1wUnitFiveProvider = mth1wUnitProvider(5);
 final mth1wUnitSixProvider = mth1wUnitProvider(6);
 final mth1wUnitSevenProvider = mth1wUnitProvider(7);
 final mth1wUnitEightProvider = mth1wUnitProvider(8);
+final mth1wUnitNineProvider = mth1wUnitProvider(9);
 
 Future<Mth1wUnitContent> _loadUnit(String path, String expectedUnitId) async {
   final source = await rootBundle.loadString(path);
