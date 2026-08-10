@@ -35,9 +35,64 @@ env:
     riverpod_generator flutter_lints
 
 jobs:
-  validate:
-    name: Validate pinned-Flutter compatible refresh
-    if: github.event_name == 'pull_request'
+  validate-generated-proposal:
+    name: Validate submitted lock-only Pub proposal
+    if: >-
+      github.event_name == 'pull_request' &&
+      startsWith(github.head_ref, 'automation/pub-compatible-refresh-')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Check out submitted proposal without write credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Prove the submitted PR changes only pubspec.lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "${GITHUB_BASE_REF}"
+          mapfile -t changed < <(git diff --name-only "origin/${GITHUB_BASE_REF}...HEAD")
+          printf 'Submitted changed files:\n'
+          printf '  %s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 1
+          test "${changed[0]}" = 'pubspec.lock'
+          python - <<'PY'
+          from pathlib import Path
+          expected = '  flutter: ">=3.41.1 <3.42.0"'
+          lock = Path('pubspec.lock').read_text(encoding='utf-8')
+          if expected not in lock.splitlines():
+              raise SystemExit('pinned Flutter lockfile ceiling drifted')
+          PY
+
+      - name: Set up pinned Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.AXIOM_FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Enforce the submitted lock with the same toolchain
+        run: flutter pub get --enforce-lockfile
+
+      - name: Analyze submitted dependency graph
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test submitted dependency graph
+        run: flutter test --reporter expanded
+
+      - name: Build Android debug APK
+        run: flutter build apk --debug --no-pub
+
+  validate-infrastructure:
+    name: Dry-run one compatible direct-package refresh
+    if: >-
+      github.event_name == 'pull_request' &&
+      !startsWith(github.head_ref, 'automation/pub-compatible-refresh-')
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -66,7 +121,6 @@ jobs:
           attempted=0
           solver_successes=0
           selected=''
-
           for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
             attempted=$((attempted + 1))
             git reset --hard "$baseline" >/dev/null
@@ -79,13 +133,11 @@ jobs:
             cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
             python - <<'PY'
           from pathlib import Path
-
           expected = '  flutter: ">=3.41.1 <3.42.0"'
           lock = Path('pubspec.lock').read_text(encoding='utf-8')
           if expected not in lock.splitlines():
               raise SystemExit('pinned Flutter lockfile ceiling drifted')
           PY
-
             mapfile -t changed < <(git diff --name-only)
             if ((${#changed[@]} == 0)); then
               echo "${package} is already at the newest version allowed by current constraints."
@@ -96,16 +148,13 @@ jobs:
               printf '  %s\n' "${changed[@]}"
               continue
             fi
-
             selected="$package"
             break
           done
-
           if ((solver_successes == 0)); then
             echo "All ${attempted} allowlisted targeted solves failed." >&2
             exit 1
           fi
-
           if [[ -z "$selected" ]]; then
             git reset --hard "$baseline" >/dev/null
             echo 'changed=false' >> "$GITHUB_OUTPUT"
@@ -141,6 +190,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      issues: write
       actions: write
     steps:
       - name: Check out current trusted branch
@@ -148,7 +198,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Refuse duplicate automation proposals
+      - name: Refuse duplicate automation proposals or pending branches
         id: preflight
         env:
           GH_TOKEN: ${{ github.token }}
@@ -156,35 +206,45 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import urllib.error
           import urllib.request
-
           api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
           repo = os.environ['GITHUB_REPOSITORY']
-          request = urllib.request.Request(
-              f'{api}/repos/{repo}/pulls?state=open&base=main&per_page=100',
-              headers={
-                  'Accept': 'application/vnd.github+json',
-                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
-                  'X-GitHub-Api-Version': '2022-11-28',
-              },
-          )
-          with urllib.request.urlopen(request, timeout=30) as response:
-              pulls = json.load(response)
-          existing = [
+          headers = {
+              'Accept': 'application/vnd.github+json',
+              'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+              'X-GitHub-Api-Version': '2022-11-28',
+          }
+          def get_json(path):
+              request = urllib.request.Request(f'{api}/repos/{repo}/{path}', headers=headers)
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      return json.load(response)
+              except urllib.error.HTTPError as error:
+                  if error.code == 404:
+                      return []
+                  raise
+          pulls = get_json('pulls?state=open&base=main&per_page=100')
+          refs = get_json('git/matching-refs/heads/automation/pub-compatible-refresh-')
+          existing_pulls = [
               pull for pull in pulls
-              if pull.get('head', {}).get('ref', '').startswith(
-                  'automation/pub-compatible-refresh-'
-              )
+              if pull.get('head', {}).get('ref', '').startswith('automation/pub-compatible-refresh-')
           ]
+          existing_refs = [
+              ref.get('ref', '') for ref in refs
+              if ref.get('ref', '').startswith('refs/heads/automation/pub-compatible-refresh-')
+          ]
+          blocked = bool(existing_pulls or existing_refs)
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
-              handle.write(f"open={'true' if existing else 'false'}\n")
-          if existing:
-              print(
-                  'compatible Pub refresh already has an open review PR: '
-                  + ', '.join(f"#{pull['number']}" for pull in existing)
-              )
+              handle.write(f"open={'true' if blocked else 'false'}\n")
+          if blocked:
+              print('compatible Pub refresh already has pending review state')
+              for pull in existing_pulls:
+                  print(f"  open PR #{pull['number']}: {pull['head']['ref']}")
+              for ref in existing_refs:
+                  print(f"  pending branch: {ref}")
           else:
-              print('no existing compatible Pub refresh PR')
+              print('no existing compatible Pub refresh PR or pending branch')
           PY
 
       - name: Set up pinned Flutter
@@ -206,7 +266,6 @@ jobs:
           attempted=0
           solver_successes=0
           selected=''
-
           for package in $AXIOM_PUB_AUTOMATION_PACKAGES; do
             attempted=$((attempted + 1))
             git reset --hard "$baseline" >/dev/null
@@ -219,13 +278,11 @@ jobs:
             cmp pubspec.yaml "$RUNNER_TEMP/pubspec.before.yaml"
             python - <<'PY'
           from pathlib import Path
-
           expected = '  flutter: ">=3.41.1 <3.42.0"'
           lock = Path('pubspec.lock').read_text(encoding='utf-8')
           if expected not in lock.splitlines():
               raise SystemExit('pinned Flutter lockfile ceiling drifted')
           PY
-
             mapfile -t changed < <(git diff --name-only)
             if ((${#changed[@]} == 0)); then
               echo "${package} is already at the newest version allowed by current constraints."
@@ -236,16 +293,13 @@ jobs:
               printf '  %s\n' "${changed[@]}"
               continue
             fi
-
             selected="$package"
             break
           done
-
           if ((solver_successes == 0)); then
             echo "All ${attempted} allowlisted targeted solves failed." >&2
             exit 1
           fi
-
           if [[ -z "$selected" ]]; then
             git reset --hard "$baseline" >/dev/null
             echo 'changed=false' >> "$GITHUB_OUTPUT"
@@ -291,7 +345,7 @@ jobs:
           git push origin "HEAD:refs/heads/${branch}"
           echo "name=${branch}" >> "$GITHUB_OUTPUT"
 
-      - name: Open review-only pull request
+      - name: Open review-only pull request when repository policy permits it
         id: pull
         if: steps.preflight.outputs.open != 'true' && steps.refresh.outputs.changed == 'true'
         env:
@@ -302,8 +356,8 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import urllib.error
           import urllib.request
-
           api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
           repo = os.environ['GITHUB_REPOSITORY']
           branch = os.environ['UPDATE_BRANCH']
@@ -313,8 +367,7 @@ jobs:
               'head': branch,
               'base': 'main',
               'body': (
-                  'Automated review proposal generated by the pinned-Flutter '
-                  'compatible refresh workflow.\n\n'
+                  'Automated review proposal generated by the pinned-Flutter compatible refresh workflow.\n\n'
                   f'- Target direct package: `{package}`\n'
                   '- Solver: Flutter 3.41.1\n'
                   '- `pubspec.yaml`: unchanged by policy\n'
@@ -324,18 +377,13 @@ jobs:
                   '- `flutter analyze --no-fatal-infos`: passed before commit\n'
                   '- complete Flutter tests: passed before commit\n'
                   '- Android debug APK smoke build: passed before commit\n\n'
-                  'The automation evaluates one allowlisted direct dependency '
-                  'per proposal, never widens dependency constraints, and never '
-                  'auto-merges. Native/plugin/platform-sensitive packages and '
-                  'updates that regenerate tracked platform files remain '
-                  'separate manual review work.'
+                  'The automation evaluates one allowlisted direct dependency per proposal, '
+                  'never widens dependency constraints, and never auto-merges.'
               ),
               'maintainer_can_modify': True,
           }).encode()
           request = urllib.request.Request(
-              f'{api}/repos/{repo}/pulls',
-              data=payload,
-              method='POST',
+              f'{api}/repos/{repo}/pulls', data=payload, method='POST',
               headers={
                   'Accept': 'application/vnd.github+json',
                   'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
@@ -343,11 +391,63 @@ jobs:
                   'X-GitHub-Api-Version': '2022-11-28',
               },
           )
-          with urllib.request.urlopen(request, timeout=30) as response:
-              pull = json.load(response)
+          opened = False
+          blocked = False
+          number = ''
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  pull = json.load(response)
+              opened = True
+              number = str(pull['number'])
+              print(f"opened review PR #{number} for {package}")
+          except urllib.error.HTTPError as error:
+              body = error.read().decode('utf-8', errors='replace')
+              if error.code == 403 and 'not permitted to create or approve pull requests' in body:
+                  blocked = True
+                  print(f'repository policy blocks GITHUB_TOKEN PR creation; preserving verified branch {branch}')
+              else:
+                  raise
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
-              handle.write(f"number={pull['number']}\n")
-          print(f"opened review PR #{pull['number']} for {package}")
+              handle.write(f"opened={'true' if opened else 'false'}\n")
+              handle.write(f"blocked={'true' if blocked else 'false'}\n")
+              handle.write(f"number={number}\n")
+          PY
+
+      - name: Record blocked PR creation on issue 128
+        if: >-
+          steps.preflight.outputs.open != 'true' &&
+          steps.refresh.outputs.changed == 'true' &&
+          steps.pull.outputs.blocked == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPDATE_BRANCH: ${{ steps.branch.outputs.name }}
+          UPDATE_PACKAGE: ${{ steps.refresh.outputs.package }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
+          repo = os.environ['GITHUB_REPOSITORY']
+          body = (
+              f"Pinned-Flutter refresh run {os.environ['GITHUB_RUN_ID']} verified "
+              f"`{os.environ['UPDATE_PACKAGE']}` and pushed `{os.environ['UPDATE_BRANCH']}`, "
+              "but repository policy blocked `GITHUB_TOKEN` from opening the review PR. "
+              "The branch is being kept as the single pending automation proposal and canonical CI is dispatched below."
+          )
+          payload = json.dumps({'body': body}).encode()
+          request = urllib.request.Request(
+              f'{api}/repos/{repo}/issues/128/comments', data=payload, method='POST',
+              headers={
+                  'Accept': 'application/vnd.github+json',
+                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                  'Content-Type': 'application/json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30):
+              pass
+          print('recorded blocked PR creation on issue #128')
           PY
 
       - name: Dispatch canonical Axiom Education CI on proposal branch
@@ -360,14 +460,11 @@ jobs:
           import json
           import os
           import urllib.request
-
           api = os.environ.get('GITHUB_API_URL', 'https://api.github.com')
           repo = os.environ['GITHUB_REPOSITORY']
           payload = json.dumps({'ref': os.environ['UPDATE_BRANCH']}).encode()
           request = urllib.request.Request(
-              f'{api}/repos/{repo}/actions/workflows/rebuild.yml/dispatches',
-              data=payload,
-              method='POST',
+              f'{api}/repos/{repo}/actions/workflows/rebuild.yml/dispatches', data=payload, method='POST',
               headers={
                   'Accept': 'application/vnd.github+json',
                   'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
@@ -377,8 +474,6 @@ jobs:
           )
           with urllib.request.urlopen(request, timeout=30) as response:
               if response.status != 204:
-                  raise SystemExit(
-                      f'canonical CI dispatch returned HTTP {response.status}'
-                  )
+                  raise SystemExit(f'canonical CI dispatch returned HTTP {response.status}')
           print('canonical Axiom Education CI dispatched')
           PY
