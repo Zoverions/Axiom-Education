@@ -1,9 +1,9 @@
 # Start Here: Grade 9 Math Foundations Preview
 
 This is a short, non-AI learning routine for the four math foundation lessons
-and the source-mapped Units 1 through 7 currently available in Axiom Education. It
-can help a learner restart regular study while the complete MTH1W course is
-being built and reviewed.
+and the source-mapped Units 1 through 9 currently authored in Axiom Education.
+It can help a learner restart regular study while the MTH1W drafts are being
+reviewed and the complete-course gates remain closed.
 
 It is **not** a complete MTH1W course, school enrolment, a credit, a grade, or a
 Ministry-approved resource. Keep the learner connected with their school,
@@ -22,16 +22,17 @@ assessment, accommodations, and graduation planning.
 
 1. **Warm up — 5 minutes.** Rework one example from the previous session.
 2. **Learn — 15 minutes.** Read one lesson and copy its worked example by hand.
-3. **Practise — 20 minutes.** Check three different generated items. Use a hint
-   after a genuine attempt, then press **New item** before the next question.
+3. **Practise — 20 minutes.** Complete several guided, independent, or retrieval
+   items from the selected unit, or check three different generated foundation
+   items. Use feedback only after a genuine attempt.
 4. **Explain — 5 minutes.** Correct one error and explain the method aloud or in
    writing.
 
-The three-item message is a stopping cue, not proof of mastery. A learner who
-is stuck should record the exact step that caused trouble and ask a qualified
-teacher or tutor for help.
+The three-item foundation message is a stopping cue, not proof of mastery. A
+learner who is stuck should record the exact step that caused trouble and ask a
+qualified teacher or tutor for help.
 
-## Source-mapped Unit 1 option
+## Source-mapped unit path
 
 From the Grade 9 Math course screen, open **Source-mapped draft Unit 1**. Work
 through its three lessons in order, keeping written steps and corrections in a
@@ -74,6 +75,25 @@ Use reviewed public data whenever possible. Any direct collection requires
 adult approval, data minimization, no sensitive identifiers, local short-lived
 storage, and a public-data fallback.
 
+Then open **Source-mapped draft Unit 8** for geometry and measurement. Compare
+more than one construction or measurement route, keep units visible at every
+step, pair diagrams with written descriptions or coordinates, and check scale,
+Pythagorean, area, surface-area, and volume reasoning against the stated
+constraints. Cultural and historical examples remain source-bounded draft
+material that still requires educator and cultural review.
+
+Finally open **Source-mapped draft Unit 9** for financial literacy. Treat every
+borrowing, value-over-time, and budgeting activity as a fictional classroom
+scenario. State the source, date range, rate or payment assumptions, fees, and
+what the model does not include. Compare totals and trade-offs without treating
+the lesson as a lender quote or a recommendation about a real financial
+product or personal action.
+
+All nine source-mapped units are authored machine-verified drafts. That does
+**not** mean the course has completed educator/cultural review, licensing,
+cumulative assessment review, accessibility/printable-alternative review,
+governed progress, or educator-workflow gates.
+
 ## Starter week
 
 | Day | Work |
@@ -84,19 +104,21 @@ storage, and a public-data fallback.
 | 4 | Lines-from-points foundations lesson plus three different items |
 | 5 | Mixed review: one or more new items from each available topic |
 
-Repeat difficult lessons as needed. Accuracy matters, but so do written steps,
-corrections, and being able to explain why a method works.
+After the starter week, move through the source-mapped units in order or follow
+a qualified educator's plan. Repeat difficult lessons as needed. Accuracy
+matters, but so do written steps, corrections, and being able to explain why a
+method works.
 
 ## Two learners sharing one device
 
-The app currently keeps session counts only on the open practice screen and
-does not save names or progress. When one learner finishes:
+The app currently keeps session counts only on the open foundation-practice
+screen and does not save names or progress. When one learner finishes:
 
-1. copy the date, topic, number of different items, and corrections into that
+1. copy the date, topic or unit, work completed, and corrections into that
    learner's own notebook;
-2. close the practice screen so its temporary counters reset;
+2. close the practice or unit screen so temporary state is cleared;
 3. hand over the device; and
-4. have the next learner open their lesson and begin a fresh practice session.
+4. have the next learner open their lesson and begin a fresh session.
 
 Do not use the on-screen count as a grade or compare the two learners by speed.
 
