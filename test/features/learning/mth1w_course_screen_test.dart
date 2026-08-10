@@ -60,7 +60,14 @@ void main() {
     );
   }
 
-  testWidgets('presents a conventional course path before mixed practice', (
+  Finder courseScrollable() => find
+      .descendant(
+        of: find.byType(ListView).first,
+        matching: find.byType(Scrollable),
+      )
+      .first;
+
+  testWidgets('presents authored draft units before foundation practice', (
     tester,
   ) async {
     await tester.pumpWidget(buildScreen());
@@ -76,13 +83,9 @@ void main() {
     expect(find.text('Percentages and proportional reasoning'), findsOneWidget);
     expect(find.text('Open mixed practice'), findsOneWidget);
     expect(find.text('Open home learning guide'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 1'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 2'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 3'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 4'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 5'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 6'), findsOneWidget);
-    expect(find.text('Open source-mapped draft Unit 7'), findsOneWidget);
+    for (var unit = 1; unit <= 9; unit += 1) {
+      expect(find.text('Open source-mapped draft Unit $unit'), findsOneWidget);
+    }
   });
 
   testWidgets('opens the bundled source-mapped Unit 2 package', (tester) async {
@@ -93,12 +96,7 @@ void main() {
     await tester.scrollUntilVisible(
       unitTwoButton,
       300,
-      scrollable: find
-          .descendant(
-            of: find.byType(ListView).first,
-            matching: find.byType(Scrollable),
-          )
-          .first,
+      scrollable: courseScrollable(),
     );
     await tester.tap(unitTwoButton);
     await tester.pumpAndSettle();
@@ -111,6 +109,51 @@ void main() {
     );
   });
 
+  testWidgets('opens split Unit 8 through its fail-closed manifest path', (
+    tester,
+  ) async {
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    final unitEightButton = find.byKey(
+      const ValueKey('mth1w-open-draft-unit-8'),
+    );
+    await tester.scrollUntilVisible(
+      unitEightButton,
+      350,
+      scrollable: courseScrollable(),
+    );
+    await tester.tap(unitEightButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Unit 8: Geometry and measurement'), findsOneWidget);
+    expect(find.textContaining('E1.1, E1.2, E1.3, E1.4, E1.5, E1.6'), findsOneWidget);
+    expect(find.textContaining('split draft preview'), findsOneWidget);
+    expect(find.textContaining('not a complete MTH1W course'), findsOneWidget);
+  });
+
+  testWidgets('opens split Unit 9 with the non-advice financial boundary', (
+    tester,
+  ) async {
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    final unitNineButton = find.byKey(
+      const ValueKey('mth1w-open-draft-unit-9'),
+    );
+    await tester.scrollUntilVisible(
+      unitNineButton,
+      350,
+      scrollable: courseScrollable(),
+    );
+    await tester.tap(unitNineButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Unit 9: Financial literacy and decisions'), findsOneWidget);
+    expect(find.textContaining('F1.1, F1.2, F1.3, F1.4'), findsOneWidget);
+    expect(find.textContaining('personal financial advice'), findsOneWidget);
+  });
+
   testWidgets('teaches with a worked example before focused practice', (
     tester,
   ) async {
@@ -121,12 +164,7 @@ void main() {
     await tester.scrollUntilVisible(
       firstLesson,
       300,
-      scrollable: find
-          .descendant(
-            of: find.byType(ListView).first,
-            matching: find.byType(Scrollable),
-          )
-          .first,
+      scrollable: courseScrollable(),
     );
     await tester.pumpAndSettle();
     await tester.tap(firstLesson);
