@@ -127,7 +127,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Unit 8: Geometry and measurement'), findsOneWidget);
-    expect(find.textContaining('E1.1, E1.2, E1.3, E1.4, E1.5, E1.6'), findsOneWidget);
+    expect(
+      find.textContaining('E1.1, E1.2, E1.3, E1.4, E1.5, E1.6'),
+      findsOneWidget,
+    );
     expect(find.textContaining('split draft preview'), findsOneWidget);
     expect(find.textContaining('not a complete MTH1W course'), findsOneWidget);
   });
@@ -149,7 +152,10 @@ void main() {
     await tester.tap(unitNineButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('Unit 9: Financial literacy and decisions'), findsOneWidget);
+    expect(
+      find.text('Unit 9: Financial literacy and decisions'),
+      findsOneWidget,
+    );
     expect(find.textContaining('F1.1, F1.2, F1.3, F1.4'), findsOneWidget);
     expect(find.textContaining('personal financial advice'), findsOneWidget);
   });
