@@ -118,11 +118,8 @@ void main() {
     final unitEightButton = find.byKey(
       const ValueKey('mth1w-open-draft-unit-8'),
     );
-    await tester.scrollUntilVisible(
-      unitEightButton,
-      350,
-      scrollable: courseScrollable(),
-    );
+    await tester.ensureVisible(unitEightButton);
+    await tester.pumpAndSettle();
     await tester.tap(unitEightButton);
     await tester.pumpAndSettle();
 
@@ -144,11 +141,8 @@ void main() {
     final unitNineButton = find.byKey(
       const ValueKey('mth1w-open-draft-unit-9'),
     );
-    await tester.scrollUntilVisible(
-      unitNineButton,
-      350,
-      scrollable: courseScrollable(),
-    );
+    await tester.ensureVisible(unitNineButton);
+    await tester.pumpAndSettle();
     await tester.tap(unitNineButton);
     await tester.pumpAndSettle();
 
