@@ -43,7 +43,8 @@ represented as course-complete:
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
 - a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, multiple reasoning routes and representations, misconception checks, and reflection prompts;
-- source-mapped offline MTH1W Units 1 through 7 with 33 full lessons, 66 worked examples, 363 practice items, seven delayed-feedback quizzes with correction attempts, and transparent performance tasks;
+- source-mapped offline MTH1W draft content for all 9 planned units and all 43 primary lesson slots, with 86 worked examples, 473 guided/independent/retrieval practice items, nine delayed-feedback 10-item quizzes with correction attempts, and nine transparent performance tasks;
+- repo-bounded split-unit loading for Units 8 and 9 so geometry/measurement and financial-literacy lessons remain individually reviewable while still passing through the same canonical content contract as Units 1 through 7;
 - lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
 - actual answer entry with exact rational and slope-intercept verification;
@@ -53,16 +54,7 @@ represented as course-complete:
 - item-linked scaffolded hints, derived local topic references, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The foundations preview and source-mapped unit drafts do **not** use tutor inference or write a learner
-record. It is intentionally usable without AI. It is **not** a complete MTH1W
-course, credit, grade, transcript, Ministry-approved resource, school
-enrolment, or replacement for an authorized education provider. The
-Each authored unit has a draft quiz and performance task, but the application does **not**
-currently provide complete-course quizzes or tests, governed learner progress,
-assignments, educator review and appeal, pack
-activation, portfolio export, or classroom synchronization. Those paths
-remain experimental, disabled, specified, or adapter-required in
-[`config/capabilities.json`](config/capabilities.json).
+The foundations preview and source-mapped unit drafts do **not** use tutor inference or write a learner record. They are intentionally usable without AI. The authored nine-unit milestone is **not** a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or replacement for an authorized education provider. Each authored unit has a draft quiz and performance task, but the application does **not** currently provide reviewed complete-course assessment, governed learner progress, assignments, educator review and appeal, pack activation, portfolio export, or classroom synchronization. Those paths remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
 
 The source conflict and blocked completion claim are documented in the
 [MTH1W Source Audit](docs/curriculum/MTH1W-SOURCE-AUDIT.md) and enforced by
@@ -70,7 +62,7 @@ The source conflict and blocked completion claim are documented in the
 [source-pinned official inventory](curriculum/official/ontario-mth1w-2021.inventory.json)
 contains all 57 expectation references without redistributing their verbatim
 descriptions; the [MTH1W Coverage Ledger](docs/curriculum/MTH1W-COVERAGE-LEDGER.md)
-records what remains. The
+records the difference between authored coverage and reviewed coverage. The
 [Home Learning Guide](docs/home-learning/START-HERE.md) describes safe current
 use. Product sequencing is MTH1W first, then every remaining Grade 9 course,
 then later grades, as defined in the
@@ -95,10 +87,10 @@ flutter run -d <device-id>
 
 The verification command validates the supported toolchain, installs the exact
 Python test dependencies and locked Dart dependencies, checks capability and
-curriculum-readiness claims, checks formatting, runs static analysis, and runs
-the complete Python and Flutter test suites. Use an activated virtual
-environment if you do not want the Python development dependencies installed
-into your user environment.
+curriculum-readiness claims, checks both monolithic and split authored-unit
+content, checks formatting, runs static analysis, and runs the complete Python
+and Flutter test suites. Use an activated virtual environment if you do not
+want the Python development dependencies installed into your user environment.
 
 For an Android installation smoke build:
 
@@ -140,8 +132,9 @@ Presently:
 - the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
 - MTH1W-labelled A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to four derived topic references whose official mapping is under review;
-- the official MTH1W hierarchy is source-pinned at 14 overall and 43 specific expectations, while educator review, licensing, full lesson coverage, assessments, accessibility, progress, and teacher workflows remain incomplete;
-- a machine-verified 9-unit, 43-lesson, 110-hour MTH1W blueprint covers every official expectation exactly once; Units 1 through 7 are authored offline drafts and the other two units remain unavailable;
+- the official MTH1W hierarchy is source-pinned at 14 overall and 43 specific expectations, while educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, progress, and teacher workflows remain incomplete;
+- a machine-verified 9-unit, 43-lesson, 110-hour MTH1W blueprint covers every official expectation exactly once, and all nine unit slots are now authored machine-verified drafts; this is an authoring milestone, not a complete-course claim;
+- Units 8 and 9 use repo-bounded split manifests that are materialized through the same canonical unit validator in Python and the same `Mth1wUnitContent` runtime model in Flutter;
 - the four-lesson Grade 9 Math Foundations Preview is experimental; it compares multiple valid reasoning routes but is not a complete MTH1W course;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
