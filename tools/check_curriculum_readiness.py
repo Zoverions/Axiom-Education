@@ -177,6 +177,8 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
             "curriculum/content/mth1w/u5-coding-relationships.v1.json",
             "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
             "curriculum/content/mth1w/u7-data-modelling.v1.json",
+            "curriculum/content/mth1w/u8/manifest.v1.json",
+            "curriculum/content/mth1w/u9/manifest.v1.json",
         ],
         "authored unit content paths mismatch",
     )
@@ -193,11 +195,11 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
             "unit_quiz_items": authored.get("unit_quiz_items"),
         }
         == {
-            "machine_verified_draft_units": 7,
-            "machine_verified_draft_lessons": 33,
-            "worked_examples": 66,
-            "practice_items": 363,
-            "unit_quiz_items": 70,
+            "machine_verified_draft_units": 9,
+            "machine_verified_draft_lessons": 43,
+            "worked_examples": 86,
+            "practice_items": 473,
+            "unit_quiz_items": 90,
         },
         "authored unit evidence counts are incorrect",
     )
