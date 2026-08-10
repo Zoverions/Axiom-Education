@@ -27,8 +27,11 @@ def test_current_readiness_blocks_complete_course_claims():
         "specific_expectations_planned": 43,
         "student_available_course": False,
     }
-    assert payload["authored_content"]["machine_verified_draft_units"] == 7
-    assert payload["authored_content"]["machine_verified_draft_lessons"] == 33
+    assert payload["authored_content"]["machine_verified_draft_units"] == 9
+    assert payload["authored_content"]["machine_verified_draft_lessons"] == 43
+    assert payload["authored_content"]["worked_examples"] == 86
+    assert payload["authored_content"]["practice_items"] == 473
+    assert payload["authored_content"]["unit_quiz_items"] == 90
     assert len(payload["required_gates"]) == 7
     statuses = {gate["id"]: gate["status"] for gate in payload["required_gates"]}
     assert statuses["official-expectation-inventory"] == "verified"
