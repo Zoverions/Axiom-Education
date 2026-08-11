@@ -1,36 +1,39 @@
 # Axiom Education
 
-Axiom Education is a local-first adaptive learning platform built as the education domain layer for AXIOM-MESH.
+Axiom Education is a local-first, lifelong education platform and education-domain layer for AXIOM-MESH. It is designed to support learning across age groups, jurisdictions, institutions, and life stages without making any one curriculum, grade band, school system, or delivery experience the product boundary.
 
 **Current rebuild:** `0.5.0-dev.0`  
 **Status:** active development; not production-ready  
 **Canonical repository:** `Zoverions/Axiom-Education`  
 **Canonical branch:** `main`  
-**First curriculum capsule:** Ontario Secondary Curriculum Pack
+**First supported jurisdiction:** Ontario, Canada  
+**Active Ontario tracks:** Kindergarten / Grades 1-8 curriculum-capsule foundation and Secondary curriculum, with MTH1W as the first deep course vertical slice
 
-The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdictional curriculum pack because its source corpus is present; it is not the identity or architectural boundary of the platform. The former repository URL is retained only through GitHub's compatibility redirect.
+The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdiction because its source corpus and active rebuild work are present; it is not the identity or architectural boundary of the platform. Elementary, secondary, post-secondary, apprenticeship, professional, reskilling, civic, hobby, and later-life learning can share the same governed learner and evidence substrate while using different curriculum packs and experience layers.
 
 See the [Repository Rename Record](docs/REPOSITORY-MIGRATION.md), [Branch Hygiene Policy](docs/BRANCH-HYGIENE.md), and [Deprecations](docs/DEPRECATIONS.md).
 
 ## Product boundary
 
 ```text
-Axiom Education application
+Axiom Education application / experience layer
   -> AXIOM Gateway
   -> policy, consent, risk, and plan evaluation
   -> short-lived capability grant
-  -> approved education or provider capsule
+  -> approved education, curriculum, or provider capsule
   -> bounded execution
   -> encrypted learner state and evidence in Grid
 ```
 
 The Flutter application remains independently releasable. AXIOM-MESH supplies the policy, consent, bounded execution, evidence, portability, and synchronization substrate for governed effects.
 
-Installing a curriculum or education capsule does not grant access to learner records, activate a provider, or authorize execution.
+A curriculum pack, grade band, school program, or learning experience is a configured domain surface inside Axiom Education. None of those surfaces defines Axiom Education as a whole. Installing a curriculum or education capsule does not grant access to learner records, activate a provider, or authorize execution.
 
 ## Current usable surface
 
-The runnable application provides a local Ontario curriculum browser and the first bounded MTH1W practice slice:
+The runnable application currently provides a local Ontario secondary curriculum browser and the first bounded MTH1W practice slice. In parallel, the Ontario elementary track is building the jurisdiction, source-verification, and curriculum-capsule foundation required for Kindergarten and Grades 1-8.
+
+The currently runnable secondary surface includes:
 
 - recoverable first-run initialization;
 - a searchable list of courses and expectation counts;
@@ -43,9 +46,9 @@ The runnable application provides a local Ontario curriculum browser and the fir
 - item-linked scaffolded hints, exact expectation IDs, uncalibrated difficulty disclosure, and digest evidence;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The MTH1W practice phase does **not** use tutor inference or write a learner record. The application does **not** currently provide governed learner records, pack activation, educator review and appeal, portfolio export, or classroom synchronization. Those paths remain disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+The MTH1W practice phase does **not** use tutor inference or write a learner record. The application does **not** currently provide governed learner records, pack activation, educator review and appeal, portfolio export, classroom synchronization, or a production-ready Ontario elementary experience. Those paths remain disabled, specified, experimental, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
 
-The scope and negative-path gates are frozen in [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md).
+The scope and negative-path gates for the current MTH1W implementation are frozen in [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md).
 
 ## First five minutes
 
@@ -105,7 +108,7 @@ The authoritative status registry is [`config/capabilities.json`](config/capabil
 Presently:
 
 - curriculum browsing from a schema-verified bundled SQLite database is implemented;
-- the Ontario curriculum corpus deterministically builds into 293 canonical records across 21 courses;
+- the current Ontario secondary corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
 - MTH1W A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to those four expectations;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
@@ -115,11 +118,14 @@ Presently:
 - canvas observation is an explicitly experimental bounded classifier and no longer returns mock equations;
 - handwriting scoring no longer returns fixed synthetic scores when its model is missing;
 - the legacy UDP/TCP classroom mesh is disabled by default, AES-GCM protected when explicitly enabled for development, and is not a trusted authority path;
-- governed learner records, selective portfolio export, accessibility gates, pack activation, and AXIOM classroom synchronization remain specified or adapter-required.
+- governed learner records, selective portfolio export, accessibility gates, pack activation, and AXIOM classroom synchronization remain specified or adapter-required;
+- Ontario elementary curriculum-capsule work remains source-discovery/foundation work until exact sources, digests, review, deterministic builds, signatures, and verification gates are satisfied.
 
-## Ontario Curriculum Pack
+## Ontario curriculum packs
 
-Build a deterministic unsigned pack into an empty directory:
+Ontario is the first jurisdiction family, not the product boundary. Elementary and secondary content are separate curriculum tracks that share generic pack, provenance, jurisdiction, learner, and governance infrastructure.
+
+Build the current deterministic unsigned Ontario secondary pack into an empty directory:
 
 ```bash
 python tools/curriculum_pack.py build \
@@ -148,7 +154,7 @@ python tools/curriculum_pack.py verify \
   --pack-dir /tmp/axiom-education-ontario
 ```
 
-The protected workflow builds the complete Ontario pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It also verifies that the frozen MTH1W subset contains exactly 11 source-identical records and produces byte-identical repeated builds. The complete pack is then signed with an ephemeral Ed25519 key and must pass signature verification.
+The protected workflow builds the complete current Ontario secondary pack twice and compares `manifest.json` and `records.jsonl` byte-for-byte. It also verifies that the frozen MTH1W subset contains exactly 11 source-identical records and produces byte-identical repeated builds. The complete pack is then signed with an ephemeral Ed25519 key and must pass signature verification.
 
 Retrieval indexes are disposable derived artifacts. They are never the authority for curriculum content.
 
@@ -162,7 +168,7 @@ A valid pack signature proves that the exact canonical manifest was signed by th
 - pedagogical quality;
 - safe application activation.
 
-The source ledger records that upstream official-document digests have not yet been captured and that course-by-course source and licensing review remains required.
+The current secondary source ledger records that upstream official-document digests have not yet been captured for the broader legacy corpus and that course-by-course source and licensing review remains required. The elementary track uses a separate staged source-discovery and verification process and must not inherit trust merely because the secondary tooling exists.
 
 ## Canonical documents
 
