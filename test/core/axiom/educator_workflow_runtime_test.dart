@@ -56,13 +56,18 @@ void main() {
       'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
 
   test('Dart workflow registry remains parity-bound to the JSON contract', () {
-    final contract = jsonDecode(
-      File(
-        'contracts/axiom-education-educator-workflow.v1.json',
-      ).readAsStringSync(),
-    ) as Map<String, dynamic>;
+    final contract =
+        jsonDecode(
+              File(
+                'contracts/axiom-education-educator-workflow.v1.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
     final parent = contract['parent_contract'] as Map<String, dynamic>;
-    expect(parent['transport_action'], AxiomEducationContract.learnerEventAppend);
+    expect(
+      parent['transport_action'],
+      AxiomEducationContract.learnerEventAppend,
+    );
     expect(parent['purpose'], EducatorWorkflowRuntime.purpose);
     expect(parent['contract_id'], AxiomEducationContract.id);
     expect(parent['contract_version'], AxiomEducationContract.version);
@@ -93,46 +98,49 @@ void main() {
     );
   });
 
-  test('valid workflow follows transitions and binds review to latest submission', () {
-    final assignment = _assignment();
-    final submission = EducatorWorkflowEvent.create(
-      workflowId: assignment.workflowId,
-      assignmentId: assignment.assignmentId,
-      subjectId: assignment.subjectId,
-      learningContextId: assignment.learningContextId,
-      courseCode: assignment.courseCode,
-      expectationIds: assignment.expectationIds,
-      eventId: 'event:test:submission',
-      eventType: 'submission.created',
-      actorRole: 'learner',
-      occurredAt: '2026-08-11T18:35:00-04:00',
-      previousEventDigest: assignment.payloadDigest,
-      artifactDigest: submittedArtifact,
-    );
-    final review = EducatorWorkflowEvent.create(
-      workflowId: assignment.workflowId,
-      assignmentId: assignment.assignmentId,
-      subjectId: assignment.subjectId,
-      learningContextId: assignment.learningContextId,
-      courseCode: assignment.courseCode,
-      expectationIds: assignment.expectationIds,
-      eventId: 'event:test:review',
-      eventType: 'review.started',
-      actorRole: 'educator',
-      occurredAt: '2026-08-11T18:40:00-04:00',
-      previousEventDigest: submission.payloadDigest,
-      artifactDigest: submittedArtifact,
-    );
+  test(
+    'valid workflow follows transitions and binds review to latest submission',
+    () {
+      final assignment = _assignment();
+      final submission = EducatorWorkflowEvent.create(
+        workflowId: assignment.workflowId,
+        assignmentId: assignment.assignmentId,
+        subjectId: assignment.subjectId,
+        learningContextId: assignment.learningContextId,
+        courseCode: assignment.courseCode,
+        expectationIds: assignment.expectationIds,
+        eventId: 'event:test:submission',
+        eventType: 'submission.created',
+        actorRole: 'learner',
+        occurredAt: '2026-08-11T18:35:00-04:00',
+        previousEventDigest: assignment.payloadDigest,
+        artifactDigest: submittedArtifact,
+      );
+      final review = EducatorWorkflowEvent.create(
+        workflowId: assignment.workflowId,
+        assignmentId: assignment.assignmentId,
+        subjectId: assignment.subjectId,
+        learningContextId: assignment.learningContextId,
+        courseCode: assignment.courseCode,
+        expectationIds: assignment.expectationIds,
+        eventId: 'event:test:review',
+        eventType: 'review.started',
+        actorRole: 'educator',
+        occurredAt: '2026-08-11T18:40:00-04:00',
+        previousEventDigest: submission.payloadDigest,
+        artifactDigest: submittedArtifact,
+      );
 
-    final result = EducatorWorkflowRuntime.verifyWorkflow([
-      assignment,
-      submission,
-      review,
-    ]);
-    expect(result.eventCount, 3);
-    expect(result.finalState, 'under-review');
-    expect(result.finalEventDigest, review.payloadDigest);
-  });
+      final result = EducatorWorkflowRuntime.verifyWorkflow([
+        assignment,
+        submission,
+        review,
+      ]);
+      expect(result.eventCount, 3);
+      expect(result.finalState, 'under-review');
+      expect(result.finalEventDigest, review.payloadDigest);
+    },
+  );
 
   test('stale artifact substitution fails before any governed write', () async {
     final assignment = _assignment();
@@ -220,7 +228,10 @@ void main() {
       transport.input,
       containsPair('payload_digest', assignment.payloadDigest),
     );
-    expect(transport.input, containsPair('contract_id', AxiomEducationContract.id));
+    expect(
+      transport.input,
+      containsPair('contract_id', AxiomEducationContract.id),
+    );
     expect(transport.input, isNot(contains('raw_student_work')));
     expect(transport.input, isNot(contains('raw_feedback')));
     expect(transport.input, isNot(contains('grade')));
@@ -229,36 +240,39 @@ void main() {
     expect(receipt.gatewayResponse['status'], 'completed');
   });
 
-  test('gateway failure propagates and cannot become local synthetic success', () async {
-    final assignment = _assignment();
-    final transport = _FakeTransport(
-      response: const AxiomTransportResponse(
-        statusCode: 503,
-        body: {
-          'error': {
-            'code': 'capability_unavailable',
-            'message': 'No governed learner-record provider is configured.',
+  test(
+    'gateway failure propagates and cannot become local synthetic success',
+    () async {
+      final assignment = _assignment();
+      final transport = _FakeTransport(
+        response: const AxiomTransportResponse(
+          statusCode: 503,
+          body: {
+            'error': {
+              'code': 'capability_unavailable',
+              'message': 'No governed learner-record provider is configured.',
+            },
           },
-        },
-      ),
-    );
-    final writer = GovernedLearnerEventWriter(
-      client: AxiomEducationClient(
-        transport: transport,
-        idempotencyKeyFactory: () => 'unused-idempotency-factory',
-      ),
-    );
+        ),
+      );
+      final writer = GovernedLearnerEventWriter(
+        client: AxiomEducationClient(
+          transport: transport,
+          idempotencyKeyFactory: () => 'unused-idempotency-factory',
+        ),
+      );
 
-    await expectLater(
-      writer.append(
-        workflow: [assignment],
-        consentId: 'consent:test',
-        memoryObjectId: 'memory:assignment:test',
-      ),
-      throwsA(isA<AxiomEducationCapabilityUnavailableException>()),
-    );
-    expect(transport.callCount, 1);
-  });
+      await expectLater(
+        writer.append(
+          workflow: [assignment],
+          consentId: 'consent:test',
+          memoryObjectId: 'memory:assignment:test',
+        ),
+        throwsA(isA<AxiomEducationCapabilityUnavailableException>()),
+      );
+      expect(transport.callCount, 1);
+    },
+  );
 
   test('tampering or schema expansion is rejected', () {
     final assignment = _assignment();
@@ -277,23 +291,26 @@ void main() {
     );
   });
 
-  test('self-asserted actor role cannot bypass event-type role restrictions', () {
-    expect(
-      () => EducatorWorkflowEvent.create(
-        workflowId: 'workflow:test:002',
-        assignmentId: 'assignment:test:002',
-        subjectId: 'learner:test',
-        learningContextId: 'context:test',
-        courseCode: 'MTH1W',
-        expectationIds: const ['MTH1W-A1.1'],
-        eventId: 'event:test:invalid-role',
-        eventType: 'assignment.created',
-        actorRole: 'learner',
-        occurredAt: '2026-08-11T18:30:00-04:00',
-        artifactDigest:
-            'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      ),
-      throwsA(isA<EducatorWorkflowValidationException>()),
-    );
-  });
+  test(
+    'self-asserted actor role cannot bypass event-type role restrictions',
+    () {
+      expect(
+        () => EducatorWorkflowEvent.create(
+          workflowId: 'workflow:test:002',
+          assignmentId: 'assignment:test:002',
+          subjectId: 'learner:test',
+          learningContextId: 'context:test',
+          courseCode: 'MTH1W',
+          expectationIds: const ['MTH1W-A1.1'],
+          eventId: 'event:test:invalid-role',
+          eventType: 'assignment.created',
+          actorRole: 'learner',
+          occurredAt: '2026-08-11T18:30:00-04:00',
+          artifactDigest:
+              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        ),
+        throwsA(isA<EducatorWorkflowValidationException>()),
+      );
+    },
+  );
 }
