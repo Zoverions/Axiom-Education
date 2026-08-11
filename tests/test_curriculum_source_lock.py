@@ -46,18 +46,14 @@ class CurriculumSourceLockTests(unittest.TestCase):
             self.assertEqual(lock["redistribution_status"], "review-required")
             self.assertIsNone(lock["retained_path"])
 
-    def test_digest_substitution_is_rejected(self) -> None:
+    def test_invalid_digest_shape_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             lock_path = self.make_lock(Path(tmp))
             payload = json.loads(lock_path.read_text(encoding="utf-8"))
-            payload["sha256"] = "0" * 64
+            payload["sha256"] = "not-a-sha256"
             lock_path.write_text(json.dumps(payload), encoding="utf-8")
-            # A non-retained lock cannot independently re-read the original bytes, so the
-            # captured digest is evidence rather than a reproducibility claim. Structural
-            # substitution is caught when retained bytes exist; source-entry substitution
-            # is always caught. Here we at least preserve a valid SHA-256 shape.
-            lock = verify_lock(lock_path)
-            self.assertEqual(lock["sha256"], "0" * 64)
+            with self.assertRaisesRegex(SourceLockError, "invalid source SHA-256"):
+                verify_lock(lock_path)
 
     def test_source_entry_binding_rejects_stale_or_fabricated_lock(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
