@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-science-technology-grades-1-8-2022",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "b007628f97620ddb10fa72ecfb308693150f152fab8868a1cd8c9e312b775365",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-11T21:35:47.174783Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+  "media_type": "text/html",
+  "byte_length": 6178840,
+  "sha256": "679713f7310bb4cb08208529e701736ee93d81a9c1120e8faaeeb8e7800ca52f",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target f2639825f6f843b4e01eca7e351e3abccdfce610ee676dacc0c2c599b4b0e5cc. GitHub run 31538611554 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution."
+}
