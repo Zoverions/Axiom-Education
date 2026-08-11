@@ -32,9 +32,10 @@ class Mth1wReviewerDossierTests(unittest.TestCase):
             actual = {
                 path.relative_to(output).as_posix()
                 for path in output.rglob("*")
-                if path.is_file() and path.name != "manifest.json"
+                if path.is_file() and path.relative_to(output).as_posix() != "manifest.json"
             }
             self.assertEqual(listed, actual)
+            self.assertIn("accessible-offline/manifest.json", listed)
             self.assertTrue(all(len(entry["sha256"]) == 64 for entry in manifest["files"]))
 
     def test_learner_exports_remain_separate_from_answer_keys(self):
