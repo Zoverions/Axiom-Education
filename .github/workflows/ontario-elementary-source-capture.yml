@@ -7,9 +7,12 @@ on:
       - feature/curriculum-standard-record-v2-20260811
     paths:
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/curriculum_source_lock.py'
+      - 'tools/check_curriculum_source_monitoring.py'
       - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_curriculum_source_monitoring.py'
       - '.github/workflows/ontario-elementary-source-capture.yml'
   workflow_dispatch:
     inputs:
@@ -28,7 +31,7 @@ permissions:
   contents: read
 
 jobs:
-  capture-pr-source-lock-candidates:
+  capture-pr-stable-document-candidates:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -38,8 +41,6 @@ jobs:
         source_id:
           - ontario-health-physical-education-grades-1-8-2019
           - ontario-mathematics-grades-1-8-2020
-          - ontario-language-grades-1-8-2023
-          - ontario-science-technology-grades-1-8-2022
           - ontario-fsl-grades-1-8-2013
     steps:
       - name: Check out exact source revision
@@ -50,10 +51,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Validate allowlisted targets without network access
-        run: python tools/remote_curriculum_source_capture.py validate-targets
+      - name: Validate allowlisted targets and monitoring policy
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
 
-      - name: Capture exact official bytes and emit metadata-only lock candidate
+      - name: Capture exact official document bytes and emit metadata-only lock candidate
         env:
           SOURCE_ID: ${{ matrix.source_id }}
         run: |
@@ -86,10 +89,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Validate allowlisted targets without network access
-        run: python tools/remote_curriculum_source_capture.py validate-targets
+      - name: Validate allowlisted targets and monitoring policy
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
 
-      - name: Capture exact official bytes and emit metadata-only lock candidate
+      - name: Capture exact current response and emit metadata-only lock candidate
         env:
           SOURCE_ID: ${{ inputs.source_id }}
         run: |
