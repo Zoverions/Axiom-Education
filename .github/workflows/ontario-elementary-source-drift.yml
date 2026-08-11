@@ -8,10 +8,13 @@ on:
     paths:
       - 'curriculum/ontario-elementary/source-locks/**'
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
       - 'tools/curriculum_source_lock.py'
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/check_curriculum_source_lock_drift.py'
+      - 'tools/check_curriculum_source_monitoring.py'
       - 'tests/test_curriculum_source_lock_drift.py'
+      - 'tests/test_curriculum_source_monitoring.py'
       - '.github/workflows/ontario-elementary-source-drift.yml'
   workflow_dispatch:
 
@@ -29,10 +32,13 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Run source-lock drift unit tests
-        run: python -m unittest tests.test_curriculum_source_lock_drift -v
+      - name: Verify monitoring classification and drift logic
+        run: |
+          python tools/check_curriculum_source_monitoring.py
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python -m unittest tests.test_curriculum_source_lock_drift -v
 
-  recapture-and-compare:
+  recapture-and-compare-stable-documents:
     needs: verify-drift-checker
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -42,8 +48,6 @@ jobs:
         source_id:
           - ontario-health-physical-education-grades-1-8-2019
           - ontario-mathematics-grades-1-8-2020
-          - ontario-language-grades-1-8-2023
-          - ontario-science-technology-grades-1-8-2022
           - ontario-fsl-grades-1-8-2013
     steps:
       - name: Check out exact source revision
@@ -52,9 +56,11 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Validate bounded capture registry
-        run: python tools/remote_curriculum_source_capture.py validate-targets
-      - name: Recapture exact official source bytes
+      - name: Validate bounded capture and monitoring registries
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Recapture exact official document bytes
         env:
           SOURCE_ID: ${{ matrix.source_id }}
         run: |
