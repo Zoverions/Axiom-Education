@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/assessment-review-evidence.v1.schema.json",
+  "title": "Axiom Education Assessment Review Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "review_id",
+    "course_code",
+    "assessment_scope",
+    "target",
+    "reviewer",
+    "reviewed_at",
+    "decision",
+    "confirmations",
+    "findings",
+    "scope_limitations",
+    "attestation_type"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-assessment-review-evidence.v1"},
+    "review_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "course_code": {"const": "MTH1W"},
+    "assessment_scope": {
+      "enum": ["unit-assessment-surface", "coursewide-assessment-plan"]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_id", "unit_id", "target_sha256"],
+      "properties": {
+        "target_id": {"type": "string", "minLength": 1},
+        "unit_id": {"type": ["string", "null"]},
+        "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qualification"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qualification": {"type": "string", "minLength": 1},
+        "organization": {"type": ["string", "null"]}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "decision": {"enum": ["approved", "changes-required", "rejected"]},
+    "confirmations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_alignment_reviewed",
+        "content_validity_reviewed",
+        "scoring_rubric_reviewed",
+        "constructed_response_reviewed",
+        "correction_reassessment_appeal_reviewed",
+        "accessibility_alternatives_reviewed",
+        "no_automatic_mastery_grade_credit_confirmed"
+      ],
+      "properties": {
+        "official_alignment_reviewed": {"type": "boolean"},
+        "content_validity_reviewed": {"type": "boolean"},
+        "scoring_rubric_reviewed": {"type": "boolean"},
+        "constructed_response_reviewed": {"type": "boolean"},
+        "correction_reassessment_appeal_reviewed": {"type": "boolean"},
+        "accessibility_alternatives_reviewed": {"type": "boolean"},
+        "no_automatic_mastery_grade_credit_confirmed": {"type": "boolean"}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "description", "disposition"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["note", "minor", "major", "critical"]},
+          "description": {"type": "string", "minLength": 1},
+          "disposition": {
+            "enum": ["open", "resolved", "accepted-with-rationale", "not-applicable"]
+          },
+          "resolution_reference": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "scope_limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "attestation_type": {"const": "human-assessment-review"},
+    "notes": {"type": "string"}
+  }
+}
