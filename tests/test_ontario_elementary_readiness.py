@@ -16,7 +16,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         summary = payload["summary"]
         self.assertEqual(payload["schema"], "axiom-education-ontario-elementary-readiness.v2")
         self.assertEqual(summary["confirmed_discovery_sources"], 8)
-        self.assertEqual(summary["registered_capture_targets"], 5)
+        self.assertEqual(summary["registered_capture_targets"], 6)
         self.assertEqual(summary["c1_snapshot_sources"], 5)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
         self.assertEqual(summary["observational_response_surface_sources"], 2)
@@ -24,6 +24,16 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertFalse(summary["kindergarten_c1_snapshot"])
         self.assertFalse(summary["overall_base_source_capture_complete"])
+
+    def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
+        payload = build_readiness()
+        rows = {row["source_id"]: row for row in payload["sources"]}
+        arts = rows["ontario-arts-grades-1-8-2009"]
+        self.assertEqual(arts["highest_evidenced_stage"], "C0-discovered")
+        self.assertTrue(arts["capture_target_registered"])
+        self.assertIsNone(arts["c1_snapshot"])
+        self.assertIsNone(arts["monitoring"])
+        self.assertEqual(arts["c0_discovery_review_status"], "source-locator-confirmed-bytes-pending")
 
     def test_strict_sources_are_only_the_current_document_like_surfaces(self) -> None:
         payload = build_readiness()
