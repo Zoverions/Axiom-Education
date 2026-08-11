@@ -8,6 +8,7 @@ on:
       - feature/ontario-elementary-discovery-gates-20260811
       - feature/ontario-elementary-source-lock-20260811
       - feature/curriculum-standard-record-v2-20260811
+      - feature/ontario-elementary-remote-source-capture-20260811
     paths:
       - 'contracts/axiom-education-jurisdiction.v1.json'
       - 'contracts/axiom-education-experience-provider.v1.json'
@@ -19,11 +20,13 @@ on:
       - 'tools/curriculum_source_lock.py'
       - 'tools/curriculum_standard_record.py'
       - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/ontario_hpe_grade1_c2_proof.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_lock.py'
       - 'tests/test_curriculum_standard_record.py'
       - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_ontario_hpe_grade1_c2_proof.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
@@ -50,27 +53,30 @@ jobs:
           python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-capture-targets.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/slices/hpe-grade1-c2-proof.v1.json >/dev/null
           python -m json.tool schemas/curriculum-source-lock.v1.schema.json >/dev/null
           python -m json.tool schemas/curriculum-standard-record.v2.schema.json >/dev/null
       - name: Validate Ontario Elementary discovery accounting
         run: python tools/check_ontario_elementary_discovery.py
       - name: Validate bounded remote capture targets without network access
         run: python tools/remote_curriculum_source_capture.py validate-targets
-      - name: Validate source-lock directory boundary
+      - name: Validate real C1 source-lock directory
         run: |
           python tools/curriculum_source_lock.py verify-directory \
-            --directory curriculum/ontario-elementary/source-locks \
-            --allow-empty
-      - name: Validate C2 normalized-record boundary
+            --directory curriculum/ontario-elementary/source-locks
+      - name: Validate C2 normalized-record promotion boundary
         run: |
           python tools/curriculum_standard_record.py verify-directory \
             --directory curriculum/ontario-elementary/records-v2 \
             --lock-dir curriculum/ontario-elementary/source-locks \
             --allow-empty
-      - name: Run jurisdiction, discovery, source-lock, C2, and remote-capture tests
+      - name: Build twice and verify the real Grade 1 HPE C2 proof
+        run: python tools/ontario_hpe_grade1_c2_proof.py verify
+      - name: Run jurisdiction and Ontario Elementary foundation tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
           python -m unittest tests.test_ontario_elementary_discovery -v
           python -m unittest tests.test_curriculum_source_lock -v
           python -m unittest tests.test_curriculum_standard_record -v
           python -m unittest tests.test_remote_curriculum_source_capture -v
+          python -m unittest tests.test_ontario_hpe_grade1_c2_proof -v
