@@ -162,7 +162,9 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
   }
 
   static void _validateAction(String action) {
-    if (action.isEmpty || action.length > 128 || !_actionPattern.hasMatch(action)) {
+    if (action.isEmpty ||
+        action.length > 128 ||
+        !_actionPattern.hasMatch(action)) {
       throw const AxiomGatewayTransportException(
         code: 'invalid_client_request',
         message: 'Intent action is invalid.',
@@ -272,11 +274,17 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
     final body = Map<String, Object?>.from(decoded);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      for (final field in const ['intent_id', 'trace_id', 'status', 'evidence']) {
+      for (final field in const [
+        'intent_id',
+        'trace_id',
+        'status',
+        'evidence',
+      ]) {
         if (!body.containsKey(field)) {
           throw AxiomGatewayTransportException(
             code: 'invalid_gateway_response',
-            message: 'Gateway intent response is missing required field: $field.',
+            message:
+                'Gateway intent response is missing required field: $field.',
             statusCode: response.statusCode,
             traceId: traceId,
           );
@@ -323,7 +331,11 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
       );
     }
     final error = Map<String, Object?>.from(errorValue);
-    if (error.keys.toSet().difference(const {'code', 'message', 'details'}).isNotEmpty ||
+    if (error.keys.toSet().difference(const {
+          'code',
+          'message',
+          'details',
+        }).isNotEmpty ||
         error['code'] is! String ||
         error['message'] is! String ||
         (error['message'] as String).isEmpty ||
@@ -340,10 +352,14 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
     final stable = stableErrorCodes.contains(code);
     final normalizedError = <String, Object?>{
       'code': code,
-      'message': stable ? error['message']! as String : 'Gateway request failed',
+      'message': stable
+          ? error['message']! as String
+          : 'Gateway request failed',
     };
     if (stable && error['details'] is Map) {
-      normalizedError['details'] = Map<String, Object?>.from(error['details']! as Map);
+      normalizedError['details'] = Map<String, Object?>.from(
+        error['details']! as Map,
+      );
     }
     return Map<String, Object?>.unmodifiable({
       'error': Map<String, Object?>.unmodifiable(normalizedError),
