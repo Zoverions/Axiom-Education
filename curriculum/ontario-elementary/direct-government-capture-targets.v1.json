@@ -1,0 +1,19 @@
+{
+  "schema": "axiom-curriculum-direct-government-capture-targets.v1",
+  "targets_version": "1.0.0",
+  "jurisdiction_id": "ca:on",
+  "claim_boundary": "Direct-government targets are exact HTTPS Ontario government source routes already recorded in C0 discovery. Capturing them proves byte identity only; it does not resolve version-history questions, licensing, normalization, review, completeness, or activation.",
+  "targets": [
+    {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "allowed_host": "www.dcp.edu.gov.on.ca",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "exact-current-government-route-from-c0-discovery",
+      "notes": "Captures the exact current Ontario DCP Arts route already recorded by discovery. The C1 lock does not by itself resolve whether all currently rendered content is unchanged from the 2009 base curriculum or includes later updates."
+    }
+  ]
+}
