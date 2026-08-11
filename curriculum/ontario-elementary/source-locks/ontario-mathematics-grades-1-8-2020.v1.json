@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-mathematics-grades-1-8-2020",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "8f4e733bb490a565f437991fd05b85afc6b636d3d6400dcfd9ce90cc2c7f422b",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-11T21:27:35.976334Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics",
+  "resolved_locator": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/90439c6e-f40c-4b58-840c-557ed88a9345/The%20Ontario%20Curriculum%20Grades%201%E2%80%938%20-%20Mathematics%2C%202020%20%28January%202021%29.pdf",
+  "media_type": "application/pdf",
+  "byte_length": 7503600,
+  "sha256": "5d053441a988b62da62b961f6975df9ff8a44cad8570468d128dc883dd484e6a",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target bd655d6a9953eccc786aa60ca22cf638d230dbe6d332e39b9f28eb126987d89f. GitHub run 31537961251 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution."
+}
