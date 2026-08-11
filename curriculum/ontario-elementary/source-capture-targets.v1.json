@@ -1,6 +1,6 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.2.0",
+  "targets_version": "1.3.0",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
@@ -73,6 +73,20 @@
       "redistribution_status": "review-required",
       "source_resolution_status": "official-publication-access-link-resolved",
       "notes": "Publications Ontario identifies the revised 2013 elementary FSL curriculum (publication 232944); the official Access Link resolves to the Ministry PDF covering Core French Grades 4-8, Extended French Grades 4-8, and French Immersion Grades 1-8."
+    },
+    {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8-231998",
+      "publication_number": "231998",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "The official Curriculum and Resources portal identifies The Arts, Grades 1-8, 2009 at this exact current DCP route. Publications Ontario independently identifies the Revised 2009 Arts curriculum lineage; this target records a pre-C1 structured-source capture route and does not promote the source until capture evidence is reviewed."
     }
   ]
 }
