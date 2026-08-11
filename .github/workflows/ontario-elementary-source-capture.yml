@@ -19,6 +19,7 @@ on:
         type: choice
         options:
           - ontario-health-physical-education-grades-1-8-2019
+          - ontario-mathematics-grades-1-8-2020
 
 permissions:
   contents: read
@@ -41,7 +42,7 @@ jobs:
 
       - name: Capture exact official bytes and emit metadata-only lock candidate
         env:
-          SOURCE_ID: ${{ inputs.source_id || 'ontario-health-physical-education-grades-1-8-2019' }}
+          SOURCE_ID: ${{ inputs.source_id || 'ontario-mathematics-grades-1-8-2020' }}
         run: |
           mkdir -p /tmp/axiom-source-capture
           python tools/remote_curriculum_source_capture.py capture \
@@ -54,7 +55,7 @@ jobs:
       - name: Upload metadata-only source-lock candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
-          name: ontario-elementary-source-lock-${{ inputs.source_id || 'ontario-health-physical-education-grades-1-8-2019' }}-${{ github.sha }}
+          name: ontario-elementary-source-lock-${{ inputs.source_id || 'ontario-mathematics-grades-1-8-2020' }}-${{ github.sha }}
           path: /tmp/axiom-source-capture/source-lock-candidate.json
           if-no-files-found: error
           retention-days: 7
