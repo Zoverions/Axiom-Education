@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Probe whether an allowlisted curriculum source returns stable exact bytes.
+"""Probe whether an allowlisted curriculum source is repeatably recapturable.
 
 This is observation tooling, not a promotion mechanism. It performs repeated captures of
-one already-allowlisted source and emits metadata only. A byte-unstable result does not
-mean the curriculum changed; it means the selected transport surface is unsuitable for
-naive exact-byte drift monitoring until a stable authoritative asset or a separately
-reviewed canonicalization rule is resolved.
+one already-allowlisted source and emits metadata only. Changed bytes or failed requests
+do not mean the curriculum changed. They mean the selected transport surface cannot be
+treated as an immutable document for naive exact-byte drift monitoring until a stable
+authoritative asset or separately reviewed canonicalization rule is resolved.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ from tools.remote_curriculum_source_capture import (  # noqa: E402
 
 
 class SourceStabilityError(RuntimeError):
-    """Raised when stability probing cannot produce bounded observations."""
+    """Raised when stability probing violates the bounded observation contract."""
 
 
 def require(condition: bool, message: str) -> None:
@@ -38,15 +38,41 @@ def require(condition: bool, message: str) -> None:
         raise SourceStabilityError(message)
 
 
-def classify_observations(source_id: str, observations: list[dict[str, Any]]) -> dict[str, Any]:
+def classify_observations(
+    source_id: str, observations: list[dict[str, Any]]
+) -> dict[str, Any]:
     require(len(observations) >= 2, "at least two observations are required")
+
+    successful: list[dict[str, Any]] = []
+    failed: list[dict[str, Any]] = []
     for item in observations:
         require(item.get("source_id") == source_id, "observation source_id mismatch")
-        require(isinstance(item.get("sha256"), str), "observation sha256 missing")
-        require(isinstance(item.get("byte_length"), int), "observation byte_length missing")
-        require(isinstance(item.get("media_type"), str), "observation media_type missing")
-        require(isinstance(item.get("resolved_locator"), str), "observation resolved_locator missing")
-        require(isinstance(item.get("source_entry_sha256"), str), "observation source binding missing")
+        status = item.get("status")
+        require(status in {"success", "error"}, "observation status is invalid")
+        if status == "success":
+            for field, expected in (
+                ("sha256", str),
+                ("byte_length", int),
+                ("media_type", str),
+                ("resolved_locator", str),
+                ("source_entry_sha256", str),
+            ):
+                require(
+                    isinstance(item.get(field), expected),
+                    f"successful observation {field} missing",
+                )
+            successful.append(item)
+        else:
+            require(
+                isinstance(item.get("error_type"), str) and item.get("error_type"),
+                "failed observation error_type missing",
+            )
+            require(
+                isinstance(item.get("error_message"), str)
+                and item.get("error_message"),
+                "failed observation error_message missing",
+            )
+            failed.append(item)
 
     signatures = {
         (
@@ -56,31 +82,73 @@ def classify_observations(source_id: str, observations: list[dict[str, Any]]) ->
             item["resolved_locator"],
             item["source_entry_sha256"],
         )
-        for item in observations
+        for item in successful
     }
-    stable = len(signatures) == 1
+    exact_bytes_stable = len(successful) >= 2 and len(signatures) == 1
+    all_attempts_succeeded = len(failed) == 0
+    recapturable_surface_stable = all_attempts_succeeded and exact_bytes_stable
+
+    normalized: list[dict[str, Any]] = []
+    for item in observations:
+        if item["status"] == "success":
+            normalized.append(
+                {
+                    "status": "success",
+                    "sha256": item["sha256"],
+                    "byte_length": item["byte_length"],
+                    "media_type": item["media_type"],
+                    "resolved_locator": item["resolved_locator"],
+                    "source_entry_sha256": item["source_entry_sha256"],
+                }
+            )
+        else:
+            normalized.append(
+                {
+                    "status": "error",
+                    "error_type": item["error_type"],
+                    "error_message": item["error_message"],
+                }
+            )
+
     return {
         "schema": "axiom-curriculum-source-stability-observation.v1",
         "source_id": source_id,
         "attempt_count": len(observations),
-        "exact_bytes_stable_across_attempts": stable,
+        "successful_attempt_count": len(successful),
+        "failed_attempt_count": len(failed),
+        "all_attempts_succeeded": all_attempts_succeeded,
+        "exact_bytes_stable_across_successful_attempts": exact_bytes_stable,
         "distinct_exact_byte_signatures": len(signatures),
-        "observations": [
-            {
-                "sha256": item["sha256"],
-                "byte_length": item["byte_length"],
-                "media_type": item["media_type"],
-                "resolved_locator": item["resolved_locator"],
-                "source_entry_sha256": item["source_entry_sha256"],
-            }
-            for item in observations
-        ],
+        "recapturable_surface_stable": recapturable_surface_stable,
+        "observations": normalized,
         "claim_boundary": (
-            "This report observes repeatability of exact response bytes only. Stable bytes do not prove "
-            "curriculum correctness or completeness. Unstable bytes do not prove curriculum content changed; "
-            "they require a more stable authoritative source surface or separately reviewed canonicalization "
-            "before exact-byte drift can be interpreted semantically."
+            "This report observes repeatability and availability of the selected response surface only. "
+            "Stable responses do not prove curriculum correctness or completeness. Changed bytes, HTTP "
+            "errors, or other failed requests do not prove curriculum content changed; they require a more "
+            "stable authoritative source surface or separately reviewed canonicalization before exact-byte "
+            "drift can be interpreted semantically."
         ),
+    }
+
+
+def _success_observation(lock: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "status": "success",
+        "source_id": lock["source_id"],
+        "sha256": lock["sha256"],
+        "byte_length": lock["byte_length"],
+        "media_type": lock["media_type"],
+        "resolved_locator": lock["resolved_locator"],
+        "source_entry_sha256": lock["source_entry_sha256"],
+    }
+
+
+def _error_observation(source_id: str, error: Exception) -> dict[str, Any]:
+    return {
+        "status": "error",
+        "source_id": source_id,
+        "error_type": type(error).__name__,
+        "error_message": str(error),
     }
 
 
@@ -95,12 +163,17 @@ def probe(source_id: str, attempts: int, output: Path) -> dict[str, Any]:
         root = Path(directory)
         for index in range(attempts):
             candidate = root / f"candidate-{index + 1}.json"
-            observations.append(capture(source_id, candidate))
+            try:
+                observations.append(_success_observation(capture(source_id, candidate)))
+            except (OSError, KeyError, RemoteCaptureError, ValueError) as error:
+                observations.append(_error_observation(source_id, error))
 
     report = classify_observations(source_id, observations)
     report["capture_target_sha256"] = canonical_json_digest(target)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     return report
 
 
@@ -118,10 +191,11 @@ def main() -> int:
         report = probe(args.source_id, args.attempts, args.output)
         print(
             f"source stability observed: {report['source_id']} "
-            f"stable={report['exact_bytes_stable_across_attempts']} "
+            f"recapturable_surface_stable={report['recapturable_surface_stable']} "
+            f"success={report['successful_attempt_count']}/{report['attempt_count']} "
             f"signatures={report['distinct_exact_byte_signatures']}"
         )
-    except (OSError, KeyError, RemoteCaptureError, SourceStabilityError, ValueError) as error:
+    except (OSError, KeyError, SourceStabilityError, ValueError) as error:
         print(f"curriculum source stability probe failed: {error}", file=sys.stderr)
         return 1
     return 0
