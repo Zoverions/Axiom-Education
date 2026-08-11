@@ -1,0 +1,32 @@
+{
+  "schema": "axiom-curriculum-reference-slice.v1",
+  "slice_id": "ontario-hpe-grade1-c2-proof",
+  "stage": "C2-normalization-proof",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "language": "en",
+  "program_family": "english-language-schools",
+  "level": "elementary",
+  "grade_or_level": "1",
+  "subject_id": "health-and-physical-education",
+  "subject_name": "Health and Physical Education",
+  "effective_from": "2019-09",
+  "source_lock_path": "curriculum/ontario-elementary/source-locks/ontario-health-physical-education-grades-1-8-2019.v1.json",
+  "normalization_method": "reference-only-manual-structure-extraction-v1",
+  "normalized_at": "2026-08-11T21:18:00Z",
+  "complete_grade_claim_allowed": false,
+  "complete_subject_claim_allowed": false,
+  "human_source_review_status": "required",
+  "licensing_review_status": "required",
+  "claim_boundary": "This proof slice exercises the real C1-to-C2 normalization path for a narrow Grade 1 HPE sample. It stores identifiers, hierarchy, strand names, and source-page references only. It does not redistribute Ontario expectation wording, claim complete Grade 1 HPE coverage, or claim human source/licensing review.",
+  "records": [
+    {"official_id": "A1", "kind": "overall", "parent_official_id": null, "strand_id": "A", "strand_name": "Social-Emotional Learning Skills", "official_page": 94},
+    {"official_id": "A1.1", "kind": "specific", "parent_official_id": "A1", "strand_id": "A", "strand_name": "Social-Emotional Learning Skills", "official_page": 94},
+    {"official_id": "B1", "kind": "overall", "parent_official_id": null, "strand_id": "B", "strand_name": "Active Living", "official_page": 97},
+    {"official_id": "B1.1", "kind": "specific", "parent_official_id": "B1", "strand_id": "B", "strand_name": "Active Living", "official_page": 97},
+    {"official_id": "C1", "kind": "overall", "parent_official_id": null, "strand_id": "C", "strand_name": "Movement Competence: Skills, Concepts, and Strategies", "official_page": 101},
+    {"official_id": "C1.1", "kind": "specific", "parent_official_id": "C1", "strand_id": "C", "strand_name": "Movement Competence: Skills, Concepts, and Strategies", "official_page": 101},
+    {"official_id": "D1", "kind": "overall", "parent_official_id": null, "strand_id": "D", "strand_name": "Healthy Living", "official_page": 104},
+    {"official_id": "D1.1", "kind": "specific", "parent_official_id": "D1", "strand_id": "D", "strand_name": "Healthy Living", "official_page": 105}
+  ]
+}
