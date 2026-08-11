@@ -1,0 +1,48 @@
+{
+  "schema": "axiom-curriculum-standard-record.v2",
+  "stage": "C2-normalized",
+  "record_id": "ca:on:hpe:grade-1:a1",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "language": "en",
+  "education_context": {
+    "program_family": "english-language-schools",
+    "level": "elementary",
+    "grade_or_level": "1",
+    "subject_id": "health-and-physical-education",
+    "subject_name": "Health and Physical Education",
+    "course_code": null,
+    "course_name": null
+  },
+  "standard": {
+    "official_id": "A1",
+    "kind": "overall",
+    "parent_official_id": null,
+    "strand_id": "A",
+    "strand_name": "Social-Emotional Learning Skills",
+    "content": {
+      "mode": "reference-only",
+      "text": null,
+      "official_text_sha256": null
+    }
+  },
+  "source": {
+    "source_id": "ontario-health-physical-education-grades-1-8-2019",
+    "source_lock_sha256": "d5effa1a696250abe75704ce46c93cde37ab1d418b94920517084c0c0843adac",
+    "upstream_document_sha256": "37416922ca741b1fb32a0708442738ae8d964d974c3315d04cdcc8bd2e652622",
+    "official_locator": "https://www.edu.gov.on.ca/eng/curriculum/elementary/2019-health-physical-education-grades-1to8.pdf",
+    "official_recognition": true,
+    "effective_from": "2019-09",
+    "effective_to": null
+  },
+  "provenance": {
+    "normalization_method": "reference-only-manual-structure-extraction-v1",
+    "normalized_at": "2026-08-11T21:18:00Z",
+    "human_source_review_status": "required"
+  },
+  "axiom_metadata": {
+    "namespace": "org.axiom.education",
+    "tags": ["grade-1", "hpe", "proof-slice", "reference-only"]
+  },
+  "content_digest": "679edf5fedb2d9d62cae4cce8c88f68ccfe3d8a459e9c5ae5b44092096b5fbe1"
+}
