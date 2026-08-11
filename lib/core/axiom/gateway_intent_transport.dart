@@ -236,7 +236,7 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
     }
     final traceId = _header(response.headers, 'x-trace-id');
     final mediaType = (_header(response.headers, 'content-type') ?? '')
-        .split(';', 1)
+        .split(';')
         .first
         .trim()
         .toLowerCase();
