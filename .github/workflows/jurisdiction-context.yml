@@ -8,7 +8,9 @@ on:
       - 'contracts/axiom-education-experience-provider.v1.json'
       - 'curriculum/ontario-elementary/**'
       - 'tools/jurisdiction_context.py'
+      - 'tools/check_ontario_elementary_discovery.py'
       - 'tests/test_jurisdiction_context.py'
+      - 'tests/test_ontario_elementary_discovery.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
@@ -30,5 +32,9 @@ jobs:
           python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
           python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
-      - name: Run jurisdiction resolver tests
-        run: python -m unittest tests.test_jurisdiction_context -v
+      - name: Validate Ontario Elementary discovery accounting
+        run: python tools/check_ontario_elementary_discovery.py
+      - name: Run jurisdiction and discovery tests
+        run: |
+          python -m unittest tests.test_jurisdiction_context -v
+          python -m unittest tests.test_ontario_elementary_discovery -v
