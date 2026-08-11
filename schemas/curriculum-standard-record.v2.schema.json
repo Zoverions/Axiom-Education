@@ -6,6 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema",
+    "stage",
     "record_id",
     "jurisdiction_id",
     "authority_id",
@@ -19,6 +20,7 @@
   ],
   "properties": {
     "schema": {"const": "axiom-curriculum-standard-record.v2"},
+    "stage": {"const": "C2-normalized"},
     "record_id": {"type": "string", "minLength": 8, "maxLength": 300},
     "jurisdiction_id": {"type": "string", "minLength": 1, "maxLength": 128},
     "authority_id": {"type": "string", "minLength": 1, "maxLength": 256},
