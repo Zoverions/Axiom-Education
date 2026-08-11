@@ -12,8 +12,10 @@ on:
       - 'tools/curriculum_source_lock.py'
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/attempt_pending_curriculum_capture.py'
       - 'tests/test_curriculum_source_discovery.py'
       - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_pending_curriculum_capture.py'
       - '.github/workflows/ontario-elementary-pending-source-capture.yml'
   workflow_dispatch:
 
@@ -34,6 +36,7 @@ jobs:
       - name: Verify append-only discovery and bounded target
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
           python tools/check_curriculum_source_monitoring.py
       - name: Observe Arts response surface three times
@@ -52,7 +55,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  capture-arts-c1-candidate:
+  attempt-arts-c1-candidate:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -65,28 +68,26 @@ jobs:
       - name: Verify append-only discovery and bounded target
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
           python tools/check_curriculum_source_monitoring.py
-      - name: Capture one exact Arts C1 candidate with bounded availability retries
+      - name: Attempt bounded Arts capture and preserve either outcome
         run: |
           mkdir -p /tmp/axiom-arts-candidate
-          captured=0
-          for attempt in 1 2 3; do
-            if python tools/remote_curriculum_source_capture.py capture \
-              --source-id ontario-arts-grades-1-8-2009 \
-              --output /tmp/axiom-arts-candidate/source-lock-candidate.json; then
-              captured=1
-              break
-            fi
-          done
-          test "$captured" -eq 1
-          python tools/curriculum_source_lock.py verify \
-            /tmp/axiom-arts-candidate/source-lock-candidate.json
-          test "$(find /tmp/axiom-arts-candidate -maxdepth 1 -type f | wc -l)" -eq 1
-      - name: Upload metadata-only Arts C1 candidate
+          python tools/attempt_pending_curriculum_capture.py \
+            --source-id ontario-arts-grades-1-8-2009 \
+            --attempts 3 \
+            --candidate-output /tmp/axiom-arts-candidate/source-lock-candidate.json \
+            --status-output /tmp/axiom-arts-candidate/capture-attempt.json
+          python -m json.tool /tmp/axiom-arts-candidate/capture-attempt.json >/dev/null
+          if test -f /tmp/axiom-arts-candidate/source-lock-candidate.json; then
+            python tools/curriculum_source_lock.py verify \
+              /tmp/axiom-arts-candidate/source-lock-candidate.json
+          fi
+      - name: Upload metadata-only Arts capture-attempt evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
-          name: ontario-elementary-arts-c1-candidate-${{ github.sha }}
-          path: /tmp/axiom-arts-candidate/source-lock-candidate.json
+          name: ontario-elementary-arts-capture-attempt-${{ github.sha }}
+          path: /tmp/axiom-arts-candidate/
           if-no-files-found: error
           retention-days: 7
