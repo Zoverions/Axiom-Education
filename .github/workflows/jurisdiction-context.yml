@@ -1,0 +1,34 @@
+name: Jurisdiction and Curriculum Foundation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'contracts/axiom-education-jurisdiction.v1.json'
+      - 'contracts/axiom-education-experience-provider.v1.json'
+      - 'curriculum/ontario-elementary/**'
+      - 'tools/jurisdiction_context.py'
+      - 'tests/test_jurisdiction_context.py'
+      - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
+      - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
+      - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
+      - '.github/workflows/jurisdiction-context.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate architecture JSON
+        run: |
+          python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
+          python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
+      - name: Run jurisdiction resolver tests
+        run: python -m unittest tests.test_jurisdiction_context -v
