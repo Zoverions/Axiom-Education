@@ -1,8 +1,8 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.1.0",
+  "targets_version": "1.2.0",
   "jurisdiction_id": "ca:on",
-  "claim_boundary": "Targets are verified official download routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
+  "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
     {
       "source_id": "ontario-health-physical-education-grades-1-8-2019",
@@ -31,6 +31,48 @@
       "redistribution_status": "review-required",
       "source_resolution_status": "official-publication-access-link-resolved",
       "notes": "Publications Ontario record CL32210 identifies Mathematics 2020: The Ontario Curriculum Grades 1-8 and its official Access Link resolves to this exact PDF on the Ontario publication CDN."
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-language",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL33241",
+      "publication_number": "CL33241",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-language",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "Publications Ontario record CL33241 identifies The Ontario Curriculum Grades 1-8: Language 2023. The current official DCP curriculum route is captured as the authoritative structured-source byte snapshot rather than assuming a separate PDF exists."
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL31757",
+      "publication_number": "CL31757",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "Publications Ontario record CL31757 identifies Ontario Curriculum, Grades 1-8, Science and Technology, 2022. The current official DCP curriculum route is captured as the authoritative structured-source byte snapshot."
+    },
+    {
+      "source_id": "ontario-fsl-grades-1-8-2013",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-fsl/grades-list?grade=n1",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/ontario-curriculum-french-as-a-second-language-grades-1-8-revised-2013-232944",
+      "publication_number": "232944",
+      "download_url": "https://www.edu.gov.on.ca/eng/curriculum/elementary/fsl18-2013curr.pdf",
+      "allowed_hosts": ["www.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario identifies the revised 2013 elementary FSL curriculum (publication 232944); the official Access Link resolves to the Ministry PDF covering Core French Grades 4-8, Extended French Grades 4-8, and French Immersion Grades 1-8."
     }
   ]
 }
