@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/source-license-review.v1.schema.json",
+  "title": "Axiom Education Source Licence Review v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "review_id",
+    "course_code",
+    "source_url",
+    "source_use_sha256",
+    "reviewer",
+    "reviewed_at",
+    "decision",
+    "redistribution_allowed_as_used",
+    "evidence_locators",
+    "findings",
+    "scope_limitations",
+    "attestation_type"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-source-licence-review.v1"},
+    "review_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "course_code": {"const": "MTH1W"},
+    "source_url": {"type": "string", "pattern": "^https://"},
+    "source_use_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qualification"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qualification": {"type": "string", "minLength": 1},
+        "organization": {"type": ["string", "null"]}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "decision": {
+      "enum": [
+        "permitted-as-used",
+        "permission-required",
+        "replace-source",
+        "restricted",
+        "unresolved"
+      ]
+    },
+    "redistribution_allowed_as_used": {"type": "boolean"},
+    "evidence_locators": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^https://"}
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "description", "disposition"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["note", "minor", "major", "critical"]},
+          "description": {"type": "string", "minLength": 1},
+          "disposition": {"enum": ["open", "resolved", "accepted-with-rationale", "not-applicable"]},
+          "resolution_reference": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "scope_limitations": {"type": "array", "items": {"type": "string"}},
+    "attestation_type": {"const": "human-licensing-review"},
+    "notes": {"type": "string"}
+  }
+}
