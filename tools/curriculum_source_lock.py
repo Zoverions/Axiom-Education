@@ -17,6 +17,14 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.curriculum_source_discovery import (  # noqa: E402
+    SourceDiscoveryError,
+    load_effective_discovery,
+)
+
 DEFAULT_DISCOVERY = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
 DEFAULT_LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -69,13 +77,10 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def load_discovery(path: Path) -> dict[str, Any]:
-    discovery = load_json(path)
-    require(
-        discovery.get("schema") == "axiom-curriculum-source-discovery.v1",
-        "unsupported discovery schema",
-    )
-    require(discovery.get("state") == "C0-discovered", "source discovery must remain C0")
-    return discovery
+    try:
+        return load_effective_discovery(path)
+    except SourceDiscoveryError as error:
+        raise SourceLockError(str(error)) from error
 
 
 def find_source(discovery: dict[str, Any], source_id: str) -> dict[str, Any]:
