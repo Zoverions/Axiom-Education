@@ -1,0 +1,162 @@
+{
+  "schema": "axiom-curriculum-source-discovery.v1",
+  "discovery_version": "0.1.0",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "scope": "kindergarten-and-grades-1-8",
+  "retrieved_on": "2026-08-10",
+  "state": "C0-discovered",
+  "claim_boundary": "This file records official-source discovery only. Source bytes/digests, licensing review, complete expectation extraction, deterministic pack build, signing, independent verification, staging, and activation have not yet been completed.",
+  "official_entry_points": [
+    {
+      "source_id": "ontario-curriculum-portal",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum",
+      "authority": "Ontario Ministry of Education",
+      "classification": "official-curriculum-portal",
+      "notes": "Official Curriculum and Resources entry point for elementary and secondary curriculum. Some curriculum is still redirected to other official sites."
+    },
+    {
+      "source_id": "ontario-schools-learning-programs",
+      "url": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs",
+      "authority": "Ontario Ministry of Education",
+      "classification": "official-policy",
+      "notes": "Defines required elementary curriculum families and distinguishes English-language and French-language school programs."
+    }
+  ],
+  "confirmed_curriculum_sources": [
+    {
+      "source_id": "ontario-kindergarten-2026",
+      "subject_family": "kindergarten",
+      "grades": ["K1", "K2"],
+      "policy_version": "2026",
+      "effective_context": "2026-2027 school year",
+      "url": "https://www.ontario.ca/page/kindergarten",
+      "classification": "official-current-overview",
+      "status_note": "Ontario states that The Ontario Curriculum, Kindergarten, 2026 replaces The Kindergarten Program, 2016 beginning in the 2026-27 school year.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-discovered"
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "subject_family": "mathematics",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2020",
+      "url": "https://www.ontario.ca/page/math-curriculum-grades-1-8",
+      "classification": "official-current-overview",
+      "status_note": "Official Ontario page identifies the 2020 elementary mathematics curriculum as the Grades 1-8 curriculum.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-discovered"
+    },
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "subject_family": "health-and-physical-education",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2019",
+      "url": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
+      "classification": "official-current-curriculum-guide",
+      "status_note": "Official Ontario page identifies the 2019 HPE curriculum for Grades 1-8 and links the curriculum document.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-discovered"
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "subject_family": "language-english-schools",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2023",
+      "url": "https://www.ontario.ca/page/growing-success-assessment-evaluation-and-reporting-ontario-schools-kindergarten-grade-12",
+      "classification": "official-policy-confirmation",
+      "status_note": "Official assessment/reporting policy identifies the revised The Ontario Curriculum: Language, Grades 1-8, 2023. Exact curriculum source/document remains to be captured from the official curriculum portal.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "version-confirmed-source-document-pending"
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "subject_family": "science-and-technology",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2022",
+      "url": "https://news.ontario.ca/en/release/1001722/ontario-modernizing-school-science-curriculum",
+      "classification": "official-version-announcement",
+      "status_note": "Official Ministry announcement confirms The Ontario Curriculum, Grades 1 to 8: Science and Technology, 2022. Exact curriculum source/document remains to be captured from the official curriculum portal.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "version-confirmed-source-document-pending"
+    },
+    {
+      "source_id": "ontario-social-studies-history-geography",
+      "subject_family": "social-studies-history-geography",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "mixed-current-review-required",
+      "url": "https://www.ontario.ca/page/indigenous-education-ontario",
+      "classification": "official-policy-confirmation",
+      "status_note": "Official Ontario page confirms revised Social Studies Grades 1-6 and History/Geography Grades 7-8 were implemented in 2018. Separate 2026 official materials indicate new learning in Grades 7-8 History for 2026-27, so exact current source/version boundaries require capture before normalization.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "current-version-boundary-review-required"
+    }
+  ],
+  "required_program_families": {
+    "english_language_schools": [
+      "the-arts",
+      "french-as-a-second-language",
+      "language",
+      "health-and-physical-education",
+      "mathematics",
+      "science-and-technology",
+      "social-studies-grades-1-6",
+      "history-and-geography-grades-7-8"
+    ],
+    "french_language_schools": [
+      "the-arts",
+      "english",
+      "french",
+      "health-and-physical-education",
+      "mathematics",
+      "science-and-technology",
+      "social-studies-grades-1-6",
+      "history-and-geography-grades-7-8"
+    ],
+    "source": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs"
+  },
+  "policy_overlays_discovered": [
+    {
+      "policy_id": "ontario-growing-success",
+      "url": "https://www.ontario.ca/page/growing-success-assessment-evaluation-and-reporting-ontario-schools-kindergarten-grade-12",
+      "classification": "assessment-evaluation-reporting",
+      "notes": "Assessment/reporting policy is a separate policy artifact and must not be flattened into curriculum expectations. Current page includes updates for revised Language 2023 and Mathematics 2020 reporting."
+    },
+    {
+      "policy_id": "ontario-ppm-160-math-time",
+      "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/policyprogram-memorandum-160",
+      "classification": "instructional-time-policy",
+      "notes": "Protected mathematics instructional time is a program-policy overlay, not a curriculum expectation."
+    },
+    {
+      "policy_id": "ontario-ppm-162-hpe-exemption",
+      "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/policyprogram-memorandum-162",
+      "classification": "guardian-exemption-policy",
+      "notes": "Defines a parent-requested exemption mechanism for the Human Development and Sexual Health expectations in Grades 1-8 HPE. This belongs in jurisdiction policy/authority logic, not curriculum-content normalization alone."
+    },
+    {
+      "policy_id": "ontario-early-reading-screening",
+      "url": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs",
+      "classification": "screening-policy",
+      "notes": "Ontario Schools policy identifies annual early reading screening requirements for Year 2 Kindergarten through Grade 2. Exact PPM/source capture is still required."
+    }
+  ],
+  "unresolved_source_work": [
+    "Capture the exact current official curriculum document/structured source for Language Grades 1-8 2023.",
+    "Capture the exact current official curriculum document/structured source for Science and Technology Grades 1-8 2022.",
+    "Resolve the 2026 Grade 7-8 History update against the prior Social Studies/History/Geography source and effective dates.",
+    "Capture current official The Arts Grades 1-8 source/version.",
+    "Capture current official French as a Second Language source/version for English-language schools.",
+    "Capture current official French-language-school French and English curriculum sources/versions.",
+    "Identify current Indigenous/Native/International language curriculum relationships and whether they belong in the base pack or optional program overlays.",
+    "Capture exact Kindergarten 2026 policy document bytes rather than relying on the overview page.",
+    "Review copyright/licensing/redistribution terms for every source before packaging official text.",
+    "Archive exact source bytes and SHA-256 digests before any record is promoted beyond C0 discovery."
+  ]
+}
