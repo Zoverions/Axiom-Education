@@ -29,15 +29,27 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             {
                 "ontario-health-physical-education-grades-1-8-2019",
                 "ontario-mathematics-grades-1-8-2020",
+                "ontario-language-grades-1-8-2023",
+                "ontario-science-technology-grades-1-8-2022",
+                "ontario-fsl-grades-1-8-2013",
             },
         )
         hpe = targets["ontario-health-physical-education-grades-1-8-2019"]
         math = targets["ontario-mathematics-grades-1-8-2020"]
+        language = targets["ontario-language-grades-1-8-2023"]
+        science = targets["ontario-science-technology-grades-1-8-2022"]
+        fsl = targets["ontario-fsl-grades-1-8-2013"]
         self.assertEqual(hpe["host_policy"], "ontario-government")
         self.assertEqual(hpe["allowed_hosts"], ["www.edu.gov.on.ca"])
         self.assertEqual(math["host_policy"], "publications-ontario-access-cdn")
         self.assertEqual(math["allowed_hosts"], ["assets-us-01.kc-usercontent.com"])
         self.assertEqual(math["publication_number"], "CL32210")
+        self.assertEqual(language["expected_media_type"], "text/html")
+        self.assertEqual(language["allowed_hosts"], ["www.dcp.edu.gov.on.ca"])
+        self.assertEqual(science["expected_media_type"], "text/html")
+        self.assertEqual(science["allowed_hosts"], ["www.dcp.edu.gov.on.ca"])
+        self.assertEqual(fsl["expected_media_type"], "application/pdf")
+        self.assertEqual(fsl["publication_number"], "232944")
         self.assertTrue(all(target["redistribution_status"] == "review-required" for target in targets.values()))
 
     def test_arbitrary_non_government_host_is_rejected_under_government_policy(self):
@@ -80,6 +92,18 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             )
         )
         with self.assertRaisesRegex(RemoteCaptureError, "bound into the Publications Ontario URL"):
+            validate_target_registry(path)
+
+    def test_dcp_structured_source_remains_under_government_host_policy(self):
+        path = self.mutation(
+            lambda payload: payload["targets"][2].update(
+                {
+                    "download_url": "https://example.com/language",
+                    "allowed_hosts": ["example.com"],
+                }
+            )
+        )
+        with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
             validate_target_registry(path)
 
     def test_source_locator_must_already_exist_in_discovery(self):
