@@ -1,0 +1,21 @@
+{
+  "schema": "axiom-curriculum-remote-capture-targets.v1",
+  "targets_version": "1.0.0",
+  "jurisdiction_id": "ca:on",
+  "claim_boundary": "Targets are verified official download routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
+  "targets": [
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "source_locator": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/022574",
+      "publication_number": "022574",
+      "download_url": "https://www.edu.gov.on.ca/eng/curriculum/elementary/2019-health-physical-education-grades-1to8.pdf",
+      "allowed_hosts": ["www.edu.gov.on.ca"],
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario identifies publication 022574 as Ontario Curriculum, Grades 1-8: Health and Physical Education, 2019 and its Access Link resolves to this Ministry of Education PDF. Exact bytes still require an explicit capture run."
+    }
+  ]
+}
