@@ -47,19 +47,19 @@
       "actors": ["educator"],
       "from": ["submitted"],
       "to": "under-review",
-      "required_digests": []
+      "required_digests": ["artifact_digest"]
     },
     "feedback.recorded": {
       "actors": ["educator"],
       "from": ["under-review"],
       "to": "feedback-available",
-      "required_digests": ["feedback_digest"]
+      "required_digests": ["artifact_digest", "feedback_digest"]
     },
     "revision.requested": {
       "actors": ["educator"],
       "from": ["feedback-available"],
       "to": "revision-requested",
-      "required_digests": ["feedback_digest"]
+      "required_digests": ["artifact_digest", "feedback_digest"]
     },
     "submission.resubmitted": {
       "actors": ["learner"],
@@ -71,25 +71,25 @@
       "actors": ["educator"],
       "from": ["under-review", "feedback-available", "corrected"],
       "to": "finalized",
-      "required_digests": []
+      "required_digests": ["artifact_digest"]
     },
     "appeal.filed": {
       "actors": ["learner", "authorized-representative"],
       "from": ["feedback-available", "finalized"],
       "to": "appealed",
-      "required_digests": ["reason_digest"]
+      "required_digests": ["artifact_digest", "reason_digest"]
     },
     "appeal.review.started": {
       "actors": ["educator"],
       "from": ["appealed"],
       "to": "under-review",
-      "required_digests": []
+      "required_digests": ["artifact_digest"]
     },
     "correction.recorded": {
       "actors": ["educator"],
       "from": ["under-review", "feedback-available"],
       "to": "corrected",
-      "required_digests": ["feedback_digest"]
+      "required_digests": ["artifact_digest", "feedback_digest"]
     }
   },
   "projection": {
