@@ -403,9 +403,7 @@ class EducatorWorkflowEvent {
       'actor_role': actorRole,
     }.entries) {
       if (entry.value.trim().isEmpty) {
-        throw EducatorWorkflowValidationException(
-          '${entry.key} is required.',
-        );
+        throw EducatorWorkflowValidationException('${entry.key} is required.');
       }
     }
 
