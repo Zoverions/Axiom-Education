@@ -32,6 +32,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
                 "ontario-fsl-grades-1-8-2013",
+                "ontario-arts-grades-1-8-2009",
             },
         )
         hpe = targets["ontario-health-physical-education-grades-1-8-2019"]
@@ -39,6 +40,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         language = targets["ontario-language-grades-1-8-2023"]
         science = targets["ontario-science-technology-grades-1-8-2022"]
         fsl = targets["ontario-fsl-grades-1-8-2013"]
+        arts = targets["ontario-arts-grades-1-8-2009"]
         self.assertEqual(hpe["host_policy"], "ontario-government")
         self.assertEqual(hpe["allowed_hosts"], ["www.edu.gov.on.ca"])
         self.assertEqual(math["host_policy"], "publications-ontario-access-cdn")
@@ -50,6 +52,13 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertEqual(science["allowed_hosts"], ["www.dcp.edu.gov.on.ca"])
         self.assertEqual(fsl["expected_media_type"], "application/pdf")
         self.assertEqual(fsl["publication_number"], "232944")
+        self.assertEqual(arts["host_policy"], "ontario-government")
+        self.assertEqual(arts["expected_media_type"], "text/html")
+        self.assertEqual(
+            arts["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+        )
+        self.assertEqual(arts["source_resolution_status"], "official-current-structured-source-resolved-pending-c1")
         self.assertTrue(all(target["redistribution_status"] == "review-required" for target in targets.values()))
 
     def test_arbitrary_non_government_host_is_rejected_under_government_policy(self):
@@ -106,7 +115,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
             validate_target_registry(path)
 
-    def test_source_locator_must_already_exist_in_discovery(self):
+    def test_source_locator_must_already_exist_in_effective_discovery(self):
         path = self.mutation(
             lambda payload: payload["targets"][0].update(
                 {"source_locator": "https://www.ontario.ca/not-recorded"}
@@ -114,6 +123,14 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(RemoteCaptureError, "recorded in C0 discovery"):
             validate_target_registry(path)
+
+    def test_arts_locator_is_resolved_by_append_only_discovery_amendment(self):
+        targets = validate_target_registry()
+        arts = targets["ontario-arts-grades-1-8-2009"]
+        self.assertEqual(
+            arts["download_url"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+        )
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
         path = self.mutation(
