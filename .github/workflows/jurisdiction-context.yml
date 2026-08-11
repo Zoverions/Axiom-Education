@@ -19,16 +19,22 @@ on:
       - 'tools/curriculum_source_lock.py'
       - 'tools/curriculum_standard_record.py'
       - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/check_curriculum_source_monitoring.py'
+      - 'tools/probe_curriculum_source_stability.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_lock.py'
       - 'tests/test_curriculum_standard_record.py'
       - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_curriculum_source_monitoring.py'
+      - 'tests/test_curriculum_source_stability.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
       - '.github/workflows/jurisdiction-context.yml'
       - '.github/workflows/ontario-elementary-source-capture.yml'
+      - '.github/workflows/ontario-elementary-source-drift.yml'
+      - '.github/workflows/ontario-elementary-source-stability.yml'
 
 permissions:
   contents: read
@@ -50,12 +56,15 @@ jobs:
           python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-capture-targets.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-monitoring.v1.json >/dev/null
           python -m json.tool schemas/curriculum-source-lock.v1.schema.json >/dev/null
           python -m json.tool schemas/curriculum-standard-record.v2.schema.json >/dev/null
       - name: Validate Ontario Elementary discovery accounting
         run: python tools/check_ontario_elementary_discovery.py
-      - name: Validate bounded remote capture targets without network access
-        run: python tools/remote_curriculum_source_capture.py validate-targets
+      - name: Validate bounded remote capture and monitoring policy without network access
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
       - name: Validate source-lock directory boundary
         run: |
           python tools/curriculum_source_lock.py verify-directory \
@@ -67,10 +76,12 @@ jobs:
             --directory curriculum/ontario-elementary/records-v2 \
             --lock-dir curriculum/ontario-elementary/source-locks \
             --allow-empty
-      - name: Run jurisdiction, discovery, source-lock, C2, and remote-capture tests
+      - name: Run jurisdiction, discovery, source-lock, C2, capture, and monitoring tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
           python -m unittest tests.test_ontario_elementary_discovery -v
           python -m unittest tests.test_curriculum_source_lock -v
           python -m unittest tests.test_curriculum_standard_record -v
           python -m unittest tests.test_remote_curriculum_source_capture -v
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python -m unittest tests.test_curriculum_source_stability -v
