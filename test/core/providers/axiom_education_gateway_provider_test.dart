@@ -22,18 +22,21 @@ AxiomGatewayRawResponse _successResponse() => AxiomGatewayRawResponse(
 );
 
 void main() {
-  test('default provider is explicitly unbound and creates no network path', () {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
+  test(
+    'default provider is explicitly unbound and creates no network path',
+    () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
 
-    final state = container.read(governedEducationRuntimeProvider);
-    expect(state, isA<GovernedEducationRuntimeUnbound>());
-    expect(state.isBound, isFalse);
-    expect(
-      (state as GovernedEducationRuntimeUnbound).reason,
-      contains('No reviewed AXIOM Gateway host binding'),
-    );
-  });
+      final state = container.read(governedEducationRuntimeProvider);
+      expect(state, isA<GovernedEducationRuntimeUnbound>());
+      expect(state.isBound, isFalse);
+      expect(
+        (state as GovernedEducationRuntimeUnbound).reason,
+        contains('No reviewed AXIOM Gateway host binding'),
+      );
+    },
+  );
 
   test('reviewed host override creates bounded read/write services lazily', () {
     var requests = 0;
