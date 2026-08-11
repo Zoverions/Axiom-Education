@@ -64,6 +64,16 @@
     "constructed_response_scoring_review_status": "required",
     "student_grade_or_credit_evidence": false
   },
+  "human_review_evidence": {
+    "schema_path": "schemas/content-review-evidence.v1.schema.json",
+    "verification_tool": "tools/mth1w_review_evidence.py",
+    "verification_status": "machine-verified-review-contract",
+    "content_addressed_lesson_targets": 43,
+    "submitted_review_records": 0,
+    "approved_educator_instructional_reviews": 0,
+    "educator_review_gate_satisfied": false,
+    "claim_boundary": "A machine-verified review contract creates no human approval. Submitted review evidence must bind to the exact current lesson digest and negative findings remain provenance."
+  },
   "local_snapshot": {
     "record_count": 11,
     "review_status": "machine-transcription-requires-course-review",
