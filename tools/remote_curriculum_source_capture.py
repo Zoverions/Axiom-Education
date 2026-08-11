@@ -3,7 +3,8 @@
 
 Remote capture is deliberately allowlisted. The caller supplies a source_id, never an
 arbitrary URL. Downloaded bytes are held only in a temporary file and deleted after the
-lock candidate is written.
+lock candidate is written. Non-gov Ontario publication CDN targets require an exact
+Publications Ontario catalogue provenance record and an explicitly approved CDN host.
 """
 
 from __future__ import annotations
@@ -22,6 +23,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGETS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-capture-targets.v1.json"
 DISCOVERY_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
+PUBLICATIONS_ONTARIO_HOST = "www.publications.gov.on.ca"
+APPROVED_PUBLICATION_CDN_HOSTS = {"assets-us-01.kc-usercontent.com"}
+ALLOWED_HOST_POLICIES = {
+    "ontario-government",
+    "publications-ontario-access-cdn",
+}
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -72,6 +79,40 @@ def validate_url(url: object, allowed_hosts: set[str], field: str) -> str:
     return url
 
 
+def validate_publication_catalog(target: dict[str, Any], source_id: str) -> None:
+    publication_url = target.get("publication_catalog_url")
+    require(isinstance(publication_url, str) and publication_url, f"{source_id}: Publications Ontario catalogue URL is required")
+    parsed = urllib.parse.urlparse(publication_url)
+    require(
+        parsed.scheme == "https" and parsed.hostname == PUBLICATIONS_ONTARIO_HOST,
+        f"{source_id}: publication catalog must be Publications Ontario",
+    )
+    publication_number = target.get("publication_number")
+    require(isinstance(publication_number, str) and publication_number, f"{source_id}: publication_number is required")
+    require(
+        publication_number.lower() in parsed.path.lower(),
+        f"{source_id}: publication_number must be bound into the Publications Ontario URL",
+    )
+
+
+def validate_host_policy(target: dict[str, Any], source_id: str, allowed_hosts: set[str]) -> None:
+    policy = target.get("host_policy")
+    require(policy in ALLOWED_HOST_POLICIES, f"{source_id}: invalid host_policy")
+    if policy == "ontario-government":
+        for host in allowed_hosts:
+            require(
+                host.endswith(".gov.on.ca") or host == "gov.on.ca",
+                f"{source_id}: non-Ontario-government host is forbidden under government policy: {host}",
+            )
+        return
+
+    validate_publication_catalog(target, source_id)
+    require(
+        allowed_hosts.issubset(APPROVED_PUBLICATION_CDN_HOSTS),
+        f"{source_id}: publication CDN host is not explicitly approved: {sorted(allowed_hosts - APPROVED_PUBLICATION_CDN_HOSTS)}",
+    )
+
+
 def validate_target_registry(path: Path = TARGETS_PATH) -> dict[str, dict[str, Any]]:
     payload = load_targets(path)
     discovery = load_discovery(DISCOVERY_PATH)
@@ -100,8 +141,7 @@ def validate_target_registry(path: Path = TARGETS_PATH) -> dict[str, dict[str, A
         )
         allowed_hosts = set(allowed_raw)
         require(len(allowed_hosts) == len(allowed_raw), f"{source_id}: allowed_hosts contains duplicates")
-        for host in allowed_hosts:
-            require(host.endswith(".gov.on.ca") or host == "gov.on.ca", f"{source_id}: non-Ontario-government host is forbidden: {host}")
+        validate_host_policy(target, source_id, allowed_hosts)
 
         source_locator = target.get("source_locator")
         require(
@@ -124,10 +164,7 @@ def validate_target_registry(path: Path = TARGETS_PATH) -> dict[str, dict[str, A
             target.get("redistribution_status") in {"review-required", "external-only"},
             f"{source_id}: remote capture cannot pre-approve redistribution",
         )
-        publication_url = target.get("publication_catalog_url")
-        if publication_url is not None:
-            parsed = urllib.parse.urlparse(str(publication_url))
-            require(parsed.scheme == "https" and parsed.hostname == "www.publications.gov.on.ca", f"{source_id}: publication catalog must be Publications Ontario")
+        validate_publication_catalog(target, source_id)
         index[source_id] = target
     return index
 
