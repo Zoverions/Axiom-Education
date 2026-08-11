@@ -74,6 +74,20 @@
     "educator_review_gate_satisfied": false,
     "claim_boundary": "A machine-verified review contract creates no human approval. Submitted review evidence must bind to the exact current lesson digest and negative findings remain provenance."
   },
+  "accessible_offline_delivery": {
+    "verification_tool": "tools/mth1w_accessible_export.py",
+    "verification_status": "machine-verified-draft-alternative",
+    "lesson_exports": 43,
+    "student_and_answer_key_separated": true,
+    "format": "text/markdown; charset=utf-8",
+    "deterministic_build": true,
+    "printable_equivalent_required": true,
+    "nonvisual_route_required": true,
+    "representation_text_alternatives_required": true,
+    "human_accessibility_review_status": "required",
+    "accessibility_gate_satisfied": false,
+    "claim_boundary": "Deterministic text alternatives provide an offline, printable, nonvisual delivery route but do not establish WCAG, AODA, assistive-technology, cognitive-accessibility, or usability conformance."
+  },
   "local_snapshot": {
     "record_count": 11,
     "review_status": "machine-transcription-requires-course-review",
