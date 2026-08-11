@@ -9,7 +9,23 @@
 
 ## One-sentence definition
 
-Axiom Education is a local-first adaptive education application that uses signed jurisdictional curriculum packs and separately governed education capabilities to provide tutoring, assessment, learner records, classroom synchronization, and portable evidence without granting the application ambient authority over a learner's data or device.
+Axiom Education is a local-first, lifelong education platform that uses signed jurisdictional curriculum packs and separately governed education capabilities to support learning, assessment, learner records, classroom and experience synchronization, and portable evidence across age groups and life stages without granting any application, curriculum, institution, or provider ambient authority over a learner's data or device.
+
+## Product scope
+
+Axiom Education is not a high-school application, an Ontario-only application, or a single curriculum product. Those are deployable surfaces inside the broader education domain.
+
+The platform is intended to support, through different curriculum packs and experience layers:
+
+- early-years and elementary learning;
+- secondary and home-learning pathways;
+- post-secondary, apprenticeship, and professional learning;
+- workplace training and reskilling;
+- civic, hobby, project, and self-directed learning;
+- later-life learning;
+- movement between jurisdictions, institutions, programs, and experience providers without discarding governed learner history.
+
+Ontario is the first supported jurisdiction. Ontario Kindergarten / Grades 1-8 and Ontario Secondary are separate curriculum tracks that share generic jurisdiction, curriculum-pack, learner, evidence, consent, portability, and provider infrastructure. MTH1W is the first deep secondary course vertical slice; it is an implementation priority, not the product definition.
 
 ## Product boundary
 
@@ -18,11 +34,11 @@ Axiom Education remains an independently releasable Flutter application and educ
 The intended governed effect path is:
 
 ```text
-Axiom Education UI
+Axiom Education UI / experience layer
   -> AXIOM Gateway
   -> policy, consent, risk, and plan evaluation
   -> short-lived capability grant
-  -> approved education or provider capsule
+  -> approved education, curriculum, or provider capsule
   -> bounded execution
   -> encrypted learner state and evidence in Grid
 ```
@@ -34,6 +50,8 @@ No learner-data mutation, external provider call, credential issuance, curriculu
 - Flutter presentation and local interaction state.
 - Course, lesson, workspace, canvas, progress, portfolio, and privacy interfaces.
 - Pure education-domain models and pedagogical contracts.
+- Jurisdiction and curriculum-pack presentation semantics.
+- Age- and experience-appropriate shells over a portable learner substrate.
 - Accessibility behavior and alternate input modes.
 - Rendering of curriculum provenance, uncertainty, consent, and evidence.
 - Development-only adapters used by tests and local prototyping.
@@ -62,6 +80,8 @@ The education domain is divided into narrow capability surfaces:
 6. `education.classroom-sync` — exchange signed classroom bundles through admitted nodes and causal synchronization.
 7. `education.portfolio` — selectively export learner-owned work and evidence.
 8. `education.credentials` — issue or verify achievements only after the AXIOM credential profile is approved.
+9. `education.jurisdiction` — resolve effective-dated education contexts and active standards without encoding jurisdiction into permanent identity.
+10. `education.experience-provider` — invoke bounded external digital or physical learning environments while preserving minimum disclosure, provenance, and verification boundaries.
 
 ## Minor-data policy floor
 
@@ -79,11 +99,19 @@ Every minor-related capability defaults to:
 - selective export and deletion or tombstoning;
 - fail-closed behavior when identity, policy, consent, provider, or evidence state is unavailable.
 
-## First supported vertical slice
+These protections are a floor for minor-related use. Adult and lifelong-learning contexts may use different consent/controller relationships while retaining data minimization, bounded authority, provenance, portability, and correction rights.
 
-The first complete course experience will be the Ontario `MTH1W` profile.
+## Current Ontario implementation tracks
 
-It must exercise:
+### Ontario Elementary
+
+The Kindergarten / Grades 1-8 track is building a reusable curriculum-capsule and jurisdiction foundation. It must progress through explicit source discovery, source capture/digesting, parsing, human review, deterministic build, signing, independent verification, staging, and governed activation. English- and French-language program families must remain separately accounted for rather than silently substituted.
+
+### Ontario Secondary
+
+The current runnable curriculum browser is secondary-focused because the inherited source corpus exists there. The first deep course vertical slice is `MTH1W`, Mathematics, Grade 9, De-streamed.
+
+MTH1W must exercise:
 
 - a signed Ontario curriculum pack;
 - deterministic arithmetic and algebra verification;
@@ -96,7 +124,21 @@ It must exercise:
 - selective portfolio export;
 - offline operation.
 
-Expansion to other courses or jurisdictions follows only after this slice passes its acceptance gates.
+Expansion to other secondary courses follows evidence gates, but completion of that sequence does not constrain Axiom Education to secondary education.
+
+## Lifelong learner continuity
+
+The durable learner substrate should allow the presentation layer and active curriculum/provider context to change while preserving only appropriately governed, portable history such as:
+
+- goals and preferences;
+- standards and curriculum context history;
+- competency and assessment evidence;
+- projects and portfolio objects;
+- accessibility preferences and accommodations;
+- correction, review, and appeal records;
+- consent, provenance, and authority history.
+
+A learner changing school, province, country, program, occupation, or life stage should not require a new education identity merely because the surrounding experience changes.
 
 ## Rebuild acceptance rule
 
@@ -118,15 +160,16 @@ Anything else is `experimental`, `adapter_required`, `specified`, or `disabled`.
 Until independently demonstrated, Axiom Education does not claim:
 
 - production readiness;
-- complete coverage or currency of every Ontario secondary course;
+- complete coverage or currency of every Ontario elementary or secondary curriculum family;
 - validated psychometric IRT parameters;
 - a complete local language-model tutor;
 - secure classroom federation from UDP, TCP, Bluetooth, WebRTC, or Wi-Fi discovery alone;
 - legal or regulatory compliance merely because processing is local;
 - verified DIDs or educational credentials without an approved issuer and verifier profile;
 - that generated explanations are correct unless their relevant claims are grounded and checked;
-- that attention, engagement, sentience, emotion, disability, or diagnosis can be inferred from ordinary interaction traces.
+- that attention, engagement, sentience, emotion, disability, or diagnosis can be inferred from ordinary interaction traces;
+- that one jurisdiction, grade band, course, application shell, or provider defines the scope of the education platform.
 
 ## Naming and compatibility
 
-`OntarioEdAI` is a deprecated historical name. Ontario content remains a jurisdictional pack. The internal Dart package identifier `ontarioedai` is a temporary compatibility shim scheduled for isolated migration before `0.6.0`; it does not define the product or contract identity.
+`OntarioEdAI` is a deprecated historical name. Ontario content remains a jurisdictional pack family. The internal Dart package identifier `ontarioedai` is a temporary compatibility shim scheduled for isolated migration before `0.6.0`; it does not define the product or contract identity.
