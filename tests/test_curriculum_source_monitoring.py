@@ -32,11 +32,14 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
-    def test_current_policy_accounts_for_all_five_c1_sources(self) -> None:
+    def test_current_policy_accounts_for_five_locks_and_one_pending_target(self) -> None:
         result = verify_policy()
         self.assertEqual(result["sources"], 5)
-        self.assertEqual(result["capture_targets"], 5)
-        self.assertEqual(result["pending_capture_targets"], [])
+        self.assertEqual(result["capture_targets"], 6)
+        self.assertEqual(
+            result["pending_capture_targets"],
+            ["ontario-arts-grades-1-8-2009"],
+        )
         self.assertEqual(
             set(result["strict_exact_byte"]),
             {
@@ -85,7 +88,7 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         with self.assertRaisesRegex(SourceMonitoringError, "every committed C1 source"):
             verify_policy(path)
 
-    def test_capture_target_may_precede_c1_lock_and_monitoring_entry(self) -> None:
+    def test_additional_capture_target_may_precede_c1_lock_and_monitoring_entry(self) -> None:
         path = self.target_mutation(
             lambda payload: payload["targets"].append(
                 {
@@ -102,13 +105,25 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         )
         result = verify_policy(targets_path=path)
         self.assertEqual(result["sources"], 5)
-        self.assertEqual(result["capture_targets"], 6)
+        self.assertEqual(result["capture_targets"], 7)
         self.assertEqual(
-            result["pending_capture_targets"], ["ontario-pending-source-example"]
+            result["pending_capture_targets"],
+            [
+                "ontario-arts-grades-1-8-2009",
+                "ontario-pending-source-example",
+            ],
         )
 
     def test_committed_c1_lock_cannot_lose_its_capture_target(self) -> None:
-        path = self.target_mutation(lambda payload: payload["targets"].pop())
+        def remove_hpe(payload):
+            payload["targets"] = [
+                target
+                for target in payload["targets"]
+                if target["source_id"]
+                != "ontario-health-physical-education-grades-1-8-2019"
+            ]
+
+        path = self.target_mutation(remove_hpe)
         with self.assertRaisesRegex(SourceMonitoringError, "retain a bounded capture target"):
             verify_policy(targets_path=path)
 
