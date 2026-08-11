@@ -26,14 +26,21 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         targets = validate_target_registry()
         self.assertEqual(
             set(targets),
-            {"ontario-health-physical-education-grades-1-8-2019"},
+            {
+                "ontario-health-physical-education-grades-1-8-2019",
+                "ontario-mathematics-grades-1-8-2020",
+            },
         )
-        target = targets["ontario-health-physical-education-grades-1-8-2019"]
-        self.assertEqual(target["allowed_hosts"], ["www.edu.gov.on.ca"])
-        self.assertEqual(target["expected_media_type"], "application/pdf")
-        self.assertEqual(target["redistribution_status"], "review-required")
+        hpe = targets["ontario-health-physical-education-grades-1-8-2019"]
+        math = targets["ontario-mathematics-grades-1-8-2020"]
+        self.assertEqual(hpe["host_policy"], "ontario-government")
+        self.assertEqual(hpe["allowed_hosts"], ["www.edu.gov.on.ca"])
+        self.assertEqual(math["host_policy"], "publications-ontario-access-cdn")
+        self.assertEqual(math["allowed_hosts"], ["assets-us-01.kc-usercontent.com"])
+        self.assertEqual(math["publication_number"], "CL32210")
+        self.assertTrue(all(target["redistribution_status"] == "review-required" for target in targets.values()))
 
-    def test_arbitrary_non_government_host_is_rejected(self):
+    def test_arbitrary_non_government_host_is_rejected_under_government_policy(self):
         path = self.mutation(
             lambda payload: payload["targets"][0].update(
                 {
@@ -43,6 +50,36 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             )
         )
         with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
+            validate_target_registry(path)
+
+    def test_publication_cdn_policy_rejects_unapproved_cdn(self):
+        path = self.mutation(
+            lambda payload: payload["targets"][1].update(
+                {
+                    "download_url": "https://example.com/curriculum.pdf",
+                    "allowed_hosts": ["example.com"],
+                }
+            )
+        )
+        with self.assertRaisesRegex(RemoteCaptureError, "not explicitly approved"):
+            validate_target_registry(path)
+
+    def test_publication_cdn_requires_publications_ontario_provenance(self):
+        path = self.mutation(
+            lambda payload: payload["targets"][1].update(
+                {"publication_catalog_url": "https://example.com/CL32210"}
+            )
+        )
+        with self.assertRaisesRegex(RemoteCaptureError, "must be Publications Ontario"):
+            validate_target_registry(path)
+
+    def test_publication_number_must_match_catalog_url(self):
+        path = self.mutation(
+            lambda payload: payload["targets"][1].update(
+                {"publication_number": "WRONG"}
+            )
+        )
+        with self.assertRaisesRegex(RemoteCaptureError, "bound into the Publications Ontario URL"):
             validate_target_registry(path)
 
     def test_source_locator_must_already_exist_in_discovery(self):
