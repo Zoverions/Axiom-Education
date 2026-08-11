@@ -123,6 +123,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_mth1w_course_blueprint.py"],
         ),
         (
+            "Verify MTH1W cumulative assessment blueprint",
+            [python, "tools/check_mth1w_cumulative_assessment.py"],
+        ),
+        (
             "Verify authored MTH1W unit content",
             [python, "tools/check_mth1w_unit_content.py"],
         ),
