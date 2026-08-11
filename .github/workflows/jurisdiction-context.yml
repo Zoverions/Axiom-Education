@@ -2,7 +2,9 @@ name: Jurisdiction and Curriculum Foundation
 
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - architecture/jurisdiction-context-2026-08-10
     paths:
       - 'contracts/axiom-education-jurisdiction.v1.json'
       - 'contracts/axiom-education-experience-provider.v1.json'
