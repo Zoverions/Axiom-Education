@@ -7,9 +7,12 @@ on:
       - feature/curriculum-standard-record-v2-20260811
     paths:
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/check_curriculum_source_monitoring.py'
       - 'tests/test_curriculum_source_stability.py'
+      - 'tests/test_curriculum_source_monitoring.py'
       - '.github/workflows/ontario-elementary-source-stability.yml'
   workflow_dispatch:
 
@@ -27,10 +30,14 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Verify stability classification logic
-        run: python -m unittest tests.test_curriculum_source_stability -v
+      - name: Verify monitoring policy and stability classification logic
+        run: |
+          python tools/check_curriculum_source_monitoring.py
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python -m unittest tests.test_curriculum_source_stability -v
 
-  observe-dcp-byte-stability:
+  observe-dcp-response-surface:
+    needs: verify-probe
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     strategy:
@@ -46,9 +53,11 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Validate bounded target registry
-        run: python tools/remote_curriculum_source_capture.py validate-targets
-      - name: Capture the same official source three times
+      - name: Validate bounded target and monitoring registries
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Observe the same official response surface three times
         env:
           SOURCE_ID: ${{ matrix.source_id }}
         run: |
