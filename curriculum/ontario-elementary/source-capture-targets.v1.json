@@ -1,6 +1,6 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.0.0",
+  "targets_version": "1.1.0",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
@@ -11,11 +11,26 @@
       "publication_number": "022574",
       "download_url": "https://www.edu.gov.on.ca/eng/curriculum/elementary/2019-health-physical-education-grades-1to8.pdf",
       "allowed_hosts": ["www.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
       "expected_media_type": "application/pdf",
       "maximum_bytes": 104857600,
       "redistribution_status": "review-required",
       "source_resolution_status": "official-publication-access-link-resolved",
-      "notes": "Publications Ontario identifies publication 022574 as Ontario Curriculum, Grades 1-8: Health and Physical Education, 2019 and its Access Link resolves to this Ministry of Education PDF. Exact bytes still require an explicit capture run."
+      "notes": "Publications Ontario identifies publication 022574 as Ontario Curriculum, Grades 1-8: Health and Physical Education, 2019 and its Access Link resolves to this Ministry of Education PDF."
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL32210",
+      "publication_number": "CL32210",
+      "download_url": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/90439c6e-f40c-4b58-840c-557ed88a9345/The%20Ontario%20Curriculum%20Grades%201%E2%80%938%20-%20Mathematics%2C%202020%20%28January%202021%29.pdf",
+      "allowed_hosts": ["assets-us-01.kc-usercontent.com"],
+      "host_policy": "publications-ontario-access-cdn",
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario record CL32210 identifies Mathematics 2020: The Ontario Curriculum Grades 1-8 and its official Access Link resolves to this exact PDF on the Ontario publication CDN."
     }
   ]
 }
