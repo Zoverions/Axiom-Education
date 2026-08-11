@@ -5,14 +5,18 @@ on:
     branches:
       - main
       - architecture/jurisdiction-context-2026-08-10
+      - feature/ontario-elementary-discovery-gates-20260811
     paths:
       - 'contracts/axiom-education-jurisdiction.v1.json'
       - 'contracts/axiom-education-experience-provider.v1.json'
       - 'curriculum/ontario-elementary/**'
+      - 'schemas/curriculum-source-lock.v1.schema.json'
       - 'tools/jurisdiction_context.py'
       - 'tools/check_ontario_elementary_discovery.py'
+      - 'tools/curriculum_source_lock.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
+      - 'tests/test_curriculum_source_lock.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
@@ -34,9 +38,16 @@ jobs:
           python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
           python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
+          python -m json.tool schemas/curriculum-source-lock.v1.schema.json >/dev/null
       - name: Validate Ontario Elementary discovery accounting
         run: python tools/check_ontario_elementary_discovery.py
-      - name: Run jurisdiction and discovery tests
+      - name: Validate source-lock directory boundary
+        run: |
+          python tools/curriculum_source_lock.py verify-directory \
+            --directory curriculum/ontario-elementary/source-locks \
+            --allow-empty
+      - name: Run jurisdiction, discovery, and source-lock tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
           python -m unittest tests.test_ontario_elementary_discovery -v
+          python -m unittest tests.test_curriculum_source_lock -v
