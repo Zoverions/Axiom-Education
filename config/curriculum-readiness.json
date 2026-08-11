@@ -88,6 +88,17 @@
     "accessibility_gate_satisfied": false,
     "claim_boundary": "Deterministic text alternatives provide an offline, printable, nonvisual delivery route but do not establish WCAG, AODA, assistive-technology, cognitive-accessibility, or usability conformance."
   },
+  "source_use_licensing": {
+    "schema_path": "schemas/source-license-review.v1.schema.json",
+    "verification_tool": "tools/mth1w_source_use_inventory.py",
+    "verification_status": "machine-verified-source-use-inventory",
+    "submitted_review_records": 0,
+    "permitted_as_used_reviews": 0,
+    "external_source_use_reviews_complete": false,
+    "human_licensing_review_status": "required",
+    "licensing_gate_satisfied": false,
+    "claim_boundary": "The machine inventory binds declared external source uses to exact unit revisions but makes no copyright or licensing determination. Even complete external-source reviews do not automatically cover every quotation, image, figure, dataset, printable/export use, or future asset."
+  },
   "local_snapshot": {
     "record_count": 11,
     "review_status": "machine-transcription-requires-course-review",
