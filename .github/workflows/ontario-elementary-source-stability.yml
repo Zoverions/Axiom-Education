@@ -1,0 +1,67 @@
+name: Ontario Elementary Source Stability
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/curriculum-standard-record-v2-20260811
+    paths:
+      - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/probe_curriculum_source_stability.py'
+      - 'tests/test_curriculum_source_stability.py'
+      - '.github/workflows/ontario-elementary-source-stability.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Verify stability classification logic
+        run: python -m unittest tests.test_curriculum_source_stability -v
+
+  observe-dcp-byte-stability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        source_id:
+          - ontario-language-grades-1-8-2023
+          - ontario-science-technology-grades-1-8-2022
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Validate bounded target registry
+        run: python tools/remote_curriculum_source_capture.py validate-targets
+      - name: Capture the same official source three times
+        env:
+          SOURCE_ID: ${{ matrix.source_id }}
+        run: |
+          mkdir -p /tmp/axiom-source-stability
+          python tools/probe_curriculum_source_stability.py \
+            --source-id "${SOURCE_ID}" \
+            --attempts 3 \
+            --output /tmp/axiom-source-stability/report.json
+          python -m json.tool /tmp/axiom-source-stability/report.json >/dev/null
+      - name: Upload metadata-only stability observation
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-source-stability-${{ matrix.source_id }}-${{ github.sha }}
+          path: /tmp/axiom-source-stability/report.json
+          if-no-files-found: error
+          retention-days: 7
