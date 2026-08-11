@@ -8,6 +8,7 @@ on:
       - feature/ontario-elementary-discovery-gates-20260811
       - feature/ontario-elementary-source-lock-20260811
       - feature/curriculum-standard-record-v2-20260811
+      - feature/ontario-elementary-remote-source-capture-20260811
     paths:
       - 'contracts/axiom-education-jurisdiction.v1.json'
       - 'contracts/axiom-education-experience-provider.v1.json'
@@ -21,6 +22,7 @@ on:
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/check_curriculum_source_monitoring.py'
       - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/ontario_elementary_readiness.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_lock.py'
@@ -28,9 +30,11 @@ on:
       - 'tests/test_remote_curriculum_source_capture.py'
       - 'tests/test_curriculum_source_monitoring.py'
       - 'tests/test_curriculum_source_stability.py'
+      - 'tests/test_ontario_elementary_readiness.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
+      - 'docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md'
       - '.github/workflows/jurisdiction-context.yml'
       - '.github/workflows/ontario-elementary-source-capture.yml'
       - '.github/workflows/ontario-elementary-source-drift.yml'
@@ -76,7 +80,9 @@ jobs:
             --directory curriculum/ontario-elementary/records-v2 \
             --lock-dir curriculum/ontario-elementary/source-locks \
             --allow-empty
-      - name: Run jurisdiction, discovery, source-lock, C2, capture, and monitoring tests
+      - name: Validate derived readiness without rewriting provenance
+        run: python tools/ontario_elementary_readiness.py verify
+      - name: Run jurisdiction, discovery, source, C2, monitoring, and readiness tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
           python -m unittest tests.test_ontario_elementary_discovery -v
@@ -85,3 +91,4 @@ jobs:
           python -m unittest tests.test_remote_curriculum_source_capture -v
           python -m unittest tests.test_curriculum_source_monitoring -v
           python -m unittest tests.test_curriculum_source_stability -v
+          python -m unittest tests.test_ontario_elementary_readiness -v
