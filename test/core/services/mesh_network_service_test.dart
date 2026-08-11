@@ -10,11 +10,11 @@ const testMeshSecret = 'test-only-mesh-secret-with-sufficient-entropy';
 
 class TestMeshNetworkService extends MeshNetworkService {
   TestMeshNetworkService({super.role = MeshRole.studentNode})
-      : super(
-          classroomPin: 'test_pin',
-          meshSecret: testMeshSecret,
-          allowLegacyMesh: true,
-        );
+    : super(
+        classroomPin: 'test_pin',
+        meshSecret: testMeshSecret,
+        allowLegacyMesh: true,
+      );
 
   Map<String, dynamic>? lastPayload;
 
@@ -25,8 +25,7 @@ class TestMeshNetworkService extends MeshNetworkService {
 }
 
 class FakeSocket extends Fake implements Socket {
-  final StreamController<Uint8List> _controller =
-      StreamController<Uint8List>();
+  final StreamController<Uint8List> _controller = StreamController<Uint8List>();
   bool destroyed = false;
 
   @override
@@ -62,8 +61,9 @@ void main() {
   group('discovery authentication', () {
     test('generates the expected signed payload shape', () {
       final service = MeshNetworkService(classroomPin: 'test_pin');
-      final payload = jsonDecode(service.generateDiscoveryPayload())
-          as Map<String, dynamic>;
+      final payload =
+          jsonDecode(service.generateDiscoveryPayload())
+              as Map<String, dynamic>;
 
       expect(payload['msg'], 'TEACHER_NODE_HERE');
       expect(payload['timestamp'], isA<int>());
@@ -180,10 +180,7 @@ void main() {
       ciphertext[0] ^= 0x01;
       final tampered = '${parts[0]}:${base64.encode(ciphertext)}';
 
-      expect(
-        () => service.decodePayloadForTest(tampered),
-        throwsA(anything),
-      );
+      expect(() => service.decodePayloadForTest(tampered), throwsA(anything));
     });
 
     test('rejects unsupported message types and excessive strokes', () {
@@ -220,10 +217,7 @@ void main() {
 
       await service.syncCanvasState(strokes);
 
-      expect(service.lastPayload, {
-        'type': 'CANVAS_SYNC',
-        'strokes': strokes,
-      });
+      expect(service.lastPayload, {'type': 'CANVAS_SYNC', 'strokes': strokes});
     });
 
     test('syncCanvasState does nothing while disconnected', () async {
@@ -242,16 +236,19 @@ void main() {
       );
     });
 
-    test('gossipCredential sends the expected payload when connected', () async {
-      final service = TestMeshNetworkService()..isConnected = true;
-      await service.gossipCredential('credential-1', {'grade': 'A'});
+    test(
+      'gossipCredential sends the expected payload when connected',
+      () async {
+        final service = TestMeshNetworkService()..isConnected = true;
+        await service.gossipCredential('credential-1', {'grade': 'A'});
 
-      expect(service.lastPayload, {
-        'type': 'CREDENTIAL_GOSSIP',
-        'id': 'credential-1',
-        'payload': {'grade': 'A'},
-      });
-    });
+        expect(service.lastPayload, {
+          'type': 'CREDENTIAL_GOSSIP',
+          'id': 'credential-1',
+          'payload': {'grade': 'A'},
+        });
+      },
+    );
   });
 
   group('socket lifecycle and framing', () {

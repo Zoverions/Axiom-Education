@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
+import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 
 void main() {
   late Directory tempDir;
@@ -34,6 +37,7 @@ void main() {
   });
 
   tearDownAll(() async {
+    await DatabaseService.resetForTesting();
     if (tempDir.existsSync()) {
       await tempDir.delete(recursive: true);
     }

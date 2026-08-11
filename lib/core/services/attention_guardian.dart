@@ -27,7 +27,9 @@ class AttentionGuardian extends ChangeNotifier {
   void stopMonitoring() {
     _focusTimer?.cancel();
     _isActive = false;
-    debugPrint('Attention Guardian: Monitoring stopped. Total focus time: ${_focusedSeconds}s');
+    debugPrint(
+      'Attention Guardian: Monitoring stopped. Total focus time: ${_focusedSeconds}s',
+    );
     notifyListeners();
   }
 
@@ -37,7 +39,9 @@ class AttentionGuardian extends ChangeNotifier {
   }
 
   void _triggerFocusCheck() {
-    debugPrint('Attention Guardian: Focus check triggered! Consider taking a break.');
+    debugPrint(
+      'Attention Guardian: Focus check triggered! Consider taking a break.',
+    );
     // Logic to show a dialog or notification could be wired up here
   }
 

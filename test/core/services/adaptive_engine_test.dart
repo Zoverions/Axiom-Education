@@ -54,7 +54,8 @@ void main() {
         difficulties: const [0.5, 0.8],
       );
 
-      final expected = initialTheta +
+      final expected =
+          initialTheta +
           (correctOnly - initialTheta) +
           (incorrectOnly - initialTheta);
       expect(combined, closeTo(expected, 1e-10));

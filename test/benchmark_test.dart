@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,21 +22,23 @@ void main() {
     const channel = MethodChannel('plugins.flutter.io/path_provider');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-      if (methodCall.method == 'getApplicationSupportDirectory' ||
-          methodCall.method == 'getDatabasesPath') {
-        return tempDir.path;
-      }
-      return '.';
-    });
+          if (methodCall.method == 'getApplicationSupportDirectory' ||
+              methodCall.method == 'getDatabasesPath') {
+            return tempDir.path;
+          }
+          return '.';
+        });
 
     // Manually copy the database file for testing
-    final dbBytes =
-        await File('assets/curriculum/ontario_curriculum.sqlite').readAsBytes();
+    final dbBytes = await File(
+      'assets/curriculum/ontario_curriculum.sqlite',
+    ).readAsBytes();
     final dbPath = '${tempDir.path}/ontario_curriculum.sqlite';
     await File(dbPath).writeAsBytes(dbBytes, flush: true);
   });
 
   tearDownAll(() async {
+    await DatabaseService.resetForTesting();
     if (tempDir.existsSync()) {
       await tempDir.delete(recursive: true);
     }
@@ -55,11 +59,13 @@ void main() {
     }
 
     print(
-        'Average time elapsed per call (CurriculumLoader): ${totalTime / iterations / 1000}ms');
+      'Average time elapsed per call (CurriculumLoader): ${totalTime / iterations / 1000}ms',
+    );
   });
 
   test('Benchmark courseDetailProvider', () async {
     final container = ProviderContainer();
+    addTearDown(container.dispose);
     // Warm up the database
     await container.read(databaseProvider.future);
 
@@ -79,8 +85,10 @@ void main() {
     stopwatch.stop();
 
     print(
-        'Time taken for 50 iterations (courseDetailProvider): ${stopwatch.elapsedMilliseconds} ms');
+      'Time taken for 50 iterations (courseDetailProvider): ${stopwatch.elapsedMilliseconds} ms',
+    );
     print(
-        'Average time per iteration: ${stopwatch.elapsedMilliseconds / 50} ms');
+      'Average time per iteration: ${stopwatch.elapsedMilliseconds / 50} ms',
+    );
   });
 }
