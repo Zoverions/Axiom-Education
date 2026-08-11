@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/educator-workflow-event.v1.schema.json",
+  "title": "Axiom Education Educator Workflow Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "workflow_id",
+    "assignment_id",
+    "subject_id",
+    "learning_context_id",
+    "course_code",
+    "expectation_ids",
+    "event_id",
+    "event_type",
+    "actor_role",
+    "occurred_at",
+    "previous_event_digest",
+    "artifact_digest",
+    "feedback_digest",
+    "reason_digest",
+    "review_state",
+    "payload_digest"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-educator-workflow-event.v1"},
+    "workflow_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "assignment_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "subject_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "learning_context_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "course_code": {"type": ["string", "null"], "maxLength": 64},
+    "expectation_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "event_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "event_type": {"type": "string", "minLength": 1, "maxLength": 128},
+    "actor_role": {
+      "enum": ["learner", "educator", "authorized-representative"]
+    },
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "previous_event_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "artifact_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "feedback_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "reason_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "review_state": {"type": "string", "minLength": 1, "maxLength": 128},
+    "payload_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
