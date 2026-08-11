@@ -1,0 +1,108 @@
+{
+  "schema": "axiom-education-course-assessment-plan.v1",
+  "course_code": "MTH1W",
+  "status": "machine-verified-draft-plan",
+  "student_availability": "not_grade_or_credit_evidence",
+  "course_blueprint_path": "curriculum/courses/ontario-mth1w-2021.course.json",
+  "official_inventory_path": "curriculum/official/ontario-mth1w-2021.inventory.json",
+  "coverage_model": "expand-unit-specific-expectations-from-course-blueprint",
+  "claim_boundary": "This plan proves structural course-wide assessment coverage only. It does not establish assessment validity, learner mastery, a grade, credit, Ministry approval, educator review, or psychometric calibration.",
+  "coursewide_expectations_required": ["AA1", "A1", "A2"],
+  "assessment_policy": {
+    "mastery_inference_allowed": false,
+    "automatic_credit_or_grade_allowed": false,
+    "constructed_response_requires_human_review": true,
+    "learner_correction_path_required": true,
+    "learner_appeal_path_required": true,
+    "accessible_alternative_required": true,
+    "printable_offline_route_required": true,
+    "response_modes": [
+      "selected-response",
+      "short-response",
+      "constructed-response",
+      "worked-solution",
+      "explanation-or-justification"
+    ]
+  },
+  "stages": [
+    {
+      "id": "mth1w-entry-diagnostic",
+      "sequence": 1,
+      "purpose": "diagnostic",
+      "summative": false,
+      "covered_unit_ids": ["mth1w-u1", "mth1w-u2", "mth1w-u3", "mth1w-u4", "mth1w-u5", "mth1w-u6", "mth1w-u7", "mth1w-u8", "mth1w-u9"],
+      "sampling_mode": "representative-prerequisite-and-readiness-sample",
+      "coursewide_expectations": ["AA1", "A1", "A2"],
+      "estimated_minutes": 45,
+      "result_use": "instructional-planning-only",
+      "correction_path": "learner may revisit and annotate reasoning; diagnostic result is never converted directly into a grade",
+      "appeal_path": "learner or educator may flag a prompt, scoring rule, accessibility barrier, or interpretation for review",
+      "accessible_alternative": "equivalent text, keyboard, printable, and non-stylus response routes required"
+    },
+    {
+      "id": "mth1w-cumulative-checkpoint-1",
+      "sequence": 2,
+      "purpose": "cumulative-checkpoint",
+      "summative": false,
+      "covered_unit_ids": ["mth1w-u1", "mth1w-u2", "mth1w-u3"],
+      "sampling_mode": "all-specific-expectations-in-covered-units",
+      "coursewide_expectations": ["AA1", "A1", "A2"],
+      "estimated_minutes": 60,
+      "result_use": "feedback-and-reteaching",
+      "correction_path": "learner receives item-level feedback and may submit a corrected solution or explanation after reflection",
+      "appeal_path": "learner may request educator review of prompt ambiguity, scoring, or evidence interpretation",
+      "accessible_alternative": "equivalent text, keyboard, printable, calculator-appropriate, and non-stylus routes required"
+    },
+    {
+      "id": "mth1w-cumulative-checkpoint-2",
+      "sequence": 3,
+      "purpose": "cumulative-checkpoint",
+      "summative": false,
+      "covered_unit_ids": ["mth1w-u1", "mth1w-u2", "mth1w-u3", "mth1w-u4", "mth1w-u5", "mth1w-u6"],
+      "sampling_mode": "all-specific-expectations-in-new-units-plus-spaced-retrieval-from-prior-units",
+      "coursewide_expectations": ["AA1", "A1", "A2"],
+      "estimated_minutes": 75,
+      "result_use": "feedback-reteaching-and-course-adjustment",
+      "correction_path": "learner may correct selected work with an explanation of the original error and revised reasoning",
+      "appeal_path": "learner may request educator review of scoring, prompt validity, accessibility, or content alignment",
+      "accessible_alternative": "equivalent text, keyboard, printable, code-trace, and non-stylus routes required"
+    },
+    {
+      "id": "mth1w-cumulative-checkpoint-3",
+      "sequence": 4,
+      "purpose": "cumulative-checkpoint",
+      "summative": false,
+      "covered_unit_ids": ["mth1w-u1", "mth1w-u2", "mth1w-u3", "mth1w-u4", "mth1w-u5", "mth1w-u6", "mth1w-u7", "mth1w-u8", "mth1w-u9"],
+      "sampling_mode": "all-specific-expectations-coursewide-with-spaced-mixed-retrieval",
+      "coursewide_expectations": ["AA1", "A1", "A2"],
+      "estimated_minutes": 90,
+      "result_use": "feedback-reteaching-and-final-assessment-preparation",
+      "correction_path": "learner may revise selected responses and identify which representation or strategy changed their reasoning",
+      "appeal_path": "learner may request educator review of scoring, prompt validity, accessibility, or course alignment",
+      "accessible_alternative": "equivalent text, keyboard, printable, diagram-description, and non-stylus routes required"
+    },
+    {
+      "id": "mth1w-final-assessment-blueprint",
+      "sequence": 5,
+      "purpose": "final-assessment-blueprint",
+      "summative": true,
+      "covered_unit_ids": ["mth1w-u1", "mth1w-u2", "mth1w-u3", "mth1w-u4", "mth1w-u5", "mth1w-u6", "mth1w-u7", "mth1w-u8", "mth1w-u9"],
+      "sampling_mode": "all-specific-expectations-must-have-reviewed-evidence-before-use",
+      "coursewide_expectations": ["AA1", "A1", "A2"],
+      "estimated_minutes": 120,
+      "result_use": "draft-evidence-only-until-human-validity-and-scoring-review",
+      "correction_path": "a reviewed correction and reassessment route is mandatory before this stage may contribute to a governed course result",
+      "appeal_path": "a human educator review and correction route is mandatory for disputed scoring, alignment, or accessibility findings",
+      "accessible_alternative": "equivalent text, keyboard, printable, assistive-technology-compatible, and non-stylus routes required"
+    }
+  ],
+  "promotion_requirements": [
+    "qualified educator review of assessment validity and expectation alignment",
+    "reviewed scoring guides and constructed-response exemplars",
+    "accessibility and printable/offline verification",
+    "misconception and boundary-case review",
+    "governed learner-record and educator-review integration",
+    "correction, reassessment, and appeal workflow verification",
+    "evidence bound to the exact assessment-content revision"
+  ]
+}
