@@ -35,7 +35,11 @@ def load_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def verify_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
+def verify_policy(
+    path: Path = POLICY_PATH,
+    targets_path: Path = TARGETS_PATH,
+    lock_dir: Path = LOCK_DIR,
+) -> dict[str, Any]:
     policy = load_json(path)
     require(
         policy.get("schema") == "axiom-curriculum-source-monitoring.v1",
@@ -47,19 +51,26 @@ def verify_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
         "monitoring claim boundary is required",
     )
 
-    targets = load_json(TARGETS_PATH)
+    targets = load_json(targets_path)
     target_index = {
         item["source_id"]: item
         for item in targets.get("targets", [])
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
-    locks = {}
-    for lock_path in sorted(LOCK_DIR.glob("*.json")):
+    require(target_index, "capture target registry must be non-empty")
+
+    locks: dict[str, dict[str, Any]] = {}
+    for lock_path in sorted(lock_dir.glob("*.json")):
         lock = load_json(lock_path)
         source_id = lock.get("source_id")
         require(isinstance(source_id, str) and source_id, f"lock missing source_id: {lock_path}")
         require(source_id not in locks, f"duplicate C1 lock source_id: {source_id}")
         locks[source_id] = lock
+
+    require(
+        set(locks).issubset(target_index),
+        "every committed C1 source must retain a bounded capture target",
+    )
 
     entries = policy.get("sources")
     require(isinstance(entries, list) and entries, "monitoring sources must be non-empty array")
@@ -106,10 +117,17 @@ def verify_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
             )
         index[source_id] = entry
 
-    require(set(index) == set(locks), "monitoring policy must account for every committed C1 source exactly")
-    require(set(index) == set(target_index), "monitoring policy must account for every current capture target exactly")
+    require(
+        set(index) == set(locks),
+        "monitoring policy must account for every committed C1 source exactly",
+    )
 
-    strict = sorted(source_id for source_id, item in index.items() if item["monitoring_mode"] == "strict-exact-byte")
+    pending_targets = sorted(set(target_index) - set(locks))
+    strict = sorted(
+        source_id
+        for source_id, item in index.items()
+        if item["monitoring_mode"] == "strict-exact-byte"
+    )
     observational = sorted(
         source_id
         for source_id, item in index.items()
@@ -117,6 +135,8 @@ def verify_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
     )
     return {
         "sources": len(index),
+        "capture_targets": len(target_index),
+        "pending_capture_targets": pending_targets,
         "strict_exact_byte": strict,
         "observational_response_surface": observational,
     }
@@ -127,7 +147,9 @@ def main() -> int:
         result = verify_policy()
         print(
             "curriculum source monitoring verified: "
-            f"sources={result['sources']} strict={len(result['strict_exact_byte'])} "
+            f"monitored={result['sources']} targets={result['capture_targets']} "
+            f"pending={len(result['pending_capture_targets'])} "
+            f"strict={len(result['strict_exact_byte'])} "
             f"observational={len(result['observational_response_surface'])}"
         )
     except (OSError, KeyError, SourceMonitoringError, ValueError) as error:
