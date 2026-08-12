@@ -147,6 +147,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_educator_workflow_contract.py"],
         ),
         (
+            "Verify native learner admission contract coherence",
+            [python, "tools/check_native_learner_admission.py"],
+        ),
+        (
             "Verify MTH1W accessible/offline delivery evidence",
             [python, "tools/check_mth1w_accessibility_readiness.py"],
         ),
