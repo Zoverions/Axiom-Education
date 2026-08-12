@@ -15,7 +15,9 @@ class GovernedEducationMemoryWriter {
   static const memoryAction = 'memory.put';
   static const metadataSchema = 'axiom-education-governed-memory-ref.v1';
 
-  static const Map<String, String> _kindByEventType = {
+  /// Exact runtime projection pinned by
+  /// `contracts/axiom-education-learner-memory.v1.json`.
+  static const Map<String, String> eventTypeToMemoryKind = {
     'assignment.created': 'education.assignment-artifact',
     'submission.created': 'education.learner-submission',
     'submission.resubmitted': 'education.learner-submission',
@@ -37,7 +39,7 @@ class GovernedEducationMemoryWriter {
     required Map<String, Object?> content,
   }) async {
     event.validate();
-    final kind = _kindByEventType[event.eventType];
+    final kind = eventTypeToMemoryKind[event.eventType];
     if (kind == null) {
       throw GovernedEducationMemoryValidationException(
         'Event type ${event.eventType} does not create new governed content. '
