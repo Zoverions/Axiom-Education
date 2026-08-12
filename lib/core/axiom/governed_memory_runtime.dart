@@ -250,6 +250,6 @@ class GovernedEducationMemoryGatewayException
   const GovernedEducationMemoryGatewayException({
     required this.statusCode,
     required this.code,
-    required super.message,
-  });
+    required String message,
+  }) : super(message);
 }
