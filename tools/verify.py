@@ -104,6 +104,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "-m", "pip", "install", "--requirement", "requirements-dev.txt"],
         ),
         (
+            "Verify vendored SQLite source and provenance",
+            [python, "tools/vendored_sqlite.py", "verify"],
+        ),
+        (
             "Install locked Dart dependencies",
             [flutter, "pub", "get", "--enforce-lockfile"],
         ),
