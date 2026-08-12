@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the Axiom Education side of native AXIOM learner-event admission."""
+"""Verify Axiom Education contracts for native AXIOM learner write/read admission."""
 
 from __future__ import annotations
 
@@ -17,9 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 DOMAIN_PATH = ROOT / "contracts" / "axiom-education.v1.json"
 WORKFLOW_PATH = ROOT / "contracts" / "axiom-education-educator-workflow.v1.json"
 APPEND_ACTION = "education.learner.event.append"
-EXPECTED_PURPOSE = "learning-progress-recording"
-EXPECTED_CONSENT_SCOPE = "learning-progress:write"
-EXPECTED_GATEWAY_SCOPE = "education:learner:write"
+READ_ACTION = "education.learner.progress.read"
+EXPECTED_WRITE_PURPOSE = "learning-progress-recording"
+EXPECTED_WRITE_CONSENT_SCOPE = "learning-progress:write"
+EXPECTED_WRITE_GATEWAY_SCOPE = "education:learner:write"
+EXPECTED_READ_PURPOSE = "learning-progress-review"
+EXPECTED_READ_CONSENT_SCOPE = "learning-progress:read"
+EXPECTED_READ_GATEWAY_SCOPE = "education:learner:read"
 EXPECTED_PROVIDER = "education.learner-record"
 
 
@@ -45,6 +49,58 @@ def load_json(path: Path) -> tuple[dict[str, Any], bytes]:
     return value, raw
 
 
+def verify_action_authority(
+    action: dict[str, Any],
+    *,
+    action_name: str,
+    mutation: bool,
+    gateway_scope: str,
+    purpose: str,
+    consent_scope: str,
+) -> tuple[set[str], set[str]]:
+    require(
+        action.get("mutation") is mutation,
+        f"{action_name} mutation boundary drift",
+    )
+    require(
+        action.get("provider_capability") == EXPECTED_PROVIDER,
+        f"{action_name} provider capability drift",
+    )
+    require(
+        action.get("required_scopes") == [gateway_scope],
+        f"{action_name} Gateway scope drift",
+    )
+    approval = action.get("approval")
+    require(isinstance(approval, dict), f"{action_name} approval profile is missing")
+    require(
+        approval.get("confirmation") is False,
+        f"{action_name} unexpectedly requires confirmation",
+    )
+    require(
+        approval.get("independent") is False,
+        f"{action_name} unexpectedly requires independent approval",
+    )
+    consent = action.get("consent")
+    require(isinstance(consent, dict), f"{action_name} consent profile is missing")
+    require(consent.get("required") is True, f"{action_name} consent must remain required")
+    require(consent.get("purpose") == purpose, f"{action_name} consent purpose drift")
+    require(
+        consent.get("data_scopes") == [consent_scope],
+        f"{action_name} consent scope drift",
+    )
+    required_input = action.get("required_input")
+    optional_input = action.get("optional_input")
+    require(isinstance(required_input, list), f"{action_name} required_input is invalid")
+    require(isinstance(optional_input, list), f"{action_name} optional_input is invalid")
+    required_fields = set(required_input)
+    optional_fields = set(optional_input)
+    require(
+        required_fields.isdisjoint(optional_fields),
+        f"{action_name} fields overlap required/optional",
+    )
+    return required_fields, optional_fields
+
+
 def verify_contracts(
     domain: dict[str, Any],
     workflow: dict[str, Any],
@@ -55,41 +111,31 @@ def verify_contracts(
     actions = domain.get("actions")
     require(isinstance(actions, dict), "education domain actions are missing")
     append = actions.get(APPEND_ACTION)
+    read = actions.get(READ_ACTION)
     require(isinstance(append, dict), "learner append action is missing")
-    require(append.get("mutation") is True, "learner append must remain a mutation")
-    require(
-        append.get("provider_capability") == EXPECTED_PROVIDER,
-        "learner append provider capability drift",
-    )
-    require(
-        append.get("required_scopes") == [EXPECTED_GATEWAY_SCOPE],
-        "learner append Gateway scope drift",
-    )
-    approval = append.get("approval")
-    require(isinstance(approval, dict), "learner append approval profile is missing")
-    require(approval.get("confirmation") is False, "learner append unexpectedly requires confirmation")
-    require(approval.get("independent") is False, "learner append unexpectedly requires independent approval")
+    require(isinstance(read, dict), "learner progress read action is missing")
 
-    consent = append.get("consent")
-    require(isinstance(consent, dict), "learner append consent profile is missing")
-    require(consent.get("required") is True, "learner append consent must remain required")
-    require(consent.get("purpose") == EXPECTED_PURPOSE, "learner append consent purpose drift")
-    require(
-        consent.get("data_scopes") == [EXPECTED_CONSENT_SCOPE],
-        "learner append consent scope drift",
+    append_required, append_optional = verify_action_authority(
+        append,
+        action_name=APPEND_ACTION,
+        mutation=True,
+        gateway_scope=EXPECTED_WRITE_GATEWAY_SCOPE,
+        purpose=EXPECTED_WRITE_PURPOSE,
+        consent_scope=EXPECTED_WRITE_CONSENT_SCOPE,
+    )
+    read_required, read_optional = verify_action_authority(
+        read,
+        action_name=READ_ACTION,
+        mutation=False,
+        gateway_scope=EXPECTED_READ_GATEWAY_SCOPE,
+        purpose=EXPECTED_READ_PURPOSE,
+        consent_scope=EXPECTED_READ_CONSENT_SCOPE,
     )
     require(
         domain.get("controller") == "capsule:axiom.education",
         "education consent controller drift",
     )
 
-    required_input = append.get("required_input")
-    optional_input = append.get("optional_input")
-    require(isinstance(required_input, list), "learner append required_input is invalid")
-    require(isinstance(optional_input, list), "learner append optional_input is invalid")
-    required_fields = set(required_input)
-    optional_fields = set(optional_input)
-    require(required_fields.isdisjoint(optional_fields), "learner append fields overlap required/optional")
     for field in (
         "contract_id",
         "contract_version",
@@ -103,7 +149,21 @@ def verify_contracts(
         "payload_digest",
         "memory_object_id",
     ):
-        require(field in required_fields, f"learner append required field missing: {field}")
+        require(field in append_required, f"learner append required field missing: {field}")
+    for field in (
+        "contract_id",
+        "contract_version",
+        "contract_sha256",
+        "subject_id",
+        "consent_id",
+        "purpose",
+        "course_code",
+    ):
+        require(field in read_required, f"learner progress read required field missing: {field}")
+    require(
+        read_optional == {"expectation_ids", "as_of"},
+        "learner progress read optional input surface drift",
+    )
 
     parent = workflow.get("parent_contract")
     require(isinstance(parent, dict), "educator workflow parent contract is missing")
@@ -117,7 +177,7 @@ def verify_contracts(
         "workflow parent contract digest does not match exact domain bytes",
     )
     require(parent.get("transport_action") == APPEND_ACTION, "workflow transport action drift")
-    require(parent.get("purpose") == EXPECTED_PURPOSE, "workflow parent purpose drift")
+    require(parent.get("purpose") == EXPECTED_WRITE_PURPOSE, "workflow parent purpose drift")
 
     projection = workflow.get("projection")
     require(isinstance(projection, dict), "educator workflow projection is missing")
@@ -127,11 +187,11 @@ def verify_contracts(
     require(isinstance(projected_required, list), "workflow required projection is invalid")
     require(isinstance(projected_optional, list), "workflow optional projection is invalid")
     require(
-        set(projected_required) == required_fields,
+        set(projected_required) == append_required,
         "workflow required projection does not match learner append contract",
     )
     require(
-        set(projected_optional).issubset(optional_fields),
+        set(projected_optional).issubset(append_optional),
         "workflow optional projection exceeds learner append contract",
     )
 
@@ -185,11 +245,16 @@ def verify_contracts(
         "valid": True,
         "domain_contract_sha256": domain_sha256,
         "append_action": APPEND_ACTION,
+        "read_action": READ_ACTION,
         "provider_capability": EXPECTED_PROVIDER,
         "consent_controller": domain["controller"],
-        "consent_purpose": EXPECTED_PURPOSE,
-        "consent_scope": EXPECTED_CONSENT_SCOPE,
-        "gateway_scope": EXPECTED_GATEWAY_SCOPE,
+        "write_consent_purpose": EXPECTED_WRITE_PURPOSE,
+        "write_consent_scope": EXPECTED_WRITE_CONSENT_SCOPE,
+        "write_gateway_scope": EXPECTED_WRITE_GATEWAY_SCOPE,
+        "read_consent_purpose": EXPECTED_READ_PURPOSE,
+        "read_consent_scope": EXPECTED_READ_CONSENT_SCOPE,
+        "read_gateway_scope": EXPECTED_READ_GATEWAY_SCOPE,
+        "read_native_authority_boundary": "learner-self-only-until-delegation",
         "memory_action": profile.get("memory_action"),
         "memory_event_types": sorted(kind_map),
     }
