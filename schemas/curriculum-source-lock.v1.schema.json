@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/curriculum-source-lock.v1.schema.json",
+  "title": "Axiom Curriculum Source Lock v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_id",
+    "jurisdiction_id",
+    "authority_id",
+    "discovery_path",
+    "source_entry_sha256",
+    "capture_method",
+    "captured_at",
+    "source_locator",
+    "resolved_locator",
+    "media_type",
+    "byte_length",
+    "sha256",
+    "bytes_retained",
+    "redistribution_status",
+    "claim_state"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-curriculum-source-lock.v1"},
+    "source_id": {"type": "string", "minLength": 1},
+    "jurisdiction_id": {"type": "string", "minLength": 1},
+    "authority_id": {"type": "string", "minLength": 1},
+    "discovery_path": {"type": "string", "minLength": 1},
+    "source_entry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "capture_method": {"const": "local-file-hash"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "source_locator": {"type": "string", "pattern": "^https://"},
+    "resolved_locator": {"type": "string", "pattern": "^https://"},
+    "media_type": {"type": "string", "minLength": 1},
+    "byte_length": {"type": "integer", "minimum": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bytes_retained": {"type": "boolean"},
+    "retained_path": {"type": ["string", "null"]},
+    "redistribution_status": {
+      "enum": ["review-required", "external-only", "redistributable-reviewed"]
+    },
+    "claim_state": {"const": "C1-bytes-captured-digested"},
+    "notes": {"type": "string"}
+  }
+}
