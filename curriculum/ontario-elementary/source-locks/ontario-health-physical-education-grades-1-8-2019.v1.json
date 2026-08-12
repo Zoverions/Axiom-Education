@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-health-physical-education-grades-1-8-2019",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "7de114cb1617d6c87144fe965dca7deb8a666338ecd4846131e3c53186c9a670",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-11T21:10:12.385347Z",
+  "source_locator": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
+  "resolved_locator": "https://www.edu.gov.on.ca/eng/curriculum/elementary/2019-health-physical-education-grades-1to8.pdf",
+  "media_type": "application/pdf",
+  "byte_length": 5724177,
+  "sha256": "37416922ca741b1fb32a0708442738ae8d964d974c3315d04cdcc8bd2e652622",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target d3ccda57723271bd92f30dd5949467baa52c68e20893429b8650ff300213ef70. GitHub run 31536581383 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution."
+}

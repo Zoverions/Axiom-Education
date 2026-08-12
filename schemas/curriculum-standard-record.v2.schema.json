@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/curriculum-standard-record.v2.schema.json",
+  "title": "Axiom Education Curriculum Standard Record v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "stage",
+    "record_id",
+    "jurisdiction_id",
+    "authority_id",
+    "language",
+    "education_context",
+    "standard",
+    "source",
+    "provenance",
+    "axiom_metadata",
+    "content_digest"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-curriculum-standard-record.v2"},
+    "stage": {"const": "C2-normalized"},
+    "record_id": {"type": "string", "minLength": 8, "maxLength": 300},
+    "jurisdiction_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "authority_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "language": {"type": "string", "minLength": 2, "maxLength": 16},
+    "education_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["program_family", "level", "grade_or_level", "subject_id", "subject_name"],
+      "properties": {
+        "program_family": {"type": "string", "minLength": 1, "maxLength": 200},
+        "level": {
+          "enum": ["kindergarten", "elementary", "secondary", "postsecondary", "apprenticeship", "professional", "lifelong", "other"]
+        },
+        "grade_or_level": {"type": "string", "minLength": 1, "maxLength": 64},
+        "subject_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "subject_name": {"type": "string", "minLength": 1, "maxLength": 500},
+        "course_code": {"type": ["string", "null"], "maxLength": 64},
+        "course_name": {"type": ["string", "null"], "maxLength": 500}
+      }
+    },
+    "standard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_id",
+        "kind",
+        "parent_official_id",
+        "strand_id",
+        "strand_name",
+        "content"
+      ],
+      "properties": {
+        "official_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "kind": {"enum": ["overall", "specific", "expectation", "learning-area", "other"]},
+        "parent_official_id": {"type": ["string", "null"], "maxLength": 256},
+        "strand_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "strand_name": {"type": "string", "minLength": 1, "maxLength": 500},
+        "content": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "text", "official_text_sha256"],
+          "properties": {
+            "mode": {"enum": ["verbatim", "paraphrase", "reference-only"]},
+            "text": {"type": ["string", "null"], "maxLength": 20000},
+            "official_text_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_lock_sha256",
+        "upstream_document_sha256",
+        "official_locator",
+        "official_recognition",
+        "effective_from",
+        "effective_to"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "source_lock_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "upstream_document_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "official_locator": {"type": "string", "pattern": "^https://"},
+        "official_recognition": {"type": "boolean"},
+        "effective_from": {"type": ["string", "null"]},
+        "effective_to": {"type": ["string", "null"]}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["normalization_method", "normalized_at", "human_source_review_status"],
+      "properties": {
+        "normalization_method": {"type": "string", "minLength": 1, "maxLength": 256},
+        "normalized_at": {"type": "string", "format": "date-time"},
+        "human_source_review_status": {"enum": ["required", "reviewed", "rejected"]}
+      }
+    },
+    "axiom_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "tags"],
+      "properties": {
+        "namespace": {"const": "org.axiom.education"},
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 64,
+          "items": {"type": "string", "minLength": 1, "maxLength": 128}
+        }
+      }
+    },
+    "content_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

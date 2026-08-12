@@ -1,0 +1,93 @@
+name: Ontario Elementary Pending Source Capture
+
+on:
+  pull_request:
+    branches:
+      - feature/ontario-elementary-readiness-monitoring-20260811
+      - main
+    paths:
+      - 'curriculum/ontario-elementary/source-discovery-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'tools/curriculum_source_discovery.py'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/attempt_pending_curriculum_capture.py'
+      - 'tests/test_curriculum_source_discovery.py'
+      - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_pending_curriculum_capture.py'
+      - '.github/workflows/ontario-elementary-pending-source-capture.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe-arts-response-surface:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Verify append-only discovery and bounded target
+        run: |
+          python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_pending_curriculum_capture -v
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Observe Arts response surface three times
+        run: |
+          mkdir -p /tmp/axiom-arts-observation
+          python tools/probe_curriculum_source_stability.py \
+            --source-id ontario-arts-grades-1-8-2009 \
+            --attempts 3 \
+            --output /tmp/axiom-arts-observation/stability.json
+          python -m json.tool /tmp/axiom-arts-observation/stability.json >/dev/null
+      - name: Upload metadata-only Arts stability observation
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-arts-stability-${{ github.sha }}
+          path: /tmp/axiom-arts-observation/stability.json
+          if-no-files-found: error
+          retention-days: 7
+
+  attempt-arts-c1-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Verify append-only discovery and bounded target
+        run: |
+          python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_pending_curriculum_capture -v
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Attempt bounded Arts capture and preserve either outcome
+        run: |
+          mkdir -p /tmp/axiom-arts-candidate
+          python tools/attempt_pending_curriculum_capture.py \
+            --source-id ontario-arts-grades-1-8-2009 \
+            --attempts 3 \
+            --candidate-output /tmp/axiom-arts-candidate/source-lock-candidate.json \
+            --status-output /tmp/axiom-arts-candidate/capture-attempt.json
+          python -m json.tool /tmp/axiom-arts-candidate/capture-attempt.json >/dev/null
+          if test -f /tmp/axiom-arts-candidate/source-lock-candidate.json; then
+            python tools/curriculum_source_lock.py verify \
+              /tmp/axiom-arts-candidate/source-lock-candidate.json
+          fi
+      - name: Upload metadata-only Arts capture-attempt evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-arts-capture-attempt-${{ github.sha }}
+          path: /tmp/axiom-arts-candidate/
+          if-no-files-found: error
+          retention-days: 7
