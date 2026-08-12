@@ -8,7 +8,10 @@ import json
 from pathlib import Path
 from typing import Any
 
-from learner_memory_profile import load_profile
+try:
+    from tools.learner_memory_profile import load_profile
+except ModuleNotFoundError:  # Direct `python tools/...` execution.
+    from learner_memory_profile import load_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 DOMAIN_PATH = ROOT / "contracts" / "axiom-education.v1.json"
