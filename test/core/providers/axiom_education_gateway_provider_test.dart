@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/axiom/gateway_intent_transport.dart';
+import 'package:ontarioedai/core/axiom/governed_learner_commit_runtime.dart';
+import 'package:ontarioedai/core/axiom/governed_memory_runtime.dart';
 import 'package:ontarioedai/core/providers/axiom_education_gateway_provider.dart';
 
 AxiomGatewayRawResponse _successResponse() => AxiomGatewayRawResponse(
@@ -61,7 +63,21 @@ void main() {
 
     final bound = state as GovernedEducationRuntimeBound;
     expect(bound.client.transport, isA<AxiomGatewayIntentTransport>());
+    expect(bound.memoryWriter, isA<GovernedEducationMemoryWriter>());
+    expect(bound.memoryWriter.transport, same(bound.client.transport));
     expect(bound.learnerEventWriter.client, same(bound.client));
+    expect(
+      bound.learnerCommitCoordinator,
+      isA<GovernedLearnerCommitCoordinator>(),
+    );
+    expect(
+      bound.learnerCommitCoordinator.memoryWriter,
+      same(bound.memoryWriter),
+    );
+    expect(
+      bound.learnerCommitCoordinator.learnerEventWriter,
+      same(bound.learnerEventWriter),
+    );
     expect(bound.learnerProgressReader.client, same(bound.client));
   });
 
