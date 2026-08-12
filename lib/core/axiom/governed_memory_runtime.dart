@@ -15,7 +15,7 @@ class GovernedEducationMemoryWriter {
   static const memoryAction = 'memory.put';
   static const metadataSchema = 'axiom-education-governed-memory-ref.v1';
 
-  /// Exact runtime projection pinned by
+  /// Exact runtime projections pinned by
   /// `contracts/axiom-education-learner-memory.v1.json`.
   static const Map<String, String> eventTypeToMemoryKind = {
     'assignment.created': 'education.assignment-artifact',
@@ -25,6 +25,22 @@ class GovernedEducationMemoryWriter {
     'revision.requested': 'education.educator-feedback',
     'appeal.filed': 'education.appeal-reason',
     'correction.recorded': 'education.correction-evidence',
+  };
+
+  /// `actor` means the authenticated AXIOM principal creating the content;
+  /// `subject` means the learner identified by the workflow event.
+  ///
+  /// The app exposes this binding for parity/planning only. AXIOM-MESH remains
+  /// authoritative for verifying the actual authenticated principal and memory
+  /// owner at learner-record admission time.
+  static const Map<String, String> eventTypeToMemoryOwner = {
+    'assignment.created': 'actor',
+    'submission.created': 'subject',
+    'submission.resubmitted': 'subject',
+    'feedback.recorded': 'actor',
+    'revision.requested': 'actor',
+    'appeal.filed': 'subject',
+    'correction.recorded': 'actor',
   };
 
   static final RegExp _sha256Pattern = RegExp(r'^[a-f0-9]{64}$');
