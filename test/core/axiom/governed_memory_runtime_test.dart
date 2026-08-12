@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:axiom_education/core/axiom/education_client.dart';
-import 'package:axiom_education/core/axiom/educator_workflow_runtime.dart';
-import 'package:axiom_education/core/axiom/governed_memory_runtime.dart';
+import 'package:ontarioedai/core/axiom/education_client.dart';
+import 'package:ontarioedai/core/axiom/educator_workflow_runtime.dart';
+import 'package:ontarioedai/core/axiom/governed_memory_runtime.dart';
 
 const digestA =
     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
