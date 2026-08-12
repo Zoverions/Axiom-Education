@@ -1,0 +1,122 @@
+{
+  "schema": "axiom-education-educator-workflow-contract.v1",
+  "contract_id": "axiom.education.educator-workflow",
+  "contract_version": "1.0.0",
+  "parent_contract": {
+    "contract_id": "axiom.education",
+    "contract_version": "1.0.0",
+    "contract_sha256": "a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2",
+    "transport_action": "education.learner.event.append",
+    "purpose": "learning-progress-recording"
+  },
+  "authority_boundary": {
+    "installation_grants_authority": false,
+    "self_asserted_educator_authority_allowed": false,
+    "self_asserted_representative_authority_allowed": false,
+    "governed_persistence_required": true,
+    "raw_student_work_in_event_payload": false,
+    "raw_feedback_in_event_payload": false,
+    "automatic_grade_inference": false,
+    "automatic_credit_inference": false,
+    "human_correction_and_appeal_required": true
+  },
+  "states": [
+    "assigned",
+    "submitted",
+    "under-review",
+    "feedback-available",
+    "revision-requested",
+    "corrected",
+    "appealed",
+    "finalized"
+  ],
+  "event_types": {
+    "assignment.created": {
+      "actors": ["educator"],
+      "from": [null],
+      "to": "assigned",
+      "required_digests": ["artifact_digest"]
+    },
+    "submission.created": {
+      "actors": ["learner"],
+      "from": ["assigned"],
+      "to": "submitted",
+      "required_digests": ["artifact_digest"]
+    },
+    "review.started": {
+      "actors": ["educator"],
+      "from": ["submitted"],
+      "to": "under-review",
+      "required_digests": ["artifact_digest"]
+    },
+    "feedback.recorded": {
+      "actors": ["educator"],
+      "from": ["under-review"],
+      "to": "feedback-available",
+      "required_digests": ["artifact_digest", "feedback_digest"]
+    },
+    "revision.requested": {
+      "actors": ["educator"],
+      "from": ["feedback-available"],
+      "to": "revision-requested",
+      "required_digests": ["artifact_digest", "feedback_digest"]
+    },
+    "submission.resubmitted": {
+      "actors": ["learner"],
+      "from": ["revision-requested"],
+      "to": "submitted",
+      "required_digests": ["artifact_digest"]
+    },
+    "review.finalized": {
+      "actors": ["educator"],
+      "from": ["under-review", "feedback-available", "corrected"],
+      "to": "finalized",
+      "required_digests": ["artifact_digest"]
+    },
+    "appeal.filed": {
+      "actors": ["learner", "authorized-representative"],
+      "from": ["feedback-available", "finalized"],
+      "to": "appealed",
+      "required_digests": ["artifact_digest", "reason_digest"]
+    },
+    "appeal.review.started": {
+      "actors": ["educator"],
+      "from": ["appealed"],
+      "to": "under-review",
+      "required_digests": ["artifact_digest"]
+    },
+    "correction.recorded": {
+      "actors": ["educator"],
+      "from": ["under-review", "feedback-available"],
+      "to": "corrected",
+      "required_digests": ["artifact_digest", "feedback_digest"]
+    }
+  },
+  "projection": {
+    "gateway_action": "education.learner.event.append",
+    "required_parent_input": [
+      "contract_id",
+      "contract_version",
+      "contract_sha256",
+      "subject_id",
+      "consent_id",
+      "purpose",
+      "event_id",
+      "event_type",
+      "occurred_at",
+      "payload_digest",
+      "memory_object_id"
+    ],
+    "projected_optional_parent_input": [
+      "course_code",
+      "expectation_ids",
+      "review_state"
+    ]
+  },
+  "non_claims": [
+    "Workflow state does not prove learner mastery.",
+    "Finalized review state is not a grade, credit, transcript, diploma, or Ministry recognition event.",
+    "An actor_role value does not establish educator, guardian, or representative authority; AXIOM identity, delegation, policy, consent, and provider admission remain separate requirements.",
+    "This contract defines payload semantics only and does not enable a learner-record provider."
+  ]
+}

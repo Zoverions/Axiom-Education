@@ -123,12 +123,44 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_mth1w_course_blueprint.py"],
         ),
         (
+            "Verify MTH1W cumulative assessment blueprint",
+            [python, "tools/check_mth1w_cumulative_assessment.py"],
+        ),
+        (
             "Verify authored MTH1W unit content",
             [python, "tools/check_mth1w_unit_content.py"],
         ),
         (
             "Verify split MTH1W unit content",
             [python, "tools/check_mth1w_split_unit_content.py"],
+        ),
+        (
+            "Verify MTH1W human review targets and submitted evidence",
+            [python, "tools/mth1w_review_evidence.py", "verify-directory"],
+        ),
+        (
+            "Verify MTH1W review readiness claim parity",
+            [python, "tools/check_mth1w_review_readiness.py"],
+        ),
+        (
+            "Verify governed educator workflow contract",
+            [python, "tools/check_educator_workflow_contract.py"],
+        ),
+        (
+            "Verify MTH1W accessible/offline delivery evidence",
+            [python, "tools/check_mth1w_accessibility_readiness.py"],
+        ),
+        (
+            "Verify MTH1W external source-use and licensing evidence",
+            [python, "tools/mth1w_source_use_inventory.py", "verify"],
+        ),
+        (
+            "Verify MTH1W licensing readiness claim parity",
+            [python, "tools/check_mth1w_licensing_readiness.py"],
+        ),
+        (
+            "Verify deterministic MTH1W reviewer dossier",
+            [python, "tools/mth1w_reviewer_dossier.py", "verify"],
         ),
         (
             "Verify curriculum readiness boundary",

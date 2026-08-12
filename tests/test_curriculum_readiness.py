@@ -32,9 +32,21 @@ def test_current_readiness_blocks_complete_course_claims():
     assert payload["authored_content"]["worked_examples"] == 86
     assert payload["authored_content"]["practice_items"] == 473
     assert payload["authored_content"]["unit_quiz_items"] == 90
+    assert payload["cumulative_assessment_plan"] == {
+        "path": "curriculum/courses/ontario-mth1w-2021.assessment-plan.json",
+        "verification_status": "machine-verified-draft-plan",
+        "stages": 5,
+        "units_structurally_covered": 9,
+        "specific_expectations_structurally_covered": 43,
+        "coursewide_expectations": ["AA1", "A1", "A2"],
+        "educator_validity_review_status": "required",
+        "constructed_response_scoring_review_status": "required",
+        "student_grade_or_credit_evidence": False,
+    }
     assert len(payload["required_gates"]) == 7
     statuses = {gate["id"]: gate["status"] for gate in payload["required_gates"]}
     assert statuses["official-expectation-inventory"] == "verified"
+    assert statuses["assessment-and-cumulative-review"] == "blocked"
     assert all(
         status == "blocked"
         for gate_id, status in statuses.items()
@@ -90,6 +102,44 @@ def test_unearned_gate_status_is_rejected(tmp_path):
         verify(path)
 
 
+def test_assessment_plan_does_not_unlock_human_review_gate(tmp_path):
+    def open_assessment_gate(payload):
+        next(
+            gate
+            for gate in payload["required_gates"]
+            if gate["id"] == "assessment-and-cumulative-review"
+        )["status"] = "verified"
+
+    path = write_mutation(tmp_path, open_assessment_gate)
+
+    with pytest.raises(ReadinessError, match="available evidence"):
+        verify(path)
+
+
+def test_assessment_plan_cannot_be_grade_or_credit_evidence(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["cumulative_assessment_plan"].update(
+            {"student_grade_or_credit_evidence": True}
+        ),
+    )
+
+    with pytest.raises(ReadinessError, match="grade or credit evidence"):
+        verify(path)
+
+
+def test_assessment_validity_review_must_remain_required(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["cumulative_assessment_plan"].update(
+            {"educator_validity_review_status": "verified"}
+        ),
+    )
+
+    with pytest.raises(ReadinessError, match="validity review"):
+        verify(path)
+
+
 def test_inventory_evidence_digest_is_pinned(tmp_path):
     path = write_mutation(
         tmp_path,
@@ -121,4 +171,16 @@ def test_authored_unit_count_drift_is_rejected(tmp_path):
     )
 
     with pytest.raises(ReadinessError, match="unit evidence counts"):
+        verify(path)
+
+
+def test_assessment_structural_coverage_drift_is_rejected(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["cumulative_assessment_plan"].update(
+            {"specific_expectations_structurally_covered": 42}
+        ),
+    )
+
+    with pytest.raises(ReadinessError, match="structural evidence"):
         verify(path)

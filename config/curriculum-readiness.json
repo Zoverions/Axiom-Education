@@ -1,6 +1,6 @@
 {
   "schema": "axiom-education-curriculum-readiness.v1",
-  "verified_at": "2026-08-10",
+  "verified_at": "2026-08-11",
   "course": {
     "code": "MTH1W",
     "jurisdiction": "Ontario, Canada",
@@ -52,6 +52,52 @@
     "unit_quiz_items": 90,
     "educator_review_status": "required",
     "student_availability": "draft_preview_with_adult_review_recommended"
+  },
+  "cumulative_assessment_plan": {
+    "path": "curriculum/courses/ontario-mth1w-2021.assessment-plan.json",
+    "verification_status": "machine-verified-draft-plan",
+    "stages": 5,
+    "units_structurally_covered": 9,
+    "specific_expectations_structurally_covered": 43,
+    "coursewide_expectations": ["AA1", "A1", "A2"],
+    "educator_validity_review_status": "required",
+    "constructed_response_scoring_review_status": "required",
+    "student_grade_or_credit_evidence": false
+  },
+  "human_review_evidence": {
+    "schema_path": "schemas/content-review-evidence.v1.schema.json",
+    "verification_tool": "tools/mth1w_review_evidence.py",
+    "verification_status": "machine-verified-review-contract",
+    "content_addressed_lesson_targets": 43,
+    "submitted_review_records": 0,
+    "approved_educator_instructional_reviews": 0,
+    "educator_review_gate_satisfied": false,
+    "claim_boundary": "A machine-verified review contract creates no human approval. Submitted review evidence must bind to the exact current lesson digest and negative findings remain provenance."
+  },
+  "accessible_offline_delivery": {
+    "verification_tool": "tools/mth1w_accessible_export.py",
+    "verification_status": "machine-verified-draft-alternative",
+    "lesson_exports": 43,
+    "student_and_answer_key_separated": true,
+    "format": "text/markdown; charset=utf-8",
+    "deterministic_build": true,
+    "printable_equivalent_required": true,
+    "nonvisual_route_required": true,
+    "representation_text_alternatives_required": true,
+    "human_accessibility_review_status": "required",
+    "accessibility_gate_satisfied": false,
+    "claim_boundary": "Deterministic text alternatives provide an offline, printable, nonvisual delivery route but do not establish WCAG, AODA, assistive-technology, cognitive-accessibility, or usability conformance."
+  },
+  "source_use_licensing": {
+    "schema_path": "schemas/source-license-review.v1.schema.json",
+    "verification_tool": "tools/mth1w_source_use_inventory.py",
+    "verification_status": "machine-verified-source-use-inventory",
+    "submitted_review_records": 0,
+    "permitted_as_used_reviews": 0,
+    "external_source_use_reviews_complete": false,
+    "human_licensing_review_status": "required",
+    "licensing_gate_satisfied": false,
+    "claim_boundary": "The machine inventory binds declared external source uses to exact unit revisions but makes no copyright or licensing determination. Even complete external-source reviews do not automatically cover every quotation, image, figure, dataset, printable/export use, or future asset."
   },
   "local_snapshot": {
     "record_count": 11,

@@ -213,6 +213,52 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
         "authored content must remain a clearly labelled draft preview",
     )
 
+    assessment = payload.get("cumulative_assessment_plan")
+    require(
+        isinstance(assessment, dict),
+        "cumulative assessment plan evidence must be an object",
+    )
+    require(
+        assessment.get("path")
+        == "curriculum/courses/ontario-mth1w-2021.assessment-plan.json",
+        "cumulative assessment plan path mismatch",
+    )
+    require(
+        assessment.get("verification_status") == "machine-verified-draft-plan",
+        "cumulative assessment plan must remain a machine-verified draft",
+    )
+    require(
+        {
+            "stages": assessment.get("stages"),
+            "units_structurally_covered": assessment.get(
+                "units_structurally_covered"
+            ),
+            "specific_expectations_structurally_covered": assessment.get(
+                "specific_expectations_structurally_covered"
+            ),
+            "coursewide_expectations": assessment.get("coursewide_expectations"),
+        }
+        == {
+            "stages": 5,
+            "units_structurally_covered": 9,
+            "specific_expectations_structurally_covered": 43,
+            "coursewide_expectations": ["AA1", "A1", "A2"],
+        },
+        "cumulative assessment structural evidence is incomplete",
+    )
+    require(
+        assessment.get("educator_validity_review_status") == "required",
+        "assessment validity review must remain required",
+    )
+    require(
+        assessment.get("constructed_response_scoring_review_status") == "required",
+        "constructed-response scoring review must remain required",
+    )
+    require(
+        assessment.get("student_grade_or_credit_evidence") is False,
+        "draft cumulative assessment plan cannot become grade or credit evidence",
+    )
+
     local_snapshot = payload.get("local_snapshot")
     require(isinstance(local_snapshot, dict), "local snapshot must be an object")
     require(local_snapshot.get("record_count") == 11, "local snapshot count changed")
@@ -240,6 +286,10 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
     require(
         gate_status == EXPECTED_GATE_STATUS,
         "a curriculum gate status does not match the available evidence",
+    )
+    require(
+        gate_status.get("assessment-and-cumulative-review") == "blocked",
+        "structural assessment coverage must not unlock human assessment review",
     )
     require(
         payload.get("delivery_sequence") == REQUIRED_SEQUENCE,
