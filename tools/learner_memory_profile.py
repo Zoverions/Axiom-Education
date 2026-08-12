@@ -10,7 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE_PATH = ROOT / "contracts" / "axiom-education-learner-memory.v1.json"
-EXPECTED_SHA256 = "9289753c2db2eaa4c18653526f248c5b87c83dc2ab1337ef82b46cf8b23af59d"
+EXPECTED_SHA256 = "3763a28919d36721467160ef772e30da1d5a536a8733fd88b65f2c60c9107d78"
 EXPECTED_EVENT_MEMORY_KINDS = {
     "assignment.created": "education.assignment-artifact",
     "submission.created": "education.learner-submission",
@@ -19,6 +19,15 @@ EXPECTED_EVENT_MEMORY_KINDS = {
     "revision.requested": "education.educator-feedback",
     "appeal.filed": "education.appeal-reason",
     "correction.recorded": "education.correction-evidence",
+}
+EXPECTED_EVENT_MEMORY_OWNERS = {
+    "assignment.created": "actor",
+    "submission.created": "subject",
+    "submission.resubmitted": "subject",
+    "feedback.recorded": "actor",
+    "revision.requested": "actor",
+    "appeal.filed": "subject",
+    "correction.recorded": "actor",
 }
 EXPECTED_METADATA_FIELDS = [
     "schema",
@@ -52,17 +61,19 @@ def load_profile(path: Path = PROFILE_PATH) -> dict[str, Any]:
     require(isinstance(profile, dict), "learner-memory profile must be an object")
     require(profile.get("schema") == "axiom-education-memory-profile.v1", "learner-memory profile schema mismatch")
     require(profile.get("profile_id") == "axiom.education.learner-memory", "learner-memory profile id mismatch")
-    require(profile.get("profile_version") == "1.0.0", "learner-memory profile version mismatch")
+    require(profile.get("profile_version") == "1.1.0", "learner-memory profile version mismatch")
     require(profile.get("memory_action") == "memory.put", "learner-memory profile memory action mismatch")
     require(profile.get("object_id_pattern") == r"^memory_[a-f0-9]{64}$", "learner-memory object id pattern mismatch")
     require(profile.get("metadata_schema") == "axiom-education-governed-memory-ref.v1", "learner-memory metadata schema mismatch")
     require(profile.get("metadata_fields") == EXPECTED_METADATA_FIELDS, "learner-memory metadata fields mismatch")
     require(profile.get("event_type_to_memory_kind") == EXPECTED_EVENT_MEMORY_KINDS, "learner-memory event-kind mapping mismatch")
+    require(profile.get("event_type_to_memory_owner") == EXPECTED_EVENT_MEMORY_OWNERS, "learner-memory owner binding mismatch")
     invariants = profile.get("invariants")
     require(isinstance(invariants, dict), "learner-memory invariants missing")
     require(invariants.get("automatic_tombstone_on_append_failure") is False, "automatic tombstone must remain disabled")
     require(invariants.get("caller_selects_memory_kind") is False, "caller-selected memory kinds must remain disabled")
     require(invariants.get("content_address_required") is True, "content addressing must remain required")
+    require(invariants.get("memory_owner_binding_required") is True, "memory ownership binding must remain required")
     require(invariants.get("memory_write_precedes_learner_event_for_new_content") is True, "memory write ordering changed")
     require(invariants.get("raw_content_in_learner_event") is False, "raw learner content must not enter learner events")
     return profile
