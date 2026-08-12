@@ -94,45 +94,45 @@ GovernedLearnerCommitCoordinator _coordinator(_RecordingTransport transport) {
 }
 
 void main() {
-  test('confirmed governed memory is recorded before learner-event append', () async {
-    final transport = _RecordingTransport((call) {
-      if (call.action == 'memory.put') return _memorySuccess();
-      if (call.action == 'education.learner.event.append') {
-        return _eventSuccess();
-      }
-      fail('Unexpected action: ${call.action}');
-    });
-    final coordinator = _coordinator(transport);
+  test(
+    'confirmed governed memory is recorded before learner-event append',
+    () async {
+      final transport = _RecordingTransport((call) {
+        if (call.action == 'memory.put') return _memorySuccess();
+        if (call.action == 'education.learner.event.append') {
+          return _eventSuccess();
+        }
+        fail('Unexpected action: ${call.action}');
+      });
+      final coordinator = _coordinator(transport);
 
-    final receipt = await coordinator.storeAndAppend(
-      workflow: _workflow(),
-      consentId: 'consent:write-001',
-      content: {'body': 'Assignment content'},
-    );
+      final receipt = await coordinator.storeAndAppend(
+        workflow: _workflow(),
+        consentId: 'consent:write-001',
+        content: {'body': 'Assignment content'},
+      );
 
-    expect(
-      transport.calls.map((call) => call.action).toList(),
-      ['memory.put', 'education.learner.event.append'],
-    );
-    expect(
-      transport.calls[1].input['memory_object_id'],
-      receipt.memoryReceipt.objectId,
-    );
-    expect(
-      receipt.learnerEventReceipt.payloadDigest,
-      receipt.memoryReceipt.workflowPayloadDigest,
-    );
-  });
+      expect(transport.calls.map((call) => call.action).toList(), [
+        'memory.put',
+        'education.learner.event.append',
+      ]);
+      expect(
+        transport.calls[1].input['memory_object_id'],
+        receipt.memoryReceipt.objectId,
+      );
+      expect(
+        receipt.learnerEventReceipt.payloadDigest,
+        receipt.memoryReceipt.workflowPayloadDigest,
+      );
+    },
+  );
 
   test('memory failure prevents learner-event append', () async {
     final transport = _RecordingTransport(
       (_) => const AxiomTransportResponse(
         statusCode: 403,
         body: {
-          'error': {
-            'code': 'policy_denied',
-            'message': 'Memory write denied.',
-          },
+          'error': {'code': 'policy_denied', 'message': 'Memory write denied.'},
         },
       ),
     );
@@ -149,83 +149,89 @@ void main() {
     expect(transport.calls.map((call) => call.action), ['memory.put']);
   });
 
-  test('append failure preserves confirmed memory reference and issues no compensation', () async {
-    final transport = _RecordingTransport((call) {
-      if (call.action == 'memory.put') return _memorySuccess();
-      return const AxiomTransportResponse(
-        statusCode: 503,
-        body: {
-          'error': {
-            'code': 'capability_unavailable',
-            'message': 'Learner record provider unavailable.',
+  test(
+    'append failure preserves confirmed memory reference and issues no compensation',
+    () async {
+      final transport = _RecordingTransport((call) {
+        if (call.action == 'memory.put') return _memorySuccess();
+        return const AxiomTransportResponse(
+          statusCode: 503,
+          body: {
+            'error': {
+              'code': 'capability_unavailable',
+              'message': 'Learner record provider unavailable.',
+            },
           },
-        },
-      );
-    });
-    final coordinator = _coordinator(transport);
+        );
+      });
+      final coordinator = _coordinator(transport);
 
-    GovernedLearnerCommitAppendException? captured;
-    try {
+      GovernedLearnerCommitAppendException? captured;
+      try {
+        await coordinator.storeAndAppend(
+          workflow: _workflow(),
+          consentId: 'consent:write-001',
+          content: {'body': 'Assignment content'},
+        );
+        fail('Expected append failure.');
+      } on GovernedLearnerCommitAppendException catch (error) {
+        captured = error;
+      }
+
+      expect(captured, isNotNull);
+      expect(captured!.memoryReceipt.objectId, 'memory_$digestB');
+      expect(
+        captured.cause,
+        isA<AxiomEducationCapabilityUnavailableException>(),
+      );
+      expect(transport.calls.map((call) => call.action).toList(), [
+        'memory.put',
+        'education.learner.event.append',
+      ]);
+      expect(
+        transport.calls.any((call) => call.action == 'memory.tombstone'),
+        isFalse,
+      );
+    },
+  );
+
+  test(
+    'caller retry reuses deterministic memory and learner-event identities',
+    () async {
+      final transport = _RecordingTransport((call) {
+        if (call.action == 'memory.put') return _memorySuccess();
+        return _eventSuccess();
+      });
+      final coordinator = _coordinator(transport);
+      final workflow = _workflow();
+      final content = {'body': 'Stable assignment content'};
+
       await coordinator.storeAndAppend(
-        workflow: _workflow(),
+        workflow: workflow,
         consentId: 'consent:write-001',
-        content: {'body': 'Assignment content'},
+        content: content,
       );
-      fail('Expected append failure.');
-    } on GovernedLearnerCommitAppendException catch (error) {
-      captured = error;
-    }
+      await coordinator.storeAndAppend(
+        workflow: workflow,
+        consentId: 'consent:write-001',
+        content: content,
+      );
 
-    expect(captured, isNotNull);
-    expect(
-      captured!.memoryReceipt.objectId,
-      'memory_$digestB',
-    );
-    expect(captured.cause, isA<AxiomEducationCapabilityUnavailableException>());
-    expect(
-      transport.calls.map((call) => call.action).toList(),
-      ['memory.put', 'education.learner.event.append'],
-    );
-    expect(
-      transport.calls.any((call) => call.action == 'memory.tombstone'),
-      isFalse,
-    );
-  });
-
-  test('caller retry reuses deterministic memory and learner-event identities', () async {
-    final transport = _RecordingTransport((call) {
-      if (call.action == 'memory.put') return _memorySuccess();
-      return _eventSuccess();
-    });
-    final coordinator = _coordinator(transport);
-    final workflow = _workflow();
-    final content = {'body': 'Stable assignment content'};
-
-    await coordinator.storeAndAppend(
-      workflow: workflow,
-      consentId: 'consent:write-001',
-      content: content,
-    );
-    await coordinator.storeAndAppend(
-      workflow: workflow,
-      consentId: 'consent:write-001',
-      content: content,
-    );
-
-    expect(transport.calls, hasLength(4));
-    expect(transport.calls[0].action, 'memory.put');
-    expect(transport.calls[1].action, 'education.learner.event.append');
-    expect(transport.calls[2].action, 'memory.put');
-    expect(transport.calls[3].action, 'education.learner.event.append');
-    expect(
-      transport.calls[0].idempotencyKey,
-      transport.calls[2].idempotencyKey,
-    );
-    expect(
-      transport.calls[1].idempotencyKey,
-      transport.calls[3].idempotencyKey,
-    );
-  });
+      expect(transport.calls, hasLength(4));
+      expect(transport.calls[0].action, 'memory.put');
+      expect(transport.calls[1].action, 'education.learner.event.append');
+      expect(transport.calls[2].action, 'memory.put');
+      expect(transport.calls[3].action, 'education.learner.event.append');
+      expect(
+        transport.calls[0].idempotencyKey,
+        transport.calls[2].idempotencyKey,
+      );
+      expect(
+        transport.calls[1].idempotencyKey,
+        transport.calls[3].idempotencyKey,
+      );
+    },
+  );
 
   test('invalid workflow fails before governed memory transport', () async {
     final transport = _RecordingTransport((_) => _memorySuccess());
