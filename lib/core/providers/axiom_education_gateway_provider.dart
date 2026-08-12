@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../axiom/education_client.dart';
 import '../axiom/educator_workflow_runtime.dart';
 import '../axiom/gateway_intent_transport.dart';
+import '../axiom/governed_learner_commit_runtime.dart';
+import '../axiom/governed_memory_runtime.dart';
 import '../axiom/learner_progress_runtime.dart';
 
 /// Reviewed host-shell binding for the Axiom Education -> AXIOM Gateway seam.
@@ -54,12 +56,16 @@ class GovernedEducationRuntimeUnbound extends GovernedEducationRuntimeState {
 /// be allowed or persisted.
 class GovernedEducationRuntimeBound extends GovernedEducationRuntimeState {
   final AxiomEducationClient client;
+  final GovernedEducationMemoryWriter memoryWriter;
   final GovernedLearnerEventWriter learnerEventWriter;
+  final GovernedLearnerCommitCoordinator learnerCommitCoordinator;
   final GovernedLearnerProgressReader learnerProgressReader;
 
   const GovernedEducationRuntimeBound({
     required this.client,
+    required this.memoryWriter,
     required this.learnerEventWriter,
+    required this.learnerCommitCoordinator,
     required this.learnerProgressReader,
   });
 
@@ -87,9 +93,16 @@ final governedEducationRuntimeProvider = Provider<GovernedEducationRuntimeState>
       );
     },
   );
+  final memoryWriter = GovernedEducationMemoryWriter(transport: transport);
+  final learnerEventWriter = GovernedLearnerEventWriter(client: client);
   return GovernedEducationRuntimeBound(
     client: client,
-    learnerEventWriter: GovernedLearnerEventWriter(client: client),
+    memoryWriter: memoryWriter,
+    learnerEventWriter: learnerEventWriter,
+    learnerCommitCoordinator: GovernedLearnerCommitCoordinator(
+      memoryWriter: memoryWriter,
+      learnerEventWriter: learnerEventWriter,
+    ),
     learnerProgressReader: GovernedLearnerProgressReader(client: client),
   );
 });
