@@ -179,7 +179,7 @@ void main() {
       }
 
       expect(captured, isNotNull);
-      expect(captured!.memoryReceipt.objectId, 'memory_$digestB');
+      expect(captured.memoryReceipt.objectId, 'memory_$digestB');
       expect(
         captured.cause,
         isA<AxiomEducationCapabilityUnavailableException>(),
