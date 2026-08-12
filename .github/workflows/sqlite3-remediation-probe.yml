@@ -42,19 +42,25 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           lock = Path('pubspec.lock').read_text(encoding='utf-8')
-          marker = '  sqlite3:\n'
-          start = lock.find(marker)
-          if start < 0:
+          lines = lock.splitlines()
+          try:
+              start = lines.index('  sqlite3:')
+          except ValueError:
               raise SystemExit('sqlite3 lock entry missing')
-          end = lock.find('\n  ', start + len(marker))
-          entry = lock[start:] if end < 0 else lock[start:end]
+          end = len(lines)
+          for index in range(start + 1, len(lines)):
+              line = lines[index]
+              if line.startswith('  ') and not line.startswith('    '):
+                  end = index
+                  break
+          entry = '\n'.join(lines[start:end])
           print(entry)
           if 'dependency: transitive' not in entry:
               raise SystemExit('sqlite3 must remain transitive')
           if 'version: "3.1.7"' not in entry:
               raise SystemExit('sqlite3 did not remain pinned to 3.1.7')
           expected = '  flutter: ">=3.41.1 <3.42.0"'
-          if expected not in lock.splitlines():
+          if expected not in lines:
               raise SystemExit('pinned Flutter lockfile ceiling drifted')
           PY
           mapfile -t changed < <(git diff --name-only)
