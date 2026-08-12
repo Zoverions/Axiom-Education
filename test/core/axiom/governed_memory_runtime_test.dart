@@ -78,101 +78,118 @@ AxiomTransportResponse _success(_IntentCall call) {
 }
 
 void main() {
-  test('stores education content through core memory.put without contract fields', () async {
-    final transport = _RecordingTransport(_success);
-    final writer = GovernedEducationMemoryWriter(transport: transport);
-    final event = _event();
+  test(
+    'stores education content through core memory.put without contract fields',
+    () async {
+      final transport = _RecordingTransport(_success);
+      final writer = GovernedEducationMemoryWriter(transport: transport);
+      final event = _event();
 
-    final receipt = await writer.storeForEvent(
-      event: event,
-      content: {
-        'title': 'Linear relations practice',
-        'private_body': 'Learner-visible assignment content.',
-      },
-    );
+      final receipt = await writer.storeForEvent(
+        event: event,
+        content: {
+          'title': 'Linear relations practice',
+          'private_body': 'Learner-visible assignment content.',
+        },
+      );
 
-    expect(transport.calls, hasLength(1));
-    final call = transport.calls.single;
-    expect(call.action, 'memory.put');
-    expect(call.input.keys, containsAll(['kind', 'content', 'metadata']));
-    expect(call.input, isNot(contains('contract_id')));
-    expect(call.input, isNot(contains('contract_version')));
-    expect(call.input, isNot(contains('contract_sha256')));
-    expect(call.input['kind'], 'education.assignment-artifact');
-    expect(call.idempotencyKey, startsWith('education-memory:'));
-    expect(call.idempotencyKey.length, inInclusiveRange(16, 160));
+      expect(transport.calls, hasLength(1));
+      final call = transport.calls.single;
+      expect(call.action, 'memory.put');
+      expect(call.input.keys, containsAll(['kind', 'content', 'metadata']));
+      expect(call.input, isNot(contains('contract_id')));
+      expect(call.input, isNot(contains('contract_version')));
+      expect(call.input, isNot(contains('contract_sha256')));
+      expect(call.input['kind'], 'education.assignment-artifact');
+      expect(call.idempotencyKey, startsWith('education-memory:'));
+      expect(call.idempotencyKey.length, inInclusiveRange(16, 160));
 
-    final metadata = Map<String, Object?>.from(call.input['metadata']! as Map);
-    expect(metadata, {
-      'schema': GovernedEducationMemoryWriter.metadataSchema,
-      'workflow_id': event.workflowId,
-      'assignment_id': event.assignmentId,
-      'event_id': event.eventId,
-      'event_type': event.eventType,
-      'workflow_payload_digest': event.payloadDigest,
-    });
-    expect(metadata.toString(), isNot(contains('Learner-visible assignment content.')));
+      final metadata = Map<String, Object?>.from(
+        call.input['metadata']! as Map,
+      );
+      expect(metadata, {
+        'schema': GovernedEducationMemoryWriter.metadataSchema,
+        'workflow_id': event.workflowId,
+        'assignment_id': event.assignmentId,
+        'event_id': event.eventId,
+        'event_type': event.eventType,
+        'workflow_payload_digest': event.payloadDigest,
+      });
+      expect(
+        metadata.toString(),
+        isNot(contains('Learner-visible assignment content.')),
+      );
 
-    expect(receipt.objectId, 'memory_$digestB');
-    expect(receipt.contentDigest, digestB);
-    expect(receipt.kind, 'education.assignment-artifact');
-    expect(receipt.workflowPayloadDigest, event.payloadDigest);
-  });
+      expect(receipt.objectId, 'memory_$digestB');
+      expect(receipt.contentDigest, digestB);
+      expect(receipt.kind, 'education.assignment-artifact');
+      expect(receipt.workflowPayloadDigest, event.payloadDigest);
+    },
+  );
 
-  test('same governed memory request derives the same retry idempotency key', () async {
-    final transport = _RecordingTransport(_success);
-    final writer = GovernedEducationMemoryWriter(transport: transport);
-    final event = _event();
-    final content = {'body': 'Stable content'};
+  test(
+    'same governed memory request derives the same retry idempotency key',
+    () async {
+      final transport = _RecordingTransport(_success);
+      final writer = GovernedEducationMemoryWriter(transport: transport);
+      final event = _event();
+      final content = {'body': 'Stable content'};
 
-    await writer.storeForEvent(event: event, content: content);
-    await writer.storeForEvent(event: event, content: content);
+      await writer.storeForEvent(event: event, content: content);
+      await writer.storeForEvent(event: event, content: content);
 
-    expect(transport.calls, hasLength(2));
-    expect(
-      transport.calls[0].idempotencyKey,
-      transport.calls[1].idempotencyKey,
-    );
-  });
+      expect(transport.calls, hasLength(2));
+      expect(
+        transport.calls[0].idempotencyKey,
+        transport.calls[1].idempotencyKey,
+      );
+    },
+  );
 
-  test('different governed content changes the retry idempotency key', () async {
-    final transport = _RecordingTransport(_success);
-    final writer = GovernedEducationMemoryWriter(transport: transport);
-    final event = _event();
+  test(
+    'different governed content changes the retry idempotency key',
+    () async {
+      final transport = _RecordingTransport(_success);
+      final writer = GovernedEducationMemoryWriter(transport: transport);
+      final event = _event();
 
-    await writer.storeForEvent(event: event, content: {'body': 'Version A'});
-    await writer.storeForEvent(event: event, content: {'body': 'Version B'});
+      await writer.storeForEvent(event: event, content: {'body': 'Version A'});
+      await writer.storeForEvent(event: event, content: {'body': 'Version B'});
 
-    expect(
-      transport.calls[0].idempotencyKey,
-      isNot(transport.calls[1].idempotencyKey),
-    );
-  });
+      expect(
+        transport.calls[0].idempotencyKey,
+        isNot(transport.calls[1].idempotencyKey),
+      );
+    },
+  );
 
-  test('events without new content must reuse an existing governed reference', () async {
-    final transport = _RecordingTransport(_success);
-    final writer = GovernedEducationMemoryWriter(transport: transport);
-    final event = EducatorWorkflowEvent.create(
-      workflowId: 'workflow:001',
-      assignmentId: 'assignment:001',
-      subjectId: 'learner:001',
-      learningContextId: 'class:MTH1W',
-      courseCode: 'MTH1W',
-      expectationIds: const ['MTH1W-A1.1'],
-      eventId: 'event:review-001',
-      eventType: 'review.started',
-      actorRole: 'educator',
-      occurredAt: '2026-08-11T20:05:00-04:00',
-      previousEventDigest: digestB,
-      artifactDigest: digestA,
-    );
+  test(
+    'events without new content must reuse an existing governed reference',
+    () async {
+      final transport = _RecordingTransport(_success);
+      final writer = GovernedEducationMemoryWriter(transport: transport);
+      final event = EducatorWorkflowEvent.create(
+        workflowId: 'workflow:001',
+        assignmentId: 'assignment:001',
+        subjectId: 'learner:001',
+        learningContextId: 'class:MTH1W',
+        courseCode: 'MTH1W',
+        expectationIds: const ['MTH1W-A1.1'],
+        eventId: 'event:review-001',
+        eventType: 'review.started',
+        actorRole: 'educator',
+        occurredAt: '2026-08-11T20:05:00-04:00',
+        previousEventDigest: digestB,
+        artifactDigest: digestA,
+      );
 
-    expect(
-      () => writer.storeForEvent(event: event, content: {'body': 'not new'}),
-      throwsA(isA<GovernedEducationMemoryValidationException>()),
-    );
-    expect(transport.calls, isEmpty);
-  });
+      expect(
+        () => writer.storeForEvent(event: event, content: {'body': 'not new'}),
+        throwsA(isA<GovernedEducationMemoryValidationException>()),
+      );
+      expect(transport.calls, isEmpty);
+    },
+  );
 
   test('response must preserve AXIOM content-address identity', () async {
     final transport = _RecordingTransport(
