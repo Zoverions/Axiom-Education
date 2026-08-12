@@ -44,6 +44,12 @@ dev_dependencies:
   msix: ^3.16.0
   flutter_lints: ^6.0.0
 
+hooks:
+  user_defines:
+    sqlite3:
+      source: source
+      path: third_party/sqlite/sqlite3.c
+
 flutter:
   assets:
     - assets/curriculum/ontario_curriculum_full.json
