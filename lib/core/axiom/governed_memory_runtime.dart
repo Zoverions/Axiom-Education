@@ -26,9 +26,7 @@ class GovernedEducationMemoryWriter {
   };
 
   static final RegExp _sha256Pattern = RegExp(r'^[a-f0-9]{64}$');
-  static final RegExp _memoryObjectPattern = RegExp(
-    r'^memory_[a-f0-9]{64}$',
-  );
+  static final RegExp _memoryObjectPattern = RegExp(r'^memory_[a-f0-9]{64}$');
 
   final AxiomIntentTransport transport;
 
@@ -236,10 +234,7 @@ class GovernedEducationMemoryValidationException
 
 class GovernedEducationMemoryTransportException
     extends GovernedEducationMemoryException {
-  const GovernedEducationMemoryTransportException(
-    super.message, {
-    super.cause,
-  });
+  const GovernedEducationMemoryTransportException(super.message, {super.cause});
 }
 
 class GovernedEducationMemoryProtocolException
