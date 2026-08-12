@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/axiom/governed_memory_runtime.dart';
 
 const expectedProfileSha256 =
-    '9289753c2db2eaa4c18653526f248c5b87c83dc2ab1337ef82b46cf8b23af59d';
+    '3763a28919d36721467160ef772e30da1d5a536a8733fd88b65f2c60c9107d78';
 
 void main() {
   test(
@@ -15,7 +15,7 @@ void main() {
       final bytes = File(
         'contracts/axiom-education-learner-memory.v1.json',
       ).readAsBytesSync();
-      expect(bytes, hasLength(971));
+      expect(bytes, hasLength(1246));
       expect(sha256.convert(bytes).toString(), expectedProfileSha256);
 
       final profile = Map<String, Object?>.from(
@@ -24,8 +24,13 @@ void main() {
       final eventKinds = Map<String, String>.from(
         profile['event_type_to_memory_kind']! as Map,
       );
+      final eventOwners = Map<String, String>.from(
+        profile['event_type_to_memory_owner']! as Map,
+      );
 
+      expect(profile['profile_version'], '1.1.0');
       expect(eventKinds, GovernedEducationMemoryWriter.eventTypeToMemoryKind);
+      expect(eventOwners, GovernedEducationMemoryWriter.eventTypeToMemoryOwner);
       expect(
         profile['memory_action'],
         GovernedEducationMemoryWriter.memoryAction,
@@ -42,6 +47,7 @@ void main() {
       expect(invariants['caller_selects_memory_kind'], isFalse);
       expect(invariants['raw_content_in_learner_event'], isFalse);
       expect(invariants['automatic_tombstone_on_append_failure'], isFalse);
+      expect(invariants['memory_owner_binding_required'], isTrue);
       expect(
         invariants['memory_write_precedes_learner_event_for_new_content'],
         isTrue,
