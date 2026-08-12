@@ -1,0 +1,60 @@
+name: Ontario Elementary Source Capture
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/curriculum-standard-record-v2-20260811
+    paths:
+      - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/curriculum_source_lock.py'
+      - 'tests/test_remote_curriculum_source_capture.py'
+      - '.github/workflows/ontario-elementary-source-capture.yml'
+  workflow_dispatch:
+    inputs:
+      source_id:
+        description: Predeclared Ontario Elementary source to capture
+        required: true
+        type: choice
+        options:
+          - ontario-health-physical-education-grades-1-8-2019
+
+permissions:
+  contents: read
+
+jobs:
+  capture-source-lock-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Validate allowlisted targets without network access
+        run: python tools/remote_curriculum_source_capture.py validate-targets
+
+      - name: Capture exact official bytes and emit metadata-only lock candidate
+        env:
+          SOURCE_ID: ${{ inputs.source_id || 'ontario-health-physical-education-grades-1-8-2019' }}
+        run: |
+          mkdir -p /tmp/axiom-source-capture
+          python tools/remote_curriculum_source_capture.py capture \
+            --source-id "${SOURCE_ID}" \
+            --output /tmp/axiom-source-capture/source-lock-candidate.json
+          python tools/curriculum_source_lock.py verify \
+            /tmp/axiom-source-capture/source-lock-candidate.json
+          test "$(find /tmp/axiom-source-capture -maxdepth 1 -type f | wc -l)" -eq 1
+
+      - name: Upload metadata-only source-lock candidate
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-source-lock-${{ inputs.source_id || 'ontario-health-physical-education-grades-1-8-2019' }}-${{ github.sha }}
+          path: /tmp/axiom-source-capture/source-lock-candidate.json
+          if-no-files-found: error
+          retention-days: 7
