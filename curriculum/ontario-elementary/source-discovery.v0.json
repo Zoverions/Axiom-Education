@@ -1,0 +1,225 @@
+{
+  "schema": "axiom-curriculum-source-discovery.v1",
+  "discovery_version": "0.2.0",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "scope": "kindergarten-and-grades-1-8",
+  "retrieved_on": "2026-08-11",
+  "state": "C0-discovered",
+  "claim_boundary": "This file records official-source discovery only. Exact upstream curriculum bytes/digests, licensing review, complete expectation extraction, deterministic pack build, signing, independent verification, staging, and activation have not yet been completed. Exact source locators and publication records do not by themselves promote a source beyond C0.",
+  "official_entry_points": [
+    {
+      "source_id": "ontario-curriculum-portal",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum",
+      "authority": "Ontario Ministry of Education",
+      "classification": "official-curriculum-portal",
+      "notes": "Official Curriculum and Resources entry point for elementary and secondary curriculum. Some curriculum is still redirected to other official sites."
+    },
+    {
+      "source_id": "ontario-schools-learning-programs",
+      "url": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs",
+      "authority": "Ontario Ministry of Education",
+      "classification": "official-policy",
+      "notes": "Defines required elementary curriculum families and distinguishes English-language and French-language school programs."
+    }
+  ],
+  "confirmed_curriculum_sources": [
+    {
+      "source_id": "ontario-kindergarten-2026",
+      "subject_family": "kindergarten",
+      "grades": ["K1", "K2"],
+      "policy_version": "2026",
+      "effective_context": "2026-2027 school year",
+      "url": "https://www.ontario.ca/page/kindergarten",
+      "classification": "official-current-overview",
+      "source_locator_status": "official-overview-captured-exact-document-pending",
+      "status_note": "Ontario states that The Ontario Curriculum, Kindergarten, 2026 replaces The Kindergarten Program, 2016 beginning in the 2026-27 school year.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-discovered"
+    },
+    {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "subject_family": "the-arts",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2009",
+      "url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+      "publication_number": "231998_U",
+      "classification": "official-publication-record",
+      "source_locator_status": "official-publication-record-captured-current-document-bytes-pending",
+      "status_note": "Publications Ontario identifies The Arts: Ontario Curriculum Grades 1-8 as Revised 2009. Its legacy access link has migrated, so the current exact curriculum bytes/portal route still require capture before C1.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "version-confirmed-source-bytes-pending"
+    },
+    {
+      "source_id": "ontario-fsl-grades-1-8-2013",
+      "subject_family": "french-as-a-second-language",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2013",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-fsl/grades-list?grade=n1",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/ontario-curriculum-french-as-a-second-language-grades-1-8-revised-2013-232944",
+      "publication_number": "232944",
+      "classification": "official-current-curriculum-portal",
+      "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+      "status_note": "The official curriculum portal identifies French as a Second Language (2013). Publications Ontario confirms Core French Grades 4-8, Extended French Grades 4-8, and French Immersion Grades 1-8 and records that the 2013 document replaced the prior elementary FSL documents.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-locator-confirmed-bytes-pending"
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "subject_family": "mathematics",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2020",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics",
+      "overview_url": "https://www.ontario.ca/page/math-curriculum-grades-1-8",
+      "classification": "official-current-curriculum-portal",
+      "source_locator_status": "exact-official-portal-captured-bytes-pending",
+      "status_note": "Official Ontario curriculum and overview sources identify the 2020 elementary mathematics curriculum as the Grades 1-8 curriculum.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-locator-confirmed-bytes-pending"
+    },
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "subject_family": "health-and-physical-education",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2019",
+      "url": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
+      "classification": "official-current-curriculum-guide",
+      "source_locator_status": "official-current-guide-captured-document-bytes-pending",
+      "status_note": "Official Ontario page identifies the 2019 HPE curriculum for Grades 1-8 and links the curriculum document.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-locator-confirmed-bytes-pending"
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "subject_family": "language-english-schools",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2023",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-language",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL33241",
+      "publication_number": "CL33241",
+      "classification": "official-current-curriculum-portal",
+      "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+      "status_note": "The official curriculum portal is the current Language Grades 1-8 source. Publications Ontario identifies The Ontario Curriculum Grades 1-8: Language 2023, June 2023, publication CL33241.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-locator-confirmed-bytes-pending"
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "subject_family": "science-and-technology",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "2022",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL31757",
+      "publication_number": "CL31757",
+      "classification": "official-current-curriculum-portal",
+      "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+      "status_note": "The official curriculum portal is the current Science and Technology Grades 1-8 source. Publications Ontario identifies Ontario Curriculum, Grades 1-8, Science and Technology, 2022, publication CL31757.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "source-locator-confirmed-bytes-pending"
+    },
+    {
+      "source_id": "ontario-social-studies-history-geography",
+      "subject_family": "social-studies-history-geography",
+      "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+      "policy_version": "mixed-current-review-required",
+      "url": "https://www.ontario.ca/page/indigenous-education-ontario",
+      "classification": "official-policy-confirmation",
+      "source_locator_status": "current-version-boundary-unresolved",
+      "status_note": "Official Ontario material confirms revised Social Studies Grades 1-6 and History/Geography Grades 7-8 were implemented in 2018. Separate 2026 official materials indicate new learning in Grades 7-8 History for 2026-27, so exact current source/version boundaries require capture before normalization.",
+      "upstream_document_sha256": null,
+      "upstream_digest_status": "not-captured",
+      "review_status": "current-version-boundary-review-required"
+    }
+  ],
+  "required_program_families": {
+    "english_language_schools": [
+      "the-arts",
+      "french-as-a-second-language",
+      "language",
+      "health-and-physical-education",
+      "mathematics",
+      "science-and-technology",
+      "social-studies-grades-1-6",
+      "history-and-geography-grades-7-8"
+    ],
+    "french_language_schools": [
+      "the-arts",
+      "english",
+      "french",
+      "health-and-physical-education",
+      "mathematics",
+      "science-and-technology",
+      "social-studies-grades-1-6",
+      "history-and-geography-grades-7-8"
+    ],
+    "source": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs"
+  },
+  "coverage_accounting": {
+    "english_language_schools": {
+      "the-arts": {"status": "source-discovered", "source_id": "ontario-arts-grades-1-8-2009"},
+      "french-as-a-second-language": {"status": "source-discovered", "source_id": "ontario-fsl-grades-1-8-2013"},
+      "language": {"status": "source-discovered", "source_id": "ontario-language-grades-1-8-2023"},
+      "health-and-physical-education": {"status": "source-discovered", "source_id": "ontario-health-physical-education-grades-1-8-2019"},
+      "mathematics": {"status": "source-discovered", "source_id": "ontario-mathematics-grades-1-8-2020"},
+      "science-and-technology": {"status": "source-discovered", "source_id": "ontario-science-technology-grades-1-8-2022"},
+      "social-studies-grades-1-6": {"status": "version-boundary-review-required", "source_id": "ontario-social-studies-history-geography"},
+      "history-and-geography-grades-7-8": {"status": "version-boundary-review-required", "source_id": "ontario-social-studies-history-geography"}
+    },
+    "french_language_schools": {
+      "the-arts": {"status": "unresolved-language-stream-source"},
+      "english": {"status": "unresolved-language-stream-source"},
+      "french": {"status": "unresolved-language-stream-source"},
+      "health-and-physical-education": {"status": "unresolved-language-stream-source"},
+      "mathematics": {"status": "unresolved-language-stream-source"},
+      "science-and-technology": {"status": "unresolved-language-stream-source"},
+      "social-studies-grades-1-6": {"status": "unresolved-language-stream-source"},
+      "history-and-geography-grades-7-8": {"status": "unresolved-language-stream-source"}
+    }
+  },
+  "policy_overlays_discovered": [
+    {
+      "policy_id": "ontario-growing-success",
+      "url": "https://www.ontario.ca/page/growing-success-assessment-evaluation-and-reporting-ontario-schools-kindergarten-grade-12",
+      "classification": "assessment-evaluation-reporting",
+      "notes": "Assessment/reporting policy is a separate policy artifact and must not be flattened into curriculum expectations. Current page includes updates for revised Language 2023 and Mathematics 2020 reporting."
+    },
+    {
+      "policy_id": "ontario-ppm-160-math-time",
+      "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/policyprogram-memorandum-160",
+      "classification": "instructional-time-policy",
+      "notes": "Protected mathematics instructional time is a program-policy overlay, not a curriculum expectation."
+    },
+    {
+      "policy_id": "ontario-ppm-162-hpe-exemption",
+      "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/policyprogram-memorandum-162",
+      "classification": "guardian-exemption-policy",
+      "notes": "Defines a parent-requested exemption mechanism for the Human Development and Sexual Health expectations in Grades 1-8 HPE. This belongs in jurisdiction policy/authority logic, not curriculum-content normalization alone."
+    },
+    {
+      "policy_id": "ontario-early-reading-screening",
+      "url": "https://www.ontario.ca/document/ontario-schools-kindergarten-grade-12-policy-and-program-requirements/learning-programs",
+      "classification": "screening-policy",
+      "notes": "Ontario Schools policy identifies annual early reading screening requirements for Year 2 Kindergarten through Grade 2. Exact PPM/source capture is still required."
+    }
+  ],
+  "unresolved_source_work": [
+    "Capture exact upstream bytes and SHA-256 digests for Language Grades 1-8 2023 from the confirmed official curriculum route.",
+    "Capture exact upstream bytes and SHA-256 digests for Science and Technology Grades 1-8 2022 from the confirmed official curriculum route.",
+    "Capture exact upstream bytes and SHA-256 digests for Mathematics Grades 1-8 2020.",
+    "Capture exact upstream bytes and SHA-256 digests for FSL Grades 1-8 2013 and reconcile portal/download variants.",
+    "Capture the current The Arts Grades 1-8 curriculum bytes after migration from the legacy Ministry route and verify that Revised 2009 remains the current base document.",
+    "Resolve the 2026 Grade 7-8 History update against the prior Social Studies/History/Geography source and effective dates.",
+    "Capture current official French-language-school Arts, English, French, HPE, Mathematics, Science and Technology, Social Studies, History, and Geography sources without substituting English-language program artifacts.",
+    "Identify current Indigenous/Native/International language curriculum relationships and whether they belong in the base pack or optional program overlays.",
+    "Capture exact Kindergarten 2026 policy document bytes rather than relying on the overview page.",
+    "Review copyright/licensing/redistribution terms for every source before packaging official text.",
+    "Archive exact source bytes where legally and technically appropriate and bind SHA-256 digests before any record is promoted beyond C0 discovery."
+  ]
+}

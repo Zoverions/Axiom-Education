@@ -1,0 +1,63 @@
+{
+  "schema": "axiom-curriculum-source-monitoring.v1",
+  "jurisdiction_id": "ca:on",
+  "as_of": "2026-08-11",
+  "claim_boundary": "Monitoring classifies transport/source-surface repeatability only. A C1 lock remains evidence that exact bytes were captured at its recorded time. A later differing response or failed request does not by itself prove curriculum content changed, invalidate historical capture evidence, approve a replacement lock, or establish semantic equivalence.",
+  "sources": [
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Official Ministry PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Publications Ontario-resolved curriculum PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-fsl-grades-1-8-2013",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Official Ministry PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The current DCP HTML route produced two distinct exact-byte signatures across three successful captures in one hosted run at the same byte length. This demonstrates response-surface byte volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 3,
+        "successful_attempt_count": 3,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6178841,
+        "observed_sha256": [
+          "a3a37dda72d43d1c309cba9426e3361a165485211ab1a7f4e6ac3459c2679ddf",
+          "d0559c37740acb4e296ba8c1be7d439ffae7597d0c1be99006ff1f81084920d0"
+        ],
+        "workflow_run_id": 31543420096
+      },
+      "promotion_blocker": "Resolve a stable authoritative asset or separately reviewed canonicalization before interpreting DCP HTML exact-byte drift semantically or replacing the committed C1 snapshot."
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "In one hosted three-attempt run, two successful DCP HTML captures were byte-identical to the committed C1 snapshot and a third request returned HTTP 404. This demonstrates response-surface availability volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 3,
+        "successful_attempt_count": 2,
+        "failed_attempt_count": 1,
+        "distinct_exact_byte_signatures": 1,
+        "successful_sha256": "679713f7310bb4cb08208529e701736ee93d81a9c1120e8faaeeb8e7800ca52f",
+        "successful_byte_length": 6178840,
+        "failure_type": "RemoteCaptureError",
+        "failure_summary": "official source download failed: HTTP Error 404: The requested content does not exist.",
+        "workflow_run_id": 31543420096
+      },
+      "promotion_blocker": "Resolve a stable authoritative asset or separately reviewed availability/canonicalization strategy before treating intermittent DCP HTML response failures as source-document drift."
+    }
+  ]
+}

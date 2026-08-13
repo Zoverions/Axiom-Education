@@ -1,0 +1,92 @@
+{
+  "schema": "axiom-curriculum-remote-capture-targets.v1",
+  "targets_version": "1.3.0",
+  "jurisdiction_id": "ca:on",
+  "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
+  "targets": [
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "source_locator": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/022574",
+      "publication_number": "022574",
+      "download_url": "https://www.edu.gov.on.ca/eng/curriculum/elementary/2019-health-physical-education-grades-1to8.pdf",
+      "allowed_hosts": ["www.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario identifies publication 022574 as Ontario Curriculum, Grades 1-8: Health and Physical Education, 2019 and its Access Link resolves to this Ministry of Education PDF."
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL32210",
+      "publication_number": "CL32210",
+      "download_url": "https://assets-us-01.kc-usercontent.com/fbd574c4-da36-0066-a0c5-849ffb2de96e/90439c6e-f40c-4b58-840c-557ed88a9345/The%20Ontario%20Curriculum%20Grades%201%E2%80%938%20-%20Mathematics%2C%202020%20%28January%202021%29.pdf",
+      "allowed_hosts": ["assets-us-01.kc-usercontent.com"],
+      "host_policy": "publications-ontario-access-cdn",
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario record CL32210 identifies Mathematics 2020: The Ontario Curriculum Grades 1-8 and its official Access Link resolves to this exact PDF on the Ontario publication CDN."
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-language",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL33241",
+      "publication_number": "CL33241",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-language",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "Publications Ontario record CL33241 identifies The Ontario Curriculum Grades 1-8: Language 2023. The current official DCP curriculum route is captured as the authoritative structured-source byte snapshot rather than assuming a separate PDF exists."
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL31757",
+      "publication_number": "CL31757",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/science-technology",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "Publications Ontario record CL31757 identifies Ontario Curriculum, Grades 1-8, Science and Technology, 2022. The current official DCP curriculum route is captured as the authoritative structured-source byte snapshot."
+    },
+    {
+      "source_id": "ontario-fsl-grades-1-8-2013",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-fsl/grades-list?grade=n1",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/ontario-curriculum-french-as-a-second-language-grades-1-8-revised-2013-232944",
+      "publication_number": "232944",
+      "download_url": "https://www.edu.gov.on.ca/eng/curriculum/elementary/fsl18-2013curr.pdf",
+      "allowed_hosts": ["www.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "application/pdf",
+      "maximum_bytes": 104857600,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-publication-access-link-resolved",
+      "notes": "Publications Ontario identifies the revised 2013 elementary FSL curriculum (publication 232944); the official Access Link resolves to the Ministry PDF covering Core French Grades 4-8, Extended French Grades 4-8, and French Immersion Grades 1-8."
+    },
+    {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8-231998",
+      "publication_number": "231998",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "The official Curriculum and Resources portal identifies The Arts, Grades 1-8, 2009 at this exact current DCP route. Publications Ontario independently identifies the Revised 2009 Arts curriculum lineage; this target records a pre-C1 structured-source capture route and does not promote the source until capture evidence is reviewed."
+    }
+  ]
+}

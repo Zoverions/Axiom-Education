@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fsl-grades-1-8-2013",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "720f55acad654c9a0bce5e9c81d1ea22b577f4e3f73a07d3f7811a4c9504dddc",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-11T21:35:46.248688Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-fsl/grades-list?grade=n1",
+  "resolved_locator": "https://www.edu.gov.on.ca/eng/curriculum/elementary/fsl18-2013curr.pdf",
+  "media_type": "application/pdf",
+  "byte_length": 2446730,
+  "sha256": "9cd9b158992dd427f654764dc312df67992f73aab974af89faf7928caf51d1c0",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 4b7bfe377e3592a4e4872fb0a06d548084eec036038d90b4d89145edfde9cd77. GitHub run 31538611554 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution."
+}

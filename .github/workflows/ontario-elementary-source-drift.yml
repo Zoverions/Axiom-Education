@@ -1,0 +1,74 @@
+name: Ontario Elementary Source Drift
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/curriculum-standard-record-v2-20260811
+    paths:
+      - 'curriculum/ontario-elementary/source-locks/**'
+      - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/check_curriculum_source_lock_drift.py'
+      - 'tools/check_curriculum_source_monitoring.py'
+      - 'tests/test_curriculum_source_lock_drift.py'
+      - 'tests/test_curriculum_source_monitoring.py'
+      - '.github/workflows/ontario-elementary-source-drift.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-drift-checker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Verify monitoring classification and drift logic
+        run: |
+          python tools/check_curriculum_source_monitoring.py
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python -m unittest tests.test_curriculum_source_lock_drift -v
+
+  recapture-and-compare-stable-documents:
+    needs: verify-drift-checker
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        source_id:
+          - ontario-health-physical-education-grades-1-8-2019
+          - ontario-mathematics-grades-1-8-2020
+          - ontario-fsl-grades-1-8-2013
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Validate bounded capture and monitoring registries
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Recapture exact official document bytes
+        env:
+          SOURCE_ID: ${{ matrix.source_id }}
+        run: |
+          mkdir -p /tmp/axiom-source-drift
+          python tools/remote_curriculum_source_capture.py capture \
+            --source-id "${SOURCE_ID}" \
+            --output /tmp/axiom-source-drift/candidate.json
+      - name: Compare with committed C1 evidence
+        run: |
+          python tools/check_curriculum_source_lock_drift.py \
+            /tmp/axiom-source-drift/candidate.json

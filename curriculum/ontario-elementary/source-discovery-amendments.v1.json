@@ -1,0 +1,35 @@
+{
+  "schema": "axiom-curriculum-source-discovery-amendments.v1",
+  "jurisdiction_id": "ca:on",
+  "base_discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "claim_boundary": "These amendments update source-discovery metadata only. They do not rewrite the historical base discovery artifact, capture source bytes, approve redistribution, normalize curriculum records, complete human review, or promote any source beyond C0 until separate evidence exists.",
+  "amendments": [
+    {
+      "amendment_id": "ontario-arts-current-dcp-route-20260811",
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "prior_source_entry_sha256": "b945185ecfc1283adaf197e3c0e3d3e2062f771d2c09e5321eb08ea4b29946ff",
+      "resolved_on": "2026-08-11",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+        "publication_number": "231998_U",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Ontario Curriculum and Resources portal now resolves The Arts, Grades 1-8, 2009 at an exact current DCP route. Publications Ontario remains the official publication record for the Revised 2009 document lineage. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    }
+  ]
+}
