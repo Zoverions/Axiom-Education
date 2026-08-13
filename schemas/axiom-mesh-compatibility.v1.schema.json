@@ -67,13 +67,35 @@
           "feature_id": {"type": "string", "minLength": 1},
           "pull_request": {"type": "integer", "minimum": 1},
           "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-          "status": {"const": "draft-not-production"},
+          "merged_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "status": {
+            "enum": [
+              "draft-not-production",
+              "merged-readiness-only-not-adopted"
+            ]
+          },
           "runtime_adoption_allowed": {"const": false},
           "contract_sha256": {
             "type": "object",
             "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"status": {"const": "merged-readiness-only-not-adopted"}},
+              "required": ["status"]
+            },
+            "then": {"required": ["merged_sha"]}
+          },
+          {
+            "if": {
+              "properties": {"status": {"const": "draft-not-production"}},
+              "required": ["status"]
+            },
+            "then": {"not": {"required": ["merged_sha"]}}
+          }
+        ]
       }
     },
     "feature_flags": {
