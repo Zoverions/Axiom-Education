@@ -25,6 +25,7 @@ on:
       - 'tools/check_curriculum_source_monitoring.py'
       - 'tools/probe_curriculum_source_stability.py'
       - 'tools/ontario_elementary_readiness.py'
+      - 'tools/ontario_hpe_grade1_c2_proof.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_discovery.py'
@@ -34,6 +35,7 @@ on:
       - 'tests/test_curriculum_source_monitoring.py'
       - 'tests/test_curriculum_source_stability.py'
       - 'tests/test_ontario_elementary_readiness.py'
+      - 'tests/test_ontario_hpe_grade1_c2_proof.py'
       - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
       - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
       - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
@@ -66,6 +68,7 @@ jobs:
           python -m json.tool curriculum/ontario-elementary/source-discovery-amendments.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-capture-targets.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-monitoring.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/slices/hpe-grade1-c2-proof.v1.json >/dev/null
           python -m json.tool schemas/curriculum-source-lock.v1.schema.json >/dev/null
           python -m json.tool schemas/curriculum-standard-record.v2.schema.json >/dev/null
       - name: Validate Ontario Elementary discovery accounting
@@ -76,12 +79,11 @@ jobs:
         run: |
           python tools/remote_curriculum_source_capture.py validate-targets
           python tools/check_curriculum_source_monitoring.py
-      - name: Validate source-lock directory boundary
+      - name: Validate real C1 source-lock directory
         run: |
           python tools/curriculum_source_lock.py verify-directory \
-            --directory curriculum/ontario-elementary/source-locks \
-            --allow-empty
-      - name: Validate C2 normalized-record boundary
+            --directory curriculum/ontario-elementary/source-locks
+      - name: Validate C2 normalized-record promotion boundary
         run: |
           python tools/curriculum_standard_record.py verify-directory \
             --directory curriculum/ontario-elementary/records-v2 \
@@ -89,6 +91,8 @@ jobs:
             --allow-empty
       - name: Validate derived readiness without rewriting provenance
         run: python tools/ontario_elementary_readiness.py verify
+      - name: Build twice and verify the real Grade 1 HPE C2 proof
+        run: python tools/ontario_hpe_grade1_c2_proof.py verify
       - name: Run jurisdiction, discovery, source, C2, monitoring, and readiness tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
@@ -100,3 +104,4 @@ jobs:
           python -m unittest tests.test_curriculum_source_monitoring -v
           python -m unittest tests.test_curriculum_source_stability -v
           python -m unittest tests.test_ontario_elementary_readiness -v
+          python -m unittest tests.test_ontario_hpe_grade1_c2_proof -v
