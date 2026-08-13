@@ -6,6 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/axiom/education_client.dart';
 import 'package:ontarioedai/core/axiom/gateway_intent_transport.dart';
 
+final _validIntentId = 'intent_${'a' * 64}';
+
 class _RecordingRequester {
   int calls = 0;
   String? path;
@@ -17,7 +19,7 @@ class _RecordingRequester {
     : response =
           response ??
           _jsonResponse(201, {
-            'intent_id': 'intent_test',
+            'intent_id': _validIntentId,
             'trace_id': 'trace_test_001',
             'status': 'completed',
             'evidence': <String, Object?>{},
@@ -44,7 +46,7 @@ AxiomGatewayRawResponse _jsonResponse(
   statusCode: statusCode,
   headers: {
     'content-type': 'application/json; charset=utf-8',
-    'x-trace-id': 'trace_header_001',
+    'x-trace-id': 'trace_test_001',
     ...headers,
   },
   body: Uint8List.fromList(utf8.encode(jsonEncode(body))),
@@ -134,6 +136,29 @@ void main() {
           'code',
           'invalid_client_request',
         ),
+      ),
+    );
+    expect(requester.calls, 0);
+  });
+
+  test('token acquisition shares the bounded request timeout', () async {
+    final requester = _RecordingRequester();
+    final transport = AxiomGatewayIntentTransport(
+      requester: requester.call,
+      tokenProvider: () => Completer<String>().future,
+      timeout: const Duration(milliseconds: 10),
+    );
+
+    await expectLater(
+      transport.postIntent(
+        action: 'education.learner.progress.read',
+        input: const {},
+        idempotencyKey: 'education-progress-read:0123456789abcdef',
+      ),
+      throwsA(
+        isA<AxiomGatewayTransportException>()
+            .having((error) => error.code, 'code', 'request_timeout')
+            .having((error) => error.retryable, 'retryable', isTrue),
       ),
     );
     expect(requester.calls, 0);
@@ -231,6 +256,62 @@ void main() {
           ),
         ),
       );
+    },
+  );
+
+  test(
+    'successful result types, status, and trace agreement fail closed',
+    () async {
+      final invalidBodies = <Map<String, Object?>>[
+        {
+          'intent_id': 'intent_not-a-digest',
+          'trace_id': 'trace_test_001',
+          'status': 'completed',
+          'evidence': <String, Object?>{},
+        },
+        {
+          'intent_id': _validIntentId,
+          'trace_id': 'trace_test_001',
+          'status': 'pending',
+          'evidence': <String, Object?>{},
+        },
+        {
+          'intent_id': _validIntentId,
+          'trace_id': 'trace_test_001',
+          'status': 'completed',
+          'evidence': <Object?>[],
+        },
+        {
+          'intent_id': _validIntentId,
+          'trace_id': 'trace_body_mismatch',
+          'status': 'completed',
+          'evidence': <String, Object?>{},
+        },
+      ];
+
+      for (final body in invalidBodies) {
+        final requester = _RecordingRequester(
+          response: _jsonResponse(201, body),
+        );
+        final transport = AxiomGatewayIntentTransport(
+          requester: requester.call,
+          tokenProvider: () => 'token',
+        );
+        await expectLater(
+          transport.postIntent(
+            action: 'education.learner.progress.read',
+            input: const {},
+            idempotencyKey: 'education-progress-read:0123456789abcdef',
+          ),
+          throwsA(
+            isA<AxiomGatewayTransportException>().having(
+              (error) => error.code,
+              'code',
+              'invalid_gateway_response',
+            ),
+          ),
+        );
+      }
     },
   );
 

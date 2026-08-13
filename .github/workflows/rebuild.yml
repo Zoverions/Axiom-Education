@@ -34,6 +34,9 @@ jobs:
       - name: Verify capability, identity, deprecation, and claim parity
         run: python tools/check_capabilities.py
 
+      - name: Verify pinned AXIOM-MESH compatibility and draft boundaries
+        run: python tools/check_axiom_mesh_compatibility.py
+
       - name: Run complete Python test suite
         run: python -m pytest -q
 

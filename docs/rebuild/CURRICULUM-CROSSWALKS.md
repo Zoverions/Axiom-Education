@@ -22,6 +22,7 @@ Each mapping binds:
 
 - a competency ID in a named source competency namespace;
 - one canonical `axiom-curriculum-standard-record.v2` target;
+- the exact repository-bounded C1 source-lock path revalidated for that target;
 - the target record ID and official expectation ID;
 - the exact target `content_digest`;
 - a relationship type;

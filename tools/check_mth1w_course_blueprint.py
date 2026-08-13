@@ -242,6 +242,7 @@ def verify(
     lesson_ids: list[str] = []
     assessment_ids: list[str] = []
     total_hours = 0
+    total_lesson_minutes = 0
 
     for unit_index, unit in enumerate(units, start=1):
         require(isinstance(unit, dict), f"unit {unit_index} must be an object")
@@ -287,6 +288,7 @@ def verify(
                 isinstance(minutes, int) and 45 <= minutes <= 180,
                 f"{lesson_id}: estimated minutes invalid",
             )
+            total_lesson_minutes += minutes
             primary = require_string_list(
                 lesson.get("primary_expectations"),
                 f"{lesson_id}: primary expectations missing",
@@ -369,6 +371,39 @@ def verify(
         )
 
     require(total_hours == 110, "unit hours must sum to 110")
+    accounting = blueprint.get("hour_accounting")
+    require(isinstance(accounting, dict), "course hour accounting is missing")
+    require(
+        accounting.get("planning_envelope_hours") == total_hours,
+        "planning envelope hours must match unit planning hours",
+    )
+    require(
+        accounting.get("authored_primary_lesson_minutes") == total_lesson_minutes,
+        "authored lesson minute accounting drifted",
+    )
+    require(
+        accounting.get("authored_primary_lesson_hours")
+        == total_lesson_minutes / 60,
+        "authored lesson hour accounting drifted",
+    )
+    unallocated_minutes = total_hours * 60 - total_lesson_minutes
+    require(unallocated_minutes >= 0, "authored lessons exceed the planning envelope")
+    require(
+        accounting.get("unallocated_program_minutes") == unallocated_minutes,
+        "unallocated program minute accounting drifted",
+    )
+    require(
+        accounting.get("unallocated_program_hours") == unallocated_minutes / 60,
+        "unallocated program hour accounting drifted",
+    )
+    require(
+        accounting.get("allocation_status") == "incomplete",
+        "hour allocation must remain incomplete while program time is unallocated",
+    )
+    require(
+        accounting.get("complete_hour_allocation_claim_allowed") is False,
+        "complete hour-allocation claim must fail closed",
+    )
     require(
         Counter(all_overall) == Counter(OVERALL_IDS),
         "overall expectation coverage is incomplete or duplicated",
@@ -449,6 +484,8 @@ def verify(
         "overall_expectations": len(OVERALL_IDS),
         "specific_expectations": len(official_specific),
         "hours": total_hours,
+        "authored_lesson_minutes": total_lesson_minutes,
+        "unallocated_program_minutes": unallocated_minutes,
     }
 
 
@@ -464,7 +501,9 @@ def main() -> int:
         f"{counts['units']} units, {counts['lessons']} lessons, "
         f"{counts['overall_expectations']} overall and "
         f"{counts['specific_expectations']} specific expectations, "
-        f"{counts['hours']} hours specified; student availability blocked"
+        f"{counts['hours']} planning hours, {counts['authored_lesson_minutes']} authored "
+        f"lesson minutes, {counts['unallocated_program_minutes']} unallocated minutes; "
+        "student availability blocked"
     )
     return 0
 

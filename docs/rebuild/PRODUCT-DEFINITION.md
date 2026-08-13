@@ -5,7 +5,7 @@
 **Canonical branch:** `main`  
 **Repository rename target:** `Zoverions/Axiom-Education`  
 **Archived baseline:** `archive/ontarioedai-pre-axiom-2026-07-30`  
-**AXIOM target:** `0.12.0-dev.0` or later
+**AXIOM compatibility target:** exact profile for `0.12.0-dev.3`; newer kernels require an explicit reviewed repin
 
 ## One-sentence definition
 

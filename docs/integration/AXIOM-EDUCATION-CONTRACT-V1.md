@@ -1,6 +1,6 @@
 # Axiom Education Contract v1
 
-**Status:** experimental contract and client; no live provider  
+**Status:** experimental contract, bounded host-injected transport, and governed learner runtime; no default host or production provider
 **Brand:** Axiom Education  
 **Contract ID:** `axiom.education`  
 **Controller:** `capsule:axiom.education`  
@@ -8,17 +8,18 @@
 **Version:** `1.0.0`  
 **Canonical SHA-256:** `a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2`  
 **Minimum AXIOM kernel:** `0.12.0-dev.0`
+**Current reviewed compatibility profile:** exact `0.12.0-dev.3` pin in `config/axiom-mesh-compatibility.v1.json`
 
 ## Purpose
 
-Axiom Education is the generic education-domain boundary for AXIOM-MESH. OntarioEdAI is its first jurisdictional application and curriculum profile, not the permanent identity of the shared contract.
+Axiom Education is the generic education-domain boundary and independently releasable lifelong-learning application for AXIOM-MESH. Ontario is its first curriculum profile, not the product identity or permanent scope of the shared contract.
 
 The contract defines what an education application may request, what purpose and consent must accompany learner-related requests, which actions are high-risk, and what AXIOM must report while no approved education provider exists.
 
 The identical canonical JSON file is committed in both repositories:
 
 ```text
-OntarioEdAI/contracts/axiom-education.v1.json
+Axiom-Education/contracts/axiom-education.v1.json
 AXIOM-MESH/mesh/config/domain-contracts/education.v1.json
 ```
 
@@ -58,16 +59,16 @@ The Dart client inserts the contract ID, version, and digest itself. Callers can
 
 | Action | Risk | Consent | Current AXIOM state |
 |---|---:|---|---|
-| `education.curriculum.pack.inspect` | low | none | unavailable |
-| `education.curriculum.pack.stage` | medium | none | unavailable |
-| `education.curriculum.pack.activate` | high | confirmation and independent approval | unavailable |
-| `education.curriculum.query` | low | none | unavailable |
-| `education.tutor.respond` | medium | personalized local tutoring | unavailable |
-| `education.learner.event.append` | medium | learning progress recording | unavailable |
-| `education.learner.progress.read` | medium | learning progress review | unavailable |
-| `education.portfolio.export` | high | learner-controlled export plus confirmation and independent approval | unavailable |
+| `education.curriculum.pack.inspect` | low | none | host-bound request; provider availability governs |
+| `education.curriculum.pack.stage` | medium | none | host-bound request; provider availability governs |
+| `education.curriculum.pack.activate` | high | confirmation and independent approval | host-bound request; no production activation provider evidenced |
+| `education.curriculum.query` | low | none | host-bound request; provider availability governs |
+| `education.tutor.respond` | medium | personalized local tutoring | host-bound request; no production tutor provider evidenced |
+| `education.learner.event.append` | medium | learning progress recording | executable host-bound client; production provider not evidenced |
+| `education.learner.progress.read` | medium | learning progress review | executable host-bound client; production provider not evidenced |
+| `education.portfolio.export` | high | learner-controlled export plus confirmation and independent approval | host-bound request; no production export provider evidenced |
 
-AXIOM policy declares every action but denies it with HTTP `503` and code `capability_unavailable`. The contract therefore cannot become accidentally executable merely because the JSON or client is installed.
+The application has no default host binding and no local learner-record fallback. A reviewed host must supply the exact compatibility profile, relative Gateway requester, and memory-only token provider; AXIOM policy and provider availability still govern every operation. The contract therefore cannot become accidentally authoritative merely because its JSON, client, or host seam is installed.
 
 ## Minor-data defaults
 

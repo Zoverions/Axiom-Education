@@ -16,6 +16,7 @@ on:
       - 'curriculum/ontario-elementary/**'
       - 'schemas/curriculum-source-lock.v1.schema.json'
       - 'schemas/curriculum-standard-record.v2.schema.json'
+      - 'requirements-dev.txt'
       - 'tools/jurisdiction_context.py'
       - 'tools/check_ontario_elementary_discovery.py'
       - 'tools/curriculum_source_discovery.py'
@@ -26,6 +27,7 @@ on:
       - 'tools/probe_curriculum_source_stability.py'
       - 'tools/ontario_elementary_readiness.py'
       - 'tools/ontario_hpe_grade1_c2_proof.py'
+      - 'tools/json_schema_validation.py'
       - 'tests/test_jurisdiction_context.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_discovery.py'
@@ -60,6 +62,8 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
       - name: Validate architecture JSON
         run: |
           python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
@@ -91,7 +95,7 @@ jobs:
             --allow-empty
       - name: Validate derived readiness without rewriting provenance
         run: python tools/ontario_elementary_readiness.py verify
-      - name: Build twice and verify the real Grade 1 HPE C2 proof
+      - name: Build twice and verify the C1-bound Grade 1 HPE C2 fixture
         run: python tools/ontario_hpe_grade1_c2_proof.py verify
       - name: Run jurisdiction, discovery, source, C2, monitoring, and readiness tests
         run: |

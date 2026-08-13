@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/axiom-mesh-compatibility.v1.schema.json",
+  "title": "Axiom Education to AXIOM-MESH compatibility profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_id",
+    "profile_version",
+    "verified_at",
+    "claim_status",
+    "mesh_baseline",
+    "required_runtime_contracts",
+    "readiness_only_contracts",
+    "observed_upcoming_drafts",
+    "feature_flags",
+    "invariants"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-mesh-compatibility.v1"},
+    "profile_id": {"type": "string", "minLength": 1, "maxLength": 160},
+    "profile_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "verified_at": {"type": "string", "format": "date"},
+    "claim_status": {"const": "contract-compatible-not-production-validated"},
+    "mesh_baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "branch", "head_sha", "kernel_version", "authority_path", "integration_mode"],
+      "properties": {
+        "repository": {"const": "Zoverions/AXIOM-MESH"},
+        "branch": {"const": "main"},
+        "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "kernel_version": {"type": "string", "minLength": 1},
+        "authority_path": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "Gateway"},
+            {"const": "Hypervisor"},
+            {"const": "Sandbox"},
+            {"const": "Grid"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "integration_mode": {"const": "released-artifact-pins-no-submodule"}
+      }
+    },
+    "required_runtime_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/contractPin"}
+    },
+    "readiness_only_contracts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/contractPin"}
+    },
+    "observed_upcoming_drafts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["feature_id", "pull_request", "head_sha", "status", "runtime_adoption_allowed"],
+        "properties": {
+          "feature_id": {"type": "string", "minLength": 1},
+          "pull_request": {"type": "integer", "minimum": 1},
+          "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "status": {"const": "draft-not-production"},
+          "runtime_adoption_allowed": {"const": false},
+          "contract_sha256": {
+            "type": "object",
+            "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        }
+      }
+    },
+    "feature_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "native_learner_self_write",
+        "native_learner_self_read",
+        "delegated_human_authority",
+        "axiom_host_profile",
+        "assurance_graph",
+        "provider_observation",
+        "checkout_freshness",
+        "local_trust_activation"
+      ],
+      "properties": {
+        "native_learner_self_write": {"const": true},
+        "native_learner_self_read": {"const": true},
+        "delegated_human_authority": {"const": false},
+        "axiom_host_profile": {"const": false},
+        "assurance_graph": {"const": false},
+        "provider_observation": {"const": false},
+        "checkout_freshness": {"const": false},
+        "local_trust_activation": {"const": false}
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gateway_is_only_network_authority_entry",
+        "direct_internal_service_access_allowed",
+        "contract_presence_grants_authority",
+        "installation_grants_learner_data_access",
+        "drafts_may_promote_themselves",
+        "application_owns_kernel_authority"
+      ],
+      "properties": {
+        "gateway_is_only_network_authority_entry": {"const": true},
+        "direct_internal_service_access_allowed": {"const": false},
+        "contract_presence_grants_authority": {"const": false},
+        "installation_grants_learner_data_access": {"const": false},
+        "drafts_may_promote_themselves": {"const": false},
+        "application_owns_kernel_authority": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "contractPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256", "source_sha", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "status": {"enum": ["required-runtime-pin", "documentation-readiness-only-no-runtime-authority"]}
+      }
+    }
+  }
+}

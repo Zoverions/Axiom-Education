@@ -26,7 +26,16 @@ FINDING_DISPOSITIONS = {"open", "resolved", "accepted-with-rationale", "not-appl
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.curriculum_standard_record import canonical_record_digest  # noqa: E402
+from tools.curriculum_standard_record import (  # noqa: E402
+    StandardRecordError,
+    verify_record,
+)
+from tools.json_schema_validation import (  # noqa: E402
+    RepositoryJsonSchemaError,
+    validate_json_schema,
+)
+
+CROSSWALK_SCHEMA = ROOT / "schemas" / "curriculum-crosswalk.v1.schema.json"
 
 
 class CrosswalkError(RuntimeError):
@@ -70,17 +79,21 @@ def parse_timestamp(value: object) -> None:
     require(parsed.tzinfo is not None, "reviewed_at must include a timezone")
 
 
-def resolve_record_path(path_value: object, repository_root: Path) -> Path:
-    require(isinstance(path_value, str) and path_value, "target_record_path is required")
+def resolve_repository_path(
+    path_value: object,
+    repository_root: Path,
+    label: str,
+) -> Path:
+    require(isinstance(path_value, str) and path_value, f"{label} is required")
     relative = Path(path_value)
-    require(not relative.is_absolute(), "target_record_path must be repository-relative")
-    require(".." not in relative.parts, "target_record_path cannot escape the repository")
+    require(not relative.is_absolute(), f"{label} must be repository-relative")
+    require(".." not in relative.parts, f"{label} cannot escape the repository")
     resolved_root = repository_root.resolve()
     resolved = (resolved_root / relative).resolve()
     try:
         resolved.relative_to(resolved_root)
     except ValueError as error:
-        raise CrosswalkError("target_record_path escapes the repository") from error
+        raise CrosswalkError(f"{label} escapes the repository") from error
     return resolved
 
 
@@ -89,25 +102,37 @@ def verify_target_record(
     target_jurisdiction_id: str,
     repository_root: Path,
 ) -> dict[str, Any]:
-    record_path = resolve_record_path(mapping.get("target_record_path"), repository_root)
-    record = load_json(record_path)
-    require(
-        record.get("schema") == "axiom-curriculum-standard-record.v2",
-        f"{record_path}: target is not a curriculum-standard-record v2",
+    record_path = resolve_repository_path(
+        mapping.get("target_record_path"),
+        repository_root,
+        "target_record_path",
     )
-    require(record.get("stage") == "C2-normalized", f"{record_path}: target record is not C2-normalized")
+    lock_path = resolve_repository_path(
+        mapping.get("target_source_lock_path"),
+        repository_root,
+        "target_source_lock_path",
+    )
+    try:
+        record = verify_record(record_path, lock_path.parent)
+    except StandardRecordError as error:
+        raise CrosswalkError(
+            f"{record_path}: target record provenance verification failed: {error}"
+        ) from error
     require(
         record.get("jurisdiction_id") == target_jurisdiction_id,
         f"{record_path}: target jurisdiction mismatch",
     )
     source = record.get("source")
     require(isinstance(source, dict), f"{record_path}: source binding missing")
+    require(
+        lock_path == lock_path.parent / f"{source.get('source_id')}.v1.json",
+        f"{record_path}: target_source_lock_path does not match source_id",
+    )
     require(source.get("official_recognition") is True, f"{record_path}: target is not an officially recognized standard record")
     standard = record.get("standard")
     require(isinstance(standard, dict), f"{record_path}: standard object missing")
     digest = record.get("content_digest")
     require(isinstance(digest, str) and len(digest) == 64, f"{record_path}: content digest missing")
-    require(digest == canonical_record_digest(record), f"{record_path}: curriculum record content digest mismatch")
     require(mapping.get("target_record_id") == record.get("record_id"), "crosswalk target_record_id mismatch")
     require(mapping.get("target_official_id") == standard.get("official_id"), "crosswalk target_official_id mismatch")
     require(mapping.get("target_content_digest") == digest, "crosswalk mapping is stale: target record changed")
@@ -191,6 +216,10 @@ def verify_crosswalk(
     repository_root: Path = ROOT,
 ) -> dict[str, Any]:
     payload = load_json(path)
+    try:
+        validate_json_schema(payload, CROSSWALK_SCHEMA, label=str(path))
+    except RepositoryJsonSchemaError as error:
+        raise CrosswalkError(str(error)) from error
     require(payload.get("schema") == "axiom-curriculum-crosswalk.v1", "unsupported crosswalk schema")
     require(isinstance(payload.get("crosswalk_id"), str) and payload["crosswalk_id"], "crosswalk_id is required")
     require(isinstance(payload.get("crosswalk_version"), str) and payload["crosswalk_version"], "crosswalk_version is required")

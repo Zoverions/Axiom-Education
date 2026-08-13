@@ -220,6 +220,73 @@ class JurisdictionContextTest(unittest.TestCase):
             )
         self.assertEqual(caught.exception.code, "parent_replacement_not_delegated")
 
+    def test_string_false_cannot_grant_parent_replacement_authority(self):
+        delegated_claim = claim(
+            claim_id="claim-school-2",
+            authority_id="school:oak",
+            jurisdiction_id="ca:on:hamilton:oak",
+            authority_level="institution",
+        )
+        delegated_claim["parent_replacement_delegated"] = "false"
+        with self.assertRaises(JurisdictionResolutionError) as caught:
+            resolve_jurisdiction_context(
+                subject_id="learner-1",
+                grade_band="elementary-3",
+                claims=[delegated_claim],
+                packs=[
+                    pack(
+                        pack_id="pack-school-2",
+                        authority_id="school:oak",
+                        jurisdiction_id="ca:on:hamilton:oak",
+                        replaces_parent_minimums=True,
+                    )
+                ],
+                as_of="2026-08-10T12:00:00Z",
+            )
+        self.assertEqual(caught.exception.code, "invalid_boolean")
+
+    def test_string_false_cannot_mark_pack_replacement_policy(self):
+        candidate = pack(
+            pack_id="pack-region-1",
+            authority_id="gov:on",
+            jurisdiction_id="ca:on",
+        )
+        candidate["replaces_parent_minimums"] = "false"
+        with self.assertRaises(JurisdictionResolutionError) as caught:
+            resolve_jurisdiction_context(
+                subject_id="learner-1",
+                grade_band="elementary-3",
+                claims=[
+                    claim(
+                        claim_id="claim-region-1",
+                        authority_id="gov:on",
+                        jurisdiction_id="ca:on",
+                        authority_level="region",
+                    )
+                ],
+                packs=[candidate],
+                as_of="2026-08-10T12:00:00Z",
+            )
+        self.assertEqual(caught.exception.code, "invalid_boolean")
+
+    def test_unknown_standards_role_is_rejected(self):
+        candidate = claim(
+            claim_id="claim-region-1",
+            authority_id="gov:on",
+            jurisdiction_id="ca:on",
+            authority_level="region",
+        )
+        candidate["standards_role"] = "advisory"
+        with self.assertRaises(JurisdictionResolutionError) as caught:
+            resolve_jurisdiction_context(
+                subject_id="learner-1",
+                grade_band="elementary-3",
+                claims=[candidate],
+                packs=[],
+                as_of="2026-08-10T12:00:00Z",
+            )
+        self.assertEqual(caught.exception.code, "invalid_standards_role")
+
     def test_jurisdiction_change_is_effective_dated_without_rewriting_history(self):
         claims = [
             claim(

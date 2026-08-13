@@ -23,7 +23,7 @@ coverage.
 | Stage | State | Exit condition |
 |---|---|---|
 | Grade 9 Math Foundations Preview | usable experimental slice | four lessons and deterministic practice remain available with accurate limits |
-| Ontario MTH1W blueprint | verified | 9 units, 43 primary lessons, and 110 hours cover every official expectation |
+| Ontario MTH1W blueprint | verified expectation map and planning envelope | 9 units and 43 primary lesson slots map every official expectation; authored primary lessons total 63.75 of the 110 planning hours, with 46.25 hours still unallocated |
 | Ontario MTH1W authored course | all 9 units and all 43 primary lesson slots are machine-verified drafts | educator/cultural review, licensing, reviewed lesson/practice coverage, assessment review, accessibility, and workflow gates pass |
 | Remaining Grade 9 courses | queued | begin only after MTH1W is complete; finish each selected course before the next |
 | Grades 10–12 | queued | begin only after the Grade 9 catalogue is complete and reviewed |
@@ -62,6 +62,10 @@ full-course route remains closed because qualified educator and cultural review,
 licensing and redistribution disposition, reviewed course-wide expectation
 coverage, cumulative assessment review, accessible/printable alternatives,
 governed learner progress, and educator workflows have not passed their gates.
+The primary lesson drafts account for 3,825 minutes (63.75 hours); the remaining
+2,775 minutes (46.25 hours) of the 110-hour planning envelope are not yet
+allocated to reviewed instruction, practice, assessment, consolidation, or
+other program time.
 
 ## Grade 9 catalogue gate
 

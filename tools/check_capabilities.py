@@ -66,6 +66,11 @@ REQUIRED_CAPABILITIES = {
     "curriculum.signed-packs",
     "instruction.mth1w-foundation",
     "education.axiom-bridge",
+    "mesh.compatibility-profile",
+    "mesh.personal-continuity",
+    "mesh.delegated-authority",
+    "mesh.assurance-graph",
+    "mesh.axiom-host",
     "tutor.local-inference",
     "tools.deterministic-math",
     "canvas.watcher",
@@ -153,6 +158,15 @@ def verify() -> Counter[str]:
     require(
         integration_target.get("mode") == "governed-domain-capability-pack",
         "unsupported AXIOM integration mode",
+    )
+    require(
+        integration_target.get("minimum_kernel") == "0.12.0-dev.3",
+        "AXIOM minimum kernel pin drifted",
+    )
+    require(
+        integration_target.get("compatibility_profile")
+        == "config/axiom-mesh-compatibility.v1.json",
+        "AXIOM compatibility profile path drifted",
     )
 
     definitions = registry.get("status_definitions")

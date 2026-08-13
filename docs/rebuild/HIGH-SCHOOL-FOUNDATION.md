@@ -50,9 +50,11 @@ governed learner-record path is available.
 
 ## Source-mapped MTH1W build
 
-The complete conventional course blueprint defines 9 units, 43 primary
-lessons, and 110 estimated hours. All nine planned unit slots are now authored
-as machine-verified drafts:
+The conventional course blueprint defines a 110-hour planning envelope across
+9 units and 43 primary lesson slots. The authored primary lessons currently
+total 3,825 minutes (63.75 hours), leaving 2,775 minutes (46.25 hours) of the
+program envelope unallocated. All nine planned unit slots are now authored as
+machine-verified drafts, but the hour gap is an explicit completion blocker:
 
 - Unit 1 maps B1.1 through B1.3 and contains 3 lessons, 6 worked examples, 33
   practice items, a delayed-feedback 10-item quiz, and an educator-reviewed

@@ -7,7 +7,13 @@ on:
       - feature/curriculum-standard-record-v2-20260811
     paths:
       - 'schemas/curriculum-crosswalk.v1.schema.json'
+      - 'schemas/curriculum-source-lock.v1.schema.json'
+      - 'schemas/curriculum-standard-record.v2.schema.json'
+      - 'requirements-dev.txt'
       - 'tools/curriculum_crosswalk.py'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/curriculum_standard_record.py'
+      - 'tools/json_schema_validation.py'
       - 'tests/test_curriculum_crosswalk.py'
       - 'docs/rebuild/CURRICULUM-CROSSWALKS.md'
       - '.github/workflows/curriculum-crosswalk.yml'
@@ -28,6 +34,9 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
+
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
 
       - name: Validate crosswalk schema
         run: python -m json.tool schemas/curriculum-crosswalk.v1.schema.json >/dev/null

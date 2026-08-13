@@ -52,7 +52,16 @@ class CurriculumSourceLockTests(unittest.TestCase):
             payload = json.loads(lock_path.read_text(encoding="utf-8"))
             payload["sha256"] = "not-a-sha256"
             lock_path.write_text(json.dumps(payload), encoding="utf-8")
-            with self.assertRaisesRegex(SourceLockError, "invalid source SHA-256"):
+            with self.assertRaisesRegex(SourceLockError, "sha256|does not match"):
+                verify_lock(lock_path)
+
+    def test_published_schema_rejects_unadvertised_lock_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            lock_path = self.make_lock(Path(tmp))
+            payload = json.loads(lock_path.read_text(encoding="utf-8"))
+            payload["unreviewed_extension"] = True
+            lock_path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(SourceLockError, "Additional properties"):
                 verify_lock(lock_path)
 
     def test_source_entry_binding_rejects_stale_or_fabricated_lock(self) -> None:

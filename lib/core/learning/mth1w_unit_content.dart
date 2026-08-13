@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../practice/rational.dart';
+
 class Mth1wUnitContentFormatException implements Exception {
   const Mth1wUnitContentFormatException(this.message);
 
@@ -315,10 +317,37 @@ class Mth1wResponseContract {
       Mth1wResponseType.selected =>
         normalized == correctAnswer!.trim().toLowerCase(),
       Mth1wResponseType.shortText => acceptedAnswers.any(
-        (answer) => answer.trim().toLowerCase() == normalized,
+        (answer) =>
+            answer.trim().toLowerCase() == normalized ||
+            _equivalentNumericResponse(value, answer),
       ),
       Mth1wResponseType.constructed => false,
     };
+  }
+
+  static bool _equivalentNumericResponse(String submitted, String accepted) {
+    final left = _numericResponse(submitted);
+    final right = _numericResponse(accepted);
+    return left != null &&
+        right != null &&
+        left.value == right.value &&
+        left.unit == right.unit;
+  }
+
+  static ({Rational value, String unit})? _numericResponse(String input) {
+    final normalized = input
+        .trim()
+        .toLowerCase()
+        .replaceAll('−', '-')
+        .replaceAll(',', '');
+    final match = RegExp(
+      r'^(?:[a-z][a-z0-9_]*\s*=\s*)?([+-]?(?:\d+(?:\.\d+)?|\.\d+|\d+\s*/\s*[+-]?\d+))\s*([a-z][a-z0-9 _-]*)?$',
+    ).firstMatch(normalized);
+    if (match == null) return null;
+    final value = Rational.tryParse(match.group(1)!);
+    if (value == null) return null;
+    final unit = (match.group(2) ?? '').trim().replaceAll(RegExp(r'\s+'), ' ');
+    return (value: value, unit: unit);
   }
 
   String get disclosedAnswer {

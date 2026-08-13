@@ -11,8 +11,9 @@
   },
   "integration_target": {
     "platform": "AXIOM-MESH",
-    "minimum_kernel": "0.12.0-dev.0",
-    "mode": "governed-domain-capability-pack"
+    "minimum_kernel": "0.12.0-dev.3",
+    "mode": "governed-domain-capability-pack",
+    "compatibility_profile": "config/axiom-mesh-compatibility.v1.json"
   },
   "status_definitions": {
     "implemented": "Production-path behavior exists with tests and no synthetic success fallback.",
@@ -91,7 +92,7 @@
       "id": "instruction.mth1w-foundation",
       "family": "instruction",
       "status": "experimental",
-      "summary": "A four-lesson Grade 9 Math Foundations Preview and all nine source-mapped MTH1W unit drafts provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and offline practice without an AI tutor. All 43 planned primary lesson slots are authored and machine verified, while educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, governed progress, and educator workflows remain incomplete.",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview and all nine source-mapped MTH1W unit drafts provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and offline practice without an AI tutor. All 43 planned primary lesson slots are authored and machine verified, but they account for 63.75 of the 110 planning hours; 46.25 hours plus educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, governed progress, and educator workflows remain incomplete.",
       "evidence": [
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
         "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
@@ -162,14 +163,56 @@
       "id": "education.axiom-bridge",
       "family": "integration",
       "status": "experimental",
-      "summary": "A digest-pinned education contract and transport-independent Dart client validate eight bounded AXIOM intent types, exact consent purposes, idempotency, digest fields, and fail-closed Gateway errors; no live transport or provider capsule is enabled.",
+      "summary": "A digest-pinned education contract, bounded relative-path Gateway transport, host-injected binding, and governed learner write/self-read runtime validate eight AXIOM intent types, exact consent purposes, idempotency, response traces, result fields, and fail-closed errors. No default host binding, local learner-record fallback, or production provider capsule is enabled.",
       "evidence": [
         "contracts/axiom-education.v1.json",
         "lib/core/axiom/education_contract.dart",
         "lib/core/axiom/education_client.dart",
+        "lib/core/axiom/gateway_intent_transport.dart",
+        "lib/core/providers/axiom_education_gateway_provider.dart",
         "test/core/axiom/education_client_test.dart",
+        "test/core/axiom/gateway_intent_transport_test.dart",
+        "test/core/providers/axiom_education_gateway_provider_test.dart",
         ".github/workflows/rebuild.yml"
       ]
+    },
+    {
+      "id": "mesh.compatibility-profile",
+      "family": "integration",
+      "status": "experimental",
+      "summary": "A fail-closed compatibility profile pins AXIOM-MESH 0.12.0-dev.3, the Gateway to Hypervisor to Sandbox to Grid authority path, required contract digests, and the current learner self-write/self-read conformance front. A reviewed host must present the exact profile before the governed runtime can bind.",
+      "evidence": [
+        "config/axiom-mesh-compatibility.v1.json",
+        "schemas/axiom-mesh-compatibility.v1.schema.json",
+        "tools/check_axiom_mesh_compatibility.py",
+        "tests/test_axiom_mesh_compatibility.py",
+        "lib/core/axiom/mesh_compatibility.dart",
+        "test/core/axiom/mesh_compatibility_test.dart"
+      ]
+    },
+    {
+      "id": "mesh.personal-continuity",
+      "family": "portability",
+      "status": "specified",
+      "summary": "Runtime Capsule, Personal Agent Pack, Compute Node Profile, and Local Trust Envelope contracts are tracked for portable personal-compute continuity, but remain documentation-readiness inputs and grant no Axiom Education runtime authority."
+    },
+    {
+      "id": "mesh.delegated-authority",
+      "family": "governance",
+      "status": "specified",
+      "summary": "Delegated human authority and delegated consent are observed as exact-head AXIOM-MESH drafts. They cannot be enabled until merged, repinned, independently reviewed, and represented by a new compatibility profile."
+    },
+    {
+      "id": "mesh.assurance-graph",
+      "family": "evidence",
+      "status": "specified",
+      "summary": "Assurance Graph and provider-observation work is tracked as non-authoritative AXIOM-MESH draft input. Axiom Education does not treat draft graph or observation records as approval, policy, consent, or execution authority."
+    },
+    {
+      "id": "mesh.axiom-host",
+      "family": "hosting",
+      "status": "specified",
+      "summary": "The upcoming AXIOM Host profile and checkout-source freshness work are observed for future host portability, while the current runtime accepts only a reviewed relative Gateway requester and exact compatibility profile."
     },
     {
       "id": "tutor.local-inference",
@@ -241,8 +284,8 @@
     {
       "id": "learner.axiom-records",
       "family": "privacy",
-      "status": "specified",
-      "summary": "Learner events, preferences, accommodations, and progress will be encrypted, purpose-bound, revocable, selectively exportable, and human-appealable."
+      "status": "adapter_required",
+      "summary": "Executable governed learner event, memory-first commit, and self-read clients exist, but encrypted storage, revocation, selective export, appeal handling, and production provider operation remain AXIOM responsibilities requiring an approved adapter and host."
     },
     {
       "id": "assessment.calibrated-irt",
@@ -273,13 +316,15 @@
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
     "The current four-lesson Grade 9 Math Foundations Preview and the nine source-mapped authored unit drafts are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "The 110-hour MTH1W value is a planning envelope: authored primary lessons total 63.75 hours and leave 46.25 hours unallocated.",
     "Known conflicts remain in preliminary local MTH1W identifiers; the official inventory, complete blueprint, and authored lesson slots do not authorize a complete-course claim without educator/cultural review, licensing, reviewed course-wide evidence, cumulative assessment review, accessibility alternatives, governed progress, and educator workflows.",
     "The deterministic foundation practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
     "A valid pack signature proves integrity and signer possession, not Ministry approval, curriculum correctness, licensing permission, or safe activation.",
-    "The AXIOM education contract and client do not enable a provider, learner-record store, or network authority.",
+    "The AXIOM education contract, compatibility profile, client, transport, and host binding do not enable a provider, learner-record store, or network authority by themselves.",
+    "Observed AXIOM-MESH delegated-authority, AXIOM Host, Assurance Graph, provider-observation, and checkout-freshness drafts are not current Axiom Education runtime capabilities.",
     "Installing an education capsule does not grant access to learner data."
   ]
 }

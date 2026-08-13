@@ -6,6 +6,7 @@ import '../axiom/gateway_intent_transport.dart';
 import '../axiom/governed_learner_commit_runtime.dart';
 import '../axiom/governed_memory_runtime.dart';
 import '../axiom/learner_progress_runtime.dart';
+import '../axiom/mesh_compatibility.dart';
 
 /// Reviewed host-shell binding for the Axiom Education -> AXIOM Gateway seam.
 ///
@@ -17,11 +18,13 @@ import '../axiom/learner_progress_runtime.dart';
 class AxiomEducationGatewayBinding {
   final AxiomGatewayRelativeRequester requester;
   final AxiomGatewayTokenProvider tokenProvider;
+  final AxiomMeshCompatibilityProfile compatibilityProfile;
   final Duration timeout;
 
   const AxiomEducationGatewayBinding({
     required this.requester,
     required this.tokenProvider,
+    required this.compatibilityProfile,
     this.timeout = AxiomGatewayIntentTransport.defaultTimeout,
   });
 }
@@ -78,6 +81,14 @@ final governedEducationRuntimeProvider = Provider<GovernedEducationRuntimeState>
 ) {
   final binding = ref.watch(axiomEducationGatewayBindingProvider);
   if (binding == null) return const GovernedEducationRuntimeUnbound();
+  final compatibilityRejection = binding.compatibilityProfile
+      .bindingRejectionReason();
+  if (compatibilityRejection != null) {
+    return GovernedEducationRuntimeUnbound(
+      reason:
+          'AXIOM-MESH compatibility profile rejected: $compatibilityRejection',
+    );
+  }
 
   final transport = AxiomGatewayIntentTransport(
     requester: binding.requester,

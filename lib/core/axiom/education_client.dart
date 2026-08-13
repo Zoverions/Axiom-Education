@@ -18,10 +18,17 @@ class AxiomTransportResponse {
 }
 
 class AxiomEducationClient {
+  static const _maximumJsonDepth = 8;
+  static const _maximumMapEntries = 128;
+  static const _maximumListItems = 256;
+  static const _maximumStringLength = 16000;
   static final RegExp _idempotencyPattern = RegExp(
     r'^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$',
   );
   static final RegExp _sha256Pattern = RegExp(r'^[a-f0-9]{64}$');
+  static final RegExp _timestampPattern = RegExp(
+    r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$',
+  );
 
   final AxiomIntentTransport transport;
   final String Function() idempotencyKeyFactory;
@@ -68,6 +75,7 @@ class AxiomEducationClient {
       'contract_sha256': AxiomEducationContract.sha256,
       ...input,
     };
+    _validateJsonValue(contractInput);
     _validateInput(action, definition, contractInput);
 
     final AxiomTransportResponse response;
@@ -131,6 +139,57 @@ class AxiomEducationClient {
       }
     }
 
+    for (final field in const {
+      'staged_pack_id',
+      'signer_key_id',
+      'expected_pack_id',
+      'expected_pack_version',
+      'course_code',
+      'strand_id',
+      'subject_id',
+      'consent_id',
+      'event_id',
+      'event_type',
+      'memory_object_id',
+      'review_state',
+    }) {
+      if (input.containsKey(field)) {
+        _validateBoundedString(input[field], field, maximum: 256);
+      }
+    }
+    for (final field in const {
+      'expectation_ids',
+      'learner_context_object_ids',
+      'selectors',
+    }) {
+      if (input.containsKey(field)) {
+        _validateStringList(input[field], field);
+      }
+    }
+    for (final field in const {'occurred_at', 'as_of', 'expires_at'}) {
+      if (input.containsKey(field)) {
+        final value = input[field];
+        _validateBoundedString(value, field, maximum: 64);
+        final timestamp = value! as String;
+        if (!_timestampPattern.hasMatch(timestamp) ||
+            DateTime.tryParse(timestamp) == null) {
+          throw AxiomEducationValidationException(
+            message: '$field must be an ISO-8601 timestamp with a timezone.',
+          );
+        }
+      }
+    }
+    if (input.containsKey('query')) {
+      _validateBoundedString(input['query'], 'query', maximum: 4096);
+    }
+    if (input.containsKey('recipient_public_key')) {
+      _validateBoundedString(
+        input['recipient_public_key'],
+        'recipient_public_key',
+        maximum: 8192,
+      );
+    }
+
     if (definition.requiresConsent) {
       final expectedPurpose = definition.consentPurpose;
       if (input['purpose'] != expectedPurpose) {
@@ -176,6 +235,88 @@ class AxiomEducationClient {
       throw const AxiomEducationValidationException(
         message: 'Tutor prompt must contain 1-16000 characters.',
       );
+    }
+  }
+
+  static void _validateJsonValue(Object? value, {int depth = 0}) {
+    if (depth > _maximumJsonDepth) {
+      throw const AxiomEducationValidationException(
+        message: 'Education input exceeds the maximum JSON nesting depth.',
+      );
+    }
+    if (value == null || value is bool) return;
+    if (value is String) {
+      if (value.length > _maximumStringLength) {
+        throw const AxiomEducationValidationException(
+          message: 'Education input contains an oversized string.',
+        );
+      }
+      return;
+    }
+    if (value is num) {
+      if (!value.isFinite) {
+        throw const AxiomEducationValidationException(
+          message: 'Education input numbers must be finite.',
+        );
+      }
+      return;
+    }
+    if (value is List) {
+      if (value.length > _maximumListItems) {
+        throw const AxiomEducationValidationException(
+          message: 'Education input contains an oversized list.',
+        );
+      }
+      for (final item in value) {
+        _validateJsonValue(item, depth: depth + 1);
+      }
+      return;
+    }
+    if (value is Map) {
+      if (value.length > _maximumMapEntries) {
+        throw const AxiomEducationValidationException(
+          message: 'Education input contains an oversized object.',
+        );
+      }
+      for (final entry in value.entries) {
+        final key = entry.key;
+        if (key is! String || key.isEmpty || key.length > 256) {
+          throw const AxiomEducationValidationException(
+            message: 'Education input contains an invalid object key.',
+          );
+        }
+        _validateJsonValue(entry.value, depth: depth + 1);
+      }
+      return;
+    }
+    throw const AxiomEducationValidationException(
+      message: 'Education input contains a non-JSON value.',
+    );
+  }
+
+  static void _validateBoundedString(
+    Object? value,
+    String field, {
+    required int maximum,
+  }) {
+    if (value is! String ||
+        value.trim().isEmpty ||
+        value.length > maximum ||
+        value.contains('\u0000')) {
+      throw AxiomEducationValidationException(
+        message: '$field must contain 1-$maximum bounded characters.',
+      );
+    }
+  }
+
+  static void _validateStringList(Object? value, String field) {
+    if (value is! List || value.isEmpty || value.length > 256) {
+      throw AxiomEducationValidationException(
+        message: '$field must contain 1-256 identifiers.',
+      );
+    }
+    for (final item in value) {
+      _validateBoundedString(item, field, maximum: 512);
     }
   }
 

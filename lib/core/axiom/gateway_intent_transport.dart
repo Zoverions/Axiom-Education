@@ -62,6 +62,10 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
   static final RegExp _actionPattern = RegExp(r'^[a-z][a-z0-9.-]+$');
   static final RegExp _idempotencyPattern = RegExp(r'^[A-Za-z0-9_.:-]+$');
   static final RegExp _errorCodePattern = RegExp(r'^[a-z][a-z0-9_]{0,63}$');
+  static final RegExp _intentIdPattern = RegExp(r'^intent_[a-f0-9]{64}$');
+  static final RegExp _traceIdPattern = RegExp(
+    r'^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$',
+  );
 
   static const Set<String> stableErrorCodes = {
     'authentication_required',
@@ -186,7 +190,16 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
   Future<String> _loadToken() async {
     final String token;
     try {
-      token = await tokenProvider();
+      token = await Future<String>.sync(tokenProvider).timeout(timeout);
+    } on TimeoutException catch (error) {
+      throw AxiomGatewayTransportException(
+        code: 'request_timeout',
+        message: 'Gateway token acquisition exceeded its bounded timeout.',
+        retryable: true,
+        cause: error,
+      );
+    } on AxiomGatewayTransportException {
+      rethrow;
     } catch (error) {
       throw AxiomGatewayTransportException(
         code: 'invalid_client_request',
@@ -272,6 +285,20 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
       );
     }
     final body = Map<String, Object?>.from(decoded);
+    final bodyTraceId = body['trace_id'];
+    if (traceId == null ||
+        !_traceIdPattern.hasMatch(traceId) ||
+        bodyTraceId is! String ||
+        !_traceIdPattern.hasMatch(bodyTraceId) ||
+        bodyTraceId != traceId) {
+      throw AxiomGatewayTransportException(
+        code: 'invalid_gateway_response',
+        message:
+            'Gateway response trace identifier is invalid or inconsistent.',
+        statusCode: response.statusCode,
+        traceId: traceId,
+      );
+    }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       for (final field in const [
@@ -289,6 +316,21 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
             traceId: traceId,
           );
         }
+      }
+      final intentId = body['intent_id'];
+      final evidence = body['evidence'];
+      if (intentId is! String ||
+          !_intentIdPattern.hasMatch(intentId) ||
+          body['status'] != 'completed' ||
+          evidence is! Map ||
+          evidence.length > 128 ||
+          body.containsKey('error')) {
+        throw AxiomGatewayTransportException(
+          code: 'invalid_gateway_response',
+          message: 'Gateway intent result fields are invalid.',
+          statusCode: response.statusCode,
+          traceId: traceId,
+        );
       }
       return AxiomTransportResponse(
         statusCode: response.statusCode,
@@ -321,8 +363,9 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
     final traceValue = body['trace_id'];
     if (errorValue is! Map ||
         traceValue is! String ||
-        traceValue.isEmpty ||
-        traceValue.length > 160) {
+        !_traceIdPattern.hasMatch(traceValue) ||
+        responseTraceId == null ||
+        traceValue != responseTraceId) {
       throw AxiomGatewayTransportException(
         code: 'invalid_gateway_response',
         message: 'Gateway error envelope is invalid.',
@@ -339,6 +382,7 @@ class AxiomGatewayIntentTransport implements AxiomIntentTransport {
         error['code'] is! String ||
         error['message'] is! String ||
         (error['message'] as String).isEmpty ||
+        (error['message'] as String).length > 4096 ||
         !_errorCodePattern.hasMatch(error['code'] as String)) {
       throw AxiomGatewayTransportException(
         code: 'invalid_gateway_response',

@@ -10,6 +10,15 @@
     "content_status": "partial_machine_verified_draft",
     "complete_course_claim_allowed": false
   },
+  "hour_accounting": {
+    "planning_envelope_hours": 110,
+    "authored_primary_lesson_minutes": 3825,
+    "authored_primary_lesson_hours": 63.75,
+    "unallocated_program_minutes": 2775,
+    "unallocated_program_hours": 46.25,
+    "allocation_status": "incomplete",
+    "complete_hour_allocation_claim_allowed": false
+  },
   "source_inventory": {
     "path": "curriculum/official/ontario-mth1w-2021.inventory.json",
     "records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",

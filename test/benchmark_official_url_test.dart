@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
-import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 
 void main() {
   late Directory tempDir;

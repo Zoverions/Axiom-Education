@@ -11,11 +11,41 @@ from tools.curriculum_crosswalk import (
     seal,
     verify_crosswalk,
 )
+from tools.curriculum_source_lock import (
+    DEFAULT_DISCOVERY,
+    canonical_json_digest,
+    create_lock,
+)
 from tools.curriculum_standard_record import canonical_record_digest
+
+
+SOURCE_ID = "ontario-mathematics-grades-1-8-2020"
+SOURCE_LOCATOR = (
+    "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics"
+)
 
 
 class CurriculumCrosswalkTests(unittest.TestCase):
     def make_record(self, root: Path) -> tuple[Path, dict]:
+        source_file = root / "captured-source.pdf"
+        source_file.write_bytes(b"crosswalk provenance fixture")
+        lock = create_lock(
+            source_id=SOURCE_ID,
+            input_path=source_file,
+            source_locator=SOURCE_LOCATOR,
+            resolved_locator=SOURCE_LOCATOR,
+            media_type="application/pdf",
+            discovery_path=DEFAULT_DISCOVERY,
+            redistribution_status="review-required",
+            retained_path=None,
+            notes="crosswalk test fixture",
+        )
+        lock_dir = root / "curriculum" / "ontario-elementary" / "source-locks"
+        lock_dir.mkdir(parents=True)
+        (lock_dir / f"{SOURCE_ID}.v1.json").write_text(
+            json.dumps(lock),
+            encoding="utf-8",
+        )
         record = {
             "schema": "axiom-curriculum-standard-record.v2",
             "stage": "C2-normalized",
@@ -45,10 +75,10 @@ class CurriculumCrosswalkTests(unittest.TestCase):
                 },
             },
             "source": {
-                "source_id": "ontario-test-source",
-                "source_lock_sha256": "a" * 64,
-                "upstream_document_sha256": "b" * 64,
-                "official_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/test",
+                "source_id": SOURCE_ID,
+                "source_lock_sha256": canonical_json_digest(lock),
+                "upstream_document_sha256": lock["sha256"],
+                "official_locator": SOURCE_LOCATOR,
                 "official_recognition": True,
                 "effective_from": "2026-09",
                 "effective_to": None,
@@ -94,6 +124,12 @@ class CurriculumCrosswalkTests(unittest.TestCase):
                     "mapping_id": "map-001",
                     "competency_id": "test.competency.1",
                     "target_record_path": record_path.relative_to(root).as_posix(),
+                    "target_source_lock_path": (
+                        Path("curriculum")
+                        / "ontario-elementary"
+                        / "source-locks"
+                        / f"{SOURCE_ID}.v1.json"
+                    ).as_posix(),
                     "target_record_id": record["record_id"],
                     "target_official_id": record["standard"]["official_id"],
                     "target_content_digest": record["content_digest"],
@@ -191,6 +227,28 @@ class CurriculumCrosswalkTests(unittest.TestCase):
             with self.assertRaisesRegex(CrosswalkError, "digest mismatch"):
                 verify_crosswalk(path, root)
 
+    def test_target_record_must_revalidate_its_c1_source_lock(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path, payload = self.make_crosswalk(root)
+            lock_path = root / payload["mappings"][0]["target_source_lock_path"]
+            lock_path.unlink()
+            with self.assertRaisesRegex(
+                CrosswalkError,
+                "target record provenance verification failed",
+            ):
+                verify_crosswalk(path, root)
+
+    def test_schema_rejects_unadvertised_crosswalk_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path, payload = self.make_crosswalk(root)
+            payload["unreviewed_extension"] = True
+            payload["crosswalk_digest"] = canonical_crosswalk_digest(payload)
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(CrosswalkError, "Additional properties"):
+                verify_crosswalk(path, root)
+
     def test_target_path_cannot_escape_repository_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -201,10 +259,20 @@ class CurriculumCrosswalkTests(unittest.TestCase):
             with self.assertRaisesRegex(CrosswalkError, "cannot escape"):
                 verify_crosswalk(path, root)
 
+    def test_source_lock_path_cannot_escape_repository_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path, payload = self.make_crosswalk(root)
+            payload["mappings"][0]["target_source_lock_path"] = "../outside.json"
+            payload["crosswalk_digest"] = canonical_crosswalk_digest(payload)
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(CrosswalkError, "target_source_lock_path cannot escape"):
+                verify_crosswalk(path, root)
+
     def test_global_coverage_and_mastery_claims_are_always_forbidden(self) -> None:
         for field, message in (
-            ("global_official_coverage_claim_allowed", "global official curriculum"),
-            ("learner_mastery_claim_allowed", "learner mastery"),
+            ("global_official_coverage_claim_allowed", "global_official_coverage_claim_allowed"),
+            ("learner_mastery_claim_allowed", "learner_mastery_claim_allowed"),
         ):
             with self.subTest(field=field), tempfile.TemporaryDirectory() as tmp:
                 root = Path(tmp)

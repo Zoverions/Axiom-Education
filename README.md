@@ -120,6 +120,24 @@ The generic cross-repository contract is [`contracts/axiom-education.v1.json`](c
 
 The contract defines bounded curriculum inspection, staging, activation, querying, tutoring, learner-event, progress, and portfolio actions. Learner-data actions require exact purpose-bound consent. High-risk activation and export require explicit confirmation and independent approval.
 
+### Mesh compatibility and forward roadmap
+
+The governed runtime now requires the exact, machine-verified
+[`config/axiom-mesh-compatibility.v1.json`](config/axiom-mesh-compatibility.v1.json)
+profile in addition to a host-injected relative Gateway requester. The profile
+pins AXIOM-MESH `0.12.0-dev.3`, contract digests, the current native learner
+self-write/self-read conformance front, and the full `Gateway -> Hypervisor ->
+Sandbox -> Grid` authority path. A missing or mismatched profile leaves the
+runtime unbound before any token or request is used.
+
+Runtime Capsule, Personal Agent Pack, Compute Node Profile, and Local Trust
+Envelope surfaces are tracked only as personal-compute portability readiness.
+The exact-head delegated-human-authority, AXIOM Host, Assurance Graph,
+provider-observation, and checkout-freshness drafts are recorded as upcoming
+inputs with runtime adoption disabled. Merging or installing any contract does
+not promote it: a new source pin, review, compatibility profile, and executable
+tests are required.
+
 A missing provider, verifier, identity, policy, consent, source, or artifact must produce an explicit unavailable or denied result. It must never produce mock success in a governed or release build.
 
 ## Current capability status
@@ -131,9 +149,9 @@ Presently:
 - curriculum browsing from a schema-verified bundled SQLite database is implemented;
 - the current Ontario secondary corpus deterministically builds into 293 canonical records across 21 courses;
 - the frozen MTH1W subset is checked against the full corpus and independently rebuilt twice byte-for-byte;
-- MTH1W-labelled A1, A2, B2, and B4 practice generation and exact local checking are experimental and explicitly bounded to four derived topic references whose official mapping is under review;
+- MTH1W-labelled A1, A2, B2, and B4 practice generation and bounded deterministic local checking are experimental and explicitly limited to four derived topic references whose official mapping is under review;
 - the official MTH1W hierarchy is source-pinned at 14 overall and 43 specific expectations, while educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, progress, and teacher workflows remain incomplete;
-- a machine-verified 9-unit, 43-lesson, 110-hour MTH1W blueprint covers every official expectation exactly once, and all nine unit slots are now authored machine-verified drafts; this is an authoring milestone, not a complete-course claim;
+- a machine-verified 9-unit, 43-lesson MTH1W blueprint maps every official expectation exactly once within a 110-hour planning envelope, but authored primary lessons total only 63.75 hours and leave 46.25 hours unallocated; all nine unit slots are authored machine-verified drafts, not a complete course;
 - Units 8 and 9 use repo-bounded split manifests that are materialized through the same canonical unit validator in Python and the same `Mth1wUnitContent` runtime model in Flutter;
 - the four-lesson Grade 9 Math Foundations Preview is experimental; it compares multiple valid reasoning routes but is not a complete MTH1W course;
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;

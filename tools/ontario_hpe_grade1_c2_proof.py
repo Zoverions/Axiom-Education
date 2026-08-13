@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Build and verify the first real Ontario Elementary C1 -> C2 proof slice.
+"""Build and verify a C1-bound Ontario Elementary C2 construction fixture.
 
 The generated records are reference-only build artifacts. They are not promoted into the
 canonical reviewed-record directory until separate human source and licensing review exists.
+The fixture binds to captured-source metadata but does not claim that its manually authored
+reference structure was derived from source bytes that the repository does not retain.
 """
 
 from __future__ import annotations
@@ -42,7 +44,7 @@ from tools.curriculum_standard_record import (  # noqa: E402
 
 
 class HpeC2ProofError(RuntimeError):
-    """Raised when the narrow proof slice drifts or overclaims."""
+    """Raised when the narrow construction fixture drifts or overclaims."""
 
 
 def require(condition: bool, message: str) -> None:
@@ -65,7 +67,7 @@ def validate_spec(path: Path = SLICE_PATH) -> tuple[dict[str, Any], dict[str, An
     spec = load_json(path)
     require(spec.get("schema") == "axiom-curriculum-reference-slice.v1", "unsupported reference slice schema")
     require(spec.get("slice_id") == "ontario-hpe-grade1-c2-proof", "slice id mismatch")
-    require(spec.get("stage") == "C2-normalization-proof", "proof slice stage mismatch")
+    require(spec.get("stage") == "C2-construction-fixture", "fixture stage mismatch")
     require(spec.get("jurisdiction_id") == "ca:on", "jurisdiction mismatch")
     require(spec.get("authority_id") == "gov:ontario:ministry-of-education", "authority mismatch")
     require(spec.get("language") == "en", "language mismatch")
@@ -73,10 +75,23 @@ def validate_spec(path: Path = SLICE_PATH) -> tuple[dict[str, Any], dict[str, An
     require(spec.get("level") == "elementary", "education level mismatch")
     require(spec.get("grade_or_level") == "1", "grade mismatch")
     require(spec.get("subject_id") == "health-and-physical-education", "subject mismatch")
-    require(spec.get("complete_grade_claim_allowed") is False, "proof slice cannot claim complete Grade 1 coverage")
-    require(spec.get("complete_subject_claim_allowed") is False, "proof slice cannot claim complete HPE coverage")
+    require(spec.get("complete_grade_claim_allowed") is False, "fixture cannot claim complete Grade 1 coverage")
+    require(spec.get("complete_subject_claim_allowed") is False, "fixture cannot claim complete HPE coverage")
     require(spec.get("human_source_review_status") == "required", "human source review must remain required")
     require(spec.get("licensing_review_status") == "required", "licensing review must remain required")
+    require(
+        spec.get("reference_metadata_origin")
+        == "manually-authored-not-derived-from-retained-source-bytes",
+        "reference metadata origin must disclose manual authorship",
+    )
+    require(
+        spec.get("source_bytes_retained_and_parsed") is False,
+        "fixture cannot claim retained source bytes were parsed",
+    )
+    require(
+        spec.get("c1_to_c2_derivation_proven") is False,
+        "fixture cannot claim C1-to-C2 derivation proof",
+    )
 
     lock_path = ROOT / str(spec.get("source_lock_path"))
     lock = verify_lock(lock_path)
@@ -85,7 +100,7 @@ def validate_spec(path: Path = SLICE_PATH) -> tuple[dict[str, Any], dict[str, An
     require(lock.get("redistribution_status") == "review-required", "proof source must not preclaim redistribution permission")
 
     records = spec.get("records")
-    require(isinstance(records, list) and len(records) == len(EXPECTED), "proof slice must contain exactly 8 references")
+    require(isinstance(records, list) and len(records) == len(EXPECTED), "fixture must contain exactly 8 references")
     seen: set[str] = set()
     for item in records:
         require(isinstance(item, dict), "proof reference must be an object")
@@ -152,7 +167,7 @@ def build_record(spec: dict[str, Any], lock: dict[str, Any], item: dict[str, Any
         },
         "axiom_metadata": {
             "namespace": "org.axiom.education",
-            "tags": ["grade-1", "hpe", "proof-slice", "reference-only"],
+            "tags": ["grade-1", "hpe", "construction-fixture", "reference-only"],
         },
         "content_digest": "",
     }
@@ -184,15 +199,18 @@ def build(output: Path, spec_path: Path = SLICE_PATH) -> dict[str, Any]:
         )
 
     manifest = {
-        "schema": "axiom-curriculum-c2-proof-build.v1",
+        "schema": "axiom-curriculum-c2-fixture-build.v1",
         "slice_id": spec["slice_id"],
-        "stage": "C2-normalized-proof-build",
+        "stage": "C2-normalized-fixture-build",
         "source_lock_sha256": canonical_json_digest(lock),
         "upstream_document_sha256": lock["sha256"],
         "record_count": len(manifest_records),
         "content_mode": "reference-only",
         "human_source_review_status": "required",
         "licensing_review_status": "required",
+        "reference_metadata_origin": spec["reference_metadata_origin"],
+        "source_bytes_retained_and_parsed": False,
+        "c1_to_c2_derivation_proven": False,
         "promoted_to_canonical_records": False,
         "records": manifest_records,
     }
@@ -233,16 +251,16 @@ def main() -> int:
     try:
         if args.command == "build":
             manifest = build(args.output)
-            print(f"Ontario HPE Grade 1 C2 proof built: {manifest['record_count']} records -> {args.output}")
+            print(f"Ontario HPE Grade 1 C2 fixture built: {manifest['record_count']} records -> {args.output}")
         else:
             manifest = verify_determinism()
             print(
-                "Ontario HPE Grade 1 C2 proof verified: "
-                f"{manifest['record_count']} deterministic reference-only records bound to real C1 bytes; "
-                "not promoted to canonical reviewed records"
+                "Ontario HPE Grade 1 C2 fixture verified: "
+                f"{manifest['record_count']} deterministic reference-only records bound to C1 metadata; "
+                "manual structure is not source-byte derivation proof and records are not promoted"
             )
     except (OSError, KeyError, HpeC2ProofError, ValueError) as error:
-        print(f"Ontario HPE Grade 1 C2 proof failed: {error}", file=sys.stderr)
+        print(f"Ontario HPE Grade 1 C2 fixture failed: {error}", file=sys.stderr)
         return 1
     return 0
 

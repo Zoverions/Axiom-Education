@@ -26,6 +26,8 @@ def test_current_blueprint_covers_the_complete_official_course_once():
         "overall_expectations": 14,
         "specific_expectations": 43,
         "hours": 110,
+        "authored_lesson_minutes": 3825,
+        "unallocated_program_minutes": 2775,
     }
 
 
@@ -84,6 +86,25 @@ def test_unit_hours_must_preserve_the_110_hour_course(tmp_path):
     )
 
     with pytest.raises(BlueprintError, match="sum to 110"):
+        verify(path)
+
+
+def test_authored_lesson_minutes_cannot_be_presented_as_110_hours(tmp_path):
+    path = write_mutation(
+        tmp_path,
+        lambda payload: payload["hour_accounting"].update(
+            {
+                "authored_primary_lesson_minutes": 6600,
+                "authored_primary_lesson_hours": 110,
+                "unallocated_program_minutes": 0,
+                "unallocated_program_hours": 0,
+                "allocation_status": "complete",
+                "complete_hour_allocation_claim_allowed": True,
+            }
+        ),
+    )
+
+    with pytest.raises(BlueprintError, match="authored lesson minute accounting"):
         verify(path)
 
 

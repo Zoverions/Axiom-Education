@@ -113,6 +113,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
         ),
         ("Verify capability registry", [python, "tools/check_capabilities.py"]),
         (
+            "Verify AXIOM-MESH compatibility profile",
+            [python, "tools/check_axiom_mesh_compatibility.py"],
+        ),
+        (
             "Verify official MTH1W expectation inventory",
             [
                 python,

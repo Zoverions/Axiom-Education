@@ -165,6 +165,16 @@ class CurriculumStandardRecordTests(unittest.TestCase):
             with self.assertRaisesRegex(StandardRecordError, "must not embed source text"):
                 verify_record(record_path, lock_dir)
 
+    def test_published_schema_rejects_unadvertised_record_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            lock_dir, lock = self.make_source_lock(root)
+            payload = self.make_record(lock)
+            payload["unreviewed_extension"] = True
+            record_path = self.write_final_record(root, payload)
+            with self.assertRaisesRegex(StandardRecordError, "Additional properties"):
+                verify_record(record_path, lock_dir)
+
 
 if __name__ == "__main__":
     unittest.main()

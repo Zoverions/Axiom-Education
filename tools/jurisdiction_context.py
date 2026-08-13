@@ -28,6 +28,7 @@ AUTHORITY_RANK = {
 }
 MINIMUM_ASSURANCE = "A2"
 DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
+STANDARDS_ROLES = {"mandatory", "optional"}
 
 
 class JurisdictionResolutionError(ValueError):
@@ -77,6 +78,24 @@ def _require_text(record: dict[str, Any], field: str, label: str) -> str:
     return value
 
 
+def _optional_boolean(
+    record: dict[str, Any],
+    field: str,
+    label: str,
+    *,
+    default: bool = False,
+) -> bool:
+    if field not in record:
+        return default
+    value = record[field]
+    if type(value) is not bool:
+        raise JurisdictionResolutionError(
+            "invalid_boolean",
+            f"{label}.{field} must be a boolean",
+        )
+    return value
+
+
 def _validate_claim(subject_id: str, claim: dict[str, Any], as_of: datetime, index: int) -> _ActiveClaim | None:
     label = f"claims[{index}]"
     if _require_text(claim, "subject_id", label) != subject_id:
@@ -92,6 +111,13 @@ def _validate_claim(subject_id: str, claim: dict[str, Any], as_of: datetime, ind
     if assurance not in ASSURANCE_RANK:
         raise JurisdictionResolutionError("invalid_assurance", f"{label}.assurance is unsupported")
     _require_digest(claim.get("evidence_digest"), f"{label}.evidence_digest")
+    standards_role = claim.get("standards_role", "mandatory")
+    if standards_role not in STANDARDS_ROLES:
+        raise JurisdictionResolutionError(
+            "invalid_standards_role",
+            f"{label}.standards_role must be mandatory or optional",
+        )
+    _optional_boolean(claim, "parent_replacement_delegated", label)
     if ASSURANCE_RANK[assurance] < ASSURANCE_RANK[MINIMUM_ASSURANCE]:
         raise JurisdictionResolutionError(
             "insufficient_claim_assurance",
@@ -112,6 +138,7 @@ def _validate_pack(pack: dict[str, Any], as_of: datetime, grade_band: str, index
     grade_bands = pack.get("grade_bands")
     if not isinstance(grade_bands, list) or not grade_bands or any(not isinstance(x, str) or not x for x in grade_bands):
         raise JurisdictionResolutionError("invalid_pack", f"{label}.grade_bands must be a non-empty string array")
+    _optional_boolean(pack, "replaces_parent_minimums", label)
     return grade_band in grade_bands and _is_active(pack, as_of, label)
 
 
@@ -209,8 +236,16 @@ def resolve_jurisdiction_context(
                 )
             continue
 
-        replaces_parent = bool(pack.get("replaces_parent_minimums", False))
-        delegated = bool(claim.get("parent_replacement_delegated", False))
+        replaces_parent = _optional_boolean(
+            pack,
+            "replaces_parent_minimums",
+            f"pack:{pack['pack_id']}",
+        )
+        delegated = _optional_boolean(
+            claim,
+            "parent_replacement_delegated",
+            f"claim:{claim['claim_id']}",
+        )
         if replaces_parent and not delegated:
             raise JurisdictionResolutionError(
                 "parent_replacement_not_delegated",

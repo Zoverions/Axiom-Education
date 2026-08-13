@@ -20,6 +20,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
 DEFAULT_RECORD_DIR = ROOT / "curriculum" / "ontario-elementary" / "records-v2"
+STANDARD_RECORD_SCHEMA = ROOT / "schemas" / "curriculum-standard-record.v2.schema.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 ALLOWED_LEVELS = {
     "kindergarten",
@@ -40,6 +41,10 @@ if str(ROOT) not in sys.path:
 from tools.curriculum_source_lock import (  # noqa: E402
     canonical_json_digest,
     verify_lock,
+)
+from tools.json_schema_validation import (  # noqa: E402
+    RepositoryJsonSchemaError,
+    validate_json_schema,
 )
 
 
@@ -94,6 +99,14 @@ def load_source_lock(lock_dir: Path, source_id: str) -> tuple[Path, dict[str, An
 
 def verify_record(record_path: Path, lock_dir: Path = DEFAULT_LOCK_DIR) -> dict[str, Any]:
     record = load_json(record_path)
+    try:
+        validate_json_schema(
+            record,
+            STANDARD_RECORD_SCHEMA,
+            label=str(record_path),
+        )
+    except RepositoryJsonSchemaError as error:
+        raise StandardRecordError(str(error)) from error
     require(record.get("schema") == "axiom-curriculum-standard-record.v2", "unsupported standard record schema")
     require(record.get("stage") == "C2-normalized", "standard record must remain C2-normalized")
 

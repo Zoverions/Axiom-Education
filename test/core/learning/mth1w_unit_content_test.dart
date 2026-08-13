@@ -50,7 +50,7 @@ void main() {
       expect(unit.assessment.performanceTask.rubric, hasLength(5));
     });
 
-    test('auto-checks selected and short-text responses exactly', () {
+    test('auto-checks selected text and equivalent bounded numeric forms', () {
       final unit = Mth1wUnitContent.fromJsonString(source());
       final selected = unit.lessons.first.practiceSets.guided.first.response;
       final shortText = unit.lessons[1].practiceSets.retrieval.last.response;
@@ -60,6 +60,20 @@ void main() {
       expect(selected.isCorrect('wrong'), isFalse);
       expect(shortText.isCorrect('NATURAL NUMBER'), isTrue);
       expect(shortText.isCorrect('integer'), isFalse);
+
+      const numeric = Mth1wResponseContract(
+        type: Mth1wResponseType.shortText,
+        options: [],
+        correctAnswer: null,
+        acceptedAnswers: ['3/4', '3/4 metre'],
+        criteria: [],
+        sampleResponse: null,
+        educatorReviewRequired: false,
+      );
+      expect(numeric.isCorrect('0.75'), isTrue);
+      expect(numeric.isCorrect('.75 metre'), isTrue);
+      expect(numeric.isCorrect('0.75 metres'), isFalse);
+      expect(numeric.isCorrect('0.7501'), isFalse);
     });
 
     test('constructed responses remain educator-reviewed', () {

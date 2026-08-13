@@ -135,6 +135,61 @@ void main() {
     expect(transport.callCount, 0);
   });
 
+  test('non-finite and oversized input fails before transport', () async {
+    final transport = FakeAxiomTransport();
+    final client = AxiomEducationClient(
+      transport: transport,
+      idempotencyKeyFactory: () => 'education-query-bounds-0001',
+    );
+    final baseline = <String, Object?>{
+      'active_pack_manifest_sha256': digest,
+      'course_code': 'MTH1W',
+    };
+
+    for (final input in <Map<String, Object?>>[
+      {...baseline, 'limit': double.nan},
+      {...baseline, 'course_code': 'x' * 257},
+      {...baseline, 'query': 'x' * 4097},
+      {...baseline, 'expectation_ids': List.filled(257, 'MTH1W-A1')},
+    ]) {
+      await expectLater(
+        client.submit(
+          action: AxiomEducationContract.curriculumQuery,
+          input: input,
+        ),
+        throwsA(isA<AxiomEducationValidationException>()),
+      );
+    }
+    expect(transport.callCount, 0);
+  });
+
+  test('event timestamps must be bounded ISO-8601 values', () async {
+    final transport = FakeAxiomTransport();
+    final client = AxiomEducationClient(
+      transport: transport,
+      idempotencyKeyFactory: () => 'education-event-bounds-0001',
+    );
+    for (final occurredAt in const ['not-a-timestamp', '2026-08-13T12:00:00']) {
+      await expectLater(
+        client.submit(
+          action: AxiomEducationContract.learnerEventAppend,
+          input: {
+            'subject_id': 'learner:test',
+            'consent_id': 'consent:test',
+            'purpose': 'learning-progress-recording',
+            'event_id': 'event:test',
+            'event_type': 'submission.created',
+            'occurred_at': occurredAt,
+            'payload_digest': digest,
+            'memory_object_id': 'memory:test',
+          },
+        ),
+        throwsA(isA<AxiomEducationValidationException>()),
+      );
+    }
+    expect(transport.callCount, 0);
+  });
+
   test('tutor intent requires exact subject consent and purpose', () async {
     final transport = FakeAxiomTransport();
     final client = AxiomEducationClient(

@@ -24,9 +24,14 @@ from tools.curriculum_source_discovery import (  # noqa: E402
     SourceDiscoveryError,
     load_effective_discovery,
 )
+from tools.json_schema_validation import (  # noqa: E402
+    RepositoryJsonSchemaError,
+    validate_json_schema,
+)
 
 DEFAULT_DISCOVERY = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
 DEFAULT_LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
+SOURCE_LOCK_SCHEMA = ROOT / "schemas" / "curriculum-source-lock.v1.schema.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 ALLOWED_REDISTRIBUTION = {
     "review-required",
@@ -121,6 +126,10 @@ def verify_lock(
     verify_retained_bytes: bool = True,
 ) -> dict[str, Any]:
     lock = load_json(lock_path)
+    try:
+        validate_json_schema(lock, SOURCE_LOCK_SCHEMA, label=str(lock_path))
+    except RepositoryJsonSchemaError as error:
+        raise SourceLockError(str(error)) from error
     discovery = load_discovery(discovery_path)
 
     require(lock.get("schema") == "axiom-curriculum-source-lock.v1", "unsupported source-lock schema")

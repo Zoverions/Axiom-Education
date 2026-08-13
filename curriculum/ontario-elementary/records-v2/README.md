@@ -40,4 +40,8 @@ python tools/curriculum_standard_record.py verify-directory \
   --allow-empty
 ```
 
-The directory remains empty until real C1 source locks exist. Building the C2 mechanism does not promote Ontario Elementary beyond its actually evidenced stage.
+Valid C1 metadata locks now exist, but the canonical directory remains empty
+until record normalization and the required human source/licensing review are
+performed against appropriately retained source evidence. The separate HPE
+construction fixture proves deterministic reference-record generation only; it
+does not promote Ontario Elementary beyond its actually evidenced stage.
