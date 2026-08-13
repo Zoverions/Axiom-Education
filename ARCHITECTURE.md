@@ -12,14 +12,20 @@ Current architecture is defined by:
 4. [`config/capabilities.json`](config/capabilities.json)
 5. executable code, protected tests, and merge evidence
 
+## Product scope
+
+Axiom Education is the general education-domain platform. It is not architecturally limited to Ontario, high school, MTH1W, or the current Flutter presentation shell.
+
+Jurisdictions, grade bands, courses, institutions, age-specific experiences, and external learning providers are replaceable or composable domain surfaces over a portable governed learner/evidence substrate. Ontario is the first jurisdiction family; Ontario elementary and secondary are parallel curriculum tracks. MTH1W is the first deep secondary vertical slice, not the product boundary.
+
 ## Current boundary
 
 ```text
-Axiom Education UI
+Axiom Education UI / experience layer
   -> AXIOM Gateway
   -> policy, consent, risk, and planning
   -> short-lived capability grant
-  -> approved provider or education capsule
+  -> approved provider, curriculum, or education capsule
   -> bounded execution
   -> encrypted learner state and evidence in Grid
 ```
