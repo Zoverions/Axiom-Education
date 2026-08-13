@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/curriculum-crosswalk.v1.schema.json",
+  "title": "Axiom Education Curriculum Crosswalk v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "crosswalk_id",
+    "crosswalk_version",
+    "source_competency_namespace",
+    "target_jurisdiction_id",
+    "claim_boundary",
+    "mappings",
+    "global_official_coverage_claim_allowed",
+    "learner_mastery_claim_allowed",
+    "crosswalk_digest"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-curriculum-crosswalk.v1"},
+    "crosswalk_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "crosswalk_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "source_competency_namespace": {"type": "string", "minLength": 1},
+    "target_jurisdiction_id": {"type": "string", "minLength": 1},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "global_official_coverage_claim_allowed": {"const": false},
+    "learner_mastery_claim_allowed": {"const": false},
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mapping_id",
+          "competency_id",
+          "target_record_path",
+          "target_record_id",
+          "target_official_id",
+          "target_content_digest",
+          "relationship",
+          "coverage_level",
+          "rationale",
+          "evidence_refs",
+          "review"
+        ],
+        "properties": {
+          "mapping_id": {"type": "string", "minLength": 1},
+          "competency_id": {"type": "string", "minLength": 1},
+          "target_record_path": {"type": "string", "minLength": 1},
+          "target_record_id": {"type": "string", "minLength": 1},
+          "target_official_id": {"type": "string", "minLength": 1},
+          "target_content_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "relationship": {
+            "enum": ["equivalent", "supports", "partial", "prerequisite", "contextual"]
+          },
+          "coverage_level": {"enum": ["none", "supporting", "direct"]},
+          "rationale": {"type": "string", "minLength": 1},
+          "evidence_refs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "review": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "reviewer", "reviewed_at", "findings"],
+            "properties": {
+              "status": {"enum": ["required", "approved", "changes-required", "rejected"]},
+              "reviewer": {
+                "anyOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["name", "qualification"],
+                    "properties": {
+                      "name": {"type": "string", "minLength": 1},
+                      "qualification": {"type": "string", "minLength": 1},
+                      "organization": {"type": ["string", "null"]}
+                    }
+                  }
+                ]
+              },
+              "reviewed_at": {"type": ["string", "null"]},
+              "findings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["id", "severity", "description", "disposition"],
+                  "properties": {
+                    "id": {"type": "string", "minLength": 1},
+                    "severity": {"enum": ["note", "minor", "major", "critical"]},
+                    "description": {"type": "string", "minLength": 1},
+                    "disposition": {
+                      "enum": ["open", "resolved", "accepted-with-rationale", "not-applicable"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "crosswalk_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
