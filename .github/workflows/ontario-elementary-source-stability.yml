@@ -6,8 +6,12 @@ on:
       - main
       - feature/curriculum-standard-record-v2-20260811
     paths:
+      - 'requirements-dev.txt'
+      - 'schemas/curriculum-source-lock.v1.schema.json'
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
       - 'curriculum/ontario-elementary/source-monitoring.v1.json'
+      - 'tools/json_schema_validation.py'
+      - 'tools/curriculum_source_lock.py'
       - 'tools/remote_curriculum_source_capture.py'
       - 'tools/probe_curriculum_source_stability.py'
       - 'tools/check_curriculum_source_monitoring.py'
@@ -30,6 +34,8 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
       - name: Verify monitoring policy and stability classification logic
         run: |
           python tools/check_curriculum_source_monitoring.py
@@ -53,6 +59,8 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
       - name: Validate bounded target and monitoring registries
         run: |
           python tools/remote_curriculum_source_capture.py validate-targets
