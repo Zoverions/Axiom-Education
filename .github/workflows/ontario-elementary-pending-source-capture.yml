@@ -35,9 +35,6 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
-          - source_id: ontario-kindergarten-2026
-            slug: kindergarten-2026
-            label: Kindergarten 2026
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -81,9 +78,6 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
-          - source_id: ontario-kindergarten-2026
-            slug: kindergarten-2026
-            label: Kindergarten 2026
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
