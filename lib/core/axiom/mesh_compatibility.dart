@@ -6,10 +6,8 @@ class AxiomMeshCompatibilityProfile {
   static const currentProfileId =
       'axiom-education.mesh-0.12.0-dev.3-provider-v1';
   static const currentKernelVersion = '0.12.0-dev.3';
-  static const currentBaselineHead =
-      'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
-  static const currentProviderHead =
-      '2365bf5ed19e0da81288551b2bb4135a7094d02b';
+  static const currentBaselineHead = 'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
+  static const currentProviderHead = '2365bf5ed19e0da81288551b2bb4135a7094d02b';
   static const currentGatewayContractSourceHead =
       'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
   static const currentGatewayContractCanonicalSha256 =
@@ -93,8 +91,7 @@ class AxiomMeshCompatibilityProfile {
       baselineHead = currentBaselineHead,
       providerHead = currentProviderHead,
       gatewayContractSourceHead = currentGatewayContractSourceHead,
-      gatewayContractCanonicalSha256 =
-          currentGatewayContractCanonicalSha256,
+      gatewayContractCanonicalSha256 = currentGatewayContractCanonicalSha256,
       gatewayCompatibilityMode = currentGatewayCompatibilityMode,
       authorityPath = currentAuthorityPath,
       requiredContractSha256 = currentRequiredContractSha256,
