@@ -1,6 +1,6 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.4.0",
+  "targets_version": "1.5.0",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
@@ -101,6 +101,18 @@
       "redistribution_status": "review-required",
       "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
       "notes": "The official Curriculum and Resources portal identifies The Arts, Grades 1-8, 2009 at this exact current DCP route. Publications Ontario independently identifies the Revised 2009 Arts curriculum lineage; this target records a pre-C1 structured-source capture route and does not promote the source until capture evidence is reviewed."
+    },
+    {
+      "source_id": "ontario-social-studies-history-geography",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "The official Curriculum and Resources portal provides the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 structured source. Discovery evidence separately binds Publications Ontario publication 233531 and Ontario's 2026-27 Grade 7-8 History update context; this capture target intentionally does not weaken publication-number URL validation for a catalogue URL that omits the number."
     }
   ]
 }
