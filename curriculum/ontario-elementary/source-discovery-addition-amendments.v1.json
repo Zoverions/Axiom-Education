@@ -1,0 +1,108 @@
+{
+  "schema": "axiom-curriculum-source-addition-amendments.v1",
+  "jurisdiction_id": "ca:on",
+  "base_additions_path": "curriculum/ontario-elementary/source-discovery-additions.v1.json",
+  "claim_boundary": "These append-only amendments resolve newer official curriculum routes for source identities that entered through the additions ledger. They do not rewrite the original additions, capture source bytes, establish a C1 digest, approve redistribution, normalize curriculum records, complete human review, or activate a curriculum pack.",
+  "amendments": [
+    {
+      "amendment_id": "ontario-fr-francais-2023-current-dcp-route-20260820",
+      "source_id": "ontario-fr-francais-grades-1-8-2023",
+      "prior_source_entry_sha256": "4aee64a86f3d01539f33421a76ab750652f0633ddff632ac6096a00c7966282d",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-francais",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/fr/CL33252",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-francais",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-french-dcp-route-and-publication-record-resolved-bytes-pending",
+        "status_note": "The current Ontario French Curriculum and Resources service resolves Français, Grades 1-8, 2023 at this exact DCP route. Publications Ontario CL33252 remains the publication identity record. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    },
+    {
+      "amendment_id": "ontario-fr-mathematiques-2020-current-dcp-route-20260820",
+      "source_id": "ontario-fr-mathematics-grades-1-8-2020",
+      "prior_source_entry_sha256": "bbc4e1bac625c4f1bd2afe0977be1707bdc6aa23d3463224069d59d549b8cd98",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/CL32239",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-french-dcp-route-and-publication-record-resolved-bytes-pending",
+        "status_note": "The current Ontario French Curriculum and Resources service resolves Mathématiques, Grades 1-8, 2020 at this exact DCP route. Publications Ontario CL32239 remains the primary publication identity record and separate online-resource record 300333 remains distinct. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    },
+    {
+      "amendment_id": "ontario-fr-eps-2019-current-dcp-route-20260820",
+      "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
+      "prior_source_entry_sha256": "0ddb1fad1793c3fec097da15e7cfad32e459674ee27f5018b1bcdc32666cc9ed",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/022579",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-french-dcp-route-and-publication-record-resolved-bytes-pending",
+        "status_note": "The current Ontario French Curriculum and Resources service resolves Éducation physique et santé, Grades 1-8, 2019 at this exact DCP route. Publications Ontario 022579 remains the official publication identity record. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    },
+    {
+      "amendment_id": "ontario-fr-education-artistique-2009-current-dcp-route-20260820",
+      "source_id": "ontario-fr-arts-grades-1-8-2009",
+      "prior_source_entry_sha256": "2b7265f6c6f0395c03e35b49636156f4e6c06c112de6c34168e7a6fcb14fc645",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-1re-la-8e-anne-ducation-artistique-2009-rvis",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-french-dcp-route-and-publication-record-resolved-bytes-pending",
+        "status_note": "The current Ontario French Curriculum and Resources service resolves Éducation artistique, Grades 1-8, Revised 2009 at this exact DCP route. Publications Ontario online-resource record 231943_U remains the publication identity and separate book record 231943 remains distinct. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    }
+  ]
+}
