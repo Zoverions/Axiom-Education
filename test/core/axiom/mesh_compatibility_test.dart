@@ -14,7 +14,8 @@ void main() {
             )
             as Map<String, Object?>;
     final baseline = payload['mesh_baseline']! as Map<String, Object?>;
-    final seam = payload['gateway_intents_submit_seam']! as Map<String, Object?>;
+    final seam =
+        payload['gateway_intents_submit_seam']! as Map<String, Object?>;
     final required = payload['required_runtime_contracts']! as List<Object?>;
     final digests = <String, String>{
       for (final item in required.cast<Map<String, Object?>>())
