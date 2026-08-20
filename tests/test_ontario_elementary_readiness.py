@@ -19,28 +19,29 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 16)
         self.assertEqual(summary["registered_capture_targets"], 12)
-        self.assertEqual(summary["c1_snapshot_sources"], 11)
+        self.assertEqual(summary["c1_snapshot_sources"], 12)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 5)
-        self.assertEqual(summary["observational_response_surface_sources"], 6)
+        self.assertEqual(summary["observational_response_surface_sources"], 7)
         self.assertFalse(summary["all_c1_sources_strictly_recapturable"])
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertTrue(summary["kindergarten_c1_snapshot"])
+        self.assertEqual(summary["english_program_families_with_c1_source"], 8)
         self.assertEqual(summary["french_program_families_with_c1_source"], 4)
         self.assertEqual(summary["unresolved_french_program_families"], [])
+        self.assertTrue(summary["english_base_source_capture_complete"])
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
-    def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
+    def test_arts_is_observational_c1(self) -> None:
         payload = build_readiness()
         rows = {row["source_id"]: row for row in payload["sources"]}
         arts = rows["ontario-arts-grades-1-8-2009"]
-        self.assertEqual(arts["highest_evidenced_stage"], "C0-discovered")
+        self.assertEqual(arts["highest_evidenced_stage"], "C1-bytes-captured-digested")
         self.assertTrue(arts["capture_target_registered"])
-        self.assertIsNone(arts["c1_snapshot"])
-        self.assertIsNone(arts["monitoring"])
-        self.assertEqual(
-            arts["c0_discovery_review_status"],
-            "source-locator-confirmed-bytes-pending",
-        )
+        self.assertIsNotNone(arts["c1_snapshot"])
+        self.assertEqual(arts["c1_snapshot"]["media_type"], "text/html")
+        self.assertEqual(arts["monitoring"]["mode"], "observational-response-surface")
+        self.assertFalse(arts["monitoring"]["strict_exact_byte_recapture"])
+        self.assertFalse(arts["monitoring"]["semantic_change_claimed"])
 
     def test_english_sshg_current_source_is_observational_c1(self) -> None:
         payload = build_readiness()
@@ -114,6 +115,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             observational,
             {
                 "ontario-kindergarten-2026",
+                "ontario-arts-grades-1-8-2009",
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
                 "ontario-social-studies-history-geography",
@@ -144,7 +146,6 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             set(payload["summary"]["uncaptured_discovered_source_ids"]),
             {
-                "ontario-arts-grades-1-8-2009",
                 "ontario-fr-francais-grades-1-8-2023",
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
@@ -152,7 +153,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_english_program_family_snapshot_coverage_is_seven_of_eight(self) -> None:
+    def test_english_program_family_snapshot_coverage_is_eight_of_eight(self) -> None:
         payload = build_readiness()
         rows = payload["program_families"]["english_language_schools"]
         snapshot_families = {
@@ -164,6 +165,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             snapshot_families,
             {
+                "the-arts",
                 "french-as-a-second-language",
                 "language",
                 "health-and-physical-education",
@@ -240,7 +242,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         locked_rows = [
             row for row in payload["sources"] if row["c1_snapshot"] is not None
         ]
-        self.assertEqual(len(locked_rows), 11)
+        self.assertEqual(len(locked_rows), 12)
         for row in locked_rows:
             self.assertFalse(row["c1_snapshot"]["bytes_retained"])
             self.assertEqual(
@@ -252,7 +254,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
     def test_machine_view_cannot_relabel_observational_sources_as_strict(self) -> None:
         payload = build_readiness()
         mutated = copy.deepcopy(payload)
-        mutated["summary"]["strict_exact_byte_monitored_sources"] = 11
+        mutated["summary"]["strict_exact_byte_monitored_sources"] = 12
         mutated["summary"]["observational_response_surface_sources"] = 0
         mutated["summary"]["all_c1_sources_strictly_recapturable"] = True
         with self.assertRaisesRegex(
