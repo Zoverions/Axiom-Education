@@ -93,8 +93,11 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             sshg["source_resolution_status"],
             "official-current-structured-source-resolved-pending-c1",
         )
-        self.assertNotIn("publication_number", sshg)
-        self.assertNotIn("publication_catalog_url", sshg)
+        self.assertEqual(sshg["publication_number"], "233531")
+        self.assertEqual(
+            sshg["publication_catalog_url"],
+            "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+        )
         self.assertTrue(
             all(
                 target["redistribution_status"] == "review-required"
@@ -154,6 +157,37 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         ):
             validate_target_registry(path)
 
+    def test_non_numbered_publication_url_requires_exact_effective_discovery_binding(self):
+        targets = validate_target_registry()
+        sshg = targets["ontario-social-studies-history-geography"]
+        self.assertEqual(sshg["publication_number"], "233531")
+
+        def wrong_number(payload):
+            self.target(payload, "ontario-social-studies-history-geography").update(
+                {"publication_number": "233532"}
+            )
+
+        path = self.mutation(wrong_number)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "exactly match effective discovery provenance",
+        ):
+            validate_target_registry(path)
+
+        def wrong_catalog(payload):
+            self.target(payload, "ontario-social-studies-history-geography").update(
+                {
+                    "publication_catalog_url": "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8"
+                }
+            )
+
+        path = self.mutation(wrong_catalog)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "exactly match effective discovery provenance",
+        ):
+            validate_target_registry(path)
+
     def test_dcp_structured_source_remains_under_government_host_policy(self):
         def mutate(payload):
             self.target(payload, "ontario-language-grades-1-8-2023").update(
@@ -205,6 +239,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             sshg["download_url"],
             "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
         )
+        self.assertEqual(sshg["publication_number"], "233531")
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
         def mutate(payload):
