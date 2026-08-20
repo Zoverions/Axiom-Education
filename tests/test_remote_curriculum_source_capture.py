@@ -47,6 +47,8 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-social-studies-history-geography",
                 "ontario-fr-science-technology-grades-1-8-2022",
                 "ontario-fr-social-studies-history-geography",
+                "ontario-fr-english-grades-4-8-2006",
+                "ontario-fr-english-beginners-grades-4-8-2013",
             },
         )
         kindergarten = targets["ontario-kindergarten-2026"]
@@ -59,6 +61,10 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         sshg = targets["ontario-social-studies-history-geography"]
         fr_science = targets["ontario-fr-science-technology-grades-1-8-2022"]
         fr_sshg = targets["ontario-fr-social-studies-history-geography"]
+        fr_english = targets["ontario-fr-english-grades-4-8-2006"]
+        fr_english_beginners = targets[
+            "ontario-fr-english-beginners-grades-4-8-2013"
+        ]
         self.assertEqual(kindergarten["publication_number"], "CL34638")
         self.assertEqual(kindergarten["host_policy"], "ontario-government")
         self.assertEqual(kindergarten["expected_media_type"], "text/html")
@@ -115,7 +121,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertNotIn("publication_number", fr_science)
         self.assertEqual(
             fr_science["source_resolution_status"],
-            "official-current-structured-source-resolved-pending-c1",
+            "official-current-structured-source-resolved",
         )
         self.assertEqual(
             fr_sshg["source_locator"],
@@ -126,7 +132,27 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertNotIn("publication_number", fr_sshg)
         self.assertEqual(
             fr_sshg["source_resolution_status"],
-            "official-current-structured-source-resolved-pending-c1",
+            "official-current-structured-source-resolved",
+        )
+        self.assertEqual(
+            fr_english["source_locator"],
+            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
+        )
+        self.assertEqual(fr_english["download_url"], fr_english["source_locator"])
+        self.assertEqual(fr_english["expected_media_type"], "application/pdf")
+        self.assertNotIn("publication_catalog_url", fr_english)
+        self.assertNotIn("publication_number", fr_english)
+        self.assertEqual(
+            fr_english_beginners["source_locator"],
+            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+        )
+        self.assertEqual(
+            fr_english_beginners["publication_number"],
+            "232897_U",
+        )
+        self.assertEqual(
+            fr_english_beginners["expected_media_type"],
+            "application/pdf",
         )
         self.assertTrue(
             all(
@@ -268,6 +294,57 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         ):
             validate_target_registry(path)
 
+    def test_french_ministry_pdf_target_requires_exact_admitted_pdf(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-fr-english-grades-4-8-2006",
+            ).update(
+                {
+                    "download_url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/other.pdf"
+                }
+            )
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "bind source_locator and download_url exactly",
+        ):
+            validate_target_registry(path)
+
+    def test_french_ministry_pdf_target_requires_pdf_media_type(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-fr-english-grades-4-8-2006",
+            ).update({"expected_media_type": "text/html"})
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "must require application/pdf",
+        ):
+            validate_target_registry(path)
+
+    def test_french_ministry_pdf_target_cannot_invent_publication_provenance(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-fr-english-grades-4-8-2006",
+            ).update(
+                {
+                    "publication_catalog_url": "https://www.publications.gov.on.ca/fabricated",
+                    "publication_number": "fabricated",
+                }
+            )
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "Ministry-PDF-only C0 provenance cannot acquire publication metadata",
+        ):
+            validate_target_registry(path)
+
     def test_source_locator_must_already_exist_in_effective_discovery(self):
         def mutate(payload):
             self.target(
@@ -317,6 +394,14 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertEqual(
             targets["ontario-fr-social-studies-history-geography"]["source_locator"],
             "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+        )
+        self.assertEqual(
+            targets["ontario-fr-english-grades-4-8-2006"]["source_locator"],
+            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
+        )
+        self.assertEqual(
+            targets["ontario-fr-english-beginners-grades-4-8-2013"]["source_locator"],
+            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
         )
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
