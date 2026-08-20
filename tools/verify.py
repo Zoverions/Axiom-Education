@@ -121,12 +121,20 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/ontario_elementary_source_review.py", "verify-directory"],
         ),
         (
+            "Verify Ontario Elementary licensing-review targets and submitted evidence",
+            [python, "tools/ontario_elementary_licensing_review.py", "verify-directory"],
+        ),
+        (
             "Verify Ontario Elementary readiness boundary",
             [python, "tools/ontario_elementary_readiness.py", "verify"],
         ),
         (
             "Verify deterministic Ontario Elementary reviewer dossier",
             [python, "tools/ontario_elementary_reviewer_dossier.py", "verify"],
+        ),
+        (
+            "Verify fail-closed Ontario Elementary C2 intake gate",
+            [python, "-m", "unittest", "tests.test_ontario_elementary_c2_intake", "-q"],
         ),
         (
             "Verify official MTH1W expectation inventory",
