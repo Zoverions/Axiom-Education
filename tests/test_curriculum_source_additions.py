@@ -45,15 +45,15 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
                 return row
         raise AssertionError(f"missing source addition: {source_id}")
 
-    def test_current_additions_append_six_french_school_c0_sources(self) -> None:
+    def test_current_additions_resolve_all_eight_french_program_families(self) -> None:
         result = verify_additions()
         self.assertEqual(
             result,
             {
                 "effective_sources_before_additions": 8,
-                "appended_c0_sources": 6,
-                "effective_sources_after_additions": 14,
-                "french_program_families_with_c0_source": 7,
+                "appended_c0_sources": 8,
+                "effective_sources_after_additions": 16,
+                "french_program_families_with_c0_source": 8,
             },
         )
 
@@ -69,6 +69,8 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
                 "ontario-fr-arts-grades-1-8-2009",
                 "ontario-fr-science-technology-grades-1-8-2022",
                 "ontario-fr-social-studies-history-geography",
+                "ontario-fr-english-grades-4-8-2006",
+                "ontario-fr-english-beginners-grades-4-8-2013",
             }.issubset(source_ids)
         )
 
@@ -91,10 +93,29 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
                 self.assertEqual(french[family]["source_id"], source_id)
                 self.assertEqual(french[family]["status"], "source-discovered")
 
-        self.assertIsNone(french["english"].get("source_id"))
+        english = french["english"]
+        self.assertEqual(english["status"], "source-discovered")
         self.assertEqual(
-            french["english"]["status"],
-            "unresolved-language-stream-source",
+            english["source_id"],
+            "ontario-fr-english-grades-4-8-2006",
+        )
+        self.assertEqual(english["applies_to_grades"], [4, 5, 6, 7, 8])
+        self.assertEqual(
+            english["coverage_mode"],
+            "primary-with-conditional-alternatives",
+        )
+        self.assertEqual(
+            english["conditional_sources"],
+            [
+                {
+                    "source_id": "ontario-fr-english-beginners-grades-4-8-2013",
+                    "condition": (
+                        "For students in French-language elementary schools who are "
+                        "not yet able to follow the regular Anglais program."
+                    ),
+                    "applies_to_grades": [4, 5, 6, 7, 8],
+                }
+            ],
         )
 
     def test_historical_and_amended_sources_are_not_rewritten(self) -> None:
@@ -185,7 +206,7 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
         ):
             load_augmented_discovery(DEFAULT_DISCOVERY, path)
 
-    def test_dcp_only_addition_requires_dedicated_classification(self) -> None:
+    def test_source_without_publication_requires_supported_official_classification(self) -> None:
         additions = self.additions()
         row = self.addition_by_source(
             additions,
@@ -195,7 +216,7 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
         path = self.write_additions(additions)
         with self.assertRaisesRegex(
             SourceAdditionError,
-            "DCP-only addition must use",
+            "official DCP route or Ministry curriculum PDF",
         ):
             load_augmented_discovery(DEFAULT_DISCOVERY, path)
 
@@ -211,7 +232,80 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
         path = self.write_additions(additions)
         with self.assertRaisesRegex(
             SourceAdditionError,
-            "exact DCP curriculum route must be present",
+            "exact official curriculum route must be present",
+        ):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_ministry_pdf_addition_requires_french_elementary_ministry_path(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-english-grades-4-8-2006",
+        )
+        row["source"]["url"] = "https://www.edu.gov.on.ca/eng/curriculum/other.pdf"
+        row["evidence"][0]["url"] = row["source"]["url"]
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "French elementary Ministry PDF",
+        ):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_conditional_source_requires_primary_binding_first(self) -> None:
+        additions = self.additions()
+        rows = additions["additions"]
+        regular_index = next(
+            index
+            for index, row in enumerate(rows)
+            if row["source"]["source_id"] == "ontario-fr-english-grades-4-8-2006"
+        )
+        beginner_index = next(
+            index
+            for index, row in enumerate(rows)
+            if row["source"]["source_id"]
+            == "ontario-fr-english-beginners-grades-4-8-2013"
+        )
+        rows[regular_index], rows[beginner_index] = rows[beginner_index], rows[regular_index]
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "requires a primary source binding first",
+        ):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_conditional_source_requires_condition(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-english-beginners-grades-4-8-2013",
+        )
+        row["coverage_bindings"][0].pop("condition")
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(SourceAdditionError, "requires a condition"):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_conditional_source_grade_scope_must_fit_its_source(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-english-beginners-grades-4-8-2013",
+        )
+        row["coverage_bindings"][0]["applies_to_grades"] = [3, 4, 5, 6, 7, 8]
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(SourceAdditionError, "grade outside source scope"):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_duplicate_conditional_source_binding_is_rejected(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-english-beginners-grades-4-8-2013",
+        )
+        row["coverage_bindings"].append(copy.deepcopy(row["coverage_bindings"][0]))
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "duplicate conditional source-addition coverage binding",
         ):
             load_augmented_discovery(DEFAULT_DISCOVERY, path)
 
