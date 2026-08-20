@@ -42,17 +42,13 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
                 return row
         raise AssertionError(f"missing monitoring source: {source_id}")
 
-    def test_current_policy_accounts_for_nine_locks_and_three_pending_targets(self) -> None:
+    def test_current_policy_accounts_for_eleven_locks_and_one_pending_target(self) -> None:
         result = verify_policy()
-        self.assertEqual(result["sources"], 9)
+        self.assertEqual(result["sources"], 11)
         self.assertEqual(result["capture_targets"], 12)
         self.assertEqual(
             result["pending_capture_targets"],
-            [
-                "ontario-arts-grades-1-8-2009",
-                "ontario-fr-english-beginners-grades-4-8-2013",
-                "ontario-fr-english-grades-4-8-2006",
-            ],
+            ["ontario-arts-grades-1-8-2009"],
         )
         self.assertEqual(
             set(result["strict_exact_byte"]),
@@ -60,6 +56,8 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
                 "ontario-health-physical-education-grades-1-8-2019",
                 "ontario-mathematics-grades-1-8-2020",
                 "ontario-fsl-grades-1-8-2013",
+                "ontario-fr-english-grades-4-8-2006",
+                "ontario-fr-english-beginners-grades-4-8-2013",
             },
         )
         self.assertEqual(
@@ -137,14 +135,12 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
             )
         )
         result = verify_policy(targets_path=path)
-        self.assertEqual(result["sources"], 9)
+        self.assertEqual(result["sources"], 11)
         self.assertEqual(result["capture_targets"], 13)
         self.assertEqual(
             result["pending_capture_targets"],
             [
                 "ontario-arts-grades-1-8-2009",
-                "ontario-fr-english-beginners-grades-4-8-2013",
-                "ontario-fr-english-grades-4-8-2006",
                 "ontario-pending-source-example",
             ],
         )
