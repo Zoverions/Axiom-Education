@@ -18,7 +18,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 16)
-        self.assertEqual(summary["registered_capture_targets"], 10)
+        self.assertEqual(summary["registered_capture_targets"], 12)
         self.assertEqual(summary["c1_snapshot_sources"], 9)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
         self.assertEqual(summary["observational_response_surface_sources"], 6)
