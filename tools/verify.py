@@ -117,6 +117,18 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_axiom_mesh_compatibility.py"],
         ),
         (
+            "Verify Ontario Elementary human source-review targets and submitted evidence",
+            [python, "tools/ontario_elementary_source_review.py", "verify-directory"],
+        ),
+        (
+            "Verify Ontario Elementary readiness boundary",
+            [python, "tools/ontario_elementary_readiness.py", "verify"],
+        ),
+        (
+            "Verify deterministic Ontario Elementary reviewer dossier",
+            [python, "tools/ontario_elementary_reviewer_dossier.py", "verify"],
+        ),
+        (
             "Verify official MTH1W expectation inventory",
             [
                 python,
