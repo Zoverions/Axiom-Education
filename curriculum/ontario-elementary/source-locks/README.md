@@ -14,7 +14,9 @@ Public availability does not automatically establish redistribution permission. 
 - do **not** commit the captured source bytes;
 - keep `redistribution_status` at `review-required` or `external-only`.
 
-The current committed locks follow that boundary, including Kindergarten 2026. HTML response surfaces may be valid historical C1 snapshots while remaining observational rather than strict exact-byte drift sources; monitoring policy is kept separately in `../source-monitoring.v1.json`.
+The current committed locks follow that boundary, including Kindergarten 2026 and Social Studies/History/Geography. HTML response surfaces may be valid historical C1 snapshots while remaining observational rather than strict exact-byte drift sources; monitoring policy is kept separately in `../source-monitoring.v1.json`.
+
+The Arts remains the only discovered English-language required-program source without a committed C1 snapshot. Publications Ontario lists both English publication `231998` (Book) and `231998_U` (Online Resources) for the Revised 2009 curriculum. These are distinct official format records and must not be collapsed into a fabricated single publication identifier merely to make metadata look uniform.
 
 ## Capture
 
