@@ -2,7 +2,7 @@
   "schema": "axiom-curriculum-source-discovery-additions.v1",
   "jurisdiction_id": "ca:on",
   "base_discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
-  "additions_version": "1.0.0",
+  "additions_version": "1.1.0",
   "claim_boundary": "These append-only additions introduce newly resolved C0 source identities that were absent from the historical 2026-08-11 discovery ledger. They do not rewrite the historical ledger or its amendments, capture curriculum bytes, establish a source digest, approve redistribution, normalize curriculum records, complete human review, or promote any added source beyond C0 discovery.",
   "additions": [
     {
@@ -133,6 +133,71 @@
         {
           "stream": "french_language_schools",
           "program_family": "the-arts",
+          "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-sciences-technologie-2022-dcp-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-science-technology-grades-1-8-2022",
+        "subject_family": "french-language-schools-science-and-technology",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2022",
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+        "classification": "official-current-dcp-curriculum-route",
+        "source_locator_status": "exact-official-french-dcp-route-confirmed-bytes-pending",
+        "status_note": "Ontario's French Curriculum and Resources service exposes the current elementary Sciences et technologie curriculum at this exact French DCP route. This addition records the current curriculum identity only; exact response bytes, digest, recapture behavior, and redistribution status remain for later C1 evidence.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "current-dcp-route-confirmed-bytes-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+          "classification": "official-current-dcp-curriculum-route"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "science-and-technology",
+          "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-etudes-sociales-histoire-geographie-dcp-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-social-studies-history-geography",
+        "subject_family": "french-language-schools-social-studies-history-geography",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2018-revised-with-2026-history-updates",
+        "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+        "classification": "official-current-dcp-curriculum-route",
+        "source_locator_status": "exact-official-french-dcp-route-confirmed-bytes-pending",
+        "status_note": "Ontario's French Curriculum and Resources service exposes current Études sociales, Histoire et Géographie content at this exact DCP curriculum root, including Grade 7 and 8 History surfaces in the current service. This C0 addition preserves the current route identity while leaving exact byte capture, digest, recapture behavior, and detailed 2018/2026 expectation reconciliation to later evidence gates.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "current-dcp-route-confirmed-version-reconciliation-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+          "classification": "official-current-dcp-curriculum-route"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "social-studies-grades-1-6",
+          "status": "source-discovered"
+        },
+        {
+          "stream": "french_language_schools",
+          "program_family": "history-and-geography-grades-7-8",
           "status": "source-discovered"
         }
       ]
