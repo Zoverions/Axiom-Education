@@ -44,8 +44,13 @@ class OntarioElementarySourceReviewTests(unittest.TestCase):
             "attestation_type": "human-review",
         }
 
-    def write_review(self, directory: Path, payload: dict[str, object]) -> Path:
-        path = directory / "review.json"
+    def write_review(
+        self,
+        directory: Path,
+        payload: dict[str, object],
+        filename: str = "review.json",
+    ) -> Path:
+        path = directory / filename
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
@@ -138,6 +143,21 @@ class OntarioElementarySourceReviewTests(unittest.TestCase):
             self.assertEqual(summary["approved_sources"], 0)
             self.assertEqual(summary["blocked_sources"], 1)
             self.assertFalse(summary["human_source_review_complete"])
+
+    def test_multiple_current_attestations_for_one_source_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            first = self.review_payload()
+            second = self.review_payload()
+            second["review_id"] = "review:duplicate-second"
+            second["reviewed_at"] = "2026-08-20T18:05:00-04:00"
+            self.write_review(directory, first, "a-review.json")
+            self.write_review(directory, second, "b-review.json")
+            with self.assertRaisesRegex(
+                ElementarySourceReviewError,
+                "exactly one current review per source",
+            ):
+                verify_directory(directory)
 
     def test_non_human_attestation_is_rejected(self) -> None:
         payload = self.review_payload()
