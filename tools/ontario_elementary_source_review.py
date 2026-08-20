@@ -221,26 +221,31 @@ def verify_directory(directory: Path = REVIEW_DIR) -> dict[str, Any]:
     targets = plan_index(plan)
     paths = sorted(directory.glob("*.json")) if directory.exists() else []
     seen_review_ids: set[str] = set()
-    decisions_by_source: dict[str, list[str]] = {source_id: [] for source_id in targets}
+    decision_by_source: dict[str, str | None] = {source_id: None for source_id in targets}
     for path in paths:
         review = verify_review(path, plan)
         review_id = str(review["review_id"])
         require(review_id not in seen_review_ids, f"duplicate review_id: {review_id}")
         seen_review_ids.add(review_id)
-        decisions_by_source[str(review["source_id"])].append(str(review["decision"]))
+        source_id = str(review["source_id"])
+        require(
+            decision_by_source[source_id] is None,
+            f"multiple source-review attestations for {source_id}; v1 requires exactly one current review per source",
+        )
+        decision_by_source[source_id] = str(review["decision"])
 
     approved_sources = sorted(
         source_id
-        for source_id, decisions in decisions_by_source.items()
-        if decisions and decisions[-1] == "approved"
+        for source_id, decision in decision_by_source.items()
+        if decision == "approved"
     )
     blocked_sources = sorted(
         source_id
-        for source_id, decisions in decisions_by_source.items()
-        if decisions and decisions[-1] in {"changes-required", "rejected"}
+        for source_id, decision in decision_by_source.items()
+        if decision in {"changes-required", "rejected"}
     )
     unreviewed_sources = sorted(
-        source_id for source_id, decisions in decisions_by_source.items() if not decisions
+        source_id for source_id, decision in decision_by_source.items() if decision is None
     )
     return {
         "targets": len(targets),
