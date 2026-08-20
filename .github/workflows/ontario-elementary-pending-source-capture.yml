@@ -38,12 +38,6 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
-          - source_id: ontario-fr-english-grades-4-8-2006
-            slug: fr-english
-            label: French-school regular Anglais
-          - source_id: ontario-fr-english-beginners-grades-4-8-2013
-            slug: fr-english-beginners
-            label: French-school Anglais pour debutants
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -88,12 +82,6 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
-          - source_id: ontario-fr-english-grades-4-8-2006
-            slug: fr-english
-            label: French-school regular Anglais
-          - source_id: ontario-fr-english-beginners-grades-4-8-2013
-            slug: fr-english-beginners
-            label: French-school Anglais pour debutants
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
