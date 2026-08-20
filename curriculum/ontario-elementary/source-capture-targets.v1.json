@@ -1,6 +1,6 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.5.2",
+  "targets_version": "1.6.0",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
@@ -115,6 +115,30 @@
       "redistribution_status": "review-required",
       "source_resolution_status": "official-current-structured-source-resolved",
       "notes": "The official Curriculum and Resources portal provides the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 structured source. The Publications Ontario product URL and publication number 233531 are bound to the exact effective append-only discovery record because the canonical product URL omits the number from its path. This target is retained for bounded recapture and observational monitoring after a metadata-only historical C1 snapshot was deliberately committed; Ontario's 2026-27 Grade 7-8 History update context remains separate discovery evidence."
+    },
+    {
+      "source_id": "ontario-fr-science-technology-grades-1-8-2022",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+      "download_url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "The exact French Ontario Curriculum and Resources route is already admitted as a C0 source identity. This target permits bounded metadata-only capture attempts only; it does not establish a digest, strict recapture stability, redistribution permission, or C1 promotion until hosted evidence is reviewed."
+    },
+    {
+      "source_id": "ontario-fr-social-studies-history-geography",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+      "download_url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "The exact French Ontario Curriculum and Resources SSHG root is already admitted as a C0 source identity for both Social Studies Grades 1-6 and History/Geography Grades 7-8. This target permits bounded metadata-only capture attempts only; 2018/2026 expectation reconciliation, digest evidence, recapture classification, redistribution, and C1 promotion remain separate gates."
     }
   ]
 }
