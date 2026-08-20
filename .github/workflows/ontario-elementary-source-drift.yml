@@ -54,6 +54,8 @@ jobs:
           - ontario-health-physical-education-grades-1-8-2019
           - ontario-mathematics-grades-1-8-2020
           - ontario-fsl-grades-1-8-2013
+          - ontario-fr-english-grades-4-8-2006
+          - ontario-fr-english-beginners-grades-4-8-2013
     steps:
       - name: Check out exact source revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
