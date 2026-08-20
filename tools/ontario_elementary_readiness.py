@@ -2,9 +2,9 @@
 """Derive Ontario Elementary readiness from immutable evidence layers.
 
 C0 discovery, append-only source additions and amendments, C1 exact-byte snapshots,
-source-surface monitoring, human source-review evidence, and canonical C2 records remain
-separate evidence. This tool composes them without rewriting older provenance or treating
-transport repeatability as curriculum truth.
+source-surface monitoring, human source-review and licensing evidence, and canonical C2
+records remain separate evidence. This tool composes them without rewriting older
+provenance or treating transport repeatability as curriculum truth.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ DISCOVERY_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.
 SOURCE_ADDITIONS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-additions.v1.json"
 SOURCE_ADDITION_AMENDMENTS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-addition-amendments.v1.json"
 SOURCE_REVIEW_DIR = ROOT / "curriculum" / "reviews" / "ontario-elementary" / "sources"
+LICENSING_REVIEW_DIR = ROOT / "curriculum" / "licensing" / "ontario-elementary" / "reviews"
 LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
 RECORD_DIR = ROOT / "curriculum" / "ontario-elementary" / "records-v2"
 CAPTURE_TARGETS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-capture-targets.v1.json"
@@ -31,6 +32,7 @@ if str(ROOT) not in sys.path:
 from tools.check_curriculum_source_monitoring import verify_policy  # noqa: E402
 from tools.curriculum_source_lock import load_discovery, verify_lock  # noqa: E402
 from tools.curriculum_standard_record import verify_record  # noqa: E402
+from tools.ontario_elementary_licensing_review import verify_directory as verify_licensing_reviews  # noqa: E402
 from tools.ontario_elementary_source_review import verify_directory as verify_source_reviews  # noqa: E402
 from tools.remote_curriculum_source_capture import validate_target_registry  # noqa: E402
 
@@ -200,8 +202,10 @@ def build_readiness() -> dict[str, Any]:
     capture_targets = validate_target_registry(CAPTURE_TARGETS_PATH)
     monitoring = monitoring_index()
     source_review = verify_source_reviews(SOURCE_REVIEW_DIR)
+    licensing_review = verify_licensing_reviews(LICENSING_REVIEW_DIR)
     require(set(monitoring) == set(locks), "monitoring must account for every C1 snapshot")
     require(source_review.get("targets") == len(sources), "source-review target count must match discovered sources")
+    require(licensing_review.get("targets") == len(sources), "licensing-review target count must match discovered sources")
 
     source_rows: list[dict[str, Any]] = []
     for source_id in sorted(sources):
@@ -295,16 +299,17 @@ def build_readiness() -> dict[str, Any]:
             "source_addition_amendments": SOURCE_ADDITION_AMENDMENTS_PATH.relative_to(ROOT).as_posix(),
             "source_lock_directory": LOCK_DIR.relative_to(ROOT).as_posix(),
             "source_review_directory": SOURCE_REVIEW_DIR.relative_to(ROOT).as_posix(),
+            "licensing_review_directory": LICENSING_REVIEW_DIR.relative_to(ROOT).as_posix(),
             "canonical_c2_record_directory": RECORD_DIR.relative_to(ROOT).as_posix(),
             "capture_target_registry": CAPTURE_TARGETS_PATH.relative_to(ROOT).as_posix(),
             "source_monitoring_policy": MONITORING_PATH.relative_to(ROOT).as_posix(),
         },
         "claim_boundary": (
-            "This is a derived readiness view over immutable historical C0 discovery, append-only source additions and amendments, C1 snapshots, monitoring, and explicit human source-review evidence. "
+            "This is a derived readiness view over immutable historical C0 discovery, append-only source additions and amendments, C1 snapshots, monitoring, explicit human source-review evidence, and explicit human licensing-review evidence. "
             "C1 is historical exact-byte capture evidence. Strict recapture stability is a separate transport/source-surface property. "
             "An observational DCP response surface does not invalidate its historical C1 snapshot and does not prove semantic curriculum change. "
-            "Complete base source capture means every required source identity has bounded C1 evidence; human source review is a separate content-addressed gate. "
-            "Neither source capture nor source review alone proves licensing, canonical curriculum extraction, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
+            "Complete base source capture means every required source identity has bounded C1 evidence; human source review and licensing review are separate content-addressed gates. "
+            "Neither source capture nor either review gate alone proves canonical curriculum extraction, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
         ),
         "summary": {
             "confirmed_discovery_sources": len(sources),
@@ -333,7 +338,15 @@ def build_readiness() -> dict[str, Any]:
             "blocked_source_reviews": source_review["blocked_sources"],
             "unreviewed_source_reviews": source_review["unreviewed_sources"],
             "human_source_review_complete": source_review["human_source_review_complete"],
-            "licensing_review_complete": False,
+            "licensing_review_targets": licensing_review["targets"],
+            "submitted_licensing_reviews": licensing_review["reviews"],
+            "resolved_licensing_reviews": licensing_review["resolved_sources"],
+            "unresolved_licensing_reviews": licensing_review["unresolved_sources"],
+            "verbatim_redistribution_permitted_sources": licensing_review["verbatim_redistribution_permitted"],
+            "reference_only_use_permitted_sources": licensing_review["reference_only_use_permitted"],
+            "external_reference_only_sources": licensing_review["external_reference_only"],
+            "prohibited_licensing_sources": licensing_review["prohibited"],
+            "licensing_review_complete": licensing_review["licensing_review_complete"],
             "deterministic_full_pack_verified": False,
             "governed_activation_available": False,
         },
@@ -382,6 +395,7 @@ def verify_readiness(payload: dict[str, Any]) -> None:
         summary.get("overall_base_source_capture_complete") is expected_overall_capture,
         "overall base source-capture claim is inconsistent with its evidence components",
     )
+
     review_targets = summary.get("human_source_review_targets", 0)
     submitted_reviews = summary.get("submitted_source_reviews", 0)
     approved_reviews = summary.get("approved_source_reviews", 0)
@@ -395,13 +409,30 @@ def verify_readiness(payload: dict[str, Any]) -> None:
         summary.get("human_source_review_complete") is (approved_reviews == review_targets),
         "human source-review completion claim is inconsistent with approved targets",
     )
+
+    licensing_targets = summary.get("licensing_review_targets", 0)
+    submitted_licensing = summary.get("submitted_licensing_reviews", 0)
+    resolved_licensing = summary.get("resolved_licensing_reviews", 0)
+    unresolved_licensing = summary.get("unresolved_licensing_reviews", 0)
+    verbatim = summary.get("verbatim_redistribution_permitted_sources", 0)
+    reference_only = summary.get("reference_only_use_permitted_sources", 0)
+    external_only = summary.get("external_reference_only_sources", 0)
+    prohibited = summary.get("prohibited_licensing_sources", 0)
+    require(licensing_targets == summary.get("confirmed_discovery_sources"), "licensing-review target count mismatch")
+    require(0 <= submitted_licensing <= licensing_targets, "submitted licensing-review count is inconsistent")
+    require(0 <= resolved_licensing <= submitted_licensing, "resolved licensing-review count is inconsistent")
+    require(unresolved_licensing == licensing_targets - resolved_licensing, "unresolved licensing-review count is inconsistent")
     require(
-        summary.get("licensing_review_complete") is False,
-        "machine readiness view cannot claim licensing completion",
+        verbatim + reference_only + external_only + prohibited == resolved_licensing,
+        "resolved licensing outcomes do not partition resolved reviews",
+    )
+    require(
+        summary.get("licensing_review_complete") is (resolved_licensing == licensing_targets),
+        "licensing-review completion claim is inconsistent with resolved targets",
     )
     require(
         summary.get("deterministic_full_pack_verified") is False,
-        "machine source-capture evidence cannot claim deterministic full-pack verification",
+        "machine source/review evidence cannot claim deterministic full-pack verification",
     )
     require(
         summary.get("governed_activation_available") is False,
@@ -442,7 +473,8 @@ def main() -> int:
                 f"English families={summary['english_program_families_with_c1_source']}/{summary['english_required_program_families']}; "
                 f"French families={summary['french_program_families_with_c1_source']}/{summary['french_required_program_families']}; "
                 f"source reviews={summary['approved_source_reviews']}/{summary['human_source_review_targets']}; "
-                f"overall base source capture {capture_state}; licensing/pack/activation gates remain separate"
+                f"licensing resolved={summary['resolved_licensing_reviews']}/{summary['licensing_review_targets']}; "
+                f"overall base source capture {capture_state}; pack/activation gates remain separate"
             )
     except (OSError, KeyError, ElementaryReadinessError, ValueError) as error:
         print(f"Ontario Elementary readiness verification failed: {error}", file=sys.stderr)
