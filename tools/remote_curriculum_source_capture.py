@@ -96,6 +96,12 @@ def validate_target_provenance(
 ) -> None:
     publication_url = target.get("publication_catalog_url")
     publication_number = target.get("publication_number")
+    dcp_only_source = source.get("classification") == "official-current-dcp-curriculum-route"
+
+    require(
+        not dcp_only_source or (publication_url is None and publication_number is None),
+        f"{source_id}: DCP-only C0 provenance cannot acquire publication metadata from a capture target",
+    )
 
     if publication_url is None and publication_number is None:
         require(
@@ -103,7 +109,7 @@ def validate_target_provenance(
             f"{source_id}: DCP-only provenance requires ontario-government host policy",
         )
         require(
-            source.get("classification") == "official-current-dcp-curriculum-route",
+            dcp_only_source,
             f"{source_id}: DCP-only capture requires a C0 official-current-dcp-curriculum-route source",
         )
         source_url = source.get("url")
