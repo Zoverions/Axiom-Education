@@ -1,0 +1,62 @@
+name: Axiom Education Apple
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "31 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axiom-education-apple-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter-apple-intel:
+    name: Flutter test, macOS build, and iOS no-codesign build
+    runs-on: macos-15-intel
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: '3.41.1'
+          channel: stable
+          cache: true
+
+      - name: Report Apple toolchain
+        shell: bash
+        run: |
+          flutter --version
+          xcodebuild -version
+          sw_vers
+          uname -a
+
+      - name: Install exact Dart dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Verify complete Dart formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze errors and warnings
+        run: flutter analyze
+
+      - name: Run Flutter tests
+        run: flutter test --reporter expanded
+
+      - name: Build macOS debug application
+        run: flutter build macos --debug --no-pub
+
+      - name: Build iOS debug application without signing
+        run: flutter build ios --debug --no-codesign --no-pub
