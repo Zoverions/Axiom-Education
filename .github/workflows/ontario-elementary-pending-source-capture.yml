@@ -9,19 +9,15 @@ on:
       - 'curriculum/ontario-elementary/source-discovery-amendments.v1.json'
       - 'curriculum/ontario-elementary/source-discovery-additions.v1.json'
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-locks/**'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
       - 'tools/curriculum_source_discovery.py'
       - 'tools/curriculum_source_additions.py'
       - 'tools/curriculum_source_lock.py'
-      - 'tools/json_schema_validation.py'
-      - 'schemas/curriculum-source-lock.v1.schema.json'
-      - 'requirements-dev.txt'
-      - 'tools/remote_curriculum_source_capture.py'
-      - 'tools/probe_curriculum_source_stability.py'
-      - 'tools/attempt_pending_curriculum_capture.py'
+      - 'tools/check_curriculum_source_monitoring.py'
       - 'tests/test_curriculum_source_discovery.py'
       - 'tests/test_curriculum_source_additions.py'
-      - 'tests/test_remote_curriculum_source_capture.py'
-      - 'tests/test_pending_curriculum_capture.py'
+      - 'tests/test_curriculum_source_monitoring.py'
       - '.github/workflows/ontario-elementary-pending-source-capture.yml'
   workflow_dispatch:
 
@@ -29,17 +25,9 @@ permissions:
   contents: read
 
 jobs:
-  observe-pending-response-surface:
-    name: Observe ${{ matrix.label }} response surface
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - source_id: ontario-arts-grades-1-8-2009
-            slug: arts
-            label: Arts
+  verify-no-untracked-pending-targets:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 8
     steps:
       - name: Check out exact source revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -49,75 +37,19 @@ jobs:
           python-version: '3.12'
       - name: Install pinned Python verification dependencies
         run: python -m pip install --requirement requirements-dev.txt
-      - name: Verify append-only discovery and bounded targets
+      - name: Verify discovery, locks, monitoring, and empty pending set
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
           python -m unittest tests.test_curriculum_source_additions -v
-          python -m unittest tests.test_remote_curriculum_source_capture -v
-          python -m unittest tests.test_pending_curriculum_capture -v
-          python tools/remote_curriculum_source_capture.py validate-targets
+          python -m unittest tests.test_curriculum_source_monitoring -v
           python tools/check_curriculum_source_monitoring.py
-      - name: Observe response surface three times
-        run: |
-          mkdir -p /tmp/axiom-pending-observation
-          python tools/probe_curriculum_source_stability.py \
-            --source-id '${{ matrix.source_id }}' \
-            --attempts 3 \
-            --output /tmp/axiom-pending-observation/stability.json
-          python -m json.tool /tmp/axiom-pending-observation/stability.json >/dev/null
-      - name: Upload metadata-only stability observation
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
-        with:
-          name: ontario-elementary-${{ matrix.slug }}-stability-${{ github.sha }}
-          path: /tmp/axiom-pending-observation/stability.json
-          if-no-files-found: error
-          retention-days: 7
-
-  attempt-pending-c1-candidate:
-    name: Attempt ${{ matrix.label }} C1 candidate
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - source_id: ontario-arts-grades-1-8-2009
-            slug: arts
-            label: Arts
-    runs-on: ubuntu-24.04
-    timeout-minutes: 12
-    steps:
-      - name: Check out exact source revision
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.12'
-      - name: Install pinned Python verification dependencies
-        run: python -m pip install --requirement requirements-dev.txt
-      - name: Verify append-only discovery and bounded targets
-        run: |
-          python -m unittest tests.test_curriculum_source_discovery -v
-          python -m unittest tests.test_curriculum_source_additions -v
-          python -m unittest tests.test_remote_curriculum_source_capture -v
-          python -m unittest tests.test_pending_curriculum_capture -v
-          python tools/remote_curriculum_source_capture.py validate-targets
-          python tools/check_curriculum_source_monitoring.py
-      - name: Attempt bounded capture and preserve either outcome
-        run: |
-          mkdir -p /tmp/axiom-pending-candidate
-          python tools/attempt_pending_curriculum_capture.py \
-            --source-id '${{ matrix.source_id }}' \
-            --attempts 3 \
-            --candidate-output /tmp/axiom-pending-candidate/source-lock-candidate.json \
-            --status-output /tmp/axiom-pending-candidate/capture-attempt.json
-          python -m json.tool /tmp/axiom-pending-candidate/capture-attempt.json >/dev/null
-          if test -f /tmp/axiom-pending-candidate/source-lock-candidate.json; then
-            python tools/curriculum_source_lock.py verify \
-              /tmp/axiom-pending-candidate/source-lock-candidate.json
-          fi
-      - name: Upload metadata-only capture-attempt evidence
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
-        with:
-          name: ontario-elementary-${{ matrix.slug }}-capture-attempt-${{ github.sha }}
-          path: /tmp/axiom-pending-candidate/
-          if-no-files-found: error
-          retention-days: 7
+          python - <<'PY'
+          from tools.check_curriculum_source_monitoring import verify_policy
+          pending = verify_policy()["pending_capture_targets"]
+          if pending:
+              raise SystemExit(
+                  "bounded capture target(s) await C1; add explicit capture/stability evidence workflow before promotion: "
+                  + ", ".join(pending)
+              )
+          print("No bounded capture targets await C1 evidence.")
+          PY
