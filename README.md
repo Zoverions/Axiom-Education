@@ -122,21 +122,32 @@ The contract defines bounded curriculum inspection, staging, activation, queryin
 
 ### Mesh compatibility and forward roadmap
 
-The governed runtime now requires the exact, machine-verified
+The governed runtime requires the machine-verified
 [`config/axiom-mesh-compatibility.v1.json`](config/axiom-mesh-compatibility.v1.json)
 profile in addition to a host-injected relative Gateway requester. The profile
-pins AXIOM-MESH `0.12.0-dev.3`, contract digests, the current native learner
-self-write/self-read conformance front, and the full `Gateway -> Hypervisor ->
-Sandbox -> Grid` authority path. A missing or mismatched profile leaves the
-runtime unbound before any token or request is used.
+records the current reviewed AXIOM-MESH `main` checkpoint and full Gateway
+contract digest as **provenance**, not as repository-head runtime authority.
+Runtime binding is scoped to the exact Education contract, learner-memory
+profile, the semantic Gateway `intents.submit` seam, and the full `Gateway ->
+Hypervisor -> Sandbox -> Grid` authority path. A missing or incompatible
+runtime seam leaves the runtime unbound before any token or request is used.
 
-Runtime Capsule, Personal Agent Pack, Compute Node Profile, and Local Trust
-Envelope surfaces are tracked only as personal-compute portability readiness.
-The exact-head delegated-human-authority, AXIOM Host, Assurance Graph,
-provider-observation, and checkout-freshness drafts are recorded as upcoming
-inputs with runtime adoption disabled. Merging or installing any contract does
-not promote it: a new source pin, review, compatibility profile, and executable
-tests are required.
+This boundary deliberately tolerates unrelated additive Mesh work. New social,
+agent, observability, or read-only Gateway routes do not silently broaden
+Education authority and do not, by themselves, invalidate the Education host
+binding. A change to the Education `/v1/intents` seam or an authority-bearing
+Education contract still requires explicit review and a new compatibility
+profile.
+
+Runtime Capsule, Personal Agent Pack, Compute Node Profile, Local Trust
+Envelope, and Agent Runtime Adapter surfaces are tracked only as
+personal-compute/interoperability readiness. Assurance Graph,
+provider-observation, and checkout-freshness foundations have merged into
+AXIOM-MESH but remain readiness-only for Education with runtime adoption
+explicitly disabled. Delegated human authority and the AXIOM Host profile
+remain draft/non-production inputs. Merging or installing a contract does not
+promote it: a reviewed Education adoption decision, compatibility evidence,
+and executable tests are required.
 
 A missing provider, verifier, identity, policy, consent, source, or artifact must produce an explicit unavailable or denied result. It must never produce mock success in a governed or release build.
 
@@ -217,6 +228,20 @@ official-document digests have not been captured for the corpus and that
 course-by-course source and licensing review remains required.
 The elementary track uses a separate staged source-discovery and verification
 process and must not inherit trust merely because the secondary tooling exists.
+
+## Platform evidence
+
+The protected repository gates exercise Linux-hosted verification and Android
+packaging plus a dedicated Windows quality lane. The active integration branch
+also contains a bounded Apple lane using the exact Flutter 3.41.1 lock to run
+formatting, analysis, Flutter tests, a macOS debug build, and an iOS debug build
+with code signing disabled.
+
+Apple CI is build-compatibility evidence only. It does not establish signing,
+notarization, App Store readiness, physical-device deployment, production Apple
+support, or accessibility approval. Native/plugin-sensitive dependency upgrades
+remain separately reviewed because Android-only evidence is not sufficient to
+certify platform behavior.
 
 ## Canonical documents
 
