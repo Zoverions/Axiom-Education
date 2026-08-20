@@ -28,15 +28,32 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
-    def test_current_additions_append_four_french_school_c0_sources(self) -> None:
+    @staticmethod
+    def addition_by_source(
+        payload: dict[str, object],
+        source_id: str,
+    ) -> dict[str, object]:
+        rows = payload["additions"]
+        if not isinstance(rows, list):
+            raise AssertionError("additions must be a list")
+        for row in rows:
+            if (
+                isinstance(row, dict)
+                and isinstance(row.get("source"), dict)
+                and row["source"].get("source_id") == source_id
+            ):
+                return row
+        raise AssertionError(f"missing source addition: {source_id}")
+
+    def test_current_additions_append_six_french_school_c0_sources(self) -> None:
         result = verify_additions()
         self.assertEqual(
             result,
             {
                 "effective_sources_before_additions": 8,
-                "appended_c0_sources": 4,
-                "effective_sources_after_additions": 12,
-                "french_program_families_with_c0_source": 4,
+                "appended_c0_sources": 6,
+                "effective_sources_after_additions": 14,
+                "french_program_families_with_c0_source": 7,
             },
         )
 
@@ -50,38 +67,35 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
                 "ontario-fr-arts-grades-1-8-2009",
+                "ontario-fr-science-technology-grades-1-8-2022",
+                "ontario-fr-social-studies-history-geography",
             }.issubset(source_ids)
         )
 
         french = augmented["coverage_accounting"]["french_language_schools"]
-        self.assertEqual(
-            french["french"]["source_id"],
-            "ontario-fr-francais-grades-1-8-2023",
-        )
-        self.assertEqual(
-            french["mathematics"]["source_id"],
-            "ontario-fr-mathematics-grades-1-8-2020",
-        )
-        self.assertEqual(
-            french["health-and-physical-education"]["source_id"],
-            "ontario-fr-health-physical-education-grades-1-8-2019",
-        )
-        self.assertEqual(
-            french["the-arts"]["source_id"],
-            "ontario-fr-arts-grades-1-8-2009",
-        )
-        for family in (
-            "english",
-            "science-and-technology",
-            "social-studies-grades-1-6",
-            "history-and-geography-grades-7-8",
-        ):
+        expected_bindings = {
+            "french": "ontario-fr-francais-grades-1-8-2023",
+            "mathematics": "ontario-fr-mathematics-grades-1-8-2020",
+            "health-and-physical-education": (
+                "ontario-fr-health-physical-education-grades-1-8-2019"
+            ),
+            "the-arts": "ontario-fr-arts-grades-1-8-2009",
+            "science-and-technology": "ontario-fr-science-technology-grades-1-8-2022",
+            "social-studies-grades-1-6": "ontario-fr-social-studies-history-geography",
+            "history-and-geography-grades-7-8": (
+                "ontario-fr-social-studies-history-geography"
+            ),
+        }
+        for family, source_id in expected_bindings.items():
             with self.subTest(family=family):
-                self.assertIsNone(french[family].get("source_id"))
-                self.assertEqual(
-                    french[family]["status"],
-                    "unresolved-language-stream-source",
-                )
+                self.assertEqual(french[family]["source_id"], source_id)
+                self.assertEqual(french[family]["status"], "source-discovered")
+
+        self.assertIsNone(french["english"].get("source_id"))
+        self.assertEqual(
+            french["english"]["status"],
+            "unresolved-language-stream-source",
+        )
 
     def test_historical_and_amended_sources_are_not_rewritten(self) -> None:
         effective = load_effective_discovery(DEFAULT_DISCOVERY)
@@ -143,6 +157,62 @@ class CurriculumSourceAdditionTests(unittest.TestCase):
         additions["additions"][0]["source"]["upstream_digest_status"] = "captured"
         path = self.write_additions(additions)
         with self.assertRaisesRegex(SourceAdditionError, "cannot claim an upstream digest"):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_publication_backed_addition_requires_publications_ontario(self) -> None:
+        additions = self.additions()
+        additions["additions"][0]["source"]["publication_catalog_url"] = (
+            "https://example.invalid/CL33252"
+        )
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(SourceAdditionError, "must use Publications Ontario"):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_dcp_only_addition_requires_exact_french_curriculum_route(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-science-technology-grades-1-8-2022",
+        )
+        row["source"]["url"] = (
+            "https://www.dcp.edu.gov.on.ca/resources/fr/matiere/sciences-techno"
+        )
+        row["evidence"][0]["url"] = row["source"]["url"]
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "French Ontario curriculum route",
+        ):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_dcp_only_addition_requires_dedicated_classification(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-science-technology-grades-1-8-2022",
+        )
+        row["source"]["classification"] = "official-current-overview"
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "DCP-only addition must use",
+        ):
+            load_augmented_discovery(DEFAULT_DISCOVERY, path)
+
+    def test_dcp_only_addition_requires_exact_route_in_evidence(self) -> None:
+        additions = self.additions()
+        row = self.addition_by_source(
+            additions,
+            "ontario-fr-social-studies-history-geography",
+        )
+        row["evidence"][0]["url"] = (
+            "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie"
+        )
+        path = self.write_additions(additions)
+        with self.assertRaisesRegex(
+            SourceAdditionError,
+            "exact DCP curriculum route must be present",
+        ):
             load_augmented_discovery(DEFAULT_DISCOVERY, path)
 
     def test_custom_discovery_does_not_implicitly_inherit_default_additions(self) -> None:
