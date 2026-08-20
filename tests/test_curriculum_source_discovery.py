@@ -142,7 +142,7 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
             "4fe7e3c26d685d61e576d108d9339858fdebc58c6aed1c8666c268f10bf71935",
         )
 
-    def test_existing_locked_source_entries_are_unchanged_by_discovery_amendments(self) -> None:
+    def test_current_source_locks_verify_against_composed_discovery(self) -> None:
         base = load_base_discovery(DEFAULT_DISCOVERY)
         effective = load_effective_discovery(DEFAULT_DISCOVERY)
         for source_id in (
@@ -163,7 +163,7 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
                 DEFAULT_DISCOVERY,
                 allow_empty=False,
             ),
-            7,
+            9,
         )
 
     def test_prior_digest_mismatch_rejects_amendment(self) -> None:
