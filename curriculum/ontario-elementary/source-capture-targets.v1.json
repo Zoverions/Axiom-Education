@@ -177,8 +177,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "The digest-bound source-addition amendment resolves the current French DCP Français Grades 1-8 route while preserving Publications Ontario CL33252 as publication lineage. This target is pending C1 and grants no redistribution or activation authority."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "The digest-bound source-addition amendment resolves the current French DCP Français Grades 1-8 route while preserving Publications Ontario CL33252 as publication lineage. A metadata-only historical C1 snapshot is committed and the route remains observational rather than strict; redistribution and activation remain separate review gates."
     },
     {
       "source_id": "ontario-fr-mathematics-grades-1-8-2020",
@@ -191,8 +191,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "The digest-bound source-addition amendment resolves the current French DCP Mathématiques Grades 1-8 route while preserving Publications Ontario CL32239 and separate record 300333 as distinct lineage. This target is pending C1 and grants no redistribution or activation authority."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "The digest-bound source-addition amendment resolves the current French DCP Mathématiques Grades 1-8 route while preserving Publications Ontario CL32239 and separate record 300333 as distinct lineage. A metadata-only historical C1 snapshot is committed and the route remains observational rather than strict; redistribution and activation remain separate review gates."
     },
     {
       "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
@@ -205,8 +205,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "The digest-bound source-addition amendment resolves the current French DCP Éducation physique et santé Grades 1-8 route while preserving Publications Ontario 022579 as publication lineage. This target is pending C1 and grants no redistribution or activation authority."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "The digest-bound source-addition amendment resolves the current French DCP Éducation physique et santé Grades 1-8 route while preserving Publications Ontario 022579 as publication lineage. A metadata-only historical C1 snapshot is committed; hosted evidence shows cross-job HTML volatility, so monitoring remains observational. Redistribution and activation remain separate review gates."
     },
     {
       "source_id": "ontario-fr-arts-grades-1-8-2009",
@@ -219,8 +219,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "The digest-bound source-addition amendment resolves the current French DCP Éducation artistique Grades 1-8 route while preserving Publications Ontario online-resource record 231943_U and distinct book record 231943 as lineage. This target is pending C1 and grants no redistribution or activation authority."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "The digest-bound source-addition amendment resolves the current French DCP Éducation artistique Grades 1-8 route while preserving Publications Ontario online-resource record 231943_U and distinct book record 231943 as lineage. A metadata-only historical C1 snapshot is committed; hosted evidence shows cross-job HTML volatility, so monitoring remains observational. Redistribution and activation remain separate review gates."
     }
   ]
 }
