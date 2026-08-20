@@ -1,7 +1,7 @@
 {
   "schema": "axiom-curriculum-source-monitoring.v1",
   "jurisdiction_id": "ca:on",
-  "as_of": "2026-08-11",
+  "as_of": "2026-08-20",
   "claim_boundary": "Monitoring classifies transport/source-surface repeatability only. A C1 lock remains evidence that exact bytes were captured at its recorded time. A later differing response or failed request does not by itself prove curriculum content changed, invalidate historical capture evidence, approve a replacement lock, or establish semantic equivalence.",
   "sources": [
     {
@@ -58,6 +58,23 @@
         "workflow_run_id": 31543420096
       },
       "promotion_blocker": "Resolve a stable authoritative asset or separately reviewed availability/canonicalization strategy before treating intermittent DCP HTML response failures as source-document drift."
+    },
+    {
+      "source_id": "ontario-kindergarten-2026",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded C1 capture and a separate three-request stability job in the same workflow run returned different exact-byte SHA-256 signatures at the same byte length. The three stability requests were mutually identical, so this is evidence of cross-job response-surface volatility rather than evidence of curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297329,
+        "c1_capture_sha256": "0a46bc1bd2d5791f32074c5254eff0f0ec2942d1b10c3083a8c0fcf1be4557ea",
+        "three_request_stability_sha256": "5501bb3f2c0e175c29ca2a8ae43dc1d58352fe9550ae814901b6e72d5663384a",
+        "workflow_run_id": 32407467373
+      },
+      "promotion_blocker": "Keep the DCP Kindergarten route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
     }
   ]
 }
