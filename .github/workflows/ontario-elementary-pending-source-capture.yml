@@ -7,8 +7,10 @@ on:
       - main
     paths:
       - 'curriculum/ontario-elementary/source-discovery-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-discovery-additions.v1.json'
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
       - 'tools/curriculum_source_discovery.py'
+      - 'tools/curriculum_source_additions.py'
       - 'tools/curriculum_source_lock.py'
       - 'tools/json_schema_validation.py'
       - 'schemas/curriculum-source-lock.v1.schema.json'
@@ -17,6 +19,7 @@ on:
       - 'tools/probe_curriculum_source_stability.py'
       - 'tools/attempt_pending_curriculum_capture.py'
       - 'tests/test_curriculum_source_discovery.py'
+      - 'tests/test_curriculum_source_additions.py'
       - 'tests/test_remote_curriculum_source_capture.py'
       - 'tests/test_pending_curriculum_capture.py'
       - '.github/workflows/ontario-elementary-pending-source-capture.yml'
@@ -35,6 +38,12 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
+          - source_id: ontario-fr-science-technology-grades-1-8-2022
+            slug: fr-science
+            label: French Science and Technology
+          - source_id: ontario-fr-social-studies-history-geography
+            slug: fr-sshg
+            label: French Social Studies History Geography
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -49,6 +58,7 @@ jobs:
       - name: Verify append-only discovery and bounded targets
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_curriculum_source_additions -v
           python -m unittest tests.test_remote_curriculum_source_capture -v
           python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
@@ -78,6 +88,12 @@ jobs:
           - source_id: ontario-arts-grades-1-8-2009
             slug: arts
             label: Arts
+          - source_id: ontario-fr-science-technology-grades-1-8-2022
+            slug: fr-science
+            label: French Science and Technology
+          - source_id: ontario-fr-social-studies-history-geography
+            slug: fr-sshg
+            label: French Social Studies History Geography
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -92,6 +108,7 @@ jobs:
       - name: Verify append-only discovery and bounded targets
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_curriculum_source_additions -v
           python -m unittest tests.test_remote_curriculum_source_capture -v
           python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
