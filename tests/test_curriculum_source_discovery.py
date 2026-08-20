@@ -30,7 +30,23 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
             "b945185ecfc1283adaf197e3c0e3d3e2062f771d2c09e5321eb08ea4b29946ff",
         )
         amendment = self.amendments()["amendments"][0]
-        self.assertEqual(amendment["prior_source_entry_sha256"], canonical_json_digest(arts))
+        self.assertEqual(
+            amendment["prior_source_entry_sha256"],
+            canonical_json_digest(arts),
+        )
+
+    def test_kindergarten_amendment_is_bound_to_exact_historical_entry(self) -> None:
+        base = load_base_discovery(DEFAULT_DISCOVERY)
+        kindergarten = find_source(base, "ontario-kindergarten-2026")
+        self.assertEqual(
+            canonical_json_digest(kindergarten),
+            "a59001b6d59c5511536f0419b04bf5b06da2566ee9ed2253de49a9769954b88d",
+        )
+        amendment = self.amendments()["amendments"][1]
+        self.assertEqual(
+            amendment["prior_source_entry_sha256"],
+            canonical_json_digest(kindergarten),
+        )
 
     def test_effective_arts_source_adds_current_dcp_route_without_rewriting_base(self) -> None:
         base = load_base_discovery(DEFAULT_DISCOVERY)
@@ -57,7 +73,37 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
             "b9e68fe1d34a8c8f3dc949a09f676e95dd083d61e720878b024638f713d43daa",
         )
 
-    def test_existing_locked_source_entries_are_unchanged_by_arts_amendment(self) -> None:
+    def test_effective_kindergarten_source_adds_current_dcp_route_without_rewriting_base(self) -> None:
+        base = load_base_discovery(DEFAULT_DISCOVERY)
+        effective = load_effective_discovery(DEFAULT_DISCOVERY)
+        base_kindergarten = find_source(base, "ontario-kindergarten-2026")
+        effective_kindergarten = find_source(effective, "ontario-kindergarten-2026")
+
+        self.assertEqual(
+            base_kindergarten["url"],
+            "https://www.ontario.ca/page/kindergarten",
+        )
+        self.assertEqual(
+            effective_kindergarten["url"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+        )
+        self.assertEqual(
+            effective_kindergarten["overview_url"],
+            "https://www.ontario.ca/page/kindergarten",
+        )
+        self.assertEqual(
+            effective_kindergarten["publication_catalog_url"],
+            "https://www.publications.gov.on.ca/CL34638",
+        )
+        self.assertEqual(effective_kindergarten["publication_number"], "CL34638")
+        self.assertEqual(effective_kindergarten["policy_version"], "2026")
+        self.assertEqual(effective_kindergarten["grades"], ["K1", "K2"])
+        self.assertEqual(
+            canonical_json_digest(effective_kindergarten),
+            "2478300fca9258fd8c32d3605e3be6f2018254868b1e3821e8bafa18f68f7b07",
+        )
+
+    def test_existing_locked_source_entries_are_unchanged_by_discovery_amendments(self) -> None:
         base = load_base_discovery(DEFAULT_DISCOVERY)
         effective = load_effective_discovery(DEFAULT_DISCOVERY)
         for source_id in (
@@ -108,12 +154,20 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
     def test_custom_discovery_does_not_implicitly_inherit_ontario_amendments(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "discovery.json"
-            path.write_text(DEFAULT_DISCOVERY.read_text(encoding="utf-8"), encoding="utf-8")
+            path.write_text(
+                DEFAULT_DISCOVERY.read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
             custom = load_effective_discovery(path)
             arts = find_source(custom, "ontario-arts-grades-1-8-2009")
             self.assertEqual(
                 arts["url"],
                 "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+            )
+            kindergarten = find_source(custom, "ontario-kindergarten-2026")
+            self.assertEqual(
+                kindergarten["url"],
+                "https://www.ontario.ca/page/kindergarten",
             )
 
 
