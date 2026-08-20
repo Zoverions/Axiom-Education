@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Fail closed on drift in the pinned Axiom Education to AXIOM-MESH seam."""
+"""Fail closed on drift in the Axiom Education to AXIOM-MESH seam."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -26,7 +27,7 @@ class MeshCompatibilityError(RuntimeError):
 
 
 EXPECTED_PROFILE_ID = "axiom-education.mesh-0.12.0-dev.3-provider-v1"
-EXPECTED_PROFILE_VERSION = "1.1.0"
+EXPECTED_PROFILE_VERSION = "1.2.0"
 EXPECTED_BASELINE_HEAD = "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534"
 PINNED_BASE_ARTIFACT_SOURCE = "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c"
 EXPECTED_PROVIDER_HEAD = "2365bf5ed19e0da81288551b2bb4135a7094d02b"
@@ -34,30 +35,28 @@ EXPECTED_GATEWAY_CANONICAL_DIGEST = (
     "77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd"
 )
 EXPECTED_GATEWAY_COMPATIBILITY_MODE = (
-    "pinned-v1-intents-submit-seam-with-additive-read-route-tolerance"
+    "semantic-intents-submit-seam-with-additive-route-tolerance"
+)
+EXPECTED_GATEWAY_SEAM_DIGEST = (
+    "f595c1274eb98b7bcea33d72756120c491049e056cd0c9b3dd8dfd2d63d34f01"
 )
 EXPECTED_REQUIRED_DIGESTS = {
     "axiom.education.v1": "a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2",
-    "axiom-gateway-client-contract.v1": "1d639b06adcf046ff19dab096a9b92134cbaaba8367c2331c10bc37a3c826949",
-    "axiom-gateway-client-contract.schema.v1": "bae7fad4b6e6cc5e0181ebb799f13fac3b797dcfd6f9c00c4f3b23339a5413b2",
-    "axiom.agent-runtime-adapter.v1": "4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c",
     "axiom.education.learner-memory.v1": "3763a28919d36721467160ef772e30da1d5a536a8733fd88b65f2c60c9107d78",
 }
 EXPECTED_REQUIRED_PATHS = {
     "axiom.education.v1": "mesh/config/domain-contracts/education.v1.json",
-    "axiom-gateway-client-contract.v1": "mesh/config/gateway-client-contract.json",
-    "axiom-gateway-client-contract.schema.v1": "mesh/config/gateway-client-contract.schema.json",
-    "axiom.agent-runtime-adapter.v1": "docs/architecture/contracts/agent-runtime-adapter.v1.schema.json",
     "axiom.education.learner-memory.v1": "mesh/config/domain-contracts/education-learner-memory.v1.json",
 }
 EXPECTED_REQUIRED_SOURCES = {
     "axiom.education.v1": PINNED_BASE_ARTIFACT_SOURCE,
-    "axiom-gateway-client-contract.v1": PINNED_BASE_ARTIFACT_SOURCE,
-    "axiom-gateway-client-contract.schema.v1": PINNED_BASE_ARTIFACT_SOURCE,
-    "axiom.agent-runtime-adapter.v1": PINNED_BASE_ARTIFACT_SOURCE,
     "axiom.education.learner-memory.v1": EXPECTED_PROVIDER_HEAD,
 }
 EXPECTED_READINESS_CONTRACTS = {
+    "axiom.agent-runtime-adapter.v1": (
+        "docs/architecture/contracts/agent-runtime-adapter.v1.schema.json",
+        "4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c",
+    ),
     "axiom.runtime-capsule.v1": (
         "docs/architecture/contracts/agent-runtime-capsule.v1.schema.json",
         "f86e3c0febbb8c6a7e0ef5e87aedcdcce72e4a6c8c5fa2c432622306bb85eaa5",
@@ -130,6 +129,17 @@ def load_profile(path: Path = PROFILE_PATH) -> dict[str, Any]:
     return payload
 
 
+def _seam_digest(seam: dict[str, Any]) -> str:
+    canonical_payload = {key: value for key, value in seam.items() if key != "sha256"}
+    canonical = json.dumps(
+        canonical_payload,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def verify(path: Path = PROFILE_PATH) -> dict[str, Any]:
     profile = load_profile(path)
     try:
@@ -141,7 +151,11 @@ def verify(path: Path = PROFILE_PATH) -> dict[str, Any]:
     require(profile["profile_version"] == EXPECTED_PROFILE_VERSION, "compatibility profile version drifted")
 
     baseline = profile["mesh_baseline"]
-    require(baseline["head_sha"] == EXPECTED_BASELINE_HEAD, "Mesh baseline head drifted")
+    require(baseline["head_sha"] == EXPECTED_BASELINE_HEAD, "Mesh provenance checkpoint drifted")
+    require(
+        baseline["head_role"] == "observed-provenance-not-runtime-binding",
+        "Mesh head must remain provenance rather than runtime authority",
+    )
     require(baseline["kernel_version"] == "0.12.0-dev.3", "Mesh kernel version drifted")
     require(
         baseline["authority_path"] == ["Gateway", "Hypervisor", "Sandbox", "Grid"],
@@ -162,6 +176,13 @@ def verify(path: Path = PROFILE_PATH) -> dict[str, Any]:
     require(
         baseline["gateway_compatibility_mode"] == EXPECTED_GATEWAY_COMPATIBILITY_MODE,
         "Gateway compatibility mode drifted",
+    )
+
+    seam = profile["gateway_intents_submit_seam"]
+    require(seam["sha256"] == EXPECTED_GATEWAY_SEAM_DIGEST, "Gateway intents seam digest drifted")
+    require(
+        _seam_digest(seam) == EXPECTED_GATEWAY_SEAM_DIGEST,
+        "Gateway intents seam content does not match its digest",
     )
 
     required = {item["id"]: item for item in profile["required_runtime_contracts"]}
@@ -233,8 +254,8 @@ def main() -> int:
         return 1
     print(
         "AXIOM-MESH compatibility verified: "
-        f"{profile['profile_id']} at checkpoint {profile['mesh_baseline']['head_sha']}; "
-        "pinned runtime artifacts remain explicit and readiness features remain non-authoritative"
+        f"{profile['profile_id']} at provenance checkpoint {profile['mesh_baseline']['head_sha']}; "
+        "runtime binding is contract- and semantic-seam-scoped, not repository-head-scoped"
     )
     return 0
 
