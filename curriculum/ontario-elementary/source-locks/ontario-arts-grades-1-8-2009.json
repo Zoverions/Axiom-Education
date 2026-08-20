@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-arts-grades-1-8-2009",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "b9e68fe1d34a8c8f3dc949a09f676e95dd083d61e720878b024638f713d43daa",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T20:59:11.357914Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+  "media_type": "text/html",
+  "byte_length": 6297332,
+  "sha256": "1307d903c60d047ecbb9ad49d6fd12b9c157480e7453072438227bc602064830",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 8f89f47809344e0947ff2d9e82560b2d6d5ed5eee6ab51ab71d4a5d209ab34ff. GitHub run 32416994073 attempt 1. Downloaded source bytes were discarded after hashing; this lock does not approve redistribution. A separate three-request stability job returned a different SHA at the same byte length while all three probes matched each other, so the historical snapshot is retained and the live DCP HTML surface is observational rather than strict."
+}
