@@ -19,13 +19,13 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 14)
         self.assertEqual(summary["registered_capture_targets"], 10)
-        self.assertEqual(summary["c1_snapshot_sources"], 7)
+        self.assertEqual(summary["c1_snapshot_sources"], 9)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
-        self.assertEqual(summary["observational_response_surface_sources"], 4)
+        self.assertEqual(summary["observational_response_surface_sources"], 6)
         self.assertFalse(summary["all_c1_sources_strictly_recapturable"])
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertTrue(summary["kindergarten_c1_snapshot"])
-        self.assertEqual(summary["french_program_families_with_c1_source"], 0)
+        self.assertEqual(summary["french_program_families_with_c1_source"], 3)
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
     def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
@@ -41,7 +41,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             "source-locator-confirmed-bytes-pending",
         )
 
-    def test_sshg_current_source_is_observational_c1(self) -> None:
+    def test_english_sshg_current_source_is_observational_c1(self) -> None:
         payload = build_readiness()
         rows = {row["source_id"]: row for row in payload["sources"]}
         sshg = rows["ontario-social-studies-history-geography"]
@@ -55,7 +55,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertFalse(sshg["monitoring"]["strict_exact_byte_recapture"])
         self.assertFalse(sshg["monitoring"]["semantic_change_claimed"])
 
-    def test_french_science_and_sshg_are_c0_capture_candidates_only(self) -> None:
+    def test_french_science_and_sshg_are_observational_c1(self) -> None:
         payload = build_readiness()
         rows = {row["source_id"]: row for row in payload["sources"]}
         for source_id in (
@@ -64,10 +64,15 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         ):
             with self.subTest(source_id=source_id):
                 row = rows[source_id]
-                self.assertEqual(row["highest_evidenced_stage"], "C0-discovered")
+                self.assertEqual(row["highest_evidenced_stage"], "C1-bytes-captured-digested")
                 self.assertTrue(row["capture_target_registered"])
-                self.assertIsNone(row["c1_snapshot"])
-                self.assertIsNone(row["monitoring"])
+                self.assertIsNotNone(row["c1_snapshot"])
+                self.assertEqual(
+                    row["monitoring"]["mode"],
+                    "observational-response-surface",
+                )
+                self.assertFalse(row["monitoring"]["strict_exact_byte_recapture"])
+                self.assertFalse(row["monitoring"]["semantic_change_claimed"])
 
     def test_strict_sources_are_only_the_current_document_like_surfaces(self) -> None:
         payload = build_readiness()
@@ -92,6 +97,8 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
                 "ontario-social-studies-history-geography",
+                "ontario-fr-science-technology-grades-1-8-2022",
+                "ontario-fr-social-studies-history-geography",
             },
         )
         rows = {row["source_id"]: row for row in payload["sources"]}
@@ -122,8 +129,6 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
                 "ontario-fr-arts-grades-1-8-2009",
-                "ontario-fr-science-technology-grades-1-8-2022",
-                "ontario-fr-social-studies-history-geography",
             },
         )
 
@@ -157,29 +162,38 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_french_language_program_c0_progress_and_gap_remain_explicit(self) -> None:
+    def test_french_language_program_stages_and_gap_remain_explicit(self) -> None:
         payload = build_readiness()
         rows = payload["program_families"]["french_language_schools"]
         self.assertEqual(len(rows), 8)
         by_family = {row["program_family"]: row for row in rows}
-        discovered = {
+        c0_only = {
             family
             for family, row in by_family.items()
             if row["highest_evidenced_stage"] == "C0-discovered"
         }
         self.assertEqual(
-            discovered,
+            c0_only,
             {
                 "the-arts",
                 "french",
                 "health-and-physical-education",
                 "mathematics",
+            },
+        )
+        c1 = {
+            family
+            for family, row in by_family.items()
+            if row["highest_evidenced_stage"] == "C1-bytes-captured-digested"
+        }
+        self.assertEqual(
+            c1,
+            {
                 "science-and-technology",
                 "social-studies-grades-1-6",
                 "history-and-geography-grades-7-8",
             },
         )
-        self.assertTrue(all(not by_family[family]["c1_snapshot"] for family in discovered))
         unresolved = {
             family
             for family, row in by_family.items()
@@ -196,7 +210,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         locked_rows = [
             row for row in payload["sources"] if row["c1_snapshot"] is not None
         ]
-        self.assertEqual(len(locked_rows), 7)
+        self.assertEqual(len(locked_rows), 9)
         for row in locked_rows:
             self.assertFalse(row["c1_snapshot"]["bytes_retained"])
             self.assertEqual(
@@ -208,7 +222,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
     def test_machine_view_cannot_relabel_observational_sources_as_strict(self) -> None:
         payload = build_readiness()
         mutated = copy.deepcopy(payload)
-        mutated["summary"]["strict_exact_byte_monitored_sources"] = 7
+        mutated["summary"]["strict_exact_byte_monitored_sources"] = 9
         mutated["summary"]["observational_response_surface_sources"] = 0
         mutated["summary"]["all_c1_sources_strictly_recapturable"] = True
         with self.assertRaisesRegex(
