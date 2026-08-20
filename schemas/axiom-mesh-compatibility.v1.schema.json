@@ -26,7 +26,17 @@
     "mesh_baseline": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["repository", "branch", "head_sha", "kernel_version", "authority_path", "integration_mode"],
+      "required": [
+        "repository",
+        "branch",
+        "head_sha",
+        "kernel_version",
+        "authority_path",
+        "integration_mode",
+        "gateway_contract_source_sha",
+        "gateway_contract_canonical_sha256",
+        "gateway_compatibility_mode"
+      ],
       "properties": {
         "repository": {"const": "Zoverions/AXIOM-MESH"},
         "branch": {"const": "main"},
@@ -44,7 +54,12 @@
           "minItems": 4,
           "maxItems": 4
         },
-        "integration_mode": {"const": "released-artifact-pins-no-submodule"}
+        "integration_mode": {"const": "released-artifact-pins-no-submodule"},
+        "gateway_contract_source_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "gateway_contract_canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "gateway_compatibility_mode": {
+          "const": "pinned-v1-intents-submit-seam-with-additive-read-route-tolerance"
+        }
       }
     },
     "required_runtime_contracts": {
