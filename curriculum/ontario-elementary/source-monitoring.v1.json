@@ -92,6 +92,40 @@
         "workflow_run_id": 32411047398
       },
       "promotion_blocker": "Keep the current DCP SSHG route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-science-technology-grades-1-8-2022",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Science C1 capture and the separate three-request stability job in workflow run 32415167619 returned different SHA-256 signatures at the same 6,459,273-byte length. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6459273,
+        "c1_capture_sha256": "3c83c83978bd2de489623e3a8ff73484b037d98519503ed8b5fc6eee253d17bc",
+        "three_request_stability_sha256": "b3863b524ea7dcebb650f6bb7298826aaf3d0cb8a047230e8f22d176b501375c",
+        "workflow_run_id": 32415167619
+      },
+      "promotion_blocker": "Keep the French Science DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-social-studies-history-geography",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French SSHG C1 capture and all three separate stability requests in workflow run 32415167619 were byte-identical at 6,459,317 bytes. This supports repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459317,
+        "c1_capture_sha256": "4ee674342675e622856521a021b5e66ea99189ea4d60a1452145dd529b0b0e9e",
+        "three_request_stability_sha256": "4ee674342675e622856521a021b5e66ea99189ea4d60a1452145dd529b0b0e9e",
+        "workflow_run_id": 32415167619
+      },
+      "promotion_blocker": "Keep the French SSHG DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
     }
   ]
 }
