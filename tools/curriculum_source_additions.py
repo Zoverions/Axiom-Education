@@ -25,6 +25,10 @@ DEFAULT_ADDITIONS = ROOT / "curriculum" / "ontario-elementary" / "source-discove
 PUBLICATIONS_HOST = "www.publications.gov.on.ca"
 DCP_HOST = "www.dcp.edu.gov.on.ca"
 DCP_FRENCH_CURRICULUM_PREFIX = "/fr/curriculum/"
+MINISTRY_CURRICULUM_HOSTS = {"www.edu.gov.on.ca", "edu.gov.on.ca"}
+MINISTRY_FRENCH_ELEMENTARY_PREFIX = "/fre/curriculum/elementary/"
+ALLOWED_BINDING_ROLES = {"primary", "conditional-alternative"}
+ALLOWED_COVERAGE_MODES = {"single-source", "primary-with-conditional-alternatives"}
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -77,6 +81,13 @@ def _host_and_path(url: str) -> tuple[str, str]:
     return parsed.netloc.casefold(), parsed.path
 
 
+def _validate_grade_scope(value: object, source_grades: list[object], message: str) -> list[object]:
+    require(isinstance(value, list) and value, message)
+    require(len(value) == len({str(item) for item in value}), f"{message}: duplicate grades")
+    require(all(item in source_grades for item in value), f"{message}: grade outside source scope")
+    return list(value)
+
+
 def _validate_source(source: dict[str, Any], addition_id: str) -> tuple[str, str]:
     source_id = source.get("source_id")
     require(isinstance(source_id, str) and source_id, f"{addition_id}: source_id is required")
@@ -127,11 +138,7 @@ def _validate_source(source: dict[str, Any], addition_id: str) -> tuple[str, str
             f"{source_id}: publication-backed source URL must be its publication record or an exact French DCP curriculum route",
         )
         provenance_mode = "publications-ontario"
-    else:
-        require(
-            classification == "official-current-dcp-curriculum-route",
-            f"{source_id}: DCP-only addition must use the official-current-dcp-curriculum-route classification",
-        )
+    elif classification == "official-current-dcp-curriculum-route":
         require(
             source_host == DCP_HOST
             and source_path.startswith(DCP_FRENCH_CURRICULUM_PREFIX)
@@ -139,6 +146,18 @@ def _validate_source(source: dict[str, Any], addition_id: str) -> tuple[str, str
             f"{source_id}: DCP-only addition must use a French Ontario curriculum route",
         )
         provenance_mode = "ontario-dcp-route"
+    else:
+        require(
+            classification == "official-ministry-curriculum-pdf",
+            f"{source_id}: source without publication provenance must be an official DCP route or Ministry curriculum PDF",
+        )
+        require(
+            source_host in MINISTRY_CURRICULUM_HOSTS
+            and source_path.startswith(MINISTRY_FRENCH_ELEMENTARY_PREFIX)
+            and source_path.casefold().endswith(".pdf"),
+            f"{source_id}: Ministry curriculum source must be a French elementary Ministry PDF",
+        )
+        provenance_mode = "ontario-ministry-pdf"
 
     require(
         isinstance(source.get("source_locator_status"), str)
@@ -200,7 +219,8 @@ def apply_additions(
     require(isinstance(accounting, dict), "coverage accounting is missing")
 
     addition_ids: set[str] = set()
-    bound_pairs: set[tuple[str, str]] = set()
+    primary_pairs: set[tuple[str, str]] = set()
+    conditional_pairs: set[tuple[str, str, str]] = set()
     for row in rows:
         require(isinstance(row, dict), "source addition must be an object")
         addition_id = row.get("addition_id")
@@ -252,7 +272,7 @@ def apply_additions(
         else:
             require(
                 source["url"] in evidence_urls,
-                f"{source_id}: exact DCP curriculum route must be present in evidence",
+                f"{source_id}: exact official curriculum route must be present in evidence",
             )
 
         bindings = row.get("coverage_bindings")
@@ -285,29 +305,105 @@ def apply_additions(
                 isinstance(family, str) and family in required_families,
                 f"{source_id}: coverage binding is not a required program family",
             )
-            pair = (stream, family)
             require(
-                pair not in bound_pairs,
-                f"duplicate source-addition coverage binding: {stream}/{family}",
+                binding.get("status") == "source-discovered",
+                f"{stream}/{family}: C0 addition coverage status must be source-discovered",
             )
-            bound_pairs.add(pair)
+
+            role = binding.get("role", "primary")
+            require(
+                role in ALLOWED_BINDING_ROLES,
+                f"{stream}/{family}: unsupported coverage binding role",
+            )
+            source_grades = source["grades"]
+            applies_to_grades = binding.get("applies_to_grades")
+            if applies_to_grades is not None:
+                applies_to_grades = _validate_grade_scope(
+                    applies_to_grades,
+                    source_grades,
+                    f"{stream}/{family}: applies_to_grades invalid",
+                )
+
             current = stream_accounting.get(family)
             require(
                 isinstance(current, dict),
                 f"{stream}/{family}: accounting row missing",
             )
+
+            if role == "primary":
+                pair = (stream, family)
+                require(
+                    pair not in primary_pairs,
+                    f"duplicate primary source-addition coverage binding: {stream}/{family}",
+                )
+                primary_pairs.add(pair)
+                require(
+                    current.get("source_id") is None,
+                    f"{stream}/{family}: existing source binding cannot be overwritten by an addition",
+                )
+                coverage_mode = binding.get("coverage_mode", "single-source")
+                require(
+                    coverage_mode in ALLOWED_COVERAGE_MODES,
+                    f"{stream}/{family}: unsupported coverage_mode",
+                )
+                updated: dict[str, Any] = {
+                    "status": "source-discovered",
+                    "source_id": source_id,
+                }
+                if coverage_mode != "single-source":
+                    updated["coverage_mode"] = coverage_mode
+                    updated["conditional_sources"] = []
+                if applies_to_grades is not None:
+                    updated["applies_to_grades"] = applies_to_grades
+                stream_accounting[family] = updated
+                continue
+
             require(
-                current.get("source_id") is None,
-                f"{stream}/{family}: existing source binding cannot be overwritten by an addition",
+                isinstance(current.get("source_id"), str),
+                f"{stream}/{family}: conditional source requires a primary source binding first",
             )
             require(
-                binding.get("status") == "source-discovered",
-                f"{stream}/{family}: C0 addition coverage status must be source-discovered",
+                current.get("coverage_mode") == "primary-with-conditional-alternatives",
+                f"{stream}/{family}: conditional source requires primary-with-conditional-alternatives coverage mode",
             )
-            stream_accounting[family] = {
-                "status": "source-discovered",
-                "source_id": source_id,
-            }
+            require(
+                source_id != current.get("source_id"),
+                f"{stream}/{family}: conditional source cannot duplicate the primary source",
+            )
+            condition = binding.get("condition")
+            require(
+                isinstance(condition, str) and condition.strip(),
+                f"{stream}/{family}: conditional source requires a condition",
+            )
+            require(
+                applies_to_grades is not None,
+                f"{stream}/{family}: conditional source requires applies_to_grades",
+            )
+            conditional_key = (stream, family, source_id)
+            require(
+                conditional_key not in conditional_pairs,
+                f"duplicate conditional source-addition coverage binding: {stream}/{family}/{source_id}",
+            )
+            conditional_pairs.add(conditional_key)
+            conditional_sources = current.get("conditional_sources")
+            require(
+                isinstance(conditional_sources, list),
+                f"{stream}/{family}: conditional_sources must be an array",
+            )
+            require(
+                all(
+                    not isinstance(item, dict) or item.get("source_id") != source_id
+                    for item in conditional_sources
+                ),
+                f"{stream}/{family}: duplicate conditional source_id",
+            )
+            conditional_sources.append(
+                {
+                    "source_id": source_id,
+                    "condition": condition.strip(),
+                    "applies_to_grades": applies_to_grades,
+                }
+            )
 
         copied = deepcopy(source)
         sources.append(copied)
