@@ -52,7 +52,9 @@ Six French-language-school source identities now cover seven of the eight requir
 - **Sciences et technologie, Grades 1-8, 2022** — exact current Ontario French Curriculum and Resources route `https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie`;
 - **Études sociales, Histoire et Géographie, Grades 1-8 current route** — exact Ontario French Curriculum and Resources root `https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo`; this one source identity supplies the Social Studies Grades 1-6 and History/Geography Grades 7-8 program-family rows, while detailed 2018/2026 expectation reconciliation remains a later evidence task.
 
-These are **C0 source identities only**. They have no committed French C1 snapshots, no French capture targets yet, no redistribution approval, and no canonical C2 records. The additions validator now accepts only two provenance modes: a Publications Ontario record or an exact `www.dcp.edu.gov.on.ca/fr/curriculum/...` route carrying the dedicated `official-current-dcp-curriculum-route` classification. A generic DCP resource page or unrelated website cannot satisfy the gate.
+All six remain **C0 source identities**. French Science and French SSHG now also have bounded, exact-route capture targets so hosted workflows can attempt metadata-only C1 candidates and separately probe response-surface stability. Listing those targets is not C1 evidence. The other four French C0 identities still have no capture target. No French source currently has a committed C1 snapshot, redistribution approval, or canonical C2 record.
+
+The additions validator accepts only two provenance modes: a Publications Ontario record or an exact `www.dcp.edu.gov.on.ca/fr/curriculum/...` route carrying the dedicated `official-current-dcp-curriculum-route` classification. The remote-capture validator preserves that distinction: a DCP-only C0 identity must bind its source locator and download URL exactly to the admitted route and cannot acquire invented Publications Ontario metadata through the capture registry. A generic DCP resource page or unrelated website cannot satisfy these gates.
 
 The only French-language-school required family still unresolved at source identity is **English**. Ontario's French-language-school policy surface distinguishes English instruction from the other French-medium curricula and includes Anglais / Anglais pour débutants boundaries. The repository therefore does not substitute an English-language-school Language artifact or treat one legacy French publication as a complete Grades 1-8 source.
 
@@ -61,10 +63,11 @@ The only French-language-school required family still unresolved at source ident
 The verifier currently requires the truthful state:
 
 - 14 confirmed discovered source identities after composing the historical ledger, amendments, and append-only additions;
-- 8 registered bounded capture targets;
+- 10 registered bounded capture targets;
 - 7 C1 snapshot sources;
 - 3 strict exact-byte monitored sources;
 - 4 observational DCP response surfaces;
+- 3 pending C1 capture targets: English Arts, French Science and Technology, and French Social Studies/History/Geography;
 - 0 canonical reviewed C2 records;
 - Kindergarten 2026 has a metadata-only C1 historical snapshot; source bytes are not retained and redistribution remains review-required;
 - Social Studies, Grades 1-6, and History and Geography, Grades 7-8 has a metadata-only historical C1 snapshot bound to the current official English DCP `elementary-sshg` route; Publications Ontario `233531` preserves the 2018 revised base lineage and Ontario's 2026-27 direction confirms new Grade 7-8 History learning;
@@ -73,7 +76,7 @@ The verifier currently requires the truthful state:
 - French-language required program families with C1 source evidence: 0/8;
 - French-language family still unresolved at source identity: English;
 - The Arts is the sole uncaptured discovered English-language required-program source and retains a bounded capture target;
-- six French C0 source identities plus English Arts are discovered but not yet C1-captured;
+- six French C0 source identities plus English Arts are discovered but not yet C1-captured; two of those French identities now have bounded pending capture targets;
 - human source review incomplete;
 - licensing review incomplete;
 - deterministic full-pack verification incomplete;
@@ -94,6 +97,14 @@ Seven C1 snapshots must not be described as seven-fourteenths product completion
 - treat a generic DCP resource page as a DCP-only curriculum identity;
 - omit the exact DCP curriculum route from DCP-only evidence;
 - silently inherit the Ontario additions when validating a custom discovery artifact.
+
+`tools/remote_curriculum_source_capture.py` rejects attempts to:
+
+- capture an unregistered source ID or non-allowlisted host;
+- use an arbitrary URL in place of an admitted C0 source locator;
+- loosen size, media-type, redistribution, redirect, or host-policy boundaries;
+- make a DCP-only source use a different download route than its admitted French curriculum route;
+- add synthetic publication metadata to a DCP-only source merely at capture time.
 
 `tools/ontario_elementary_readiness.py` rejects attempts to:
 
