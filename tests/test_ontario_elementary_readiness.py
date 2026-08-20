@@ -17,7 +17,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
-        self.assertEqual(summary["confirmed_discovery_sources"], 12)
+        self.assertEqual(summary["confirmed_discovery_sources"], 14)
         self.assertEqual(summary["registered_capture_targets"], 8)
         self.assertEqual(summary["c1_snapshot_sources"], 7)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
@@ -108,6 +108,8 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
                 "ontario-fr-arts-grades-1-8-2009",
+                "ontario-fr-science-technology-grades-1-8-2022",
+                "ontario-fr-social-studies-history-geography",
             },
         )
 
@@ -141,7 +143,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_french_language_program_c0_progress_and_gaps_remain_explicit(self) -> None:
+    def test_french_language_program_c0_progress_and_gap_remain_explicit(self) -> None:
         payload = build_readiness()
         rows = payload["program_families"]["french_language_schools"]
         self.assertEqual(len(rows), 8)
@@ -158,6 +160,9 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "french",
                 "health-and-physical-education",
                 "mathematics",
+                "science-and-technology",
+                "social-studies-grades-1-6",
+                "history-and-geography-grades-7-8",
             },
         )
         self.assertTrue(all(not by_family[family]["c1_snapshot"] for family in discovered))
@@ -166,15 +171,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             for family, row in by_family.items()
             if row["highest_evidenced_stage"] == "unresolved"
         }
-        self.assertEqual(
-            unresolved,
-            {
-                "english",
-                "science-and-technology",
-                "social-studies-grades-1-6",
-                "history-and-geography-grades-7-8",
-            },
-        )
+        self.assertEqual(unresolved, {"english"})
         self.assertEqual(
             set(payload["summary"]["unresolved_french_program_families"]),
             unresolved,
