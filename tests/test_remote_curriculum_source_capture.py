@@ -69,7 +69,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         fr_english_beginners = targets[
             "ontario-fr-english-beginners-grades-4-8-2013"
         ]
-        pending_french = {
+        resolved_french = {
             "ontario-fr-francais-grades-1-8-2023": (
                 "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-francais",
                 "CL33252",
@@ -170,7 +170,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         )
         self.assertEqual(fr_english_beginners["publication_number"], "232897_U")
         self.assertEqual(fr_english_beginners["expected_media_type"], "application/pdf")
-        for source_id, (route, publication_number) in pending_french.items():
+        for source_id, (route, publication_number) in resolved_french.items():
             with self.subTest(source_id=source_id):
                 target = targets[source_id]
                 self.assertEqual(target["source_locator"], route)
@@ -180,7 +180,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 self.assertEqual(target["expected_media_type"], "text/html")
                 self.assertEqual(
                     target["source_resolution_status"],
-                    "official-current-structured-source-resolved-pending-c1",
+                    "official-current-structured-source-resolved",
                 )
         self.assertTrue(
             all(
@@ -291,9 +291,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 payload,
                 "ontario-fr-science-technology-grades-1-8-2022",
             ).update(
-                {
-                    "download_url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/other"
-                }
+                {"download_url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/other"}
             )
 
         path = self.mutation(mutate)
@@ -324,13 +322,8 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
 
     def test_french_ministry_pdf_target_requires_exact_admitted_pdf(self):
         def mutate(payload):
-            self.target(
-                payload,
-                "ontario-fr-english-grades-4-8-2006",
-            ).update(
-                {
-                    "download_url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/other.pdf"
-                }
+            self.target(payload, "ontario-fr-english-grades-4-8-2006").update(
+                {"download_url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/other.pdf"}
             )
 
         path = self.mutation(mutate)
@@ -342,10 +335,9 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
 
     def test_french_ministry_pdf_target_requires_pdf_media_type(self):
         def mutate(payload):
-            self.target(
-                payload,
-                "ontario-fr-english-grades-4-8-2006",
-            ).update({"expected_media_type": "text/html"})
+            self.target(payload, "ontario-fr-english-grades-4-8-2006").update(
+                {"expected_media_type": "text/html"}
+            )
 
         path = self.mutation(mutate)
         with self.assertRaisesRegex(
@@ -356,10 +348,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
 
     def test_french_ministry_pdf_target_cannot_invent_publication_provenance(self):
         def mutate(payload):
-            self.target(
-                payload,
-                "ontario-fr-english-grades-4-8-2006",
-            ).update(
+            self.target(payload, "ontario-fr-english-grades-4-8-2006").update(
                 {
                     "publication_catalog_url": "https://www.publications.gov.on.ca/fabricated",
                     "publication_number": "fabricated",
