@@ -21,6 +21,7 @@ on:
       - 'tools/check_ontario_elementary_discovery.py'
       - 'tools/curriculum_source_discovery.py'
       - 'tools/curriculum_source_additions.py'
+      - 'tools/check_conditional_curriculum_family_evidence.py'
       - 'tools/curriculum_source_lock.py'
       - 'tools/curriculum_standard_record.py'
       - 'tools/remote_curriculum_source_capture.py'
@@ -33,6 +34,7 @@ on:
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_discovery.py'
       - 'tests/test_curriculum_source_additions.py'
+      - 'tests/test_conditional_curriculum_family_evidence.py'
       - 'tests/test_curriculum_source_lock.py'
       - 'tests/test_curriculum_standard_record.py'
       - 'tests/test_remote_curriculum_source_capture.py'
@@ -86,6 +88,10 @@ jobs:
         run: |
           python tools/curriculum_source_additions.py
           python -m unittest tests.test_curriculum_source_additions -v
+      - name: Validate atomic conditional curriculum family evidence
+        run: |
+          python tools/check_conditional_curriculum_family_evidence.py
+          python -m unittest tests.test_conditional_curriculum_family_evidence -v
       - name: Validate bounded remote capture and monitoring policy without network access
         run: |
           python tools/remote_curriculum_source_capture.py validate-targets
@@ -110,6 +116,7 @@ jobs:
           python -m unittest tests.test_ontario_elementary_discovery -v
           python -m unittest tests.test_curriculum_source_discovery -v
           python -m unittest tests.test_curriculum_source_additions -v
+          python -m unittest tests.test_conditional_curriculum_family_evidence -v
           python -m unittest tests.test_curriculum_source_lock -v
           python -m unittest tests.test_curriculum_standard_record -v
           python -m unittest tests.test_remote_curriculum_source_capture -v
