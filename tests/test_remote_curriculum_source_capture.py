@@ -62,6 +62,10 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             kindergarten["source_locator"],
             "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
         )
+        self.assertEqual(
+            kindergarten["source_resolution_status"],
+            "official-current-structured-source-resolved",
+        )
         self.assertEqual(hpe["host_policy"], "ontario-government")
         self.assertEqual(hpe["allowed_hosts"], ["www.edu.gov.on.ca"])
         self.assertEqual(math["host_policy"], "publications-ontario-access-cdn")
@@ -91,7 +95,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         )
         self.assertEqual(
             sshg["source_resolution_status"],
-            "official-current-structured-source-resolved-pending-c1",
+            "official-current-structured-source-resolved",
         )
         self.assertEqual(sshg["publication_number"], "233531")
         self.assertEqual(
