@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Derive Ontario Elementary readiness from immutable evidence layers.
 
-C0 discovery, append-only source additions, C1 exact-byte snapshots, source-surface
-monitoring, and canonical C2 records remain separate evidence. This tool composes them
-without rewriting older provenance or treating transport repeatability as curriculum truth.
+C0 discovery, append-only source additions and amendments, C1 exact-byte snapshots,
+source-surface monitoring, and canonical C2 records remain separate evidence. This tool
+composes them without rewriting older provenance or treating transport repeatability as
+curriculum truth.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DISCOVERY_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
 SOURCE_ADDITIONS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-additions.v1.json"
+SOURCE_ADDITION_AMENDMENTS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-addition-amendments.v1.json"
 LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
 RECORD_DIR = ROOT / "curriculum" / "ontario-elementary" / "records-v2"
 CAPTURE_TARGETS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-capture-targets.v1.json"
@@ -286,16 +288,17 @@ def build_readiness() -> dict[str, Any]:
         "derived_from": {
             "discovery_path": DISCOVERY_PATH.relative_to(ROOT).as_posix(),
             "source_additions": SOURCE_ADDITIONS_PATH.relative_to(ROOT).as_posix(),
+            "source_addition_amendments": SOURCE_ADDITION_AMENDMENTS_PATH.relative_to(ROOT).as_posix(),
             "source_lock_directory": LOCK_DIR.relative_to(ROOT).as_posix(),
             "canonical_c2_record_directory": RECORD_DIR.relative_to(ROOT).as_posix(),
             "capture_target_registry": CAPTURE_TARGETS_PATH.relative_to(ROOT).as_posix(),
             "source_monitoring_policy": MONITORING_PATH.relative_to(ROOT).as_posix(),
         },
         "claim_boundary": (
-            "This is a derived readiness view over immutable historical C0 discovery, append-only source additions, and later evidence. "
+            "This is a derived readiness view over immutable historical C0 discovery, append-only source additions and amendments, and later evidence. "
             "C1 is historical exact-byte capture evidence. Strict recapture stability is a separate transport/source-surface property. "
             "An observational DCP response surface does not invalidate its historical C1 snapshot and does not prove semantic curriculum change. "
-            "Neither C0 source identity, C1, nor canonical C2 records alone prove human source review, licensing, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
+            "Complete base source capture means every required source identity has bounded C1 evidence; it does not prove human source review, licensing, canonical curriculum extraction, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
         ),
         "summary": {
             "confirmed_discovery_sources": len(sources),
@@ -358,9 +361,15 @@ def verify_readiness(payload: dict[str, Any]) -> None:
         <= summary.get("french_required_program_families", 0),
         "French C1 coverage exceeds required families",
     )
+    expected_overall_capture = (
+        summary.get("all_discovered_sources_c1_locked") is True
+        and summary.get("english_base_source_capture_complete") is True
+        and summary.get("french_base_source_capture_complete") is True
+        and summary.get("kindergarten_c1_snapshot") is True
+    )
     require(
-        summary.get("overall_base_source_capture_complete") is False,
-        "Ontario Elementary must not claim complete base source capture while known gaps remain",
+        summary.get("overall_base_source_capture_complete") is expected_overall_capture,
+        "overall base source-capture claim is inconsistent with its evidence components",
     )
     require(
         summary.get("human_source_review_complete") is False,
@@ -369,6 +378,10 @@ def verify_readiness(payload: dict[str, Any]) -> None:
     require(
         summary.get("licensing_review_complete") is False,
         "machine readiness view cannot claim licensing completion",
+    )
+    require(
+        summary.get("deterministic_full_pack_verified") is False,
+        "machine source-capture evidence cannot claim deterministic full-pack verification",
     )
     require(
         summary.get("governed_activation_available") is False,
@@ -400,6 +413,11 @@ def main() -> int:
                 print(rendered, end="")
         else:
             summary = payload["summary"]
+            capture_state = (
+                "complete"
+                if summary["overall_base_source_capture_complete"]
+                else "incomplete"
+            )
             print(
                 "Ontario Elementary readiness verified: "
                 f"C1 snapshots={summary['c1_snapshot_sources']}/{summary['confirmed_discovery_sources']}; "
@@ -407,7 +425,7 @@ def main() -> int:
                 f"observational={summary['observational_response_surface_sources']}; "
                 f"English families={summary['english_program_families_with_c1_source']}/{summary['english_required_program_families']}; "
                 f"French families={summary['french_program_families_with_c1_source']}/{summary['french_required_program_families']}; "
-                "overall source capture incomplete"
+                f"overall base source capture {capture_state}; downstream review/licensing/pack/activation gates remain separate"
             )
     except (OSError, KeyError, ElementaryReadinessError, ValueError) as error:
         print(f"Ontario Elementary readiness verification failed: {error}", file=sys.stderr)
