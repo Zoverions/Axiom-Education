@@ -40,6 +40,18 @@ void main() {
       AxiomMeshCompatibilityProfile.currentProviderHead,
     );
     expect(
+      baseline['gateway_contract_source_sha'],
+      AxiomMeshCompatibilityProfile.currentGatewayContractSourceHead,
+    );
+    expect(
+      baseline['gateway_contract_canonical_sha256'],
+      AxiomMeshCompatibilityProfile.currentGatewayContractCanonicalSha256,
+    );
+    expect(
+      baseline['gateway_compatibility_mode'],
+      AxiomMeshCompatibilityProfile.currentGatewayCompatibilityMode,
+    );
+    expect(
       (baseline['authority_path']! as List<Object?>).cast<String>(),
       AxiomMeshCompatibilityProfile.currentAuthorityPath,
     );
