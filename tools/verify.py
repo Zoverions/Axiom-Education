@@ -143,6 +143,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_mth1w_split_unit_content.py"],
         ),
         (
+            "Verify effective MTH1W authored state",
+            [python, "tools/check_mth1w_effective_authored_state.py"],
+        ),
+        (
             "Verify MTH1W human review targets and submitted evidence",
             [python, "tools/mth1w_review_evidence.py", "verify-directory"],
         ),
