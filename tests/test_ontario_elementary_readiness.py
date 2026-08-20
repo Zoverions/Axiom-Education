@@ -17,7 +17,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
-        self.assertEqual(summary["confirmed_discovery_sources"], 8)
+        self.assertEqual(summary["confirmed_discovery_sources"], 12)
         self.assertEqual(summary["registered_capture_targets"], 8)
         self.assertEqual(summary["c1_snapshot_sources"], 7)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
@@ -25,6 +25,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertFalse(summary["all_c1_sources_strictly_recapturable"])
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertTrue(summary["kindergarten_c1_snapshot"])
+        self.assertEqual(summary["french_program_families_with_c1_source"], 0)
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
     def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
@@ -101,7 +102,13 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         payload = build_readiness()
         self.assertEqual(
             set(payload["summary"]["uncaptured_discovered_source_ids"]),
-            {"ontario-arts-grades-1-8-2009"},
+            {
+                "ontario-arts-grades-1-8-2009",
+                "ontario-fr-francais-grades-1-8-2023",
+                "ontario-fr-mathematics-grades-1-8-2020",
+                "ontario-fr-health-physical-education-grades-1-8-2019",
+                "ontario-fr-arts-grades-1-8-2009",
+            },
         )
 
     def test_english_program_family_snapshot_coverage_is_seven_of_eight(self) -> None:
@@ -134,16 +141,43 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_french_language_program_gaps_remain_explicit(self) -> None:
+    def test_french_language_program_c0_progress_and_gaps_remain_explicit(self) -> None:
         payload = build_readiness()
         rows = payload["program_families"]["french_language_schools"]
         self.assertEqual(len(rows), 8)
-        self.assertTrue(
-            all(row["highest_evidenced_stage"] == "unresolved" for row in rows)
+        by_family = {row["program_family"]: row for row in rows}
+        discovered = {
+            family
+            for family, row in by_family.items()
+            if row["highest_evidenced_stage"] == "C0-discovered"
+        }
+        self.assertEqual(
+            discovered,
+            {
+                "the-arts",
+                "french",
+                "health-and-physical-education",
+                "mathematics",
+            },
+        )
+        self.assertTrue(all(not by_family[family]["c1_snapshot"] for family in discovered))
+        unresolved = {
+            family
+            for family, row in by_family.items()
+            if row["highest_evidenced_stage"] == "unresolved"
+        }
+        self.assertEqual(
+            unresolved,
+            {
+                "english",
+                "science-and-technology",
+                "social-studies-grades-1-6",
+                "history-and-geography-grades-7-8",
+            },
         )
         self.assertEqual(
             set(payload["summary"]["unresolved_french_program_families"]),
-            {row["program_family"] for row in rows},
+            unresolved,
         )
 
     def test_c1_snapshots_preserve_no_bytes_and_review_required_licensing(self) -> None:
