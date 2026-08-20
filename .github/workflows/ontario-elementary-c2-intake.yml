@@ -1,0 +1,85 @@
+name: Ontario Elementary C2 Intake Gate
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/ontario-elementary-readiness-monitoring-20260811
+    paths:
+      - 'requirements-dev.txt'
+      - 'schemas/curriculum-standard-record.v2.schema.json'
+      - 'curriculum/ontario-elementary/source-discovery.v0.json'
+      - 'curriculum/ontario-elementary/source-discovery-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-discovery-additions.v1.json'
+      - 'curriculum/ontario-elementary/source-discovery-addition-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-locks/**'
+      - 'curriculum/ontario-elementary/records-v2/**'
+      - 'curriculum/reviews/ontario-elementary/sources/**'
+      - 'curriculum/licensing/ontario-elementary/reviews/**'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/curriculum_standard_record.py'
+      - 'tools/ontario_elementary_source_review.py'
+      - 'tools/ontario_elementary_licensing_review.py'
+      - 'tools/ontario_elementary_c2_intake.py'
+      - 'tests/test_ontario_elementary_c2_intake.py'
+      - '.github/workflows/ontario-elementary-c2-intake.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-c2-intake-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+      - name: Verify fail-closed C2 intake logic
+        run: python -m unittest tests.test_ontario_elementary_c2_intake -v
+      - name: Prove deterministic current intake plan
+        run: |
+          mkdir -p /tmp/axiom-elementary-c2-intake
+          python tools/ontario_elementary_c2_intake.py plan \
+            --output /tmp/axiom-elementary-c2-intake/plan-a.json
+          python tools/ontario_elementary_c2_intake.py plan \
+            --output /tmp/axiom-elementary-c2-intake/plan-b.json
+          cmp /tmp/axiom-elementary-c2-intake/plan-a.json /tmp/axiom-elementary-c2-intake/plan-b.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          plan = json.loads(Path('/tmp/axiom-elementary-c2-intake/plan-a.json').read_text())
+          if plan['target_count'] != 16:
+              raise SystemExit(f"expected 16 C2 intake targets, found {plan['target_count']}")
+          if not 0 <= plan['eligible_source_count'] <= plan['target_count']:
+              raise SystemExit(f"invalid eligible source count: {plan['eligible_source_count']}")
+          for target in plan['targets']:
+              eligible = target['eligible_for_reference_only_candidate_intake']
+              modes = target['candidate_content_modes']
+              if eligible:
+                  if target['source_review_decision'] != 'approved':
+                      raise SystemExit(f"eligible target lacks source approval: {target['source_id']}")
+                  if target['licensing_decision'] not in {
+                      'reference-only-use-permitted',
+                      'verbatim-redistribution-permitted',
+                  }:
+                      raise SystemExit(f"eligible target lacks compatible licensing: {target['source_id']}")
+                  if modes != ['reference-only']:
+                      raise SystemExit(f"v1 exposed unsupported candidate mode: {target['source_id']} {modes}")
+              elif modes:
+                  raise SystemExit(f"blocked target exposes candidate modes: {target['source_id']} {modes}")
+          PY
+      - name: Upload deterministic C2 intake plan
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-c2-intake-plan-${{ github.sha }}
+          path: /tmp/axiom-elementary-c2-intake/plan-a.json
+          if-no-files-found: error
+          retention-days: 14
