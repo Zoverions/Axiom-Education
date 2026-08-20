@@ -14,15 +14,17 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
     def test_current_readiness_separates_snapshot_and_recapture_evidence(self) -> None:
         payload = build_readiness()
         summary = payload["summary"]
-        self.assertEqual(payload["schema"], "axiom-education-ontario-elementary-readiness.v2")
+        self.assertEqual(
+            payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
+        )
         self.assertEqual(summary["confirmed_discovery_sources"], 8)
-        self.assertEqual(summary["registered_capture_targets"], 6)
-        self.assertEqual(summary["c1_snapshot_sources"], 5)
+        self.assertEqual(summary["registered_capture_targets"], 7)
+        self.assertEqual(summary["c1_snapshot_sources"], 6)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
-        self.assertEqual(summary["observational_response_surface_sources"], 2)
+        self.assertEqual(summary["observational_response_surface_sources"], 3)
         self.assertFalse(summary["all_c1_sources_strictly_recapturable"])
         self.assertEqual(summary["canonical_c2_records"], 0)
-        self.assertFalse(summary["kindergarten_c1_snapshot"])
+        self.assertTrue(summary["kindergarten_c1_snapshot"])
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
     def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
@@ -33,7 +35,10 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertTrue(arts["capture_target_registered"])
         self.assertIsNone(arts["c1_snapshot"])
         self.assertIsNone(arts["monitoring"])
-        self.assertEqual(arts["c0_discovery_review_status"], "source-locator-confirmed-bytes-pending")
+        self.assertEqual(
+            arts["c0_discovery_review_status"],
+            "source-locator-confirmed-bytes-pending",
+        )
 
     def test_strict_sources_are_only_the_current_document_like_surfaces(self) -> None:
         payload = build_readiness()
@@ -46,7 +51,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_language_and_science_remain_valid_c1_snapshots_but_observational(self) -> None:
+    def test_dcp_html_sources_remain_valid_c1_snapshots_but_observational(self) -> None:
         payload = build_readiness()
         observational = set(
             payload["summary"]["observational_response_surface_source_ids"]
@@ -54,6 +59,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             observational,
             {
+                "ontario-kindergarten-2026",
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
             },
@@ -81,7 +87,6 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             set(payload["summary"]["uncaptured_discovered_source_ids"]),
             {
-                "ontario-kindergarten-2026",
                 "ontario-arts-grades-1-8-2009",
                 "ontario-social-studies-history-geography",
             },
@@ -132,7 +137,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         locked_rows = [
             row for row in payload["sources"] if row["c1_snapshot"] is not None
         ]
-        self.assertEqual(len(locked_rows), 5)
+        self.assertEqual(len(locked_rows), 6)
         for row in locked_rows:
             self.assertFalse(row["c1_snapshot"]["bytes_retained"])
             self.assertEqual(
@@ -144,7 +149,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
     def test_machine_view_cannot_relabel_observational_sources_as_strict(self) -> None:
         payload = build_readiness()
         mutated = copy.deepcopy(payload)
-        mutated["summary"]["strict_exact_byte_monitored_sources"] = 5
+        mutated["summary"]["strict_exact_byte_monitored_sources"] = 6
         mutated["summary"]["observational_response_surface_sources"] = 0
         mutated["summary"]["all_c1_sources_strictly_recapturable"] = True
         with self.assertRaisesRegex(
