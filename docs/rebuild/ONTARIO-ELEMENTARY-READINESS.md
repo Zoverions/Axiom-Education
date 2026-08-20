@@ -42,15 +42,16 @@ Those observations do **not** prove curriculum content changed. They block treat
 The verifier currently requires the truthful state:
 
 - 8 confirmed discovered source families;
-- 7 registered bounded capture targets;
+- 8 registered bounded capture targets;
 - 6 C1 snapshot sources;
 - 3 strict exact-byte monitored sources;
 - 3 observational DCP response surfaces;
 - 0 canonical reviewed C2 records;
 - Kindergarten 2026 has a metadata-only C1 historical snapshot; source bytes are not retained and redistribution remains review-required;
+- the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 source lineage is resolved at the official DCP `elementary-sshg` route, with Publications Ontario `233531` preserving the 2018 revised base lineage and Ontario's 2026-27 direction confirming new Grade 7-8 History learning; it remains C0 until bounded capture evidence is reviewed;
 - English-language required program families with C1 source evidence: 5/8;
 - French-language required program families with C1 source evidence: 0/8;
-- known uncaptured discovered sources remain The Arts and Social Studies/History/Geography;
+- known uncaptured discovered sources remain The Arts and Social Studies/History/Geography, and both now have bounded capture targets;
 - human source review incomplete;
 - licensing review incomplete;
 - deterministic full-pack verification incomplete;
