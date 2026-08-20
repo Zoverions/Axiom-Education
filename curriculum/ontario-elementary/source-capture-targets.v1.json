@@ -1,6 +1,6 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.5.1",
+  "targets_version": "1.5.2",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
@@ -15,8 +15,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "Ontario's official Kindergarten overview confirms the 2026 curriculum is the program basis beginning in 2026-27. Publications Ontario lists the English Kindergarten 2026 extract as CL34638, and the current DCP Kindergarten curriculum route is the bounded structured source for a metadata-only C1 capture attempt."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "Ontario's official Kindergarten overview confirms the 2026 curriculum is the program basis beginning in 2026-27. Publications Ontario lists the English Kindergarten 2026 extract as CL34638. This target is retained for bounded recapture and observational monitoring after a metadata-only historical C1 snapshot was deliberately committed; it does not imply strict byte stability or redistribution approval."
     },
     {
       "source_id": "ontario-health-physical-education-grades-1-8-2019",
@@ -113,8 +113,8 @@
       "expected_media_type": "text/html",
       "maximum_bytes": 52428800,
       "redistribution_status": "review-required",
-      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
-      "notes": "The official Curriculum and Resources portal provides the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 structured source. The Publications Ontario product URL and publication number 233531 are bound to the exact effective append-only discovery record because the canonical product URL omits the number from its path. Ontario's 2026-27 Grade 7-8 History update context remains separate discovery evidence."
+      "source_resolution_status": "official-current-structured-source-resolved",
+      "notes": "The official Curriculum and Resources portal provides the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 structured source. The Publications Ontario product URL and publication number 233531 are bound to the exact effective append-only discovery record because the canonical product URL omits the number from its path. This target is retained for bounded recapture and observational monitoring after a metadata-only historical C1 snapshot was deliberately committed; Ontario's 2026-27 Grade 7-8 History update context remains separate discovery evidence."
     }
   ]
 }
