@@ -33,6 +33,11 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertTrue(summary["english_base_source_capture_complete"])
         self.assertTrue(summary["french_base_source_capture_complete"])
         self.assertTrue(summary["overall_base_source_capture_complete"])
+        self.assertEqual(summary["human_source_review_targets"], 16)
+        self.assertEqual(summary["submitted_source_reviews"], 0)
+        self.assertEqual(summary["approved_source_reviews"], 0)
+        self.assertEqual(summary["blocked_source_reviews"], 0)
+        self.assertEqual(summary["unreviewed_source_reviews"], 16)
         self.assertFalse(summary["human_source_review_complete"])
         self.assertFalse(summary["licensing_review_complete"])
         self.assertFalse(summary["deterministic_full_pack_verified"])
@@ -234,9 +239,15 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         with self.assertRaisesRegex(ElementaryReadinessError, "inconsistent with its evidence components"):
             verify_readiness(mutated)
 
-    def test_complete_source_capture_cannot_promote_downstream_gates(self) -> None:
+    def test_source_review_completion_cannot_outpace_approved_targets(self) -> None:
+        payload = build_readiness()
+        mutated = copy.deepcopy(payload)
+        mutated["summary"]["human_source_review_complete"] = True
+        with self.assertRaisesRegex(ElementaryReadinessError, "human source-review completion"):
+            verify_readiness(mutated)
+
+    def test_complete_source_capture_cannot_promote_other_downstream_gates(self) -> None:
         for field, message in (
-            ("human_source_review_complete", "human source review"),
             ("licensing_review_complete", "licensing completion"),
             ("deterministic_full_pack_verified", "full-pack verification"),
             ("governed_activation_available", "governed activation"),
