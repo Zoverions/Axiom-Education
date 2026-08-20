@@ -5,8 +5,9 @@ Remote capture is deliberately allowlisted. The caller supplies a source_id, nev
 arbitrary URL. Downloaded bytes are held only in a temporary file and deleted after the
 lock candidate is written. Non-gov Ontario publication CDN targets require an exact
 Publications Ontario catalogue provenance record and an explicitly approved CDN host.
-Direct Ontario-government DCP targets may instead bind to an exact French curriculum
-route already admitted in append-only C0 discovery.
+Direct Ontario-government DCP targets may bind to an exact French curriculum route
+already admitted in append-only C0 discovery. Direct Ministry PDF targets may bind only
+to an exact French elementary curriculum PDF already admitted in C0 discovery.
 """
 
 from __future__ import annotations
@@ -28,6 +29,8 @@ DISCOVERY_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.
 PUBLICATIONS_ONTARIO_HOST = "www.publications.gov.on.ca"
 DCP_HOST = "www.dcp.edu.gov.on.ca"
 DCP_FRENCH_CURRICULUM_PREFIX = "/fr/curriculum/"
+MINISTRY_CURRICULUM_HOST = "www.edu.gov.on.ca"
+MINISTRY_FRENCH_ELEMENTARY_PREFIX = "/fre/curriculum/elementary/"
 APPROVED_PUBLICATION_CDN_HOSTS = {"assets-us-01.kc-usercontent.com"}
 ALLOWED_HOST_POLICIES = {
     "ontario-government",
@@ -96,40 +99,68 @@ def validate_target_provenance(
 ) -> None:
     publication_url = target.get("publication_catalog_url")
     publication_number = target.get("publication_number")
-    dcp_only_source = source.get("classification") == "official-current-dcp-curriculum-route"
+    source_classification = source.get("classification")
+    dcp_only_source = source_classification == "official-current-dcp-curriculum-route"
+    ministry_pdf_source = source_classification == "official-ministry-curriculum-pdf"
 
     require(
         not dcp_only_source or (publication_url is None and publication_number is None),
         f"{source_id}: DCP-only C0 provenance cannot acquire publication metadata from a capture target",
     )
+    require(
+        not ministry_pdf_source
+        or (publication_url is None and publication_number is None),
+        f"{source_id}: Ministry-PDF-only C0 provenance cannot acquire publication metadata from a capture target",
+    )
 
     if publication_url is None and publication_number is None:
         require(
             target.get("host_policy") == "ontario-government",
-            f"{source_id}: DCP-only provenance requires ontario-government host policy",
-        )
-        require(
-            dcp_only_source,
-            f"{source_id}: DCP-only capture requires a C0 official-current-dcp-curriculum-route source",
+            f"{source_id}: direct government provenance requires ontario-government host policy",
         )
         source_url = source.get("url")
         require(
             isinstance(source_url, str),
-            f"{source_id}: DCP-only C0 source URL is required",
+            f"{source_id}: direct government C0 source URL is required",
         )
         parsed = urllib.parse.urlparse(source_url)
-        require(
-            parsed.scheme == "https"
-            and parsed.hostname == DCP_HOST
-            and parsed.path.startswith(DCP_FRENCH_CURRICULUM_PREFIX),
-            f"{source_id}: DCP-only source must be an exact French Ontario curriculum route",
+
+        if dcp_only_source:
+            require(
+                parsed.scheme == "https"
+                and parsed.hostname == DCP_HOST
+                and parsed.path.startswith(DCP_FRENCH_CURRICULUM_PREFIX),
+                f"{source_id}: DCP-only source must be an exact French Ontario curriculum route",
+            )
+            require(
+                target.get("source_locator") == source_url
+                and target.get("download_url") == source_url,
+                f"{source_id}: DCP-only target must bind source_locator and download_url exactly to the admitted C0 route",
+            )
+            return
+
+        if ministry_pdf_source:
+            require(
+                parsed.scheme == "https"
+                and parsed.hostname == MINISTRY_CURRICULUM_HOST
+                and parsed.path.startswith(MINISTRY_FRENCH_ELEMENTARY_PREFIX)
+                and parsed.path.casefold().endswith(".pdf"),
+                f"{source_id}: Ministry-PDF-only source must be an exact French elementary Ministry PDF",
+            )
+            require(
+                target.get("source_locator") == source_url
+                and target.get("download_url") == source_url,
+                f"{source_id}: Ministry-PDF-only target must bind source_locator and download_url exactly to the admitted C0 PDF",
+            )
+            require(
+                target.get("expected_media_type") == "application/pdf",
+                f"{source_id}: Ministry-PDF-only capture must require application/pdf",
+            )
+            return
+
+        raise RemoteCaptureError(
+            f"{source_id}: direct government capture requires an admitted DCP route or Ministry curriculum PDF source"
         )
-        require(
-            target.get("source_locator") == source_url
-            and target.get("download_url") == source_url,
-            f"{source_id}: DCP-only target must bind source_locator and download_url exactly to the admitted C0 route",
-        )
-        return
 
     require(
         isinstance(publication_url, str) and publication_url,
