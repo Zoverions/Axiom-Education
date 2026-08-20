@@ -243,7 +243,10 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             )
 
         path = self.mutation(mutate)
-        with self.assertRaisesRegex(RemoteCaptureError, "bind source_locator and download_url exactly"):
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "bind source_locator and download_url exactly",
+        ):
             validate_target_registry(path)
 
     def test_french_dcp_only_target_cannot_invent_publication_provenance(self):
@@ -261,7 +264,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         path = self.mutation(mutate)
         with self.assertRaisesRegex(
             RemoteCaptureError,
-            "exactly match effective discovery provenance",
+            "cannot acquire publication metadata",
         ):
             validate_target_registry(path)
 
