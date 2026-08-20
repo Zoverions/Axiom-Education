@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-science-technology-grades-1-8-2022",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "48e1d4fe68f8afa16de57ba677861e606a0b306797db79fa2ba1f8a50bea7a2e",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T20:38:32.713170Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+  "media_type": "text/html",
+  "byte_length": 6459273,
+  "sha256": "3c83c83978bd2de489623e3a8ff73484b037d98519503ed8b5fc6eee253d17bc",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 43ccd68796503e323634f931f1d2b1784f83828a74cc46f488a45d333685e285. GitHub run 32415167619 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution. Deliberately promoted as a historical C1 snapshot after review of the companion three-request stability artifact; the live DCP HTML surface remains observational because the companion job returned a different SHA at the same byte length."
+}
