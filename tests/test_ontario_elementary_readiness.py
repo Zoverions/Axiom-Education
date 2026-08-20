@@ -18,7 +18,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 8)
-        self.assertEqual(summary["registered_capture_targets"], 7)
+        self.assertEqual(summary["registered_capture_targets"], 8)
         self.assertEqual(summary["c1_snapshot_sources"], 6)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
         self.assertEqual(summary["observational_response_surface_sources"], 3)
@@ -37,6 +37,19 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertIsNone(arts["monitoring"])
         self.assertEqual(
             arts["c0_discovery_review_status"],
+            "source-locator-confirmed-bytes-pending",
+        )
+
+    def test_sshg_current_source_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
+        payload = build_readiness()
+        rows = {row["source_id"]: row for row in payload["sources"]}
+        sshg = rows["ontario-social-studies-history-geography"]
+        self.assertEqual(sshg["highest_evidenced_stage"], "C0-discovered")
+        self.assertTrue(sshg["capture_target_registered"])
+        self.assertIsNone(sshg["c1_snapshot"])
+        self.assertIsNone(sshg["monitoring"])
+        self.assertEqual(
+            sshg["c0_discovery_review_status"],
             "source-locator-confirmed-bytes-pending",
         )
 
