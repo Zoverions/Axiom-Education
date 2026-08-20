@@ -182,6 +182,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             "Verify curriculum readiness boundary",
             [python, "tools/check_curriculum_readiness.py"],
         ),
+        (
+            "Verify atomic conditional curriculum family evidence",
+            [python, "tools/check_conditional_curriculum_family_evidence.py"],
+        ),
         ("Run complete Python test suite", [python, "-m", "pytest", "-q"]),
         (
             "Verify Dart formatting",
