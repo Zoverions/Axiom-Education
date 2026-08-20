@@ -1,9 +1,23 @@
 {
   "schema": "axiom-curriculum-remote-capture-targets.v1",
-  "targets_version": "1.3.0",
+  "targets_version": "1.4.0",
   "jurisdiction_id": "ca:on",
   "claim_boundary": "Targets are verified official download or structured-source routes eligible for opt-in byte capture. Listing a target does not capture bytes, establish a digest, approve redistribution, normalize curriculum, or promote a source beyond its evidenced stage.",
   "targets": [
+    {
+      "source_id": "ontario-kindergarten-2026",
+      "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+      "publication_catalog_url": "https://www.publications.gov.on.ca/CL34638",
+      "publication_number": "CL34638",
+      "download_url": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+      "allowed_hosts": ["www.dcp.edu.gov.on.ca"],
+      "host_policy": "ontario-government",
+      "expected_media_type": "text/html",
+      "maximum_bytes": 52428800,
+      "redistribution_status": "review-required",
+      "source_resolution_status": "official-current-structured-source-resolved-pending-c1",
+      "notes": "Ontario's official Kindergarten overview confirms the 2026 curriculum is the program basis beginning in 2026-27. Publications Ontario lists the English Kindergarten 2026 extract as CL34638, and the current DCP Kindergarten curriculum route is the bounded structured source for a metadata-only C1 capture attempt."
+    },
     {
       "source_id": "ontario-health-physical-education-grades-1-8-2019",
       "source_locator": "https://www.ontario.ca/document/health-and-physical-education-grades-1-8",
