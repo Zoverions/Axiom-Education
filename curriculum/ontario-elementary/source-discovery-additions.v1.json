@@ -1,0 +1,141 @@
+{
+  "schema": "axiom-curriculum-source-discovery-additions.v1",
+  "jurisdiction_id": "ca:on",
+  "base_discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "additions_version": "1.0.0",
+  "claim_boundary": "These append-only additions introduce newly resolved C0 source identities that were absent from the historical 2026-08-11 discovery ledger. They do not rewrite the historical ledger or its amendments, capture curriculum bytes, establish a source digest, approve redistribution, normalize curriculum records, complete human review, or promote any added source beyond C0 discovery.",
+  "additions": [
+    {
+      "addition_id": "ontario-french-schools-francais-2023-publication-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-francais-grades-1-8-2023",
+        "subject_family": "french-language-schools-french",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2023",
+        "url": "https://www.publications.gov.on.ca/fr/CL33252",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/fr/CL33252",
+        "publication_number": "CL33252",
+        "classification": "official-publication-record",
+        "source_locator_status": "official-publication-record-captured-current-curriculum-route-pending",
+        "status_note": "Publications Ontario identifies Le curriculum de l'Ontario de la 1re à la 8e année : français 2023, June 2023, publication CL33252. The exact current curriculum response route and bytes remain unresolved at this C0 addition stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "version-confirmed-current-byte-route-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.publications.gov.on.ca/fr/CL33252",
+          "classification": "official-publication-record"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "french",
+          "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-mathematiques-2020-publication-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-mathematics-grades-1-8-2020",
+        "subject_family": "french-language-schools-mathematics",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2020",
+        "url": "https://www.publications.gov.on.ca/CL32239",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/CL32239",
+        "publication_number": "CL32239",
+        "classification": "official-publication-record",
+        "source_locator_status": "official-publication-record-captured-current-curriculum-route-pending",
+        "status_note": "Publications Ontario identifies Le curriculum de l'Ontario de la 1re à la 8e année -- Mathématiques, 2020, August 2020, publication CL32239. Publications Ontario also lists a separate French online-resource record 300333; the records are not collapsed. The exact current curriculum response route and bytes remain unresolved at this C0 addition stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "version-confirmed-current-byte-route-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.publications.gov.on.ca/CL32239",
+          "classification": "official-publication-record"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "mathematics",
+          "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-eps-2019-publication-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
+        "subject_family": "french-language-schools-health-and-physical-education",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2019",
+        "url": "https://www.publications.gov.on.ca/022579",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/022579",
+        "publication_number": "022579",
+        "classification": "official-publication-record",
+        "source_locator_status": "official-publication-record-captured-current-curriculum-route-pending",
+        "status_note": "Publications Ontario identifies Le curriculum de l'Ontario de la 1re à la 8e année, Éducation physique et santé 2019, publication 022579, as the French-language elementary HPE curriculum record. The exact current curriculum response route and bytes remain unresolved at this C0 addition stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "version-confirmed-current-byte-route-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.publications.gov.on.ca/022579",
+          "classification": "official-publication-record"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/fr/browse-catalogues/health-physical-education-curriculum",
+          "classification": "official-curriculum-catalogue"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "health-and-physical-education",
+          "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-education-artistique-2009-publication-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-arts-grades-1-8-2009",
+        "subject_family": "french-language-schools-the-arts",
+        "grades": [1, 2, 3, 4, 5, 6, 7, 8],
+        "policy_version": "2009",
+        "url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-1re-la-8e-anne-ducation-artistique-2009-rvis",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-1re-la-8e-anne-ducation-artistique-2009-rvis",
+        "publication_number": "231943_U",
+        "classification": "official-publication-record",
+        "source_locator_status": "official-publication-record-captured-current-curriculum-route-pending",
+        "status_note": "Publications Ontario identifies the French Revised 2009 elementary Arts curriculum as online-resource publication 231943_U and separately lists book publication 231943. These format records are preserved as distinct official records rather than collapsed. The exact current curriculum response route and bytes remain unresolved at this C0 addition stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "version-confirmed-current-byte-route-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-1re-la-8e-anne-ducation-artistique-2009-rvis",
+          "classification": "official-publication-record"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "the-arts",
+          "status": "source-discovered"
+        }
+      ]
+    }
+  ]
+}
