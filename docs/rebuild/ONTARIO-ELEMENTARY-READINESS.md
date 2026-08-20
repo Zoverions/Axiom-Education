@@ -13,10 +13,15 @@ historical C0 discovery
   + digest-bound amendments to added source identities
   + C1 exact-byte historical snapshots
   + source-surface monitoring
-  + canonical C2 records
-  + later human/licensing/pack evidence
+  + content-addressed human source identity/scope review
+  + content-addressed human licensing/redistribution review
+  + exact-byte-gated C2 candidate intake
+  + canonical C2 records and normalization review
+  + later pack/staging/activation evidence
   -> derived readiness
 ```
+
+No later stage is inferred merely because an earlier stage is complete.
 
 ## Current milestone: base source capture complete
 
@@ -97,13 +102,82 @@ Current source identities include:
 
 The additions validator and digest-bound addition-amendment validator preserve the original Publications Ontario identity, subject, grade scope, policy version and source provenance. A later route resolution cannot silently rewrite those fields or manufacture a C1 digest.
 
+## Human source identity and scope review — 0/16
+
+Base capture does not decide whether Axiom's composed metadata correctly represents the official source identity, authority, policy version, grade scope, and locator. Those claims now have a separate deterministic human-review layer.
+
+`tools/ontario_elementary_source_review.py` generates **16 content-addressed review targets**. Each target binds the exact composed source-entry digest and exact C1 lock digest. A valid review must be an explicit human attestation with reviewer identity and qualification, and it must address:
+
+- official authority;
+- source identity;
+- policy version;
+- grade scope;
+- official locator.
+
+An approval cannot contain open findings. A changed source object or C1 lock makes the review stale. Version 1 allows only one current attestation per source; duplicate current attestations fail closed rather than relying on filename ordering.
+
+Current committed state: **0 submitted / 0 approved / 16 unreviewed**. No machine-generated approval exists.
+
+## Licensing and redistribution review — 0/16
+
+Licensing is a separate content-addressed human gate. Public availability is explicitly **not** treated as redistribution permission.
+
+`tools/ontario_elementary_licensing_review.py` creates 16 targets bound to the current source-review target and C1 lock. Supported human decisions are:
+
+- `verbatim-redistribution-permitted`;
+- `reference-only-use-permitted`;
+- `external-reference-only`;
+- `prohibited`;
+- `unresolved`.
+
+A resolved decision requires the rights/authority and terms basis to be recorded, the redistribution scope and conditions to be decided, all required confirmations to be true, and no open findings. Verbatim permission additionally requires at least one evidence locator. The verifier records the human decision but does not claim that software has independently decided copyright law or proved the legal conclusion correct.
+
+Current committed state: **0 submitted / 0 resolved / 16 unresolved / 0 verbatim permissions**.
+
+Historical C1 locks remain `review-required`; later licensing evidence is additive and does not rewrite what was known at capture time.
+
+## Deterministic reviewer dossier
+
+`tools/ontario_elementary_reviewer_dossier.py` packages a deterministic human-review handoff containing:
+
+- the 16 source-review targets;
+- the 16 licensing-review targets;
+- current readiness and monitoring context;
+- all 16 metadata-only C1 locks;
+- 16 blank source-review templates;
+- 16 blank licensing-review templates;
+- summaries of any submitted evidence;
+- a reviewer guide and content-digested manifest.
+
+The dossier packages **no captured Ontario curriculum source bytes**. Blank templates contain the exact target digest but no reviewer identity, no decision, and no preselected confirmations; they are intentionally invalid until a qualified human completes them.
+
+## C2 candidate intake — 0/16 eligible
+
+C2 normalization now has an explicit pre-canonical gate rather than an implied transition from C1.
+
+`tools/ontario_elementary_c2_intake.py` currently supports **reference-only candidate intake only**. A source becomes eligible only when:
+
+1. its current source identity/scope review is `approved`;
+2. its current licensing decision is either `reference-only-use-permitted` or `verbatim-redistribution-permitted`; and
+3. the operator supplies official source bytes whose SHA-256 and byte length exactly match the historical C1 snapshot.
+
+An exact-byte match proves only that the operator input matches the historical C1 capture. It does not prove semantic extraction, normalization correctness, human normalization review, canonical C2 promotion, pack readiness, or activation.
+
+`external-reference-only`, `prohibited`, `unresolved`, missing licensing evidence, or missing source approval all block candidate intake. Even a future verbatim-redistribution permission exposes only `reference-only` candidate mode in C2 intake v1. Paraphrase and verbatim candidate modes remain intentionally unsupported until a separately reviewed licensing-aware canonicalization boundary exists.
+
+Current committed state: **0/16 eligible sources** and **0 canonical C2 records**.
+
+The existing HPE Grade 1 artifact remains a deterministic C1-bound **construction fixture**, not proof that the official source was source-byte-derived, normalized correctly, and human-reviewed.
+
 ## What remains incomplete
 
-Base source capture completion does not advance the later gates automatically. The current readiness verifier still requires:
+Base source capture completion does not advance the later gates automatically. The current readiness verifier still reports:
 
-- **human source/instructional review:** incomplete;
-- **licensing and redistribution review:** incomplete;
-- **canonical reviewed C2 curriculum extraction:** not established as a complete corpus;
+- **human source identity/scope review:** 0/16 approved;
+- **licensing and redistribution review:** 0/16 resolved;
+- **reference-only C2 candidate eligibility:** 0/16;
+- **canonical reviewed C2 curriculum extraction:** 0 canonical records;
+- **normalization/source-content review:** not yet established;
 - **crosswalk review:** incomplete beyond bounded construction/evidence work;
 - **deterministic full curriculum pack verification:** incomplete;
 - **accessible and printable alternatives:** incomplete at whole-program level;
@@ -112,11 +186,9 @@ Base source capture completion does not advance the later gates automatically. T
 - **signed staging and governed activation:** unavailable;
 - **Ministry approval or endorsement:** not claimed.
 
-The HPE Grade 1 artifact remains a deterministic C1-bound **construction fixture**, not proof that the full official source has been canonically extracted and human-reviewed.
-
 ## Fail-closed properties
 
-The source pipeline rejects attempts to:
+The source and review pipeline rejects attempts to:
 
 - rewrite the historical discovery artifact in place;
 - introduce an already-existing source ID through the additions path;
@@ -131,7 +203,15 @@ The source pipeline rejects attempts to:
 - classify an HTML response surface as a strict document source under the current policy;
 - partially promote the regular/conditional French-school English family;
 - claim source-capture completeness when its component evidence disagrees;
-- infer human review, licensing, full-pack verification, governed activation, or Ministry approval from C1 evidence.
+- accept a stale, machine-authored, incomplete, or duplicate-current source-review attestation;
+- infer source approval from C1 capture;
+- accept a stale, machine-authored, incomplete, or duplicate-current licensing attestation;
+- infer redistribution permission from public availability or C1 capture;
+- claim licensing completion unless all 16 current targets have resolved decisions;
+- admit C2 candidate normalization without current source approval and compatible licensing evidence;
+- accept operator source bytes whose digest or byte length differs from the C1 lock;
+- expose paraphrase or verbatim C2 candidate modes through the v1 intake gate;
+- infer canonical C2 promotion, full-pack verification, governed activation, or Ministry approval from any earlier evidence stage.
 
 ## Current derived state
 
@@ -148,9 +228,14 @@ The machine-verifiable source/readiness state is therefore:
 - uncaptured discovered sources: **0**;
 - pending bounded capture targets: **0**;
 - overall base source capture: **complete**;
-- human review: **incomplete**;
-- licensing review: **incomplete**;
+- source-review targets: **16**;
+- approved source reviews: **0/16**;
+- licensing-review targets: **16**;
+- resolved licensing reviews: **0/16**;
+- verbatim redistribution permissions: **0**;
+- reference-only C2 intake eligibility: **0/16**;
+- canonical C2 records: **0**;
 - deterministic full-pack verification: **incomplete**;
 - governed activation: **unavailable**.
 
-That boundary is intentional: **all required sources are now captured, but the curriculum built from those sources is not yet promoted.**
+That boundary is intentional: **all required sources are captured, while human source review, licensing, and source-derived C2 normalization remain evidence-gated and unpromoted.**
