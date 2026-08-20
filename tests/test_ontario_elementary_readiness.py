@@ -18,7 +18,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 16)
-        self.assertEqual(summary["registered_capture_targets"], 12)
+        self.assertEqual(summary["registered_capture_targets"], 16)
         self.assertEqual(summary["c1_snapshot_sources"], 12)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 5)
         self.assertEqual(summary["observational_response_surface_sources"], 7)
@@ -29,6 +29,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(summary["french_program_families_with_c1_source"], 4)
         self.assertEqual(summary["unresolved_french_program_families"], [])
         self.assertTrue(summary["english_base_source_capture_complete"])
+        self.assertFalse(summary["french_base_source_capture_complete"])
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
     def test_arts_is_observational_c1(self) -> None:
@@ -152,6 +153,9 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-fr-arts-grades-1-8-2009",
             },
         )
+        rows = {row["source_id"]: row for row in payload["sources"]}
+        for source_id in payload["summary"]["uncaptured_discovered_source_ids"]:
+            self.assertTrue(rows[source_id]["capture_target_registered"])
 
     def test_english_program_family_snapshot_coverage_is_eight_of_eight(self) -> None:
         payload = build_readiness()
