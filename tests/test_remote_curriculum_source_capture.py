@@ -45,6 +45,8 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-fsl-grades-1-8-2013",
                 "ontario-arts-grades-1-8-2009",
                 "ontario-social-studies-history-geography",
+                "ontario-fr-science-technology-grades-1-8-2022",
+                "ontario-fr-social-studies-history-geography",
             },
         )
         kindergarten = targets["ontario-kindergarten-2026"]
@@ -55,6 +57,8 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         fsl = targets["ontario-fsl-grades-1-8-2013"]
         arts = targets["ontario-arts-grades-1-8-2009"]
         sshg = targets["ontario-social-studies-history-geography"]
+        fr_science = targets["ontario-fr-science-technology-grades-1-8-2022"]
+        fr_sshg = targets["ontario-fr-social-studies-history-geography"]
         self.assertEqual(kindergarten["publication_number"], "CL34638")
         self.assertEqual(kindergarten["host_policy"], "ontario-government")
         self.assertEqual(kindergarten["expected_media_type"], "text/html")
@@ -101,6 +105,28 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertEqual(
             sshg["publication_catalog_url"],
             "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+        )
+        self.assertEqual(
+            fr_science["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+        )
+        self.assertEqual(fr_science["download_url"], fr_science["source_locator"])
+        self.assertNotIn("publication_catalog_url", fr_science)
+        self.assertNotIn("publication_number", fr_science)
+        self.assertEqual(
+            fr_science["source_resolution_status"],
+            "official-current-structured-source-resolved-pending-c1",
+        )
+        self.assertEqual(
+            fr_sshg["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+        )
+        self.assertEqual(fr_sshg["download_url"], fr_sshg["source_locator"])
+        self.assertNotIn("publication_catalog_url", fr_sshg)
+        self.assertNotIn("publication_number", fr_sshg)
+        self.assertEqual(
+            fr_sshg["source_resolution_status"],
+            "official-current-structured-source-resolved-pending-c1",
         )
         self.assertTrue(
             all(
@@ -205,6 +231,40 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
             validate_target_registry(path)
 
+    def test_french_dcp_only_target_requires_exact_admitted_route(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-fr-science-technology-grades-1-8-2022",
+            ).update(
+                {
+                    "download_url": "https://www.dcp.edu.gov.on.ca/fr/curriculum/other"
+                }
+            )
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(RemoteCaptureError, "bind source_locator and download_url exactly"):
+            validate_target_registry(path)
+
+    def test_french_dcp_only_target_cannot_invent_publication_provenance(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-fr-social-studies-history-geography",
+            ).update(
+                {
+                    "publication_catalog_url": "https://www.publications.gov.on.ca/fabricated",
+                    "publication_number": "fabricated",
+                }
+            )
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "exactly match effective discovery provenance",
+        ):
+            validate_target_registry(path)
+
     def test_source_locator_must_already_exist_in_effective_discovery(self):
         def mutate(payload):
             self.target(
@@ -244,6 +304,17 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
         )
         self.assertEqual(sshg["publication_number"], "233531")
+
+    def test_french_locators_are_resolved_by_append_only_source_additions(self):
+        targets = validate_target_registry()
+        self.assertEqual(
+            targets["ontario-fr-science-technology-grades-1-8-2022"]["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+        )
+        self.assertEqual(
+            targets["ontario-fr-social-studies-history-geography"]["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+        )
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
         def mutate(payload):
