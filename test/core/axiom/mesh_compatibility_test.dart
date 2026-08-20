@@ -14,6 +14,7 @@ void main() {
             )
             as Map<String, Object?>;
     final baseline = payload['mesh_baseline']! as Map<String, Object?>;
+    final seam = payload['gateway_intents_submit_seam']! as Map<String, Object?>;
     final required = payload['required_runtime_contracts']! as List<Object?>;
     final digests = <String, String>{
       for (final item in required.cast<Map<String, Object?>>())
@@ -35,6 +36,7 @@ void main() {
       baseline['head_sha'],
       AxiomMeshCompatibilityProfile.currentBaselineHead,
     );
+    expect(baseline['head_role'], 'observed-provenance-not-runtime-binding');
     expect(
       learnerMemory['source_sha'],
       AxiomMeshCompatibilityProfile.currentProviderHead,
@@ -50,6 +52,10 @@ void main() {
     expect(
       baseline['gateway_compatibility_mode'],
       AxiomMeshCompatibilityProfile.currentGatewayCompatibilityMode,
+    );
+    expect(
+      seam['sha256'],
+      AxiomMeshCompatibilityProfile.currentGatewayIntentsSubmitSeamSha256,
     );
     expect(
       (baseline['authority_path']! as List<Object?>).cast<String>(),
