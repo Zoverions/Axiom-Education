@@ -155,6 +155,76 @@
         "workflow_run_id": 32415167619
       },
       "promotion_blocker": "Keep the French SSHG DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-francais-grades-1-8-2023",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Français C1 capture and all three separate stability requests in workflow run 32421398988 were byte-identical at 6,459,273 bytes. This demonstrates repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459273,
+        "c1_capture_sha256": "0ee8c811b38707cbc6d5b21d2217f7737a5ad12126fec078ddcf1923584978d8",
+        "three_request_stability_sha256": "0ee8c811b38707cbc6d5b21d2217f7737a5ad12126fec078ddcf1923584978d8",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Français DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-mathematics-grades-1-8-2020",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Mathématiques C1 capture and all three separate stability requests in workflow run 32421398988 were byte-identical at 6,459,278 bytes. This demonstrates repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459278,
+        "c1_capture_sha256": "34aacca4b04d2b289d3b417b2eb27b3632c5b2a9dd9bfda3db96ed513868da6d",
+        "three_request_stability_sha256": "34aacca4b04d2b289d3b417b2eb27b3632c5b2a9dd9bfda3db96ed513868da6d",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Mathématiques DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Éducation physique et santé C1 capture and the separate three-request stability job in workflow run 32421398988 returned different SHA-256 signatures and byte lengths. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "c1_capture_byte_length": 6459289,
+        "c1_capture_sha256": "6f2134378de34994e46a50da001aaec523c258a316905c2af22987ec5713cbb4",
+        "three_request_stability_byte_length": 6459325,
+        "three_request_stability_sha256": "505fed1951e94855dba0bbebecaa1a8d44cc65897ef436cd0c4eb579ccc9e98b",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Éducation physique et santé DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-arts-grades-1-8-2009",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Éducation artistique C1 capture and the separate three-request stability job in workflow run 32421398988 returned different SHA-256 signatures and byte lengths. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "c1_capture_byte_length": 6459321,
+        "c1_capture_sha256": "bf010080b4357dc2a33697c8f6faf30642d412b2eb55dc258e381c4b4a950b3a",
+        "three_request_stability_byte_length": 6459285,
+        "three_request_stability_sha256": "06a67c21babe40b9271cf8cb085d3f33719c7a3d4332a24c18a7b56bfddd83d4",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Éducation artistique DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
     }
   ]
 }
