@@ -22,11 +22,22 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
+    @staticmethod
+    def target(payload: dict[str, object], source_id: str) -> dict[str, object]:
+        targets = payload["targets"]
+        if not isinstance(targets, list):
+            raise AssertionError("capture targets must be a list")
+        for target in targets:
+            if isinstance(target, dict) and target.get("source_id") == source_id:
+                return target
+        raise AssertionError(f"missing target: {source_id}")
+
     def test_current_target_registry_is_bounded(self):
         targets = validate_target_registry()
         self.assertEqual(
             set(targets),
             {
+                "ontario-kindergarten-2026",
                 "ontario-health-physical-education-grades-1-8-2019",
                 "ontario-mathematics-grades-1-8-2020",
                 "ontario-language-grades-1-8-2023",
@@ -35,12 +46,20 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-arts-grades-1-8-2009",
             },
         )
+        kindergarten = targets["ontario-kindergarten-2026"]
         hpe = targets["ontario-health-physical-education-grades-1-8-2019"]
         math = targets["ontario-mathematics-grades-1-8-2020"]
         language = targets["ontario-language-grades-1-8-2023"]
         science = targets["ontario-science-technology-grades-1-8-2022"]
         fsl = targets["ontario-fsl-grades-1-8-2013"]
         arts = targets["ontario-arts-grades-1-8-2009"]
+        self.assertEqual(kindergarten["publication_number"], "CL34638")
+        self.assertEqual(kindergarten["host_policy"], "ontario-government")
+        self.assertEqual(kindergarten["expected_media_type"], "text/html")
+        self.assertEqual(
+            kindergarten["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+        )
         self.assertEqual(hpe["host_policy"], "ontario-government")
         self.assertEqual(hpe["allowed_hosts"], ["www.edu.gov.on.ca"])
         self.assertEqual(math["host_policy"], "publications-ontario-access-cdn")
@@ -58,69 +77,90 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             arts["source_locator"],
             "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
         )
-        self.assertEqual(arts["source_resolution_status"], "official-current-structured-source-resolved-pending-c1")
-        self.assertTrue(all(target["redistribution_status"] == "review-required" for target in targets.values()))
+        self.assertEqual(
+            arts["source_resolution_status"],
+            "official-current-structured-source-resolved-pending-c1",
+        )
+        self.assertTrue(
+            all(
+                target["redistribution_status"] == "review-required"
+                for target in targets.values()
+            )
+        )
 
     def test_arbitrary_non_government_host_is_rejected_under_government_policy(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][0].update(
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-health-physical-education-grades-1-8-2019",
+            ).update(
                 {
                     "download_url": "https://example.com/curriculum.pdf",
                     "allowed_hosts": ["example.com"],
                 }
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
             validate_target_registry(path)
 
     def test_publication_cdn_policy_rejects_unapproved_cdn(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][1].update(
+        def mutate(payload):
+            self.target(payload, "ontario-mathematics-grades-1-8-2020").update(
                 {
                     "download_url": "https://example.com/curriculum.pdf",
                     "allowed_hosts": ["example.com"],
                 }
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "not explicitly approved"):
             validate_target_registry(path)
 
     def test_publication_cdn_requires_publications_ontario_provenance(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][1].update(
+        def mutate(payload):
+            self.target(payload, "ontario-mathematics-grades-1-8-2020").update(
                 {"publication_catalog_url": "https://example.com/CL32210"}
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "must be Publications Ontario"):
             validate_target_registry(path)
 
     def test_publication_number_must_match_catalog_url(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][1].update(
+        def mutate(payload):
+            self.target(payload, "ontario-mathematics-grades-1-8-2020").update(
                 {"publication_number": "WRONG"}
             )
-        )
-        with self.assertRaisesRegex(RemoteCaptureError, "bound into the Publications Ontario URL"):
+
+        path = self.mutation(mutate)
+        with self.assertRaisesRegex(
+            RemoteCaptureError,
+            "bound into the Publications Ontario URL",
+        ):
             validate_target_registry(path)
 
     def test_dcp_structured_source_remains_under_government_host_policy(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][2].update(
+        def mutate(payload):
+            self.target(payload, "ontario-language-grades-1-8-2023").update(
                 {
                     "download_url": "https://example.com/language",
                     "allowed_hosts": ["example.com"],
                 }
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "non-Ontario-government host"):
             validate_target_registry(path)
 
     def test_source_locator_must_already_exist_in_effective_discovery(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][0].update(
-                {"source_locator": "https://www.ontario.ca/not-recorded"}
-            )
-        )
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-health-physical-education-grades-1-8-2019",
+            ).update({"source_locator": "https://www.ontario.ca/not-recorded"})
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "recorded in C0 discovery"):
             validate_target_registry(path)
 
@@ -132,27 +172,49 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
         )
 
-    def test_remote_capture_cannot_preapprove_redistribution(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][0].update(
-                {"redistribution_status": "redistributable-reviewed"}
-            )
+    def test_kindergarten_locator_is_resolved_by_append_only_discovery_amendment(self):
+        targets = validate_target_registry()
+        kindergarten = targets["ontario-kindergarten-2026"]
+        self.assertEqual(
+            kindergarten["download_url"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
         )
+        self.assertEqual(
+            kindergarten["publication_catalog_url"],
+            "https://www.publications.gov.on.ca/CL34638",
+        )
+
+    def test_remote_capture_cannot_preapprove_redistribution(self):
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-health-physical-education-grades-1-8-2019",
+            ).update({"redistribution_status": "redistributable-reviewed"})
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "cannot pre-approve redistribution"):
             validate_target_registry(path)
 
     def test_oversized_capture_limit_is_rejected(self):
-        path = self.mutation(
-            lambda payload: payload["targets"][0].update(
-                {"maximum_bytes": 300 * 1024 * 1024}
-            )
-        )
+        def mutate(payload):
+            self.target(
+                payload,
+                "ontario-health-physical-education-grades-1-8-2019",
+            ).update({"maximum_bytes": 300 * 1024 * 1024})
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(RemoteCaptureError, "safe range"):
             validate_target_registry(path)
 
     def test_duplicate_source_target_is_rejected(self):
         def duplicate(payload):
-            payload["targets"].append(dict(payload["targets"][0]))
+            target = dict(
+                self.target(
+                    payload,
+                    "ontario-health-physical-education-grades-1-8-2019",
+                )
+            )
+            payload["targets"].append(target)
 
         path = self.mutation(duplicate)
         with self.assertRaisesRegex(RemoteCaptureError, "duplicate capture target"):
