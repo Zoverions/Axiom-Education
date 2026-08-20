@@ -164,9 +164,7 @@ void main() {
         return _successResponse();
       },
       tokenProvider: () => 'memory-only-token',
-      compatibilityProfile: _profile(
-        gatewayIntentsSubmitSeamSha256: '0' * 64,
-      ),
+      compatibilityProfile: _profile(gatewayIntentsSubmitSeamSha256: '0' * 64),
     );
     final container = ProviderContainer(
       overrides: [
