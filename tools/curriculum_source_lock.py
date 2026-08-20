@@ -20,10 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.curriculum_source_additions import (  # noqa: E402
-    SourceAdditionError,
-    load_augmented_discovery,
+from tools.curriculum_source_addition_amendments import (  # noqa: E402
+    SourceAdditionAmendmentError,
+    load_composed_discovery,
 )
+from tools.curriculum_source_additions import SourceAdditionError  # noqa: E402
 from tools.curriculum_source_discovery import SourceDiscoveryError  # noqa: E402
 from tools.json_schema_validation import (  # noqa: E402
     RepositoryJsonSchemaError,
@@ -84,8 +85,12 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def load_discovery(path: Path) -> dict[str, Any]:
     try:
-        return load_augmented_discovery(path)
-    except (SourceAdditionError, SourceDiscoveryError) as error:
+        return load_composed_discovery(path)
+    except (
+        SourceAdditionAmendmentError,
+        SourceAdditionError,
+        SourceDiscoveryError,
+    ) as error:
         raise SourceLockError(str(error)) from error
 
 
