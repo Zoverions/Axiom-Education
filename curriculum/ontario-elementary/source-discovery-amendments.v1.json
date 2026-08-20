@@ -30,6 +30,38 @@
         "upstream_digest_status": "not-captured",
         "review_status": "source-locator-confirmed-bytes-pending"
       }
+    },
+    {
+      "amendment_id": "ontario-kindergarten-2026-current-dcp-route-20260820",
+      "source_id": "ontario-kindergarten-2026",
+      "prior_source_entry_sha256": "a59001b6d59c5511536f0419b04bf5b06da2566ee9ed2253de49a9769954b88d",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.ontario.ca/page/kindergarten",
+          "classification": "official-effective-date-confirmation"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/CL34638",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+        "overview_url": "https://www.ontario.ca/page/kindergarten",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/CL34638",
+        "publication_number": "CL34638",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Ontario Curriculum and Resources portal now resolves Kindergarten 2026 at the current DCP route. Ontario's Kindergarten overview confirms the 2026 curriculum replaces the 2016 program beginning in the 2026-27 school year, and Publications Ontario lists the English Kindergarten 2026 extract as publication CL34638. Exact current curriculum response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
     }
   ]
 }
