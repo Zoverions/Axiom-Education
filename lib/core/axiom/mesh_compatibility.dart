@@ -13,7 +13,9 @@ class AxiomMeshCompatibilityProfile {
   static const currentGatewayContractCanonicalSha256 =
       '77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd';
   static const currentGatewayCompatibilityMode =
-      'pinned-v1-intents-submit-seam-with-additive-read-route-tolerance';
+      'semantic-intents-submit-seam-with-additive-route-tolerance';
+  static const currentGatewayIntentsSubmitSeamSha256 =
+      'f595c1274eb98b7bcea33d72756120c491049e056cd0c9b3dd8dfd2d63d34f01';
   static const currentAuthorityPath = <String>[
     'Gateway',
     'Hypervisor',
@@ -23,23 +25,24 @@ class AxiomMeshCompatibilityProfile {
   static const currentRequiredContractSha256 = <String, String>{
     'axiom.education.v1':
         'a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2',
-    'axiom-gateway-client-contract.v1':
-        '1d639b06adcf046ff19dab096a9b92134cbaaba8367c2331c10bc37a3c826949',
-    'axiom-gateway-client-contract.schema.v1':
-        'bae7fad4b6e6cc5e0181ebb799f13fac3b797dcfd6f9c00c4f3b23339a5413b2',
-    'axiom.agent-runtime-adapter.v1':
-        '4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c',
     'axiom.education.learner-memory.v1':
         '3763a28919d36721467160ef772e30da1d5a536a8733fd88b65f2c60c9107d78',
   };
 
   final String profileId;
   final String kernelVersion;
+
+  /// Observed Mesh main head for provenance. This is not a runtime authority
+  /// pin because unrelated additive Mesh work must not invalidate Education.
   final String baselineHead;
   final String providerHead;
+
+  /// Observed full Gateway contract provenance. Runtime compatibility is
+  /// instead bound to [gatewayIntentsSubmitSeamSha256].
   final String gatewayContractSourceHead;
   final String gatewayContractCanonicalSha256;
   final String gatewayCompatibilityMode;
+  final String gatewayIntentsSubmitSeamSha256;
   final List<String> authorityPath;
   final Map<String, String> requiredContractSha256;
   final bool nativeLearnerSelfWrite;
@@ -66,6 +69,7 @@ class AxiomMeshCompatibilityProfile {
     required this.gatewayContractSourceHead,
     required this.gatewayContractCanonicalSha256,
     required this.gatewayCompatibilityMode,
+    required this.gatewayIntentsSubmitSeamSha256,
     required this.authorityPath,
     required this.requiredContractSha256,
     required this.nativeLearnerSelfWrite,
@@ -93,6 +97,7 @@ class AxiomMeshCompatibilityProfile {
       gatewayContractSourceHead = currentGatewayContractSourceHead,
       gatewayContractCanonicalSha256 = currentGatewayContractCanonicalSha256,
       gatewayCompatibilityMode = currentGatewayCompatibilityMode,
+      gatewayIntentsSubmitSeamSha256 = currentGatewayIntentsSubmitSeamSha256,
       authorityPath = currentAuthorityPath,
       requiredContractSha256 = currentRequiredContractSha256,
       nativeLearnerSelfWrite = true,
@@ -115,15 +120,13 @@ class AxiomMeshCompatibilityProfile {
   String? bindingRejectionReason() {
     if (profileId != currentProfileId ||
         kernelVersion != currentKernelVersion ||
-        baselineHead != currentBaselineHead ||
         providerHead != currentProviderHead) {
-      return 'Mesh baseline or provider source pin does not match this build.';
+      return 'Mesh profile, kernel, or provider source pin does not match this build.';
     }
-    if (gatewayContractSourceHead != currentGatewayContractSourceHead ||
-        gatewayContractCanonicalSha256 !=
-            currentGatewayContractCanonicalSha256 ||
-        gatewayCompatibilityMode != currentGatewayCompatibilityMode) {
-      return 'Current Gateway compatibility observation does not match this build.';
+    if (gatewayCompatibilityMode != currentGatewayCompatibilityMode ||
+        gatewayIntentsSubmitSeamSha256 !=
+            currentGatewayIntentsSubmitSeamSha256) {
+      return 'Gateway intents.submit semantic seam does not match this build.';
     }
     if (!_sameList(authorityPath, currentAuthorityPath)) {
       return 'Mesh authority path must remain Gateway -> Hypervisor -> Sandbox -> Grid.';
