@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Derive Ontario Elementary readiness from immutable evidence layers.
 
-C0 discovery, C1 exact-byte snapshots, source-surface monitoring, and canonical C2
-records remain separate evidence. This tool composes them without rewriting older
-provenance or treating transport repeatability as curriculum truth.
+C0 discovery, append-only source additions, C1 exact-byte snapshots, source-surface
+monitoring, and canonical C2 records remain separate evidence. This tool composes them
+without rewriting older provenance or treating transport repeatability as curriculum truth.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DISCOVERY_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
+SOURCE_ADDITIONS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-additions.v1.json"
 LOCK_DIR = ROOT / "curriculum" / "ontario-elementary" / "source-locks"
 RECORD_DIR = ROOT / "curriculum" / "ontario-elementary" / "records-v2"
 CAPTURE_TARGETS_PATH = ROOT / "curriculum" / "ontario-elementary" / "source-capture-targets.v1.json"
@@ -284,16 +285,17 @@ def build_readiness() -> dict[str, Any]:
         "scope": discovery["scope"],
         "derived_from": {
             "discovery_path": DISCOVERY_PATH.relative_to(ROOT).as_posix(),
+            "source_additions": SOURCE_ADDITIONS_PATH.relative_to(ROOT).as_posix(),
             "source_lock_directory": LOCK_DIR.relative_to(ROOT).as_posix(),
             "canonical_c2_record_directory": RECORD_DIR.relative_to(ROOT).as_posix(),
             "capture_target_registry": CAPTURE_TARGETS_PATH.relative_to(ROOT).as_posix(),
             "source_monitoring_policy": MONITORING_PATH.relative_to(ROOT).as_posix(),
         },
         "claim_boundary": (
-            "This is a derived readiness view over immutable C0 discovery and later evidence. "
+            "This is a derived readiness view over immutable historical C0 discovery, append-only source additions, and later evidence. "
             "C1 is historical exact-byte capture evidence. Strict recapture stability is a separate transport/source-surface property. "
             "An observational DCP response surface does not invalidate its historical C1 snapshot and does not prove semantic curriculum change. "
-            "Neither C1 nor canonical C2 records alone prove human source review, licensing, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
+            "Neither C0 source identity, C1, nor canonical C2 records alone prove human source review, licensing, complete program coverage, pack verification, staging, activation, or Ministry endorsement."
         ),
         "summary": {
             "confirmed_discovery_sources": len(sources),
