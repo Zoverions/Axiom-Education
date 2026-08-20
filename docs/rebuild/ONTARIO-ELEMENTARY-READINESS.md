@@ -31,9 +31,9 @@ A changed digest, length, media type, locator, or source binding on these source
 
 ### Observational DCP response surfaces
 
-Language 2023 and Science & Technology 2022 remain valid historical C1 snapshots, but their current DCP HTML routes have demonstrated transport/response volatility.
+Language 2023, Science & Technology 2022, and Kindergarten 2026 have valid historical C1 snapshots, but their current DCP HTML routes are treated as observational response surfaces rather than immutable source documents.
 
-Language produced two distinct exact-byte signatures across three successful requests in one hosted run. Science produced two byte-identical successful responses and one HTTP 404 in one hosted run.
+Language produced two distinct exact-byte signatures across three successful requests in one hosted run. Science produced two byte-identical successful responses and one HTTP 404 in one hosted run. For Kindergarten 2026, the bounded C1 capture and a separate three-request stability job in workflow run `32407467373` returned different SHA-256 signatures at the same byte length; the three stability requests were mutually identical.
 
 Those observations do **not** prove curriculum content changed. They block treating these HTML response surfaces as immutable document sources until a stable authoritative asset or separately reviewed canonicalization/availability strategy exists.
 
@@ -42,20 +42,21 @@ Those observations do **not** prove curriculum content changed. They block treat
 The verifier currently requires the truthful state:
 
 - 8 confirmed discovered source families;
-- 5 C1 snapshot sources;
+- 7 registered bounded capture targets;
+- 6 C1 snapshot sources;
 - 3 strict exact-byte monitored sources;
-- 2 observational DCP response surfaces;
+- 3 observational DCP response surfaces;
 - 0 canonical reviewed C2 records;
-- Kindergarten 2026 not C1-locked;
+- Kindergarten 2026 has a metadata-only C1 historical snapshot; source bytes are not retained and redistribution remains review-required;
 - English-language required program families with C1 source evidence: 5/8;
 - French-language required program families with C1 source evidence: 0/8;
-- known uncaptured sources remain Kindergarten, The Arts, and Social Studies/History/Geography;
+- known uncaptured discovered sources remain The Arts and Social Studies/History/Geography;
 - human source review incomplete;
 - licensing review incomplete;
 - deterministic full-pack verification incomplete;
 - governed activation unavailable.
 
-Five C1 snapshots must not be described as five-eighths product completion. Likewise, only three strict recapture sources must not be described as three-fifths curriculum truth. These are different evidence dimensions.
+Six C1 snapshots must not be described as six-eighths product completion. Likewise, three strict recapture sources must not be described as half of curriculum truth. These are different evidence dimensions, and Kindergarten is outside the Grades 1-8 required-program-family denominator used for the 5/8 English-language count.
 
 ## Fail-closed properties
 
