@@ -2,8 +2,8 @@
   "schema": "axiom-curriculum-source-discovery-additions.v1",
   "jurisdiction_id": "ca:on",
   "base_discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
-  "additions_version": "1.1.0",
-  "claim_boundary": "These append-only additions introduce newly resolved C0 source identities that were absent from the historical 2026-08-11 discovery ledger. They do not rewrite the historical ledger or its amendments, capture curriculum bytes, establish a source digest, approve redistribution, normalize curriculum records, complete human review, or promote any added source beyond C0 discovery.",
+  "additions_version": "1.2.0",
+  "claim_boundary": "These append-only additions introduce newly resolved C0 source identities that were absent from the historical 2026-08-11 discovery ledger. They do not rewrite the historical ledger or its amendments, capture curriculum bytes, establish a source digest, approve redistribution, normalize curriculum records, complete human review, or promote any added source beyond C0 discovery. Where one required program family has a primary curriculum plus a policy-required conditional alternative, both identities are preserved rather than collapsed into a synthetic document.",
   "additions": [
     {
       "addition_id": "ontario-french-schools-francais-2023-publication-20260820",
@@ -199,6 +199,95 @@
           "stream": "french_language_schools",
           "program_family": "history-and-geography-grades-7-8",
           "status": "source-discovered"
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-anglais-4-8-2006-ministry-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-english-grades-4-8-2006",
+        "subject_family": "french-language-schools-english",
+        "grades": [4, 5, 6, 7, 8],
+        "policy_version": "2006-revised",
+        "url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
+        "classification": "official-ministry-curriculum-pdf",
+        "source_locator_status": "official-ministry-curriculum-pdf-confirmed-bytes-pending",
+        "status_note": "The Ontario Ministry of Education's French elementary curriculum PDF is Le curriculum de l'Ontario de la 4e à la 8e année – Anglais, édition révisée, 2006. Current Ontario policy says English instruction in French-language elementary schools begins in this later elementary band rather than Grades 1-3. This is the primary English curriculum identity; exact bytes and digest remain uncaptured at C0.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "current-policy-and-ministry-source-confirmed-bytes-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
+          "classification": "official-ministry-curriculum-pdf"
+        },
+        {
+          "url": "https://edusourceontario.com/res/pc-4-8-anglais-2006",
+          "classification": "current-provincial-resource-catalogue"
+        },
+        {
+          "url": "https://www.ontario.ca/fr/document/les-ecoles-de-lontario-de-la-maternelle-et-du-jardin-denfants-la-12e-annee/programmes-apprentissage",
+          "classification": "current-provincial-program-policy"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "english",
+          "status": "source-discovered",
+          "role": "primary",
+          "coverage_mode": "primary-with-conditional-alternatives",
+          "applies_to_grades": [4, 5, 6, 7, 8]
+        }
+      ]
+    },
+    {
+      "addition_id": "ontario-french-schools-anglais-debutants-4-8-2013-publication-20260820",
+      "discovered_on": "2026-08-20",
+      "source": {
+        "source_id": "ontario-fr-english-beginners-grades-4-8-2013",
+        "subject_family": "french-language-schools-english-beginners",
+        "grades": [4, 5, 6, 7, 8],
+        "policy_version": "2013-revised",
+        "url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-4e-la-8e-anne-anglais-pour-dbutants-2013-rvis",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-4e-la-8e-anne-anglais-pour-dbutants-2013-rvis",
+        "publication_number": "232897_U",
+        "ministry_pdf_url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+        "classification": "official-publication-record",
+        "source_locator_status": "official-publication-record-and-ministry-pdf-confirmed-bytes-pending",
+        "status_note": "Publications Ontario identifies Le curriculum de l'Ontario de la 4e à la 8e année – Anglais pour débutants, 2013 révisé, publication 232897_U. Ontario policy requires this alternate program for students in French-language elementary schools who are not yet able to follow the regular English program. It is preserved as a conditional alternative rather than substituted for the regular Anglais curriculum.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "current-policy-and-publication-source-confirmed-bytes-pending"
+      },
+      "evidence": [
+        {
+          "url": "https://www.publications.gov.on.ca/fr/le-curriculum-de-lontario-de-la-4e-la-8e-anne-anglais-pour-dbutants-2013-rvis",
+          "classification": "official-publication-record"
+        },
+        {
+          "url": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+          "classification": "official-ministry-curriculum-pdf"
+        },
+        {
+          "url": "https://edusourceontario.com/res/pc-4-8-anglais-pour-debutants-2013",
+          "classification": "current-provincial-resource-catalogue"
+        },
+        {
+          "url": "https://www.ontario.ca/fr/document/les-ecoles-de-lontario-de-la-maternelle-et-du-jardin-denfants-la-12e-annee/programmes-apprentissage",
+          "classification": "current-provincial-program-policy"
+        }
+      ],
+      "coverage_bindings": [
+        {
+          "stream": "french_language_schools",
+          "program_family": "english",
+          "status": "source-discovered",
+          "role": "conditional-alternative",
+          "condition": "For students in French-language elementary schools who are not yet able to follow the regular Anglais program.",
+          "applies_to_grades": [4, 5, 6, 7, 8]
         }
       ]
     }
