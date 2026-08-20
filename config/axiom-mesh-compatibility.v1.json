@@ -1,46 +1,63 @@
 {
   "schema": "axiom-education-mesh-compatibility.v1",
   "profile_id": "axiom-education.mesh-0.12.0-dev.3-provider-v1",
-  "profile_version": "1.1.0",
+  "profile_version": "1.2.0",
   "verified_at": "2026-08-20",
   "claim_status": "contract-compatible-not-production-validated",
   "mesh_baseline": {
     "repository": "Zoverions/AXIOM-MESH",
     "branch": "main",
     "head_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
+    "head_role": "observed-provenance-not-runtime-binding",
     "kernel_version": "0.12.0-dev.3",
     "authority_path": ["Gateway", "Hypervisor", "Sandbox", "Grid"],
     "integration_mode": "released-artifact-pins-no-submodule",
     "gateway_contract_source_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
     "gateway_contract_canonical_sha256": "77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd",
-    "gateway_compatibility_mode": "pinned-v1-intents-submit-seam-with-additive-read-route-tolerance"
+    "gateway_compatibility_mode": "semantic-intents-submit-seam-with-additive-route-tolerance"
+  },
+  "gateway_intents_submit_seam": {
+    "schema": "axiom-gateway-intents-submit-seam.v1",
+    "sha256": "f595c1274eb98b7bcea33d72756120c491049e056cd0c9b3dd8dfd2d63d34f01",
+    "base_path": "/v1",
+    "boundary": {
+      "request_target": "same-origin-relative-path",
+      "authenticated_transport": "permission-restricted-gateway-ingress",
+      "direct_internal_service_access": false,
+      "token_persistence": "caller-managed-memory-only"
+    },
+    "limits": {
+      "default_timeout_ms": 10000,
+      "maximum_timeout_ms": 30000,
+      "maximum_request_bytes": 1048576,
+      "maximum_response_bytes": 2097152,
+      "idempotency_key_minimum_length": 16,
+      "idempotency_key_maximum_length": 160
+    },
+    "error_contract": {
+      "schema": "axiom-gateway-error.v1",
+      "trace_header": "x-trace-id",
+      "unknown_code_behavior": "preserve-and-present-generic-failure"
+    },
+    "route": {
+      "id": "intents.submit",
+      "method": "POST",
+      "path": "/v1/intents",
+      "access": "authenticated",
+      "idempotency": "required",
+      "path_parameters": [],
+      "query_parameters": [],
+      "request_schema": "axiom-intent-request.v1",
+      "response_schema": "axiom-intent-result.v1",
+      "required_response_fields": ["intent_id", "trace_id", "status", "evidence"],
+      "response_media_type": "application/json"
+    }
   },
   "required_runtime_contracts": [
     {
       "id": "axiom.education.v1",
       "path": "mesh/config/domain-contracts/education.v1.json",
       "sha256": "a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2",
-      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
-      "status": "required-runtime-pin"
-    },
-    {
-      "id": "axiom-gateway-client-contract.v1",
-      "path": "mesh/config/gateway-client-contract.json",
-      "sha256": "1d639b06adcf046ff19dab096a9b92134cbaaba8367c2331c10bc37a3c826949",
-      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
-      "status": "required-runtime-pin"
-    },
-    {
-      "id": "axiom-gateway-client-contract.schema.v1",
-      "path": "mesh/config/gateway-client-contract.schema.json",
-      "sha256": "bae7fad4b6e6cc5e0181ebb799f13fac3b797dcfd6f9c00c4f3b23339a5413b2",
-      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
-      "status": "required-runtime-pin"
-    },
-    {
-      "id": "axiom.agent-runtime-adapter.v1",
-      "path": "docs/architecture/contracts/agent-runtime-adapter.v1.schema.json",
-      "sha256": "4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c",
       "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
       "status": "required-runtime-pin"
     },
@@ -53,6 +70,13 @@
     }
   ],
   "readiness_only_contracts": [
+    {
+      "id": "axiom.agent-runtime-adapter.v1",
+      "path": "docs/architecture/contracts/agent-runtime-adapter.v1.schema.json",
+      "sha256": "4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    },
     {
       "id": "axiom.runtime-capsule.v1",
       "path": "docs/architecture/contracts/agent-runtime-capsule.v1.schema.json",
