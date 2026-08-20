@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-social-studies-history-geography",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "f41dca20f9a7c6d12dacbb7690b04df3c29d668c473310bfb17ede00a9ada212",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T20:38:37.710237Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+  "media_type": "text/html",
+  "byte_length": 6459317,
+  "sha256": "4ee674342675e622856521a021b5e66ea99189ea4d60a1452145dd529b0b0e9e",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 8f1ac8dd5c6b8bb69d519a5d1172ebb6a5173fda5110bf04db848d5117910d77. GitHub run 32415167619 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution. Deliberately promoted as a historical C1 snapshot after review of the companion three-request stability artifact; all four hosted captures matched exactly, but the live HTML route remains observational rather than a strict document source."
+}
