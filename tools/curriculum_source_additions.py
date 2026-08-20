@@ -16,10 +16,15 @@ from copy import deepcopy
 from datetime import date
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DISCOVERY = ROOT / "curriculum" / "ontario-elementary" / "source-discovery.v0.json"
 DEFAULT_ADDITIONS = ROOT / "curriculum" / "ontario-elementary" / "source-discovery-additions.v1.json"
+
+PUBLICATIONS_HOST = "www.publications.gov.on.ca"
+DCP_HOST = "www.dcp.edu.gov.on.ca"
+DCP_FRENCH_CURRICULUM_PREFIX = "/fr/curriculum/"
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -67,7 +72,12 @@ def _validate_https(value: object, message: str) -> str:
     return value
 
 
-def _validate_source(source: dict[str, Any], addition_id: str) -> str:
+def _host_and_path(url: str) -> tuple[str, str]:
+    parsed = urlparse(url)
+    return parsed.netloc.casefold(), parsed.path
+
+
+def _validate_source(source: dict[str, Any], addition_id: str) -> tuple[str, str]:
     source_id = source.get("source_id")
     require(isinstance(source_id, str) and source_id, f"{addition_id}: source_id is required")
     require(
@@ -80,24 +90,56 @@ def _validate_source(source: dict[str, Any], addition_id: str) -> str:
         isinstance(source.get("policy_version"), str) and source["policy_version"],
         f"{source_id}: policy_version is required",
     )
-    source_url = _validate_https(source.get("url"), f"{source_id}: official source URL must use HTTPS")
-    publication_url = _validate_https(
-        source.get("publication_catalog_url"),
-        f"{source_id}: publication catalogue URL must use HTTPS",
+    source_url = _validate_https(
+        source.get("url"),
+        f"{source_id}: official source URL must use HTTPS",
     )
+    source_host, source_path = _host_and_path(source_url)
+
+    classification = source.get("classification")
     require(
-        "publications.gov.on.ca" in publication_url,
-        f"{source_id}: initial French-school additions require Publications Ontario provenance",
-    )
-    publication_number = source.get("publication_number")
-    require(
-        isinstance(publication_number, str) and publication_number,
-        f"{source_id}: publication_number is required",
-    )
-    require(
-        isinstance(source.get("classification"), str) and source["classification"],
+        isinstance(classification, str) and classification,
         f"{source_id}: classification is required",
     )
+
+    publication_url = source.get("publication_catalog_url")
+    publication_number = source.get("publication_number")
+    if publication_url is not None or publication_number is not None:
+        publication_url = _validate_https(
+            publication_url,
+            f"{source_id}: publication catalogue URL must use HTTPS",
+        )
+        publication_host, _ = _host_and_path(publication_url)
+        require(
+            publication_host == PUBLICATIONS_HOST,
+            f"{source_id}: publication provenance must use Publications Ontario",
+        )
+        require(
+            isinstance(publication_number, str) and publication_number,
+            f"{source_id}: publication_number is required when publication provenance is used",
+        )
+        require(
+            source_url == publication_url
+            or (
+                source_host == DCP_HOST
+                and source_path.startswith(DCP_FRENCH_CURRICULUM_PREFIX)
+            ),
+            f"{source_id}: publication-backed source URL must be its publication record or an exact French DCP curriculum route",
+        )
+        provenance_mode = "publications-ontario"
+    else:
+        require(
+            classification == "official-current-dcp-curriculum-route",
+            f"{source_id}: DCP-only addition must use the official-current-dcp-curriculum-route classification",
+        )
+        require(
+            source_host == DCP_HOST
+            and source_path.startswith(DCP_FRENCH_CURRICULUM_PREFIX)
+            and source_path != DCP_FRENCH_CURRICULUM_PREFIX.rstrip("/"),
+            f"{source_id}: DCP-only addition must use a French Ontario curriculum route",
+        )
+        provenance_mode = "ontario-dcp-route"
+
     require(
         isinstance(source.get("source_locator_status"), str)
         and source["source_locator_status"],
@@ -119,11 +161,7 @@ def _validate_source(source: dict[str, Any], addition_id: str) -> str:
         isinstance(source.get("review_status"), str) and source["review_status"],
         f"{source_id}: review_status is required",
     )
-    require(
-        source_url == publication_url or source_url.startswith("https://www.dcp.edu.gov.on.ca/"),
-        f"{source_id}: source URL must be its official publication record or DCP route",
-    )
-    return source_id
+    return source_id, provenance_mode
 
 
 def apply_additions(
@@ -175,11 +213,13 @@ def apply_additions(
         try:
             date.fromisoformat(discovered_on)
         except ValueError as error:
-            raise SourceAdditionError(f"{addition_id}: discovered_on must be YYYY-MM-DD") from error
+            raise SourceAdditionError(
+                f"{addition_id}: discovered_on must be YYYY-MM-DD"
+            ) from error
 
         source = row.get("source")
         require(isinstance(source, dict), f"{addition_id}: source must be an object")
-        source_id = _validate_source(source, addition_id)
+        source_id, provenance_mode = _validate_source(source, addition_id)
         require(
             source_id not in index,
             f"{addition_id}: source_id already exists and must use the amendment chain instead: {source_id}",
@@ -189,22 +229,42 @@ def apply_additions(
         require(isinstance(evidence, list) and evidence, f"{source_id}: evidence is required")
         evidence_urls: set[str] = set()
         for item in evidence:
-            require(isinstance(item, dict), f"{source_id}: evidence item must be an object")
-            url = _validate_https(item.get("url"), f"{source_id}: evidence URL must use HTTPS")
+            require(
+                isinstance(item, dict),
+                f"{source_id}: evidence item must be an object",
+            )
+            url = _validate_https(
+                item.get("url"),
+                f"{source_id}: evidence URL must use HTTPS",
+            )
             evidence_urls.add(url)
             require(
-                isinstance(item.get("classification"), str) and item["classification"],
+                isinstance(item.get("classification"), str)
+                and item["classification"],
                 f"{source_id}: evidence classification is required",
             )
-        require(
-            source["publication_catalog_url"] in evidence_urls,
-            f"{source_id}: publication catalogue must be present in evidence",
-        )
+
+        if provenance_mode == "publications-ontario":
+            require(
+                source["publication_catalog_url"] in evidence_urls,
+                f"{source_id}: publication catalogue must be present in evidence",
+            )
+        else:
+            require(
+                source["url"] in evidence_urls,
+                f"{source_id}: exact DCP curriculum route must be present in evidence",
+            )
 
         bindings = row.get("coverage_bindings")
-        require(isinstance(bindings, list) and bindings, f"{source_id}: coverage binding is required")
+        require(
+            isinstance(bindings, list) and bindings,
+            f"{source_id}: coverage binding is required",
+        )
         for binding in bindings:
-            require(isinstance(binding, dict), f"{source_id}: coverage binding must be an object")
+            require(
+                isinstance(binding, dict),
+                f"{source_id}: coverage binding must be an object",
+            )
             stream = binding.get("stream")
             family = binding.get("program_family")
             require(
@@ -213,17 +273,29 @@ def apply_additions(
             )
             required_families = required.get(stream)
             stream_accounting = accounting.get(stream)
-            require(isinstance(required_families, list), f"{stream}: required families missing")
-            require(isinstance(stream_accounting, dict), f"{stream}: coverage accounting missing")
+            require(
+                isinstance(required_families, list),
+                f"{stream}: required families missing",
+            )
+            require(
+                isinstance(stream_accounting, dict),
+                f"{stream}: coverage accounting missing",
+            )
             require(
                 isinstance(family, str) and family in required_families,
                 f"{source_id}: coverage binding is not a required program family",
             )
             pair = (stream, family)
-            require(pair not in bound_pairs, f"duplicate source-addition coverage binding: {stream}/{family}")
+            require(
+                pair not in bound_pairs,
+                f"duplicate source-addition coverage binding: {stream}/{family}",
+            )
             bound_pairs.add(pair)
             current = stream_accounting.get(family)
-            require(isinstance(current, dict), f"{stream}/{family}: accounting row missing")
+            require(
+                isinstance(current, dict),
+                f"{stream}/{family}: accounting row missing",
+            )
             require(
                 current.get("source_id") is None,
                 f"{stream}/{family}: existing source binding cannot be overwritten by an addition",
