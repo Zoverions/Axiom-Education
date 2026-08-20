@@ -44,6 +44,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-science-technology-grades-1-8-2022",
                 "ontario-fsl-grades-1-8-2013",
                 "ontario-arts-grades-1-8-2009",
+                "ontario-social-studies-history-geography",
             },
         )
         kindergarten = targets["ontario-kindergarten-2026"]
@@ -53,6 +54,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         science = targets["ontario-science-technology-grades-1-8-2022"]
         fsl = targets["ontario-fsl-grades-1-8-2013"]
         arts = targets["ontario-arts-grades-1-8-2009"]
+        sshg = targets["ontario-social-studies-history-geography"]
         self.assertEqual(kindergarten["publication_number"], "CL34638")
         self.assertEqual(kindergarten["host_policy"], "ontario-government")
         self.assertEqual(kindergarten["expected_media_type"], "text/html")
@@ -81,6 +83,18 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             arts["source_resolution_status"],
             "official-current-structured-source-resolved-pending-c1",
         )
+        self.assertEqual(sshg["host_policy"], "ontario-government")
+        self.assertEqual(sshg["expected_media_type"], "text/html")
+        self.assertEqual(
+            sshg["source_locator"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+        )
+        self.assertEqual(
+            sshg["source_resolution_status"],
+            "official-current-structured-source-resolved-pending-c1",
+        )
+        self.assertNotIn("publication_number", sshg)
+        self.assertNotIn("publication_catalog_url", sshg)
         self.assertTrue(
             all(
                 target["redistribution_status"] == "review-required"
@@ -182,6 +196,14 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         self.assertEqual(
             kindergarten["publication_catalog_url"],
             "https://www.publications.gov.on.ca/CL34638",
+        )
+
+    def test_sshg_locator_is_resolved_by_append_only_discovery_amendment(self):
+        targets = validate_target_registry()
+        sshg = targets["ontario-social-studies-history-geography"]
+        self.assertEqual(
+            sshg["download_url"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
         )
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
