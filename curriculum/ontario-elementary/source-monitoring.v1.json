@@ -75,6 +75,23 @@
         "workflow_run_id": 32407467373
       },
       "promotion_blocker": "Keep the DCP Kindergarten route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-social-studies-history-geography",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded C1 capture and the separate three-request stability job in workflow run 32411047398 returned different SHA-256 signatures at the same byte length. All three stability requests were mutually identical, so the evidence supports a historical C1 snapshot while demonstrating cross-job DCP response-surface volatility rather than a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297332,
+        "c1_capture_sha256": "5c003403051f9bba75ad5475c7bd21f93cf07488def91bf2e1722b1d06500176",
+        "three_request_stability_sha256": "6ac0fc3f002a8ea80d8b5bbeb158f7ddfa44950e036f7c0bff2206c48222eb98",
+        "workflow_run_id": 32411047398
+      },
+      "promotion_blocker": "Keep the current DCP SSHG route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
     }
   ]
 }
