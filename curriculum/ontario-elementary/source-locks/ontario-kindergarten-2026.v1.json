@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-kindergarten-2026",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "2478300fca9258fd8c32d3605e3be6f2018254868b1e3821e8bafa18f68f7b07",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T19:13:33.921488Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+  "media_type": "text/html",
+  "byte_length": 6297329,
+  "sha256": "0a46bc1bd2d5791f32074c5254eff0f0ec2942d1b10c3083a8c0fcf1be4557ea",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 3587403e6ca5797e9e2543319c45f6055bc3ea466ab1185be30d9e14575ae03e. GitHub run 32407467373 attempt 1. Downloaded source bytes were discarded after hashing; this lock does not approve redistribution. A separate same-run three-request stability job returned one repeated but different exact-byte signature, so the live DCP response surface remains observational rather than a strict exact-byte drift source."
+}
