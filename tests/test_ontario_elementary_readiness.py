@@ -39,6 +39,14 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(summary["blocked_source_reviews"], 0)
         self.assertEqual(summary["unreviewed_source_reviews"], 16)
         self.assertFalse(summary["human_source_review_complete"])
+        self.assertEqual(summary["licensing_review_targets"], 16)
+        self.assertEqual(summary["submitted_licensing_reviews"], 0)
+        self.assertEqual(summary["resolved_licensing_reviews"], 0)
+        self.assertEqual(summary["unresolved_licensing_reviews"], 16)
+        self.assertEqual(summary["verbatim_redistribution_permitted_sources"], 0)
+        self.assertEqual(summary["reference_only_use_permitted_sources"], 0)
+        self.assertEqual(summary["external_reference_only_sources"], 0)
+        self.assertEqual(summary["prohibited_licensing_sources"], 0)
         self.assertFalse(summary["licensing_review_complete"])
         self.assertFalse(summary["deterministic_full_pack_verified"])
         self.assertFalse(summary["governed_activation_available"])
@@ -248,7 +256,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
 
     def test_complete_source_capture_cannot_promote_other_downstream_gates(self) -> None:
         for field, message in (
-            ("licensing_review_complete", "licensing completion"),
+            ("licensing_review_complete", "licensing-review completion"),
             ("deterministic_full_pack_verified", "full-pack verification"),
             ("governed_activation_available", "governed activation"),
         ):
