@@ -62,6 +62,43 @@
         "upstream_digest_status": "not-captured",
         "review_status": "source-locator-confirmed-bytes-pending"
       }
+    },
+    {
+      "amendment_id": "ontario-sshg-current-dcp-route-20260820",
+      "source_id": "ontario-social-studies-history-geography",
+      "prior_source_entry_sha256": "1259ce3379e69edae3d366e821794b912002efcc99017a39a27e3e8bef72888b",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+          "classification": "official-publication-record"
+        },
+        {
+          "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/mandatory-professional-activity-days",
+          "classification": "official-2026-curriculum-update-confirmation"
+        },
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/sshg-webinars",
+          "classification": "official-revision-implementation-support"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+        "publication_number": "233531",
+        "classification": "official-current-curriculum-portal",
+        "policy_version": "2018-revised-with-2026-history-updates",
+        "effective_context": "2026-2027 school year",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Curriculum and Resources portal now resolves the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 curriculum at the elementary SSHG route. Publications Ontario retains the 2018 revised base publication as 233531. Ontario's 2026-27 mandatory professional-learning direction identifies new 2026 learning in Grades 7 and 8 History on Black history in Canada, so the current DCP route is the capture surface for the revised program. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
     }
   ]
 }
