@@ -35,6 +35,23 @@
       "semantic_change_claimed": false
     },
     {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Arts C1 capture and the separate three-request stability job in workflow run 32416994073 returned different SHA-256 signatures at the same 6,297,332-byte length. All three stability requests were mutually identical, so the evidence supports a historical C1 snapshot while demonstrating cross-job DCP HTML response-surface volatility rather than a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297332,
+        "c1_capture_sha256": "1307d903c60d047ecbb9ad49d6fd12b9c157480e7453072438227bc602064830",
+        "three_request_stability_sha256": "38a1da204bd84562de8d175f9499a51499cc403acbeaf593152a069fc8a5d98c",
+        "workflow_run_id": 32416994073
+      },
+      "promotion_blocker": "Keep the current Arts DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
       "source_id": "ontario-language-grades-1-8-2023",
       "monitoring_mode": "observational-response-surface",
       "reason": "The current DCP HTML route produced two distinct exact-byte signatures across three successful captures in one hosted run at the same byte length. This demonstrates response-surface byte volatility, not a curriculum-content change.",
