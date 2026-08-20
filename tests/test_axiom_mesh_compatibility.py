@@ -36,13 +36,38 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
         with self.assertRaisesRegex(MeshCompatibilityError, "baseline head"):
             verify(path)
 
-    def test_draft_feature_cannot_self_promote(self) -> None:
+    def test_current_gateway_observation_drift_is_rejected(self) -> None:
+        path = self.mutation(
+            lambda value: value["mesh_baseline"].update(
+                {"gateway_contract_canonical_sha256": "0" * 64}
+            )
+        )
+        with self.assertRaisesRegex(MeshCompatibilityError, "Gateway canonical"):
+            verify(path)
+
+    def test_pinned_runtime_source_does_not_follow_unrelated_mesh_head(self) -> None:
+        path = self.mutation(
+            lambda value: value["required_runtime_contracts"][0].update(
+                {"source_sha": value["mesh_baseline"]["head_sha"]}
+            )
+        )
+        with self.assertRaisesRegex(MeshCompatibilityError, "source SHA drifted"):
+            verify(path)
+
+    def test_observed_feature_cannot_self_promote(self) -> None:
         path = self.mutation(
             lambda value: value["observed_upcoming_drafts"][0].update(
                 {"runtime_adoption_allowed": True}
             )
         )
         with self.assertRaisesRegex(MeshCompatibilityError, "runtime_adoption_allowed"):
+            verify(path)
+
+    def test_merged_readiness_feature_still_cannot_promote(self) -> None:
+        path = self.mutation(
+            lambda value: value["feature_flags"].update({"assurance_graph": True})
+        )
+        with self.assertRaisesRegex(MeshCompatibilityError, "assurance_graph"):
             verify(path)
 
     def test_contract_path_drift_is_rejected(self) -> None:
@@ -63,13 +88,25 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
         with self.assertRaisesRegex(MeshCompatibilityError, "contract digests drifted"):
             verify(path)
 
+    def test_merged_observation_requires_exact_merge_sha(self) -> None:
+        path = self.mutation(
+            lambda value: value["observed_upcoming_drafts"][2].update(
+                {"merged_sha": "0" * 40}
+            )
+        )
+        with self.assertRaisesRegex(MeshCompatibilityError, "merged SHA drifted"):
+            verify(path)
+
     def test_direct_internal_service_access_is_rejected(self) -> None:
         path = self.mutation(
             lambda value: value["invariants"].update(
                 {"direct_internal_service_access_allowed": True}
             )
         )
-        with self.assertRaisesRegex(MeshCompatibilityError, "direct_internal_service_access_allowed"):
+        with self.assertRaisesRegex(
+            MeshCompatibilityError,
+            "direct_internal_service_access_allowed",
+        ):
             verify(path)
 
     def test_submodule_integration_mode_is_rejected(self) -> None:
