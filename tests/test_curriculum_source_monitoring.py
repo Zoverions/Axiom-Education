@@ -32,10 +32,20 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
-    def test_current_policy_accounts_for_five_locks_and_one_pending_target(self) -> None:
+    @staticmethod
+    def source(payload: dict[str, object], source_id: str) -> dict[str, object]:
+        rows = payload["sources"]
+        if not isinstance(rows, list):
+            raise AssertionError("monitoring sources must be a list")
+        for row in rows:
+            if isinstance(row, dict) and row.get("source_id") == source_id:
+                return row
+        raise AssertionError(f"missing monitoring source: {source_id}")
+
+    def test_current_policy_accounts_for_six_locks_and_one_pending_target(self) -> None:
         result = verify_policy()
-        self.assertEqual(result["sources"], 5)
-        self.assertEqual(result["capture_targets"], 6)
+        self.assertEqual(result["sources"], 6)
+        self.assertEqual(result["capture_targets"], 7)
         self.assertEqual(
             result["pending_capture_targets"],
             ["ontario-arts-grades-1-8-2009"],
@@ -51,40 +61,55 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         self.assertEqual(
             set(result["observational_response_surface"]),
             {
+                "ontario-kindergarten-2026",
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
             },
         )
 
     def test_monitoring_cannot_claim_semantic_curriculum_change(self) -> None:
-        path = self.mutation(
-            lambda payload: payload["sources"][3].update(
+        def mutate(payload):
+            self.source(payload, "ontario-language-grades-1-8-2023").update(
                 {"semantic_change_claimed": True}
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(SourceMonitoringError, "cannot claim semantic change"):
             verify_policy(path)
 
     def test_html_response_surface_cannot_be_promoted_to_strict_without_new_evidence(self) -> None:
-        path = self.mutation(
-            lambda payload: payload["sources"][3].update(
+        def mutate(payload):
+            self.source(payload, "ontario-kindergarten-2026").update(
                 {"monitoring_mode": "strict-exact-byte"}
             )
-        )
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(SourceMonitoringError, "requires document-like PDF"):
             verify_policy(path)
 
     def test_observational_source_requires_multi_attempt_evidence(self) -> None:
-        path = self.mutation(
-            lambda payload: payload["sources"][4]["observation"].update(
-                {"attempt_count": 1}
-            )
-        )
+        def mutate(payload):
+            observation = self.source(
+                payload,
+                "ontario-science-technology-grades-1-8-2022",
+            )["observation"]
+            if not isinstance(observation, dict):
+                raise AssertionError("observation must be an object")
+            observation.update({"attempt_count": 1})
+
+        path = self.mutation(mutate)
         with self.assertRaisesRegex(SourceMonitoringError, "multi-attempt observation"):
             verify_policy(path)
 
     def test_every_committed_lock_must_remain_accounted_for(self) -> None:
-        path = self.mutation(lambda payload: payload["sources"].pop())
+        def remove_kindergarten(payload):
+            payload["sources"] = [
+                source
+                for source in payload["sources"]
+                if source["source_id"] != "ontario-kindergarten-2026"
+            ]
+
+        path = self.mutation(remove_kindergarten)
         with self.assertRaisesRegex(SourceMonitoringError, "every committed C1 source"):
             verify_policy(path)
 
@@ -104,8 +129,8 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
             )
         )
         result = verify_policy(targets_path=path)
-        self.assertEqual(result["sources"], 5)
-        self.assertEqual(result["capture_targets"], 7)
+        self.assertEqual(result["sources"], 6)
+        self.assertEqual(result["capture_targets"], 8)
         self.assertEqual(
             result["pending_capture_targets"],
             [
