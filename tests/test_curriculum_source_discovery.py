@@ -124,7 +124,7 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
                 DEFAULT_DISCOVERY,
                 allow_empty=False,
             ),
-            5,
+            6,
         )
 
     def test_prior_digest_mismatch_rejects_amendment(self) -> None:
