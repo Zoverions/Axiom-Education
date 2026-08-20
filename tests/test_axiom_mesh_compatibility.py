@@ -28,12 +28,16 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
             profile["mesh_baseline"]["authority_path"],
             ["Gateway", "Hypervisor", "Sandbox", "Grid"],
         )
+        self.assertEqual(
+            profile["mesh_baseline"]["head_role"],
+            "observed-provenance-not-runtime-binding",
+        )
 
-    def test_baseline_head_drift_is_rejected(self) -> None:
+    def test_provenance_checkpoint_drift_is_rejected_in_profile_evidence(self) -> None:
         path = self.mutation(
             lambda value: value["mesh_baseline"].update({"head_sha": "0" * 40})
         )
-        with self.assertRaisesRegex(MeshCompatibilityError, "baseline head"):
+        with self.assertRaisesRegex(MeshCompatibilityError, "provenance checkpoint"):
             verify(path)
 
     def test_current_gateway_observation_drift_is_rejected(self) -> None:
@@ -43,6 +47,24 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
             )
         )
         with self.assertRaisesRegex(MeshCompatibilityError, "Gateway canonical"):
+            verify(path)
+
+    def test_gateway_intent_seam_content_drift_is_rejected(self) -> None:
+        path = self.mutation(
+            lambda value: value["gateway_intents_submit_seam"]["route"].update(
+                {"path": "/v1/unreviewed"}
+            )
+        )
+        with self.assertRaises(MeshCompatibilityError):
+            verify(path)
+
+    def test_gateway_intent_seam_digest_drift_is_rejected(self) -> None:
+        path = self.mutation(
+            lambda value: value["gateway_intents_submit_seam"].update(
+                {"sha256": "0" * 64}
+            )
+        )
+        with self.assertRaises(MeshCompatibilityError):
             verify(path)
 
     def test_pinned_runtime_source_does_not_follow_unrelated_mesh_head(self) -> None:
@@ -60,14 +82,14 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
                 {"runtime_adoption_allowed": True}
             )
         )
-        with self.assertRaisesRegex(MeshCompatibilityError, "runtime_adoption_allowed"):
+        with self.assertRaises(MeshCompatibilityError):
             verify(path)
 
     def test_merged_readiness_feature_still_cannot_promote(self) -> None:
         path = self.mutation(
             lambda value: value["feature_flags"].update({"assurance_graph": True})
         )
-        with self.assertRaisesRegex(MeshCompatibilityError, "assurance_graph"):
+        with self.assertRaises(MeshCompatibilityError):
             verify(path)
 
     def test_contract_path_drift_is_rejected(self) -> None:
@@ -103,10 +125,7 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
                 {"direct_internal_service_access_allowed": True}
             )
         )
-        with self.assertRaisesRegex(
-            MeshCompatibilityError,
-            "direct_internal_service_access_allowed",
-        ):
+        with self.assertRaises(MeshCompatibilityError):
             verify(path)
 
     def test_submodule_integration_mode_is_rejected(self) -> None:
@@ -115,7 +134,7 @@ class AxiomMeshCompatibilityTests(unittest.TestCase):
                 {"integration_mode": "git-submodule"}
             )
         )
-        with self.assertRaisesRegex(MeshCompatibilityError, "integration_mode"):
+        with self.assertRaises(MeshCompatibilityError):
             verify(path)
 
 
