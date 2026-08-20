@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-mathematics-grades-1-8-2020",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "5d28f26a2528f30dd95be9ba2d9d0b4b4697a999d24c8a98febd265084c3c085",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T21:50:40.266618Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+  "media_type": "text/html",
+  "byte_length": 6459278,
+  "sha256": "34aacca4b04d2b289d3b417b2eb27b3632c5b2a9dd9bfda3db96ed513868da6d",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted hosted capture from workflow run 32421398988. Candidate and all three stability probes were byte-identical. Source bytes were discarded after hashing; this historical C1 snapshot does not approve redistribution, normalization, review, staging, or activation."
+}
