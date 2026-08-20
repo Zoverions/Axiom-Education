@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-08-10",
+  "verified_at": "2026-08-20",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -62,7 +62,7 @@
       "id": "curriculum.ontario-data",
       "family": "curriculum",
       "status": "experimental",
-      "summary": "The current corpus deterministically produces 293 experimental records across 21 courses, but upstream official-document digests, licensing review, and course-by-course human verification remain incomplete; an official-source audit found known identifier conflicts in the preliminary MTH1W snapshot.",
+      "summary": "The current secondary corpus deterministically produces 293 experimental records across 21 courses, but broader upstream official-document digests, licensing review, and course-by-course human verification remain incomplete; an official-source audit found known identifier conflicts in the preliminary MTH1W snapshot.",
       "evidence": [
         "assets/curriculum/ontario_curriculum_full.json",
         "assets/curriculum/ontario_curriculum.sqlite",
@@ -70,6 +70,29 @@
         "config/curriculum-readiness.json",
         "docs/curriculum/MTH1W-SOURCE-AUDIT.md",
         "tools/check_curriculum_readiness.py"
+      ]
+    },
+    {
+      "id": "curriculum.ontario-elementary-evidence",
+      "family": "curriculum",
+      "status": "experimental",
+      "summary": "Ontario Elementary evidence infrastructure has 16/16 bounded metadata-only C1 source snapshots, 5 strict PDF and 11 observational HTML monitoring surfaces, deterministic human source-review and licensing-review targets, a reviewer dossier, and a fail-closed reference-only C2 intake gate. Human source approvals are 0/16, licensing decisions are 0/16, C2 eligibility is 0/16, and canonical C2 records remain 0.",
+      "evidence": [
+        "docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md",
+        "curriculum/ontario-elementary/source-locks",
+        "curriculum/ontario-elementary/source-monitoring.v1.json",
+        "curriculum/reviews/ontario-elementary/sources",
+        "curriculum/licensing/ontario-elementary/reviews",
+        "tools/ontario_elementary_readiness.py",
+        "tools/ontario_elementary_source_review.py",
+        "tools/ontario_elementary_licensing_review.py",
+        "tools/ontario_elementary_reviewer_dossier.py",
+        "tools/ontario_elementary_c2_intake.py",
+        "tests/test_ontario_elementary_readiness.py",
+        "tests/test_ontario_elementary_source_review.py",
+        "tests/test_ontario_elementary_licensing_review.py",
+        "tests/test_ontario_elementary_reviewer_dossier.py",
+        "tests/test_ontario_elementary_c2_intake.py"
       ]
     },
     {
@@ -180,7 +203,7 @@
       "id": "mesh.compatibility-profile",
       "family": "integration",
       "status": "experimental",
-      "summary": "A fail-closed compatibility profile pins AXIOM-MESH 0.12.0-dev.3, the Gateway to Hypervisor to Sandbox to Grid authority path, required contract digests, and the current learner self-write/self-read conformance front. A reviewed host must present the exact profile before the governed runtime can bind.",
+      "summary": "A fail-closed compatibility profile pins AXIOM-MESH 0.12.0-dev.3, exact Education and learner-memory contracts, the semantic Gateway intents.submit seam, and the Gateway to Hypervisor to Sandbox to Grid authority path. The observed Mesh head and full Gateway digest are provenance rather than runtime equality gates, and a reviewed host must present compatible Education semantics before the governed runtime can bind.",
       "evidence": [
         "config/axiom-mesh-compatibility.v1.json",
         "schemas/axiom-mesh-compatibility.v1.schema.json",
@@ -194,25 +217,25 @@
       "id": "mesh.personal-continuity",
       "family": "portability",
       "status": "specified",
-      "summary": "Runtime Capsule, Personal Agent Pack, Compute Node Profile, and Local Trust Envelope contracts are tracked for portable personal-compute continuity, but remain documentation-readiness inputs and grant no Axiom Education runtime authority."
+      "summary": "Runtime Capsule, Personal Agent Pack, Compute Node Profile, Local Trust Envelope, and Agent Runtime Adapter surfaces are tracked for portable personal-compute continuity, but remain readiness inputs and grant no Axiom Education runtime authority."
     },
     {
       "id": "mesh.delegated-authority",
       "family": "governance",
       "status": "specified",
-      "summary": "Delegated human authority and delegated consent are observed as exact-head AXIOM-MESH drafts. They cannot be enabled until merged, repinned, independently reviewed, and represented by a new compatibility profile."
+      "summary": "Delegated human authority and delegated consent remain observed AXIOM-MESH draft/non-production inputs. They cannot be enabled until merged or otherwise stabilized upstream, repinned, independently reviewed, and represented by a new Education compatibility profile."
     },
     {
       "id": "mesh.assurance-graph",
       "family": "evidence",
       "status": "specified",
-      "summary": "Assurance Graph and provider-observation work is tracked as non-authoritative AXIOM-MESH draft input. Axiom Education does not treat draft graph or observation records as approval, policy, consent, or execution authority."
+      "summary": "Assurance Graph and provider-observation foundations have merged into AXIOM-MESH but remain readiness-only for Axiom Education. Their Education adoption flags stay disabled, and graph or observation records are not treated as approval, policy, consent, or execution authority."
     },
     {
       "id": "mesh.axiom-host",
       "family": "hosting",
       "status": "specified",
-      "summary": "The upcoming AXIOM Host profile and checkout-source freshness work are observed for future host portability, while the current runtime accepts only a reviewed relative Gateway requester and exact compatibility profile."
+      "summary": "AXIOM Host remains a draft/non-production input while checkout-freshness foundations have merged upstream. Both remain non-authoritative for Education until an explicit reviewed adoption profile and executable evidence exist; the current runtime accepts only the reviewed relative Gateway requester and compatibility profile."
     },
     {
       "id": "tutor.local-inference",
@@ -315,6 +338,7 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
+    "Ontario Elementary base source capture is complete for the current 16-source set, but human source review is 0/16 approved, licensing is 0/16 resolved, C2 intake eligibility is 0/16, and canonical C2 records remain 0; none of those later claims may be inferred from C1 capture.",
     "The current four-lesson Grade 9 Math Foundations Preview and the nine source-mapped authored unit drafts are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
     "The 110-hour MTH1W value is a planning envelope: authored primary lessons total 63.75 hours and leave 46.25 hours unallocated.",
     "Known conflicts remain in preliminary local MTH1W identifiers; the official inventory, complete blueprint, and authored lesson slots do not authorize a complete-course claim without educator/cultural review, licensing, reviewed course-wide evidence, cumulative assessment review, accessibility alternatives, governed progress, and educator workflows.",
@@ -324,7 +348,7 @@
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
     "A valid pack signature proves integrity and signer possession, not Ministry approval, curriculum correctness, licensing permission, or safe activation.",
     "The AXIOM education contract, compatibility profile, client, transport, and host binding do not enable a provider, learner-record store, or network authority by themselves.",
-    "Observed AXIOM-MESH delegated-authority, AXIOM Host, Assurance Graph, provider-observation, and checkout-freshness drafts are not current Axiom Education runtime capabilities.",
+    "Observed or merged AXIOM-MESH readiness surfaces do not become Axiom Education runtime capabilities without explicit reviewed adoption and compatible executable evidence.",
     "Installing an education capsule does not grant access to learner data."
   ]
 }
