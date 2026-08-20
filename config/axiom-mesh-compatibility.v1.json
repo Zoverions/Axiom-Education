@@ -1,16 +1,19 @@
 {
   "schema": "axiom-education-mesh-compatibility.v1",
   "profile_id": "axiom-education.mesh-0.12.0-dev.3-provider-v1",
-  "profile_version": "1.0.0",
-  "verified_at": "2026-08-13",
+  "profile_version": "1.1.0",
+  "verified_at": "2026-08-20",
   "claim_status": "contract-compatible-not-production-validated",
   "mesh_baseline": {
     "repository": "Zoverions/AXIOM-MESH",
     "branch": "main",
-    "head_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+    "head_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
     "kernel_version": "0.12.0-dev.3",
     "authority_path": ["Gateway", "Hypervisor", "Sandbox", "Grid"],
-    "integration_mode": "released-artifact-pins-no-submodule"
+    "integration_mode": "released-artifact-pins-no-submodule",
+    "gateway_contract_source_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
+    "gateway_contract_canonical_sha256": "77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd",
+    "gateway_compatibility_mode": "pinned-v1-intents-submit-seam-with-additive-read-route-tolerance"
   },
   "required_runtime_contracts": [
     {
@@ -104,22 +107,25 @@
     {
       "feature_id": "assurance-graph-a0",
       "pull_request": 1057,
-      "head_sha": "af7118c6d6a8c81ea40246135009df84434f864a",
-      "status": "draft-not-production",
+      "head_sha": "ba67408f9e7495a8f23cf070105efcf619cd86d9",
+      "merged_sha": "488073e4f04d8a3ec54d4ba7cd4567063a93305f",
+      "status": "merged-readiness-only-not-adopted",
       "runtime_adoption_allowed": false
     },
     {
       "feature_id": "provider-observation",
       "pull_request": 1059,
-      "head_sha": "22cfc32ec593519a1fa954e6e34c2655caee9826",
-      "status": "draft-not-production",
+      "head_sha": "893968f1607e277a18271102d95b178d2dce7fd1",
+      "merged_sha": "0e3427e6197acf79104b1e30eaf8b01488055df8",
+      "status": "merged-readiness-only-not-adopted",
       "runtime_adoption_allowed": false
     },
     {
       "feature_id": "checkout-source-freshness",
       "pull_request": 1060,
-      "head_sha": "409e873ccf625fda701411bae111dee58da8e85d",
-      "status": "draft-not-production",
+      "head_sha": "7300e38d20ebcbb0963090e5a8a491eda5de6e45",
+      "merged_sha": "0b41429bb1bbb716089874b70cc57a5bb68ea527",
+      "status": "merged-readiness-only-not-adopted",
       "runtime_adoption_allowed": false
     }
   ],
