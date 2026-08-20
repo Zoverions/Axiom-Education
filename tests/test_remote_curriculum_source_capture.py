@@ -49,6 +49,10 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
                 "ontario-fr-social-studies-history-geography",
                 "ontario-fr-english-grades-4-8-2006",
                 "ontario-fr-english-beginners-grades-4-8-2013",
+                "ontario-fr-francais-grades-1-8-2023",
+                "ontario-fr-mathematics-grades-1-8-2020",
+                "ontario-fr-health-physical-education-grades-1-8-2019",
+                "ontario-fr-arts-grades-1-8-2009",
             },
         )
         kindergarten = targets["ontario-kindergarten-2026"]
@@ -65,6 +69,24 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         fr_english_beginners = targets[
             "ontario-fr-english-beginners-grades-4-8-2013"
         ]
+        pending_french = {
+            "ontario-fr-francais-grades-1-8-2023": (
+                "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-francais",
+                "CL33252",
+            ),
+            "ontario-fr-mathematics-grades-1-8-2020": (
+                "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+                "CL32239",
+            ),
+            "ontario-fr-health-physical-education-grades-1-8-2019": (
+                "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+                "022579",
+            ),
+            "ontario-fr-arts-grades-1-8-2009": (
+                "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+                "231943_U",
+            ),
+        }
         self.assertEqual(kindergarten["publication_number"], "CL34638")
         self.assertEqual(kindergarten["host_policy"], "ontario-government")
         self.assertEqual(kindergarten["expected_media_type"], "text/html")
@@ -95,7 +117,7 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         )
         self.assertEqual(
             arts["source_resolution_status"],
-            "official-current-structured-source-resolved-pending-c1",
+            "official-current-structured-source-resolved",
         )
         self.assertEqual(sshg["host_policy"], "ontario-government")
         self.assertEqual(sshg["expected_media_type"], "text/html")
@@ -146,14 +168,20 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
             fr_english_beginners["source_locator"],
             "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
         )
-        self.assertEqual(
-            fr_english_beginners["publication_number"],
-            "232897_U",
-        )
-        self.assertEqual(
-            fr_english_beginners["expected_media_type"],
-            "application/pdf",
-        )
+        self.assertEqual(fr_english_beginners["publication_number"], "232897_U")
+        self.assertEqual(fr_english_beginners["expected_media_type"], "application/pdf")
+        for source_id, (route, publication_number) in pending_french.items():
+            with self.subTest(source_id=source_id):
+                target = targets[source_id]
+                self.assertEqual(target["source_locator"], route)
+                self.assertEqual(target["download_url"], route)
+                self.assertEqual(target["publication_number"], publication_number)
+                self.assertEqual(target["host_policy"], "ontario-government")
+                self.assertEqual(target["expected_media_type"], "text/html")
+                self.assertEqual(
+                    target["source_resolution_status"],
+                    "official-current-structured-source-resolved-pending-c1",
+                )
         self.assertTrue(
             all(
                 target["redistribution_status"] == "review-required"
@@ -385,24 +413,21 @@ class RemoteCurriculumSourceCaptureTests(unittest.TestCase):
         )
         self.assertEqual(sshg["publication_number"], "233531")
 
-    def test_french_locators_are_resolved_by_append_only_source_additions(self):
+    def test_french_locators_are_resolved_by_append_only_source_layers(self):
         targets = validate_target_registry()
-        self.assertEqual(
-            targets["ontario-fr-science-technology-grades-1-8-2022"]["source_locator"],
-            "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
-        )
-        self.assertEqual(
-            targets["ontario-fr-social-studies-history-geography"]["source_locator"],
-            "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
-        )
-        self.assertEqual(
-            targets["ontario-fr-english-grades-4-8-2006"]["source_locator"],
-            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
-        )
-        self.assertEqual(
-            targets["ontario-fr-english-beginners-grades-4-8-2013"]["source_locator"],
-            "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
-        )
+        expected = {
+            "ontario-fr-science-technology-grades-1-8-2022": "https://www.dcp.edu.gov.on.ca/fr/curriculum/sciences-technologie",
+            "ontario-fr-social-studies-history-geography": "https://www.dcp.edu.gov.on.ca/fr/curriculum/etudes-sociales-histoire-geo",
+            "ontario-fr-english-grades-4-8-2006": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglais48currb.pdf",
+            "ontario-fr-english-beginners-grades-4-8-2013": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+            "ontario-fr-francais-grades-1-8-2023": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-francais",
+            "ontario-fr-mathematics-grades-1-8-2020": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-mathematiques",
+            "ontario-fr-health-physical-education-grades-1-8-2019": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+            "ontario-fr-arts-grades-1-8-2009": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+        }
+        for source_id, locator in expected.items():
+            with self.subTest(source_id=source_id):
+                self.assertEqual(targets[source_id]["source_locator"], locator)
 
     def test_remote_capture_cannot_preapprove_redistribution(self):
         def mutate(payload):
