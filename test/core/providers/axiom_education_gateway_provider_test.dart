@@ -27,6 +27,42 @@ AxiomGatewayRawResponse _successResponse() => AxiomGatewayRawResponse(
   ),
 );
 
+AxiomMeshCompatibilityProfile _profile({
+  String? baselineHead,
+  String? gatewayIntentsSubmitSeamSha256,
+}) {
+  const current = AxiomMeshCompatibilityProfile.current();
+  return AxiomMeshCompatibilityProfile(
+    profileId: current.profileId,
+    kernelVersion: current.kernelVersion,
+    baselineHead: baselineHead ?? current.baselineHead,
+    providerHead: current.providerHead,
+    gatewayContractSourceHead: current.gatewayContractSourceHead,
+    gatewayContractCanonicalSha256: current.gatewayContractCanonicalSha256,
+    gatewayCompatibilityMode: current.gatewayCompatibilityMode,
+    gatewayIntentsSubmitSeamSha256:
+        gatewayIntentsSubmitSeamSha256 ??
+        current.gatewayIntentsSubmitSeamSha256,
+    authorityPath: current.authorityPath,
+    requiredContractSha256: current.requiredContractSha256,
+    nativeLearnerSelfWrite: true,
+    nativeLearnerSelfRead: true,
+    delegatedHumanAuthority: false,
+    axiomHostProfile: false,
+    assuranceGraph: false,
+    providerObservation: false,
+    checkoutFreshness: false,
+    localTrustActivation: false,
+    releasedArtifactPinsWithoutSubmodule: true,
+    gatewayIsOnlyNetworkAuthorityEntry: true,
+    directInternalServiceAccessAllowed: false,
+    contractPresenceGrantsAuthority: false,
+    installationGrantsLearnerDataAccess: false,
+    draftsMayPromoteThemselves: false,
+    applicationOwnsKernelAuthority: false,
+  );
+}
+
 void main() {
   test(
     'default provider is explicitly unbound and creates no network path',
@@ -102,42 +138,35 @@ void main() {
     expect(runtimeType, isNot(contains('origin')));
   });
 
-  test('mismatched Mesh baseline fails closed before any request', () {
-    var requests = 0;
-    final current = const AxiomMeshCompatibilityProfile.current();
-    final incompatible = AxiomMeshCompatibilityProfile(
-      profileId: current.profileId,
-      kernelVersion: current.kernelVersion,
-      baselineHead: '0' * 40,
-      providerHead: current.providerHead,
-      gatewayContractSourceHead: current.gatewayContractSourceHead,
-      gatewayContractCanonicalSha256: current.gatewayContractCanonicalSha256,
-      gatewayCompatibilityMode: current.gatewayCompatibilityMode,
-      authorityPath: current.authorityPath,
-      requiredContractSha256: current.requiredContractSha256,
-      nativeLearnerSelfWrite: true,
-      nativeLearnerSelfRead: true,
-      delegatedHumanAuthority: false,
-      axiomHostProfile: false,
-      assuranceGraph: false,
-      providerObservation: false,
-      checkoutFreshness: false,
-      localTrustActivation: false,
-      releasedArtifactPinsWithoutSubmodule: true,
-      gatewayIsOnlyNetworkAuthorityEntry: true,
-      directInternalServiceAccessAllowed: false,
-      contractPresenceGrantsAuthority: false,
-      installationGrantsLearnerDataAccess: false,
-      draftsMayPromoteThemselves: false,
-      applicationOwnsKernelAuthority: false,
+  test('new unrelated Mesh provenance head does not break runtime binding', () {
+    final binding = AxiomEducationGatewayBinding(
+      requester: (path, request) async => _successResponse(),
+      tokenProvider: () => 'memory-only-token',
+      compatibilityProfile: _profile(baselineHead: '0' * 40),
     );
+    final container = ProviderContainer(
+      overrides: [
+        axiomEducationGatewayBindingProvider.overrideWithValue(binding),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    final state = container.read(governedEducationRuntimeProvider);
+    expect(state, isA<GovernedEducationRuntimeBound>());
+    expect(state.isBound, isTrue);
+  });
+
+  test('mismatched Gateway semantic seam fails closed before any request', () {
+    var requests = 0;
     final binding = AxiomEducationGatewayBinding(
       requester: (path, request) async {
         requests++;
         return _successResponse();
       },
       tokenProvider: () => 'memory-only-token',
-      compatibilityProfile: incompatible,
+      compatibilityProfile: _profile(
+        gatewayIntentsSubmitSeamSha256: '0' * 64,
+      ),
     );
     final container = ProviderContainer(
       overrides: [
@@ -150,7 +179,7 @@ void main() {
     expect(state, isA<GovernedEducationRuntimeUnbound>());
     expect(
       (state as GovernedEducationRuntimeUnbound).reason,
-      contains('baseline'),
+      contains('semantic seam'),
     );
     expect(requests, 0);
   });
