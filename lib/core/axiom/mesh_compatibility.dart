@@ -6,8 +6,16 @@ class AxiomMeshCompatibilityProfile {
   static const currentProfileId =
       'axiom-education.mesh-0.12.0-dev.3-provider-v1';
   static const currentKernelVersion = '0.12.0-dev.3';
-  static const currentBaselineHead = '4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c';
-  static const currentProviderHead = '2365bf5ed19e0da81288551b2bb4135a7094d02b';
+  static const currentBaselineHead =
+      'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
+  static const currentProviderHead =
+      '2365bf5ed19e0da81288551b2bb4135a7094d02b';
+  static const currentGatewayContractSourceHead =
+      'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
+  static const currentGatewayContractCanonicalSha256 =
+      '77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd';
+  static const currentGatewayCompatibilityMode =
+      'pinned-v1-intents-submit-seam-with-additive-read-route-tolerance';
   static const currentAuthorityPath = <String>[
     'Gateway',
     'Hypervisor',
@@ -31,6 +39,9 @@ class AxiomMeshCompatibilityProfile {
   final String kernelVersion;
   final String baselineHead;
   final String providerHead;
+  final String gatewayContractSourceHead;
+  final String gatewayContractCanonicalSha256;
+  final String gatewayCompatibilityMode;
   final List<String> authorityPath;
   final Map<String, String> requiredContractSha256;
   final bool nativeLearnerSelfWrite;
@@ -54,6 +65,9 @@ class AxiomMeshCompatibilityProfile {
     required this.kernelVersion,
     required this.baselineHead,
     required this.providerHead,
+    required this.gatewayContractSourceHead,
+    required this.gatewayContractCanonicalSha256,
+    required this.gatewayCompatibilityMode,
     required this.authorityPath,
     required this.requiredContractSha256,
     required this.nativeLearnerSelfWrite,
@@ -78,6 +92,10 @@ class AxiomMeshCompatibilityProfile {
       kernelVersion = currentKernelVersion,
       baselineHead = currentBaselineHead,
       providerHead = currentProviderHead,
+      gatewayContractSourceHead = currentGatewayContractSourceHead,
+      gatewayContractCanonicalSha256 =
+          currentGatewayContractCanonicalSha256,
+      gatewayCompatibilityMode = currentGatewayCompatibilityMode,
       authorityPath = currentAuthorityPath,
       requiredContractSha256 = currentRequiredContractSha256,
       nativeLearnerSelfWrite = true,
@@ -103,6 +121,12 @@ class AxiomMeshCompatibilityProfile {
         baselineHead != currentBaselineHead ||
         providerHead != currentProviderHead) {
       return 'Mesh baseline or provider source pin does not match this build.';
+    }
+    if (gatewayContractSourceHead != currentGatewayContractSourceHead ||
+        gatewayContractCanonicalSha256 !=
+            currentGatewayContractCanonicalSha256 ||
+        gatewayCompatibilityMode != currentGatewayCompatibilityMode) {
+      return 'Current Gateway compatibility observation does not match this build.';
     }
     if (!_sameList(authorityPath, currentAuthorityPath)) {
       return 'Mesh authority path must remain Gateway -> Hypervisor -> Sandbox -> Grid.';
