@@ -9,6 +9,7 @@ on:
       - 'requirements-dev.txt'
       - 'schemas/curriculum-source-lock.v1.schema.json'
       - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-locks/**'
       - 'curriculum/ontario-elementary/source-monitoring.v1.json'
       - 'tools/json_schema_validation.py'
       - 'tools/curriculum_source_lock.py'
@@ -50,6 +51,7 @@ jobs:
       fail-fast: false
       matrix:
         source_id:
+          - ontario-kindergarten-2026
           - ontario-language-grades-1-8-2023
           - ontario-science-technology-grades-1-8-2022
     steps:
