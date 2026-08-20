@@ -18,7 +18,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 14)
-        self.assertEqual(summary["registered_capture_targets"], 8)
+        self.assertEqual(summary["registered_capture_targets"], 10)
         self.assertEqual(summary["c1_snapshot_sources"], 7)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
         self.assertEqual(summary["observational_response_surface_sources"], 4)
@@ -54,6 +54,20 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         )
         self.assertFalse(sshg["monitoring"]["strict_exact_byte_recapture"])
         self.assertFalse(sshg["monitoring"]["semantic_change_claimed"])
+
+    def test_french_science_and_sshg_are_c0_capture_candidates_only(self) -> None:
+        payload = build_readiness()
+        rows = {row["source_id"]: row for row in payload["sources"]}
+        for source_id in (
+            "ontario-fr-science-technology-grades-1-8-2022",
+            "ontario-fr-social-studies-history-geography",
+        ):
+            with self.subTest(source_id=source_id):
+                row = rows[source_id]
+                self.assertEqual(row["highest_evidenced_stage"], "C0-discovered")
+                self.assertTrue(row["capture_target_registered"])
+                self.assertIsNone(row["c1_snapshot"])
+                self.assertIsNone(row["monitoring"])
 
     def test_strict_sources_are_only_the_current_document_like_surfaces(self) -> None:
         payload = build_readiness()
