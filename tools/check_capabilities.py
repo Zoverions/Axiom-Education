@@ -16,6 +16,7 @@ README_PATH = ROOT / "README.md"
 CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
 HIGH_SCHOOL_FOUNDATION_PATH = ROOT / "docs" / "rebuild" / "HIGH-SCHOOL-FOUNDATION.md"
+ONTARIO_ELEMENTARY_READINESS_PATH = ROOT / "docs" / "rebuild" / "ONTARIO-ELEMENTARY-READINESS.md"
 COURSE_ROADMAP_PATH = ROOT / "docs" / "rebuild" / "COURSE-COMPLETION-ROADMAP.md"
 MTH1W_SOURCE_AUDIT_PATH = ROOT / "docs" / "curriculum" / "MTH1W-SOURCE-AUDIT.md"
 MTH1W_COVERAGE_LEDGER_PATH = ROOT / "docs" / "curriculum" / "MTH1W-COVERAGE-LEDGER.md"
@@ -63,6 +64,7 @@ ALLOWED_STATUSES = {
 REQUIRED_CAPABILITIES = {
     "app.curriculum-browser",
     "curriculum.ontario-data",
+    "curriculum.ontario-elementary-evidence",
     "curriculum.signed-packs",
     "instruction.mth1w-foundation",
     "education.axiom-bridge",
@@ -251,6 +253,7 @@ def verify() -> Counter[str]:
         CHANGELOG_PATH,
         PRODUCT_DEFINITION_PATH,
         HIGH_SCHOOL_FOUNDATION_PATH,
+        ONTARIO_ELEMENTARY_READINESS_PATH,
         COURSE_ROADMAP_PATH,
         MTH1W_SOURCE_AUDIT_PATH,
         MTH1W_COVERAGE_LEDGER_PATH,
@@ -283,6 +286,10 @@ def verify() -> Counter[str]:
     require(
         "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md" in readme,
         "README does not link the high-school foundation strategy",
+    )
+    require(
+        "docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md" in readme,
+        "README does not link Ontario Elementary readiness",
     )
     require(
         "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md" in readme,
