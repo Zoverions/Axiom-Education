@@ -26,7 +26,18 @@ permissions:
   contents: read
 
 jobs:
-  observe-arts-response-surface:
+  observe-pending-response-surface:
+    name: Observe ${{ matrix.label }} response surface
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - source_id: ontario-arts-grades-1-8-2009
+            slug: arts
+            label: Arts
+          - source_id: ontario-kindergarten-2026
+            slug: kindergarten-2026
+            label: Kindergarten 2026
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -38,29 +49,41 @@ jobs:
           python-version: '3.12'
       - name: Install pinned Python verification dependencies
         run: python -m pip install --requirement requirements-dev.txt
-      - name: Verify append-only discovery and bounded target
+      - name: Verify append-only discovery and bounded targets
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_remote_curriculum_source_capture -v
           python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
           python tools/check_curriculum_source_monitoring.py
-      - name: Observe Arts response surface three times
+      - name: Observe response surface three times
         run: |
-          mkdir -p /tmp/axiom-arts-observation
+          mkdir -p /tmp/axiom-pending-observation
           python tools/probe_curriculum_source_stability.py \
-            --source-id ontario-arts-grades-1-8-2009 \
+            --source-id '${{ matrix.source_id }}' \
             --attempts 3 \
-            --output /tmp/axiom-arts-observation/stability.json
-          python -m json.tool /tmp/axiom-arts-observation/stability.json >/dev/null
-      - name: Upload metadata-only Arts stability observation
+            --output /tmp/axiom-pending-observation/stability.json
+          python -m json.tool /tmp/axiom-pending-observation/stability.json >/dev/null
+      - name: Upload metadata-only stability observation
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
-          name: ontario-elementary-arts-stability-${{ github.sha }}
-          path: /tmp/axiom-arts-observation/stability.json
+          name: ontario-elementary-${{ matrix.slug }}-stability-${{ github.sha }}
+          path: /tmp/axiom-pending-observation/stability.json
           if-no-files-found: error
           retention-days: 7
 
-  attempt-arts-c1-candidate:
+  attempt-pending-c1-candidate:
+    name: Attempt ${{ matrix.label }} C1 candidate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - source_id: ontario-arts-grades-1-8-2009
+            slug: arts
+            label: Arts
+          - source_id: ontario-kindergarten-2026
+            slug: kindergarten-2026
+            label: Kindergarten 2026
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -72,29 +95,30 @@ jobs:
           python-version: '3.12'
       - name: Install pinned Python verification dependencies
         run: python -m pip install --requirement requirements-dev.txt
-      - name: Verify append-only discovery and bounded target
+      - name: Verify append-only discovery and bounded targets
         run: |
           python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_remote_curriculum_source_capture -v
           python -m unittest tests.test_pending_curriculum_capture -v
           python tools/remote_curriculum_source_capture.py validate-targets
           python tools/check_curriculum_source_monitoring.py
-      - name: Attempt bounded Arts capture and preserve either outcome
+      - name: Attempt bounded capture and preserve either outcome
         run: |
-          mkdir -p /tmp/axiom-arts-candidate
+          mkdir -p /tmp/axiom-pending-candidate
           python tools/attempt_pending_curriculum_capture.py \
-            --source-id ontario-arts-grades-1-8-2009 \
+            --source-id '${{ matrix.source_id }}' \
             --attempts 3 \
-            --candidate-output /tmp/axiom-arts-candidate/source-lock-candidate.json \
-            --status-output /tmp/axiom-arts-candidate/capture-attempt.json
-          python -m json.tool /tmp/axiom-arts-candidate/capture-attempt.json >/dev/null
-          if test -f /tmp/axiom-arts-candidate/source-lock-candidate.json; then
+            --candidate-output /tmp/axiom-pending-candidate/source-lock-candidate.json \
+            --status-output /tmp/axiom-pending-candidate/capture-attempt.json
+          python -m json.tool /tmp/axiom-pending-candidate/capture-attempt.json >/dev/null
+          if test -f /tmp/axiom-pending-candidate/source-lock-candidate.json; then
             python tools/curriculum_source_lock.py verify \
-              /tmp/axiom-arts-candidate/source-lock-candidate.json
+              /tmp/axiom-pending-candidate/source-lock-candidate.json
           fi
-      - name: Upload metadata-only Arts capture-attempt evidence
+      - name: Upload metadata-only capture-attempt evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
-          name: ontario-elementary-arts-capture-attempt-${{ github.sha }}
-          path: /tmp/axiom-arts-candidate/
+          name: ontario-elementary-${{ matrix.slug }}-capture-attempt-${{ github.sha }}
+          path: /tmp/axiom-pending-candidate/
           if-no-files-found: error
           retention-days: 7
