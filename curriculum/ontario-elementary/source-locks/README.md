@@ -10,13 +10,15 @@ Public availability does not automatically establish redistribution permission. 
 
 - capture the exact official bytes through a declared official source target;
 - record the source locator and any resolved locator;
-- record SHA-256, byte length, media type, capture time, and the exact discovery entry revision;
+- record SHA-256, byte length, media type, capture time, and the exact composed discovery entry revision;
 - do **not** commit the captured source bytes;
 - keep `redistribution_status` at `review-required` or `external-only`.
 
-The current committed locks follow that boundary, including Kindergarten 2026 and Social Studies/History/Geography. HTML response surfaces may be valid historical C1 snapshots while remaining observational rather than strict exact-byte drift sources; monitoring policy is kept separately in `../source-monitoring.v1.json`.
+All 16 currently discovered Ontario Elementary/Kindergarten source identities now have metadata-only C1 locks and bounded recapture targets. That includes all eight English-language-school Grades 1-8 program families, all eight French-language-school program families, the conditional Anglais pour débutants pathway, and Kindergarten 2026. This is **base source-capture completeness only**; it is not curriculum-completion, human-review, licensing, canonical C2, pack, activation, credit, or Ministry-approval evidence.
 
-The Arts remains the only discovered English-language required-program source without a committed C1 snapshot. Publications Ontario lists both English publication `231998` (Book) and `231998_U` (Online Resources) for the Revised 2009 curriculum. These are distinct official format records and must not be collapsed into a fabricated single publication identifier merely to make metadata look uniform.
+HTML response surfaces may be valid historical C1 snapshots while remaining observational rather than strict exact-byte drift sources. The monitoring policy in `../source-monitoring.v1.json` currently classifies five document-like PDF sources as strict and eleven DCP HTML sources as observational. A byte-stable HTML run is still observational because one hosted run does not establish an immutable source document; a later differing HTML response does not erase the historical C1 capture or prove curriculum content changed.
+
+The English and French Arts publication lineages preserve distinct official format records rather than collapsing them merely to make metadata uniform. The French-language-school English family likewise preserves regular Anglais and the policy-required conditional Anglais pour débutants pathway rather than inventing one synthetic curriculum source.
 
 ## Capture
 
@@ -32,7 +34,7 @@ python tools/curriculum_source_lock.py capture \
   --output curriculum/ontario-elementary/source-locks/ontario-mathematics-grades-1-8-2020.v1.json
 ```
 
-For hosted capture, `tools/remote_curriculum_source_capture.py` accepts only predeclared source IDs from the bounded target registry. `tools/attempt_pending_curriculum_capture.py` can preserve either a verified candidate or a truthful capture-unavailable result without turning source unavailability into fake success.
+For hosted capture, `tools/remote_curriculum_source_capture.py` accepts only predeclared source IDs from the bounded target registry. `tools/attempt_pending_curriculum_capture.py` can preserve either a verified candidate or a truthful capture-unavailable result without turning source unavailability into fake success. The standing pending-source CI gate currently requires that every registered Ontario Elementary source target already has a corresponding committed C1 lock and monitoring entry.
 
 If the portal redirects to a distinct official download URL, preserve the discovery locator as `source_locator` and record the final official download URL as `resolved_locator`.
 
