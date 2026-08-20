@@ -79,23 +79,41 @@ def validate_url(url: object, allowed_hosts: set[str], field: str) -> str:
     return url
 
 
-def validate_publication_catalog(target: dict[str, Any], source_id: str) -> None:
+def validate_publication_catalog(
+    target: dict[str, Any],
+    source_id: str,
+    source: dict[str, Any],
+) -> None:
     publication_url = target.get("publication_catalog_url")
-    require(isinstance(publication_url, str) and publication_url, f"{source_id}: Publications Ontario catalogue URL is required")
+    require(
+        isinstance(publication_url, str) and publication_url,
+        f"{source_id}: Publications Ontario catalogue URL is required",
+    )
     parsed = urllib.parse.urlparse(publication_url)
     require(
         parsed.scheme == "https" and parsed.hostname == PUBLICATIONS_ONTARIO_HOST,
         f"{source_id}: publication catalog must be Publications Ontario",
     )
     publication_number = target.get("publication_number")
-    require(isinstance(publication_number, str) and publication_number, f"{source_id}: publication_number is required")
     require(
-        publication_number.lower() in parsed.path.lower(),
-        f"{source_id}: publication_number must be bound into the Publications Ontario URL",
+        isinstance(publication_number, str) and publication_number,
+        f"{source_id}: publication_number is required",
+    )
+    if publication_number.lower() in parsed.path.lower():
+        return
+    require(
+        source.get("publication_catalog_url") == publication_url
+        and source.get("publication_number") == publication_number,
+        f"{source_id}: publication_number must be bound into the Publications Ontario URL or exactly match effective discovery provenance",
     )
 
 
-def validate_host_policy(target: dict[str, Any], source_id: str, allowed_hosts: set[str]) -> None:
+def validate_host_policy(
+    target: dict[str, Any],
+    source_id: str,
+    allowed_hosts: set[str],
+    source: dict[str, Any],
+) -> None:
     policy = target.get("host_policy")
     require(policy in ALLOWED_HOST_POLICIES, f"{source_id}: invalid host_policy")
     if policy == "ontario-government":
@@ -106,7 +124,7 @@ def validate_host_policy(target: dict[str, Any], source_id: str, allowed_hosts: 
             )
         return
 
-    validate_publication_catalog(target, source_id)
+    validate_publication_catalog(target, source_id, source)
     require(
         allowed_hosts.issubset(APPROVED_PUBLICATION_CDN_HOSTS),
         f"{source_id}: publication CDN host is not explicitly approved: {sorted(allowed_hosts - APPROVED_PUBLICATION_CDN_HOSTS)}",
@@ -141,7 +159,7 @@ def validate_target_registry(path: Path = TARGETS_PATH) -> dict[str, dict[str, A
         )
         allowed_hosts = set(allowed_raw)
         require(len(allowed_hosts) == len(allowed_raw), f"{source_id}: allowed_hosts contains duplicates")
-        validate_host_policy(target, source_id, allowed_hosts)
+        validate_host_policy(target, source_id, allowed_hosts, source)
 
         source_locator = target.get("source_locator")
         require(
@@ -164,7 +182,7 @@ def validate_target_registry(path: Path = TARGETS_PATH) -> dict[str, dict[str, A
             target.get("redistribution_status") in {"review-required", "external-only"},
             f"{source_id}: remote capture cannot pre-approve redistribution",
         )
-        validate_publication_catalog(target, source_id)
+        validate_publication_catalog(target, source_id, source)
         index[source_id] = target
     return index
 
