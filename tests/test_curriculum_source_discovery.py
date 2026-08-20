@@ -48,6 +48,19 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
             canonical_json_digest(kindergarten),
         )
 
+    def test_sshg_amendment_is_bound_to_exact_historical_entry(self) -> None:
+        base = load_base_discovery(DEFAULT_DISCOVERY)
+        sshg = find_source(base, "ontario-social-studies-history-geography")
+        self.assertEqual(
+            canonical_json_digest(sshg),
+            "1259ce3379e69edae3d366e821794b912002efcc99017a39a27e3e8bef72888b",
+        )
+        amendment = self.amendments()["amendments"][2]
+        self.assertEqual(
+            amendment["prior_source_entry_sha256"],
+            canonical_json_digest(sshg),
+        )
+
     def test_effective_arts_source_adds_current_dcp_route_without_rewriting_base(self) -> None:
         base = load_base_discovery(DEFAULT_DISCOVERY)
         effective = load_effective_discovery(DEFAULT_DISCOVERY)
@@ -101,6 +114,32 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
         self.assertEqual(
             canonical_json_digest(effective_kindergarten),
             "2478300fca9258fd8c32d3605e3be6f2018254868b1e3821e8bafa18f68f7b07",
+        )
+
+    def test_effective_sshg_source_resolves_2018_lineage_and_2026_history_update(self) -> None:
+        base = load_base_discovery(DEFAULT_DISCOVERY)
+        effective = load_effective_discovery(DEFAULT_DISCOVERY)
+        base_sshg = find_source(base, "ontario-social-studies-history-geography")
+        effective_sshg = find_source(effective, "ontario-social-studies-history-geography")
+
+        self.assertEqual(
+            base_sshg["url"],
+            "https://www.ontario.ca/page/indigenous-education-ontario",
+        )
+        self.assertEqual(
+            effective_sshg["url"],
+            "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+        )
+        self.assertEqual(effective_sshg["publication_number"], "233531")
+        self.assertEqual(
+            effective_sshg["policy_version"],
+            "2018-revised-with-2026-history-updates",
+        )
+        self.assertEqual(effective_sshg["effective_context"], "2026-2027 school year")
+        self.assertEqual(effective_sshg["grades"], [1, 2, 3, 4, 5, 6, 7, 8])
+        self.assertEqual(
+            canonical_json_digest(effective_sshg),
+            "4fe7e3c26d685d61e576d108d9339858fdebc58c6aed1c8666c268f10bf71935",
         )
 
     def test_existing_locked_source_entries_are_unchanged_by_discovery_amendments(self) -> None:
@@ -168,6 +207,11 @@ class CurriculumSourceDiscoveryTests(unittest.TestCase):
             self.assertEqual(
                 kindergarten["url"],
                 "https://www.ontario.ca/page/kindergarten",
+            )
+            sshg = find_source(custom, "ontario-social-studies-history-geography")
+            self.assertEqual(
+                sshg["url"],
+                "https://www.ontario.ca/page/indigenous-education-ontario",
             )
 
 
