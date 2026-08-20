@@ -6,12 +6,12 @@ Axiom Education is a local-first, lifelong education platform and education-doma
 **Status:** active development; not production-ready  
 **Canonical repository:** `Zoverions/Axiom-Education`  
 **Canonical branch:** `main`  
-**First supported jurisdiction:** Ontario, Canada
+**First supported jurisdiction:** Ontario, Canada  
 **Active Ontario tracks:** Kindergarten / Grades 1-8 curriculum-capsule foundation and Secondary curriculum, with MTH1W as the first deep course vertical slice
 
 The historical product and repository name `OntarioEdAI` is deprecated. Ontario remains the first supported jurisdiction because its source corpus and active rebuild work are present; it is not the identity or architectural boundary of the platform. Elementary, secondary, post-secondary, apprenticeship, professional, reskilling, civic, hobby, and later-life learning can share the same governed learner and evidence substrate while using different curriculum packs and experience layers.
 
-See the [High-School Foundation Strategy](docs/rebuild/HIGH-SCHOOL-FOUNDATION.md), [Repository Rename Record](docs/REPOSITORY-MIGRATION.md), [Branch Hygiene Policy](docs/BRANCH-HYGIENE.md), and [Deprecations](docs/DEPRECATIONS.md).
+See the [High-School Foundation Strategy](docs/rebuild/HIGH-SCHOOL-FOUNDATION.md), [Ontario Elementary Readiness](docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md), [Repository Rename Record](docs/REPOSITORY-MIGRATION.md), [Branch Hygiene Policy](docs/BRANCH-HYGIENE.md), and [Deprecations](docs/DEPRECATIONS.md).
 
 ## Product boundary
 
@@ -31,7 +31,9 @@ A curriculum pack, grade band, school program, or learning experience is a confi
 
 ## Current usable surface
 
-The runnable application currently provides a local Ontario secondary curriculum browser and the first bounded MTH1W practice slice. In parallel, the Ontario elementary track is building the jurisdiction, source-verification, and curriculum-capsule foundation required for Kindergarten and Grades 1-8.
+The runnable application currently provides a local Ontario secondary curriculum browser and the first bounded MTH1W practice slice. In parallel, the Ontario Elementary track now has a complete base source-acquisition layer for its current composed source set: 16/16 bounded metadata-only C1 snapshots, 8/8 English-language Grades 1-8 required-program-family source coverage, 8/8 French-language-school required-program-family source coverage, and separate Kindergarten 2026 C1 evidence. Five source surfaces are strict exact-byte PDFs and eleven DCP HTML surfaces remain observational. Captured Ontario source bytes are not committed and every historical C1 lock remains `review-required` for redistribution.
+
+Elementary source capture is **not** curriculum readiness. Current human source identity/scope review is 0/16 approved, licensing review is 0/16 resolved, and the canonical Elementary `records-v2` directory contains 0 C2 records. Deterministic source-review and licensing-review plans, a reviewer dossier, and a fail-closed C2 intake gate are executable; C2 candidate eligibility remains 0/16 until current human source approval and compatible licensing evidence exist. The C2 intake v1 supports reference-only candidates only and additionally requires operator-supplied source bytes to match the historical C1 SHA-256 exactly.
 
 The currently runnable secondary surface includes:
 
@@ -87,10 +89,12 @@ flutter run -d <device-id>
 
 The verification command validates the supported toolchain, installs the exact
 Python test dependencies and locked Dart dependencies, checks capability and
-curriculum-readiness claims, checks both monolithic and split authored-unit
-content, checks formatting, runs static analysis, and runs the complete Python
-and Flutter test suites. Use an activated virtual environment if you do not
-want the Python development dependencies installed into your user environment.
+curriculum-readiness claims, verifies Ontario Elementary source-review and
+licensing-review evidence plus the deterministic reviewer dossier and fail-closed
+C2 intake gate, checks both monolithic and split authored-unit content, checks
+formatting, runs static analysis, and runs the complete Python and Flutter test
+suites. Use an activated virtual environment if you do not want the Python
+development dependencies installed into your user environment.
 
 For an Android installation smoke build:
 
@@ -173,7 +177,8 @@ Presently:
 - handwriting scoring no longer returns fixed synthetic scores when its model is missing;
 - the legacy UDP/TCP classroom mesh is disabled by default, AES-GCM protected when explicitly enabled for development, and is not a trusted authority path;
 - governed learner records, selective portfolio export, accessibility gates, pack activation, and AXIOM classroom synchronization remain specified or adapter-required;
-- Ontario elementary curriculum-capsule work remains source-discovery/foundation work until exact sources, digests, review, deterministic builds, signatures, and verification gates are satisfied.
+- Ontario Elementary base source capture is complete for the current composed source set: 16/16 metadata-only C1 snapshots, 5 strict PDF and 11 observational HTML monitoring surfaces, with 8/8 English and 8/8 French required-program-family source coverage plus Kindergarten 2026 evidence;
+- Ontario Elementary human source review is 0/16 approved, licensing review is 0/16 resolved, canonical C2 records remain 0, and the reference-only C2 intake gate therefore has 0/16 eligible sources. None of those incomplete gates may be inferred from base source capture.
 
 ## Ontario curriculum packs
 
@@ -223,11 +228,20 @@ A valid pack signature proves that the exact canonical manifest was signed by th
 - safe application activation.
 
 The MTH1W source audit pins the reviewed official PDF digest and documents known
-identifier conflicts. The broader source ledger still records that upstream
-official-document digests have not been captured for the corpus and that
-course-by-course source and licensing review remains required.
-The elementary track uses a separate staged source-discovery and verification
-process and must not inherit trust merely because the secondary tooling exists.
+identifier conflicts. The broader secondary source ledger still records that
+upstream official-document digests have not been captured for the entire corpus
+and that course-by-course source and licensing review remains required.
+
+The Elementary track has a separate evidence chain. Its current composed source
+set has 16/16 bounded C1 snapshots, but the exact source bytes are not retained
+in the repository. Five PDF sources have strict exact-byte monitoring and eleven
+DCP HTML sources remain observational response surfaces. Human source review,
+licensing review, canonical C2 normalization, deterministic full-pack evidence,
+staging, and governed activation are independent later gates. The deterministic
+reviewer dossier packages metadata, plans, and blank human-review templates but
+explicitly excludes captured Ontario source bytes. The C2 intake gate additionally
+requires operator-supplied bytes to match the historical C1 digest and cannot
+currently admit any source because review evidence is still incomplete.
 
 ## Platform evidence
 
@@ -246,6 +260,7 @@ certify platform behavior.
 ## Canonical documents
 
 - [Product definition](docs/rebuild/PRODUCT-DEFINITION.md)
+- [Ontario Elementary readiness](docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md)
 - [Changelog](CHANGELOG.md)
 - [Evidence-gated requirements](docs/rebuild/REQUIREMENTS.md)
 - [MTH1W Phase 0 and Phase 1](docs/vertical-slices/MTH1W-PHASE-1.md)
