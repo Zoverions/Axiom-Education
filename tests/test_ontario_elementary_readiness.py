@@ -17,7 +17,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             payload["schema"], "axiom-education-ontario-elementary-readiness.v2"
         )
-        self.assertEqual(summary["confirmed_discovery_sources"], 14)
+        self.assertEqual(summary["confirmed_discovery_sources"], 16)
         self.assertEqual(summary["registered_capture_targets"], 10)
         self.assertEqual(summary["c1_snapshot_sources"], 9)
         self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
@@ -26,6 +26,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertTrue(summary["kindergarten_c1_snapshot"])
         self.assertEqual(summary["french_program_families_with_c1_source"], 3)
+        self.assertEqual(summary["unresolved_french_program_families"], [])
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
     def test_arts_is_resolved_and_capture_registered_but_remains_c0(self) -> None:
@@ -129,6 +130,8 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
                 "ontario-fr-arts-grades-1-8-2009",
+                "ontario-fr-english-grades-4-8-2006",
+                "ontario-fr-english-beginners-grades-4-8-2013",
             },
         )
 
@@ -162,7 +165,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             },
         )
 
-    def test_french_language_program_stages_and_gap_remain_explicit(self) -> None:
+    def test_french_language_program_stages_are_explicit(self) -> None:
         payload = build_readiness()
         rows = payload["program_families"]["french_language_schools"]
         self.assertEqual(len(rows), 8)
@@ -176,6 +179,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             c0_only,
             {
                 "the-arts",
+                "english",
                 "french",
                 "health-and-physical-education",
                 "mathematics",
@@ -199,10 +203,18 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             for family, row in by_family.items()
             if row["highest_evidenced_stage"] == "unresolved"
         }
-        self.assertEqual(unresolved, {"english"})
+        self.assertEqual(unresolved, set())
         self.assertEqual(
             set(payload["summary"]["unresolved_french_program_families"]),
             unresolved,
+        )
+        self.assertEqual(
+            by_family["english"]["source_id"],
+            "ontario-fr-english-grades-4-8-2006",
+        )
+        self.assertEqual(
+            by_family["english"]["highest_evidenced_stage"],
+            "C0-discovered",
         )
 
     def test_c1_snapshots_preserve_no_bytes_and_review_required_licensing(self) -> None:
