@@ -42,17 +42,13 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
                 return row
         raise AssertionError(f"missing monitoring source: {source_id}")
 
-    def test_current_policy_accounts_for_seven_locks_and_three_pending_targets(self) -> None:
+    def test_current_policy_accounts_for_nine_locks_and_one_pending_target(self) -> None:
         result = verify_policy()
-        self.assertEqual(result["sources"], 7)
+        self.assertEqual(result["sources"], 9)
         self.assertEqual(result["capture_targets"], 10)
         self.assertEqual(
             result["pending_capture_targets"],
-            [
-                "ontario-arts-grades-1-8-2009",
-                "ontario-fr-science-technology-grades-1-8-2022",
-                "ontario-fr-social-studies-history-geography",
-            ],
+            ["ontario-arts-grades-1-8-2009"],
         )
         self.assertEqual(
             set(result["strict_exact_byte"]),
@@ -69,6 +65,8 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
                 "ontario-language-grades-1-8-2023",
                 "ontario-science-technology-grades-1-8-2022",
                 "ontario-social-studies-history-geography",
+                "ontario-fr-science-technology-grades-1-8-2022",
+                "ontario-fr-social-studies-history-geography",
             },
         )
 
@@ -84,7 +82,7 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
 
     def test_html_response_surface_cannot_be_promoted_to_strict_without_new_evidence(self) -> None:
         def mutate(payload):
-            self.source(payload, "ontario-social-studies-history-geography").update(
+            self.source(payload, "ontario-fr-social-studies-history-geography").update(
                 {"monitoring_mode": "strict-exact-byte"}
             )
 
@@ -96,7 +94,7 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
         def mutate(payload):
             observation = self.source(
                 payload,
-                "ontario-science-technology-grades-1-8-2022",
+                "ontario-fr-science-technology-grades-1-8-2022",
             )["observation"]
             if not isinstance(observation, dict):
                 raise AssertionError("observation must be an object")
@@ -107,14 +105,15 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
             verify_policy(path)
 
     def test_every_committed_lock_must_remain_accounted_for(self) -> None:
-        def remove_sshg(payload):
+        def remove_fr_science(payload):
             payload["sources"] = [
                 source
                 for source in payload["sources"]
-                if source["source_id"] != "ontario-social-studies-history-geography"
+                if source["source_id"]
+                != "ontario-fr-science-technology-grades-1-8-2022"
             ]
 
-        path = self.mutation(remove_sshg)
+        path = self.mutation(remove_fr_science)
         with self.assertRaisesRegex(SourceMonitoringError, "every committed C1 source"):
             verify_policy(path)
 
@@ -134,27 +133,25 @@ class CurriculumSourceMonitoringTests(unittest.TestCase):
             )
         )
         result = verify_policy(targets_path=path)
-        self.assertEqual(result["sources"], 7)
+        self.assertEqual(result["sources"], 9)
         self.assertEqual(result["capture_targets"], 11)
         self.assertEqual(
             result["pending_capture_targets"],
             [
                 "ontario-arts-grades-1-8-2009",
-                "ontario-fr-science-technology-grades-1-8-2022",
-                "ontario-fr-social-studies-history-geography",
                 "ontario-pending-source-example",
             ],
         )
 
     def test_committed_c1_lock_cannot_lose_its_capture_target(self) -> None:
-        def remove_sshg(payload):
+        def remove_fr_sshg(payload):
             payload["targets"] = [
                 target
                 for target in payload["targets"]
-                if target["source_id"] != "ontario-social-studies-history-geography"
+                if target["source_id"] != "ontario-fr-social-studies-history-geography"
             ]
 
-        path = self.target_mutation(remove_sshg)
+        path = self.target_mutation(remove_fr_sshg)
         with self.assertRaisesRegex(SourceMonitoringError, "retain a bounded capture target"):
             verify_policy(targets_path=path)
 
