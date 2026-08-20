@@ -183,6 +183,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "tools/check_curriculum_readiness.py"],
         ),
         (
+            "Verify amendments to append-only curriculum source additions",
+            [python, "tools/curriculum_source_addition_amendments.py"],
+        ),
+        (
             "Verify atomic conditional curriculum family evidence",
             [python, "tools/check_conditional_curriculum_family_evidence.py"],
         ),
