@@ -23,6 +23,18 @@
       "semantic_change_claimed": false
     },
     {
+      "source_id": "ontario-fr-english-grades-4-8-2006",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "The official Ministry Anglais Grades 4-8 revised 2006 PDF produced the same 382,437-byte SHA-256 3a5efd2a38ab77d600397ba72a2710b7770b2c0f62aafdc19c8fd10412449037 in the bounded C1 capture and all three independent stability recaptures in workflow run 32416994073.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-fr-english-beginners-grades-4-8-2013",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "The official Ministry Anglais pour debutants Grades 4-8 revised 2013 PDF produced the same 3,887,969-byte SHA-256 3f16c79225fa0a3b4de504a6843598389d729f14ecce00b7adaf58f95bcfe845 in the bounded C1 capture and all three independent stability recaptures in workflow run 32416994073.",
+      "semantic_change_claimed": false
+    },
+    {
       "source_id": "ontario-language-grades-1-8-2023",
       "monitoring_mode": "observational-response-surface",
       "reason": "The current DCP HTML route produced two distinct exact-byte signatures across three successful captures in one hosted run at the same byte length. This demonstrates response-surface byte volatility, not a curriculum-content change.",
