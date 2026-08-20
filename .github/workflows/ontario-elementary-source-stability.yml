@@ -58,6 +58,10 @@ jobs:
           - ontario-social-studies-history-geography
           - ontario-fr-science-technology-grades-1-8-2022
           - ontario-fr-social-studies-history-geography
+          - ontario-fr-francais-grades-1-8-2023
+          - ontario-fr-mathematics-grades-1-8-2020
+          - ontario-fr-health-physical-education-grades-1-8-2019
+          - ontario-fr-arts-grades-1-8-2009
     steps:
       - name: Check out exact source revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
