@@ -19,13 +19,13 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         )
         self.assertEqual(summary["confirmed_discovery_sources"], 16)
         self.assertEqual(summary["registered_capture_targets"], 12)
-        self.assertEqual(summary["c1_snapshot_sources"], 9)
-        self.assertEqual(summary["strict_exact_byte_monitored_sources"], 3)
+        self.assertEqual(summary["c1_snapshot_sources"], 11)
+        self.assertEqual(summary["strict_exact_byte_monitored_sources"], 5)
         self.assertEqual(summary["observational_response_surface_sources"], 6)
         self.assertFalse(summary["all_c1_sources_strictly_recapturable"])
         self.assertEqual(summary["canonical_c2_records"], 0)
         self.assertTrue(summary["kindergarten_c1_snapshot"])
-        self.assertEqual(summary["french_program_families_with_c1_source"], 3)
+        self.assertEqual(summary["french_program_families_with_c1_source"], 4)
         self.assertEqual(summary["unresolved_french_program_families"], [])
         self.assertFalse(summary["overall_base_source_capture_complete"])
 
@@ -75,6 +75,23 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 self.assertFalse(row["monitoring"]["strict_exact_byte_recapture"])
                 self.assertFalse(row["monitoring"]["semantic_change_claimed"])
 
+    def test_french_english_primary_and_conditional_alternative_are_strict_c1(self) -> None:
+        payload = build_readiness()
+        rows = {row["source_id"]: row for row in payload["sources"]}
+        for source_id in (
+            "ontario-fr-english-grades-4-8-2006",
+            "ontario-fr-english-beginners-grades-4-8-2013",
+        ):
+            with self.subTest(source_id=source_id):
+                row = rows[source_id]
+                self.assertEqual(row["highest_evidenced_stage"], "C1-bytes-captured-digested")
+                self.assertTrue(row["capture_target_registered"])
+                self.assertIsNotNone(row["c1_snapshot"])
+                self.assertEqual(row["c1_snapshot"]["media_type"], "application/pdf")
+                self.assertEqual(row["monitoring"]["mode"], "strict-exact-byte")
+                self.assertTrue(row["monitoring"]["strict_exact_byte_recapture"])
+                self.assertFalse(row["monitoring"]["semantic_change_claimed"])
+
     def test_strict_sources_are_only_the_current_document_like_surfaces(self) -> None:
         payload = build_readiness()
         self.assertEqual(
@@ -83,6 +100,8 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-health-physical-education-grades-1-8-2019",
                 "ontario-mathematics-grades-1-8-2020",
                 "ontario-fsl-grades-1-8-2013",
+                "ontario-fr-english-grades-4-8-2006",
+                "ontario-fr-english-beginners-grades-4-8-2013",
             },
         )
 
@@ -130,8 +149,6 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
                 "ontario-fr-mathematics-grades-1-8-2020",
                 "ontario-fr-health-physical-education-grades-1-8-2019",
                 "ontario-fr-arts-grades-1-8-2009",
-                "ontario-fr-english-grades-4-8-2006",
-                "ontario-fr-english-beginners-grades-4-8-2013",
             },
         )
 
@@ -179,7 +196,6 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
             c0_only,
             {
                 "the-arts",
-                "english",
                 "french",
                 "health-and-physical-education",
                 "mathematics",
@@ -193,6 +209,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         self.assertEqual(
             c1,
             {
+                "english",
                 "science-and-technology",
                 "social-studies-grades-1-6",
                 "history-and-geography-grades-7-8",
@@ -214,15 +231,16 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
         )
         self.assertEqual(
             by_family["english"]["highest_evidenced_stage"],
-            "C0-discovered",
+            "C1-bytes-captured-digested",
         )
+        self.assertTrue(by_family["english"]["strict_exact_byte_recapture"])
 
     def test_c1_snapshots_preserve_no_bytes_and_review_required_licensing(self) -> None:
         payload = build_readiness()
         locked_rows = [
             row for row in payload["sources"] if row["c1_snapshot"] is not None
         ]
-        self.assertEqual(len(locked_rows), 9)
+        self.assertEqual(len(locked_rows), 11)
         for row in locked_rows:
             self.assertFalse(row["c1_snapshot"]["bytes_retained"])
             self.assertEqual(
@@ -234,7 +252,7 @@ class OntarioElementaryReadinessTests(unittest.TestCase):
     def test_machine_view_cannot_relabel_observational_sources_as_strict(self) -> None:
         payload = build_readiness()
         mutated = copy.deepcopy(payload)
-        mutated["summary"]["strict_exact_byte_monitored_sources"] = 9
+        mutated["summary"]["strict_exact_byte_monitored_sources"] = 11
         mutated["summary"]["observational_response_surface_sources"] = 0
         mutated["summary"]["all_c1_sources_strictly_recapturable"] = True
         with self.assertRaisesRegex(
