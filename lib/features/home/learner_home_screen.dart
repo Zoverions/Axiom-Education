@@ -26,27 +26,21 @@ class LearnerHomeScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text(
                       'Start learning',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     _PrimaryLearningCard(
-                      onOpenCourse: () => _push(
-                        context,
-                        const Mth1wLearningHubScreen(),
-                      ),
-                      onOpenPractice: () => _push(
-                        context,
-                        const Mth1wPracticeScreen(),
-                      ),
+                      onOpenCourse: () =>
+                          _push(context, const Mth1wLearningHubScreen()),
+                      onOpenPractice: () =>
+                          _push(context, const Mth1wPracticeScreen()),
                     ),
                     const SizedBox(height: 20),
                     Text(
                       'Explore',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     LayoutBuilder(
@@ -59,10 +53,8 @@ class LearnerHomeScreen extends StatelessWidget {
                             description:
                                 'Search the bundled Ontario secondary curriculum by course code or name.',
                             buttonLabel: 'Open curriculum library',
-                            onPressed: () => _push(
-                              context,
-                              const CurriculumLibraryScreen(),
-                            ),
+                            onPressed: () =>
+                                _push(context, const CurriculumLibraryScreen()),
                           ),
                           _HomeActionCard(
                             icon: Icons.family_restroom_rounded,
@@ -70,10 +62,8 @@ class LearnerHomeScreen extends StatelessWidget {
                             description:
                                 'Use a home-learning routine and clear privacy guidance without invented progress or grades.',
                             buttonLabel: 'Open family tools',
-                            onPressed: () => _push(
-                              context,
-                              const ParentDashboard(),
-                            ),
+                            onPressed: () =>
+                                _push(context, const ParentDashboard()),
                           ),
                         ];
 
@@ -110,9 +100,9 @@ class LearnerHomeScreen extends StatelessWidget {
   }
 
   static void _push(BuildContext context, Widget screen) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (context) => screen),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (context) => screen));
   }
 }
 
@@ -147,9 +137,9 @@ class _WelcomeCard extends StatelessWidget {
               'The current learning preview works offline and without an AI tutor. '
               'Choose a lesson, practise with exact local feedback, or browse the '
               'curriculum behind the experience.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: colors.onPrimaryContainer,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: colors.onPrimaryContainer),
             ),
           ],
         ),
@@ -265,17 +255,14 @@ class _HomeActionCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
             Text(description),
             const SizedBox(height: 16),
-            OutlinedButton(
-              onPressed: onPressed,
-              child: Text(buttonLabel),
-            ),
+            OutlinedButton(onPressed: onPressed, child: Text(buttonLabel)),
           ],
         ),
       ),
@@ -298,22 +285,25 @@ class _CurrentBoundaryCard extends StatelessWidget {
           children: [
             Text(
               'What this app does today',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             const _StatusRow(
               icon: Icons.offline_bolt_rounded,
-              text: 'Offline lessons, curriculum browsing, and local practice are available.',
+              text:
+                  'Offline lessons, curriculum browsing, and local practice are available.',
             ),
             const _StatusRow(
               icon: Icons.privacy_tip_outlined,
-              text: 'Practice feedback is temporary and is not written to a learner record.',
+              text:
+                  'Practice feedback is temporary and is not written to a learner record.',
             ),
             const _StatusRow(
               icon: Icons.pending_actions_rounded,
-              text: 'AI tutoring, authoritative saved progress, grades, credits, and school-equivalency claims are not enabled.',
+              text:
+                  'AI tutoring, authoritative saved progress, grades, credits, and school-equivalency claims are not enabled.',
             ),
           ],
         ),
