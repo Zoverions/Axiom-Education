@@ -229,9 +229,8 @@ class _CourseReferenceCard extends StatelessWidget {
                     children: [
                       Text(
                         course.id,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Text(course.name),
@@ -274,8 +273,7 @@ class _CourseReferenceCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (context) =>
-                              const Mth1wLearningHubScreen(),
+                          builder: (context) => const Mth1wLearningHubScreen(),
                         ),
                       );
                     },
@@ -322,11 +320,7 @@ class _LibraryErrorState extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.menu_book_outlined,
-                size: 46,
-                color: colors.error,
-              ),
+              Icon(Icons.menu_book_outlined, size: 46, color: colors.error),
               const SizedBox(height: 14),
               Text(
                 'The curriculum library could not be opened',
