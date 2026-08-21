@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/curriculum_provider.dart';
-import '../diagnostic/diagnostic_screen.dart';
 import '../learning/mth1w_learning_hub_screen.dart';
+import 'curriculum_course_reference_screen.dart';
 
 class CurriculumLibraryScreen extends ConsumerStatefulWidget {
   const CurriculumLibraryScreen({super.key});
@@ -259,7 +259,7 @@ class _CourseReferenceCard extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                        builder: (context) => CourseDetailScreen(
+                        builder: (context) => CurriculumCourseReferenceScreen(
                           courseId: course.id,
                           fallbackCourseName: course.name,
                         ),
