@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'core/services/hive_service.dart';
-import 'features/diagnostic/diagnostic_screen.dart';
+import 'features/home/learner_home_screen.dart';
 
 typedef AppInitializer = Future<void> Function();
 
@@ -79,7 +79,7 @@ class _AppBootstrapGateState extends State<AppBootstrapGate> {
           return _StartupErrorScreen(onRetry: _retry);
         }
 
-        return const DiagnosticScreen();
+        return const LearnerHomeScreen();
       },
     );
   }
