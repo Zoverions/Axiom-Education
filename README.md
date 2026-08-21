@@ -31,28 +31,32 @@ A curriculum pack, grade band, school program, or learning experience is a confi
 
 ## Current usable surface
 
-The runnable application currently provides a local Ontario secondary curriculum browser and the first bounded MTH1W practice slice. In parallel, the Ontario Elementary track now has a complete base source-acquisition layer for its current composed source set: 16/16 bounded metadata-only C1 snapshots, 8/8 English-language Grades 1-8 required-program-family source coverage, 8/8 French-language-school required-program-family source coverage, and separate Kindergarten 2026 C1 evidence. Five source surfaces are strict exact-byte PDFs and eleven DCP HTML surfaces remain observational. Captured Ontario source bytes are not committed and every historical C1 lock remains `review-required` for redistribution.
+The runnable application now opens on a learner-facing local-first home rather than exposing the curriculum database as the product. From that home, a learner can enter the Grade 9 Math learning hub, start bounded offline practice, browse the local Ontario secondary curriculum library, or open family/home-learning tools. These routes remain intentionally narrow: current practice feedback is temporary, no learner progress is persisted by default, and the learner-facing experience does not claim a grade, mastery result, credit, transcript, enrolment, or Ministry approval.
+
+In parallel, the Ontario Elementary track has a complete base source-acquisition layer for its current composed source set: 16/16 bounded metadata-only C1 snapshots, 8/8 English-language Grades 1-8 required-program-family source coverage, 8/8 French-language-school required-program-family source coverage, and separate Kindergarten 2026 C1 evidence. Five source surfaces are strict exact-byte PDFs and eleven DCP HTML surfaces remain observational. Captured Ontario source bytes are not committed and every historical C1 lock remains `review-required` for redistribution.
 
 Elementary source capture is **not** curriculum readiness. Current human source identity/scope review is 0/16 approved, licensing review is 0/16 resolved, and the canonical Elementary `records-v2` directory contains 0 C2 records. Deterministic source-review and licensing-review plans, a reviewer dossier, and a fail-closed C2 intake gate are executable; C2 candidate eligibility remains 0/16 until current human source approval and compatible licensing evidence exist. The C2 intake v1 supports reference-only candidates only and additionally requires operator-supplied source bytes to match the historical C1 SHA-256 exactly.
 
 The currently runnable secondary surface includes:
 
-- recoverable first-run initialization;
-- a searchable list of courses and expectation counts;
-- course, strand, expectation, and tag browsing;
-- pull-to-refresh and explicit retry states;
+- a learner-facing home with direct routes to Grade 9 Math learning, quick practice, curriculum reference, and family tools;
+- recoverable first-run initialization and clear local loading, retry, and empty states;
+- a searchable curriculum library with course and expectation counts plus course, strand, expectation, and tag browsing;
+- pull-to-refresh and explicit retry behavior for the bundled curriculum;
 - automatic restoration of a missing or invalid bundled curriculum database;
 - a read-only curriculum database and a separate local settings store;
+- a Grade 9 Math learning hub that puts four short foundation lessons and mixed practice ahead of the larger draft-unit explorer;
 - a four-lesson Grade 9 math foundations path with explicit goals, prerequisites, direct instruction, worked examples, multiple reasoning routes and representations, misconception checks, and reflection prompts;
 - source-mapped offline MTH1W draft content for all 9 planned units and all 43 primary lesson slots, with 86 worked examples, 473 guided/independent/retrieval practice items, nine delayed-feedback 10-item quizzes with correction attempts, and nine transparent performance tasks;
 - repo-bounded split-unit loading for Units 8 and 9 so geometry/measurement and financial-literacy lessons remain individually reviewable while still passing through the same canonical content contract as Units 1 through 7;
 - lesson-selected focused practice plus a mixed-practice route, both available without AI;
 - deterministic offline practice for `MTH1W-A1`, `MTH1W-A2`, `MTH1W-B2`, and `MTH1W-B4`;
-- actual answer entry with exact rational and slope-intercept verification;
-- an ephemeral on-screen count of checks, exact successes, and distinct items that is never saved to a learner record;
-- a three-different-item stopping cue that is explicitly not a grade or mastery result;
-- an in-app and written home-learning routine for two learners sharing a device;
-- item-linked scaffolded hints, derived local topic references, uncalibrated difficulty disclosure, and digest evidence;
+- actual answer entry with exact rational and slope-intercept verification, with blank or whitespace-only submissions blocked;
+- an ephemeral on-screen summary of total attempts, distinct questions checked, and distinct questions answered correctly; repeated checks of the same question cannot inflate the distinct-success count, and nothing is saved to a learner record;
+- a three-different-question stopping cue that is explicitly not a grade or mastery result;
+- an in-app and written home-learning routine for two learners sharing a device, with a direct route from the guide into mixed practice;
+- item-linked scaffolded hints, derived local topic references, uncalibrated difficulty disclosure, and digest evidence, with technical identifiers kept behind expandable detail controls;
+- learner cards that allow explanatory text to grow rather than intentionally truncating it, improving behavior under larger system text sizes;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
 The foundations preview and source-mapped unit drafts do **not** use tutor inference or automatically write a learner record. They remain usable without AI. The repository now contains an experimental, host-injected AXIOM Gateway client and governed learner write/self-read runtime, but it has no default host binding, local learner-record fallback, production provider, or authority-expanding path. The authored nine-unit milestone is **not** a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or replacement for an authorized education provider. Each authored unit has a draft quiz and performance task, while reviewed complete-course assessment, production learner progress, delegated authority, pack activation, portfolio export, and classroom synchronization remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
