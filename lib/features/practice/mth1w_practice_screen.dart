@@ -507,10 +507,7 @@ class _HintCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Hints',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Hints', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             for (var index = 0; index < hints.length; index += 1)
               Padding(
