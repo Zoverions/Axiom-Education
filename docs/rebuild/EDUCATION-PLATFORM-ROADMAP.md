@@ -18,6 +18,22 @@ complete and verify MTH1W
 
 That sequence governs **Ontario Secondary course rollout only**. It does not block Ontario Elementary, early-years work, platform infrastructure, post-secondary architecture, apprenticeship/professional learning, or lifelong-learning capabilities from advancing in parallel.
 
+## Integration discipline
+
+Axiom Education consumes AXIOM-MESH through the narrowest reviewed semantic authority seam rather than binding runtime compatibility to every unrelated Mesh repository change.
+
+For the current governed Education runtime, the binding surface is the reviewed Education-facing `POST /v1/intents` behavior, exact required Education contracts, learner-memory profile, and the `Gateway -> Hypervisor -> Sandbox -> Grid` authority path. A reviewed Mesh repository head and the full Gateway contract remain useful provenance, but they are not by themselves runtime authority.
+
+Consequences:
+
+- unrelated additive social, agent, observability, or read routes do not silently broaden Education authority;
+- unrelated Mesh repository commits do not automatically invalidate an otherwise unchanged Education semantic seam;
+- a change to the Education intent seam, a required contract, or an authority-bearing path still fails closed until explicitly reviewed;
+- merged Mesh features such as Assurance Graph, provider observation, and checkout freshness remain readiness-only until Education deliberately adopts them with evidence;
+- draft delegated-human-authority and host profiles remain non-production inputs and grant no Education authority merely by existing.
+
+Cross-platform delivery evidence is also a compatibility boundary rather than a product-completeness claim. Linux/Android, Windows, macOS, and iOS no-codesign lanes should continue to exercise the same learner and evidence code paths. Apple signing, notarization, App Store readiness, physical-device support, Apple Silicon support, and production accessibility remain separate claims requiring their own evidence.
+
 ## Parallel workstreams
 
 ### 1. Education-domain substrate
@@ -77,9 +93,38 @@ MTH1W promotion requires more than complete lesson slots:
 - educator correction and appeal;
 - no automatic mastery, grade, credit, transcript, or Ministry-equivalence inference.
 
+The current nine-unit authored draft covers all planned lesson slots but accounts for 3,825 primary-lesson minutes inside a 6,600-minute planning envelope. The remaining 2,775 minutes must be allocated only where instruction, practice, consolidation, assessment, or other pedagogical structure actually requires them; lesson durations must not be inflated merely to manufacture a 110-hour claim.
+
 After MTH1W passes its own gates, secondary content can expand through the remaining Grade 9 courses and later grades without redefining the platform around that sequence.
 
-### 4. Learner continuity across life stages
+### 4. Learner experience and accessibility
+
+The primary product surface should remain understandable without exposing internal evidence plumbing as navigation.
+
+The current direction is:
+
+```text
+learner home
+  -> focused learning hub / lesson
+  -> bounded local practice
+  -> curriculum reference when needed
+  -> family/support tools when needed
+```
+
+The larger source-mapped draft-unit explorer remains secondary until its review gates mature.
+
+Learner-facing design should continue to:
+
+- use clear next actions rather than internal architecture terms;
+- keep technical digests and verifier identifiers available but collapsible;
+- prevent blank or invalid submissions before they become misleading attempts;
+- distinguish attempts from distinct questions checked and distinct questions answered correctly;
+- avoid repeated checks inflating apparent progress;
+- avoid intentional text truncation where larger system text should reflow;
+- expose loading, empty, retry, unavailable, and fail-closed states explicitly;
+- avoid displaying synthetic study time, grades, mastery, streaks, or completion state when no governed evidence supports them.
+
+### 5. Learner continuity across life stages
 
 The learner-facing shell may change substantially with age while governed continuity can preserve selected, portable state such as:
 
@@ -93,7 +138,7 @@ The learner-facing shell may change substantially with age while governed contin
 
 The architecture should support movement across early years, elementary, secondary, post-secondary, apprenticeship, professional learning, employment/reskilling, civic learning, hobbies/projects, and later-life learning without permanently encoding one jurisdiction or institution into identity.
 
-### 5. External learning experiences
+### 6. External learning experiences
 
 Coding environments, simulations, robotics/maker tools, museums/libraries, virtual worlds, OER/video systems, physical activities, creative tools, apprenticeships, and employer learning can become bounded experience providers.
 
@@ -121,11 +166,14 @@ Priorities should be chosen by **shared leverage and evidence maturity**, not ag
 
 A practical order is:
 
-1. finish reusable substrate primitives that unblock multiple tracks;
-2. deepen the most evidence-ready vertical slices (currently Ontario Elementary source pipeline and MTH1W secondary);
-3. convert human-review bottlenecks into reproducible evidence workflows without manufacturing approval;
-4. expand subject/grade coverage only after the source/verification factory survives multiple structurally different slices;
-5. add jurisdictions by reusing the same evidence machinery rather than copying Ontario assumptions;
-6. broaden lifelong/provider experiences on the same governed learner substrate.
+1. preserve and continuously verify the narrow Education/AXIOM-MESH semantic authority seam and cross-platform portability;
+2. finish reusable substrate primitives that unblock multiple tracks;
+3. keep improving the primary learner-facing shell, accessibility, and honest feedback without creating unsupported progress claims;
+4. deepen the most evidence-ready vertical slices (currently Ontario Elementary source pipeline and MTH1W secondary);
+5. convert human-review bottlenecks into reproducible evidence workflows without manufacturing approval;
+6. allocate the remaining MTH1W program time only through defensible instructional/assessment design, then finish the educator, licensing, accessibility, and cumulative-assessment gates;
+7. expand subject/grade coverage only after the source/verification factory survives multiple structurally different slices;
+8. add jurisdictions by reusing the same evidence machinery rather than copying Ontario assumptions;
+9. broaden lifelong/provider experiences on the same governed learner substrate.
 
 This keeps Axiom Education coherent as one education platform while allowing elementary, secondary, and lifelong capabilities to mature at different speeds.
