@@ -4,6 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 import 'package:ontarioedai/main.dart';
 
+Future<void> tapVisibleText(WidgetTester tester, String label) async {
+  final target = find.text(label);
+  await tester.ensureVisible(target);
+  await tester.pumpAndSettle();
+  await tester.tap(target);
+  await tester.pumpAndSettle();
+}
+
 void main() {
   final courses = <CourseOverview>[
     const CourseOverview('A', 'Arts Foundations', 1),
@@ -42,8 +50,7 @@ void main() {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Open curriculum library'));
-    await tester.pumpAndSettle();
+    await tapVisibleText(tester, 'Open curriculum library');
 
     expect(find.text('Curriculum library'), findsOneWidget);
     expect(find.text('Ontario secondary curriculum'), findsOneWidget);
@@ -63,8 +70,7 @@ void main() {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Open curriculum library'));
-    await tester.pumpAndSettle();
+    await tapVisibleText(tester, 'Open curriculum library');
     await tester.enterText(find.byType(EditableText), 'not-a-course');
     await tester.pump();
 
@@ -81,8 +87,7 @@ void main() {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Open family tools'));
-    await tester.pumpAndSettle();
+    await tapVisibleText(tester, 'Open family tools');
 
     expect(find.text('Family support that stays honest'), findsOneWidget);
     expect(find.text('Saved progress is not enabled yet'), findsOneWidget);
@@ -92,8 +97,7 @@ void main() {
     expect(find.text('Level 3 (75%)'), findsNothing);
     expect(find.text('Score: 90%'), findsNothing);
 
-    await tester.tap(find.text('Open home learning guide'));
-    await tester.pumpAndSettle();
+    await tapVisibleText(tester, 'Open home learning guide');
 
     expect(find.text('Home learning guide'), findsOneWidget);
     expect(find.text('A 45-minute session'), findsOneWidget);
