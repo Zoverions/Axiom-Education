@@ -5,7 +5,10 @@ import 'package:ontarioedai/core/providers/curriculum_provider.dart';
 import 'package:ontarioedai/features/curriculum/curriculum_course_reference_screen.dart';
 
 void main() {
-  Widget buildReference({required String courseId, required CourseDetail detail}) {
+  Widget buildReference({
+    required String courseId,
+    required CourseDetail detail,
+  }) {
     return ProviderScope(
       overrides: [
         courseDetailProvider(courseId).overrideWith((ref) async => detail),
@@ -19,18 +22,16 @@ void main() {
     );
   }
 
-  testWidgets('keeps curriculum detail explicitly reference-only', (tester) async {
-    const detail = CourseDetail(
-      'ENG3U',
-      'English, Grade 11',
-      [
-        StrandDetail('Writing', [
-          ExpectationDetail('Develop and organize ideas for a purpose.', [
-            'writing',
-          ]),
+  testWidgets('keeps curriculum detail explicitly reference-only', (
+    tester,
+  ) async {
+    const detail = CourseDetail('ENG3U', 'English, Grade 11', [
+      StrandDetail('Writing', [
+        ExpectationDetail('Develop and organize ideas for a purpose.', [
+          'writing',
         ]),
-      ],
-    );
+      ]),
+    ]);
 
     await tester.pumpWidget(buildReference(courseId: 'ENG3U', detail: detail));
     await tester.pumpAndSettle();
@@ -51,17 +52,14 @@ void main() {
   testWidgets('offers MTH1W learning as a separate explicit action', (
     tester,
   ) async {
-    const detail = CourseDetail(
-      'MTH1W',
-      'Mathematics, Grade 9',
-      [
-        StrandDetail('Algebra', [
-          ExpectationDetail('Use algebraic reasoning in mathematical situations.', [
-            'algebra',
-          ]),
-        ]),
-      ],
-    );
+    const detail = CourseDetail('MTH1W', 'Mathematics, Grade 9', [
+      StrandDetail('Algebra', [
+        ExpectationDetail(
+          'Use algebraic reasoning in mathematical situations.',
+          ['algebra'],
+        ),
+      ]),
+    ]);
 
     await tester.pumpWidget(buildReference(courseId: 'MTH1W', detail: detail));
     await tester.pumpAndSettle();
