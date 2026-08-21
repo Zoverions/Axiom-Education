@@ -27,7 +27,7 @@ void main() {
     expect(find.text('Open math learning'), findsOneWidget);
     expect(find.text('Quick practice'), findsOneWidget);
     expect(find.text('Browse curriculum'), findsOneWidget);
-    expect(find.text('Home learning guide'), findsOneWidget);
+    expect(find.text('Family tools'), findsOneWidget);
     expect(find.text('What this app does today'), findsOneWidget);
     expect(
       find.textContaining('Practice feedback is temporary'),
@@ -70,11 +70,23 @@ void main() {
     expect(find.text('Search by course code or course name.'), findsOneWidget);
   });
 
-  testWidgets('opens the family study guide from home', (tester) async {
+  testWidgets('opens honest family tools and the home learning guide', (
+    tester,
+  ) async {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Open guide'));
+    await tester.tap(find.text('Open family tools'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Support learning without invented progress data'),
+      findsOneWidget,
+    );
+    expect(find.text('Saved progress is not enabled yet'), findsOneWidget);
+    expect(find.textContaining('fake study time'), findsOneWidget);
+
+    await tester.tap(find.text('Open home learning guide'));
     await tester.pumpAndSettle();
 
     expect(find.text('Home learning guide'), findsOneWidget);
