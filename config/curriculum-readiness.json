@@ -86,7 +86,18 @@
     "representation_text_alternatives_required": true,
     "human_accessibility_review_status": "required",
     "accessibility_gate_satisfied": false,
-    "claim_boundary": "Deterministic text alternatives provide an offline, printable, nonvisual delivery route but do not establish WCAG, AODA, assistive-technology, cognitive-accessibility, or usability conformance."
+    "human_review_evidence": {
+      "schema_path": "schemas/accessibility-review-evidence.v1.schema.json",
+      "verification_tool": "tools/mth1w_accessibility_review_evidence.py",
+      "verification_status": "machine-verified-review-contract",
+      "content_addressed_targets": 44,
+      "lesson_alternative_targets": 43,
+      "application_surface_targets": 1,
+      "submitted_review_records": 0,
+      "approved_current_targets": 0,
+      "all_current_targets_approved": false
+    },
+    "claim_boundary": "Deterministic text alternatives provide an offline, printable, nonvisual delivery route, and the review contract binds future human findings to 43 lesson alternatives plus the current learner-app surface. Neither mechanism establishes WCAG, AODA, assistive-technology, cognitive-accessibility, usability, or course-completion conformance without actual qualified-human evidence."
   },
   "source_use_licensing": {
     "schema_path": "schemas/source-license-review.v1.schema.json",
