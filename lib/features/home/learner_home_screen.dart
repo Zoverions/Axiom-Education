@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../dashboard/parent_dashboard.dart';
 import '../diagnostic/diagnostic_screen.dart';
-import '../learning/home_learning_guide_screen.dart';
 import '../learning/mth1w_course_screen.dart';
 import '../practice/mth1w_practice_screen.dart';
 
@@ -65,14 +65,14 @@ class LearnerHomeScreen extends StatelessWidget {
                             ),
                           ),
                           _HomeActionCard(
-                            icon: Icons.home_work_rounded,
-                            title: 'Home learning guide',
+                            icon: Icons.family_restroom_rounded,
+                            title: 'Family tools',
                             description:
-                                'Use a simple study routine, including guidance for two learners sharing one device.',
-                            buttonLabel: 'Open guide',
+                                'Use a home-learning routine and clear privacy guidance without invented progress or grades.',
+                            buttonLabel: 'Open family tools',
                             onPressed: () => _push(
                               context,
-                              const HomeLearningGuideScreen(),
+                              const ParentDashboard(),
                             ),
                           ),
                         ];
