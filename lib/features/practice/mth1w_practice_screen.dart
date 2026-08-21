@@ -120,7 +120,13 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
       appBar: AppBar(title: const Text('Grade 9 Math Practice Preview')),
       body: SafeArea(
         child: expectationsAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(
+            child: Semantics(
+              liveRegion: true,
+              label: 'Loading Grade 9 Math practice',
+              child: CircularProgressIndicator(),
+            ),
+          ),
           error: (error, stackTrace) => _ConfigurationError(
             onRetry: () => ref.invalidate(mth1wGoldenPathProvider),
           ),
@@ -244,7 +250,7 @@ class _PracticeBody extends StatelessWidget {
                 LinearProgressIndicator(value: position / total),
                 const SizedBox(height: 6),
                 Text(
-                  'Foundations topic $position of $total',
+                  'Practice topic $position of $total',
                   textAlign: TextAlign.end,
                 ),
                 const SizedBox(height: 12),
@@ -265,8 +271,8 @@ class _PracticeBody extends StatelessWidget {
                         ? 'Integer, decimal, or fraction'
                         : 'y = mx + b',
                     helperText: verifierAvailable
-                        ? 'Enter an answer to enable exact local checking.'
-                        : 'Answer checking is disabled because the verifier is unavailable.',
+                        ? 'Enter an answer to check it on this device.'
+                        : 'Answer checking is unavailable right now.',
                   ),
                   onChanged: onAnswerChanged,
                   onSubmitted: canCheck ? (_) => onCheck() : null,
@@ -402,12 +408,12 @@ class _StatusBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 verifierAvailable
-                    ? 'Offline practice is ready. Answers are checked locally '
-                          'with exact arithmetic. This preview is not a complete '
+                    ? 'Offline practice is ready. Answers are checked on this '
+                          'device using fixed rules. This preview is not a complete '
                           'course or grade, and it does not use an AI tutor or '
                           'learner record.'
-                    : 'Fail-closed mode: the verifier is unavailable, so '
-                          'answers cannot be submitted or treated as correct.',
+                    : 'Answer checking is unavailable, so answers cannot be '
+                          'submitted or treated as correct.',
               ),
             ),
           ],
@@ -432,7 +438,7 @@ class _ExpectationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Practice focus • ${item.expectationId}',
+              "What you're practising",
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -440,22 +446,24 @@ class _ExpectationCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(item.expectationText),
             const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Chip(label: Text(expectation.strand)),
+            const SizedBox(height: 6),
+            ExpansionTile(
+              key: const ValueKey('practice-curriculum-details'),
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: const EdgeInsets.only(bottom: 4),
+              title: const Text('Curriculum details'),
               children: [
-                Chip(label: Text(expectation.strand)),
-                Chip(
-                  label: Text(
-                    'Practice difficulty ${item.difficultyValue.toStringAsFixed(1)} — uncalibrated',
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: SelectableText(
+                    'Curriculum reference ${item.expectationId}\n'
+                    'Practice difficulty ${item.difficultyValue.toStringAsFixed(1)} — uncalibrated\n'
+                    'Official mapping status: review pending',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Local topic reference; official curriculum mapping remains under review.',
-              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -557,6 +565,11 @@ class _VerificationCard extends StatelessWidget {
         : unavailable
         ? colors.errorContainer
         : colors.tertiaryContainer;
+    final title = successful
+        ? 'Correct'
+        : unavailable
+        ? 'Answer checking unavailable'
+        : 'Try again';
 
     return Semantics(
       liveRegion: true,
@@ -568,7 +581,7 @@ class _VerificationCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                result.evidenceLabel,
+                title,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -577,7 +590,7 @@ class _VerificationCard extends StatelessWidget {
               Text(result.message),
               if (result.normalizedAnswer != null) ...[
                 const SizedBox(height: 6),
-                Text('Normalized answer: ${result.normalizedAnswer}'),
+                Text('Checked as: ${result.normalizedAnswer}'),
               ],
               const SizedBox(height: 6),
               ExpansionTile(
@@ -589,6 +602,7 @@ class _VerificationCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: SelectableText(
+                      'Evidence ${result.evidenceLabel}\n'
                       'Verifier ${MathAnswerVerifier.verifierId}\n'
                       'Item digest ${result.itemDigest}',
                       style: Theme.of(context).textTheme.bodySmall,
@@ -628,8 +642,8 @@ class _ConfigurationError extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                'The signed curriculum expectations or deterministic practice '
-                'configuration could not be validated. No fallback item was generated.',
+                'The local curriculum or answer-checking setup could not be '
+                'verified. No replacement question was generated.',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
