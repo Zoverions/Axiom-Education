@@ -120,11 +120,11 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
       appBar: AppBar(title: const Text('Grade 9 Math Practice Preview')),
       body: SafeArea(
         child: expectationsAsync.when(
-          loading: () => const Center(
+          loading: () => Center(
             child: Semantics(
               liveRegion: true,
               label: 'Loading Grade 9 Math practice',
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             ),
           ),
           error: (error, stackTrace) => _ConfigurationError(
