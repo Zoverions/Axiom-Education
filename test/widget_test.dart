@@ -36,7 +36,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('opens a searchable curriculum library from home', (tester) async {
+  testWidgets('opens a searchable curriculum library from home', (
+    tester,
+  ) async {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
@@ -98,28 +100,29 @@ void main() {
     expect(find.text('Two learners, one device'), findsOneWidget);
   });
 
-  testWidgets('recovers into learner home when local startup succeeds on retry', (
-    tester,
-  ) async {
-    var attempts = 0;
+  testWidgets(
+    'recovers into learner home when local startup succeeds on retry',
+    (tester) async {
+      var attempts = 0;
 
-    Future<void> initialize() async {
-      attempts += 1;
-      if (attempts == 1) {
-        throw StateError('simulated local setup failure');
+      Future<void> initialize() async {
+        attempts += 1;
+        if (attempts == 1) {
+          throw StateError('simulated local setup failure');
+        }
       }
-    }
 
-    await tester.pumpWidget(buildApp(initializer: initialize));
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(buildApp(initializer: initialize));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Local setup could not finish'), findsOneWidget);
-    expect(find.text('Try again'), findsOneWidget);
+      expect(find.text('Local setup could not finish'), findsOneWidget);
+      expect(find.text('Try again'), findsOneWidget);
 
-    await tester.tap(find.text('Try again'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Try again'));
+      await tester.pumpAndSettle();
 
-    expect(attempts, 2);
-    expect(find.text('Learn locally. Stay in control.'), findsOneWidget);
-  });
+      expect(attempts, 2);
+      expect(find.text('Learn locally. Stay in control.'), findsOneWidget);
+    },
+  );
 }
