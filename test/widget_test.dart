@@ -18,15 +18,37 @@ void main() {
     );
   }
 
-  testWidgets('opens a searchable local curriculum browser', (tester) async {
+  testWidgets('opens a learner-facing home', (tester) async {
     await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Learn locally. Stay in control.'), findsOneWidget);
+    expect(find.text('Grade 9 Math Foundations'), findsOneWidget);
+    expect(find.text('Open math learning'), findsOneWidget);
+    expect(find.text('Quick practice'), findsOneWidget);
+    expect(find.text('Browse curriculum'), findsOneWidget);
+    expect(find.text('Home learning guide'), findsOneWidget);
+    expect(find.text('What this app does today'), findsOneWidget);
+    expect(
+      find.textContaining('Practice feedback is temporary'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('opens a searchable local curriculum browser from home', (
+    tester,
+  ) async {
+    await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Open curriculum library'));
     await tester.pumpAndSettle();
 
     expect(find.text('Ontario Secondary Curriculum Pack'), findsOneWidget);
     expect(find.text('3 courses • 31 expectations'), findsOneWidget);
     expect(find.textContaining('Arts Foundations'), findsOneWidget);
     expect(find.text('A'), findsNWidgets(2));
-    expect(tester.takeException(), isNull);
 
     await tester.enterText(find.byType(EditableText), 'English');
     await tester.pump();
@@ -35,10 +57,12 @@ void main() {
     expect(find.text('MTH1W'), findsNothing);
   });
 
-  testWidgets('shows a clear empty search state', (tester) async {
+  testWidgets('shows a clear empty curriculum search state', (tester) async {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
+    await tester.tap(find.text('Open curriculum library'));
+    await tester.pumpAndSettle();
     await tester.enterText(find.byType(EditableText), 'not-a-course');
     await tester.pump();
 
@@ -46,7 +70,21 @@ void main() {
     expect(find.text('Search by course code or course name.'), findsOneWidget);
   });
 
-  testWidgets('recovers when local startup succeeds on retry', (tester) async {
+  testWidgets('opens the family study guide from home', (tester) async {
+    await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Open guide'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Home learning guide'), findsOneWidget);
+    expect(find.text('A 45-minute session'), findsOneWidget);
+    expect(find.text('Two learners, one device'), findsOneWidget);
+  });
+
+  testWidgets('recovers into learner home when local startup succeeds on retry', (
+    tester,
+  ) async {
     var attempts = 0;
 
     Future<void> initialize() async {
@@ -66,6 +104,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(attempts, 2);
-    expect(find.text('Ontario Secondary Curriculum Pack'), findsOneWidget);
+    expect(find.text('Learn locally. Stay in control.'), findsOneWidget);
   });
 }
