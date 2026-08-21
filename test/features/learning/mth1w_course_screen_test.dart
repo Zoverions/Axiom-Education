@@ -84,7 +84,7 @@ void main() {
     expect(find.text('Open mixed practice'), findsOneWidget);
     expect(find.text('Open home learning guide'), findsOneWidget);
     for (var unit = 1; unit <= 9; unit += 1) {
-      expect(find.text('Open source-mapped draft Unit $unit'), findsOneWidget);
+      expect(find.text('Open draft Unit $unit'), findsOneWidget);
     }
   });
 
