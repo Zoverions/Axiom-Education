@@ -69,7 +69,7 @@ void main() {
     expect(find.text('Order of operations with rational numbers'), findsOneWidget);
     expect(find.text('Percentages and proportional reasoning'), findsOneWidget);
     expect(find.text('Solving linear equations'), findsOneWidget);
-    expect(find.text('Lines from two points'), findsOneWidget);
+    expect(find.text('Equation of a line from two points'), findsOneWidget);
     expect(find.text('Start mixed practice'), findsOneWidget);
     expect(find.text('Explore more Grade 9 Math'), findsOneWidget);
     expect(find.text('Explore draft units'), findsOneWidget);
