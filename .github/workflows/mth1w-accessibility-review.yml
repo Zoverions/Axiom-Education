@@ -14,8 +14,10 @@ on:
       - 'schemas/accessibility-review-evidence.v1.schema.json'
       - 'tools/mth1w_accessible_export.py'
       - 'tools/mth1w_accessibility_review_evidence.py'
+      - 'tools/mth1w_accessibility_review_templates.py'
       - 'tools/check_mth1w_accessibility_readiness.py'
       - 'tests/test_mth1w_accessibility_review_evidence.py'
+      - 'tests/test_mth1w_accessibility_review_templates.py'
       - '.github/workflows/mth1w-accessibility-review.yml'
   workflow_dispatch:
 
@@ -50,13 +52,30 @@ jobs:
           python tools/mth1w_accessibility_review_evidence.py verify-readiness
           python tools/check_mth1w_accessibility_readiness.py
 
-      - name: Run accessibility review mutation tests
-        run: python -m unittest tests.test_mth1w_accessibility_review_evidence -v
+      - name: Build deterministic non-valid reviewer templates
+        run: |
+          python tools/mth1w_accessibility_review_templates.py verify
+          python tools/mth1w_accessibility_review_templates.py build \
+            --output /tmp/mth1w-accessibility-review-templates
+          python -m json.tool /tmp/mth1w-accessibility-review-templates/manifest.json >/dev/null
+
+      - name: Run accessibility review mutation and template tests
+        run: |
+          python -m unittest tests.test_mth1w_accessibility_review_evidence -v
+          python -m unittest tests.test_mth1w_accessibility_review_templates -v
 
       - name: Upload short-lived accessibility review plan
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
           name: mth1w-accessibility-review-plan-${{ github.sha }}
           path: /tmp/mth1w-accessibility-review-plan.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload short-lived accessibility reviewer templates
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: mth1w-accessibility-review-templates-${{ github.sha }}
+          path: /tmp/mth1w-accessibility-review-templates
           if-no-files-found: error
           retention-days: 7
