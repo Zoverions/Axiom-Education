@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Build and verify content-addressed human accessibility review evidence for MTH1W.
 
-The plan separates 43 deterministic lesson-alternative targets from one learner-application
-surface target. Machine-generated alternatives and software tests never constitute human
-accessibility/usability approval. Historical negative reviews remain provenance, and the
-latest valid review controls the current disposition for each exact target revision.
+The plan separates 43 deterministic lesson-alternative targets from four learner-
+application targets: Android, Windows, macOS, and iOS. Machine-generated
+alternatives, software tests, and platform builds never constitute human
+accessibility/usability approval. Historical negative reviews remain provenance,
+and the latest valid review controls the current disposition for each exact target
+revision.
 """
 
 from __future__ import annotations
@@ -24,7 +26,8 @@ REVIEW_DIR = ROOT / "curriculum" / "reviews" / "mth1w-accessibility"
 READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_LESSON_TARGETS = 43
-EXPECTED_APPLICATION_TARGETS = 1
+APPLICATION_PLATFORMS = ("android", "windows", "macos", "ios")
+EXPECTED_APPLICATION_TARGETS = len(APPLICATION_PLATFORMS)
 EXPECTED_TARGETS = EXPECTED_LESSON_TARGETS + EXPECTED_APPLICATION_TARGETS
 DECISIONS = {"approved", "changes-required", "rejected"}
 FINDING_DISPOSITIONS = {
@@ -96,6 +99,25 @@ def sha256_file(path: Path) -> str:
         raise AccessibilityReviewError(f"cannot read accessibility surface: {path}") from error
 
 
+def _application_review_requirements(platform: str) -> list[str]:
+    base = [
+        "keyboard or equivalent non-touch navigation",
+        "screen-reader navigation and labels",
+        "text scaling and reflow",
+        "contrast and non-colour cues",
+        "motion independence/reduced-motion safety",
+        "focus order and control labels",
+        "cognitive usability across primary learner routes",
+    ]
+    platform_hint = {
+        "android": "Android assistive-technology behaviour, including TalkBack or a documented equivalent",
+        "windows": "Windows assistive-technology behaviour, including Narrator or a documented equivalent",
+        "macos": "macOS assistive-technology behaviour, including VoiceOver or a documented equivalent",
+        "ios": "iOS assistive-technology behaviour, including VoiceOver or a documented equivalent",
+    }[platform]
+    return [platform_hint, *base]
+
+
 def build_plan() -> dict[str, Any]:
     with tempfile.TemporaryDirectory(prefix="axiom-accessibility-review-") as tmp:
         manifest = verify_package(Path(tmp))
@@ -138,6 +160,7 @@ def build_plan() -> dict[str, Any]:
                 "review_scope": "lesson-alternative",
                 "lesson_id": lesson_id,
                 "unit_id": unit_id,
+                "platform": None,
                 "target_sha256": canonical_digest(binding),
                 "binding": binding,
                 "review_requirements": [
@@ -156,29 +179,28 @@ def build_plan() -> dict[str, Any]:
         path = ROOT / relative
         require(path.is_file(), f"learner application accessibility surface missing: {relative}")
         app_files.append({"path": relative, "sha256": sha256_file(path)})
-    app_binding = {
-        "surface": "learner-application",
-        "files": app_files,
-    }
-    application_target = {
-        "target_id": "mth1w-learner-application-accessibility-surface",
-        "review_scope": "learner-application-surface",
-        "lesson_id": None,
-        "unit_id": None,
-        "target_sha256": canonical_digest(app_binding),
-        "binding": app_binding,
-        "review_requirements": [
-            "keyboard navigation",
-            "screen-reader navigation and labels",
-            "text scaling and reflow",
-            "contrast and non-colour cues",
-            "motion independence/reduced-motion safety",
-            "focus order and control labels",
-            "cognitive usability across primary learner routes",
-        ],
-    }
 
-    targets = lesson_targets + [application_target]
+    application_targets: list[dict[str, Any]] = []
+    for platform in APPLICATION_PLATFORMS:
+        app_binding = {
+            "surface": "learner-application",
+            "platform": platform,
+            "files": app_files,
+        }
+        application_targets.append(
+            {
+                "target_id": f"mth1w-learner-application-accessibility-{platform}",
+                "review_scope": "learner-application-surface",
+                "lesson_id": None,
+                "unit_id": None,
+                "platform": platform,
+                "target_sha256": canonical_digest(app_binding),
+                "binding": app_binding,
+                "review_requirements": _application_review_requirements(platform),
+            }
+        )
+
+    targets = lesson_targets + application_targets
     require(len(targets) == EXPECTED_TARGETS, "accessibility review target count mismatch")
     return {
         "schema": "axiom-education-mth1w-accessibility-review-plan.v1",
@@ -186,10 +208,11 @@ def build_plan() -> dict[str, Any]:
         "status": "machine-generated-review-targets-no-human-approval",
         "target_count": len(targets),
         "lesson_alternative_targets": len(lesson_targets),
-        "application_surface_targets": 1,
+        "application_surface_targets": len(application_targets),
+        "application_platforms": list(APPLICATION_PLATFORMS),
         "claim_boundary": (
-            "Targets bind future human accessibility/usability review to exact current lesson alternatives and learner-app source surfaces. "
-            "Generating this plan, deterministic exports, or green platform CI creates no WCAG, AODA, assistive-technology, usability, course-completion, or Ministry approval."
+            "Targets bind future human accessibility/usability review to exact current lesson alternatives and to separate Android, Windows, macOS, and iOS learner-app surfaces. "
+            "Generating this plan, deterministic exports, green platform CI, or a debug/no-codesign build creates no WCAG, AODA, assistive-technology, usability, production-support, course-completion, or Ministry approval."
         ),
         "targets": targets,
     }
@@ -246,7 +269,7 @@ def verify_review(path: Path, plan: dict[str, Any] | None = None) -> dict[str, A
     target = review.get("target")
     require(isinstance(target, dict), "accessibility review target is required")
     require(
-        set(target) == {"target_id", "lesson_id", "unit_id", "target_sha256"},
+        set(target) == {"target_id", "lesson_id", "unit_id", "platform", "target_sha256"},
         "accessibility review target fields are invalid",
     )
     target_id = target.get("target_id")
@@ -255,6 +278,11 @@ def verify_review(path: Path, plan: dict[str, Any] | None = None) -> dict[str, A
     require(scope == current["review_scope"], "accessibility review scope does not match target")
     require(target.get("lesson_id") == current["lesson_id"], "accessibility lesson binding mismatch")
     require(target.get("unit_id") == current["unit_id"], "accessibility unit binding mismatch")
+    require(target.get("platform") == current["platform"], "accessibility platform binding mismatch")
+    if scope == "lesson-alternative":
+        require(target.get("platform") is None, "lesson accessibility review cannot claim an application platform")
+    else:
+        require(target.get("platform") in APPLICATION_PLATFORMS, "application accessibility platform is invalid")
     digest = target.get("target_sha256")
     require(
         isinstance(digest, str) and SHA256_RE.fullmatch(digest) is not None,
@@ -370,15 +398,22 @@ def verify_directory(directory: Path = REVIEW_DIR) -> dict[str, Any]:
         if target["review_scope"] == "lesson-alternative"
     }
     application_ids = set(targets) - lesson_ids
+    approved_application_platforms = sorted(
+        str(targets[target_id]["platform"])
+        for target_id in approved_targets
+        if target_id in application_ids
+    )
     return {
         "targets": len(targets),
         "lesson_alternative_targets": len(lesson_ids),
         "application_surface_targets": len(application_ids),
+        "application_platforms": list(APPLICATION_PLATFORMS),
         "reviews": len(paths),
         "targets_with_any_review": sum(1 for value in latest.values() if value is not None),
         "latest_approved_targets": len(approved_targets),
         "latest_approved_lesson_alternatives": len(set(approved_targets) & lesson_ids),
         "latest_approved_application_surfaces": len(set(approved_targets) & application_ids),
+        "latest_approved_application_platforms": approved_application_platforms,
         "all_current_targets_approved": len(approved_targets) == len(targets),
         "unreviewed_target_ids": sorted(target_id for target_id, value in latest.items() if value is None),
         "latest_nonapproved_target_ids": sorted(
@@ -413,6 +448,10 @@ def verify_readiness_boundary(readiness_path: Path = READINESS_PATH) -> dict[str
         human.get("application_surface_targets") == summary["application_surface_targets"],
         "accessibility application target claim mismatch",
     )
+    require(
+        human.get("application_platforms") == summary["application_platforms"],
+        "accessibility application platform claim mismatch",
+    )
     require(human.get("submitted_review_records") == summary["reviews"], "accessibility review count claim mismatch")
     require(
         human.get("approved_current_targets") == summary["latest_approved_targets"],
@@ -436,7 +475,7 @@ def verify_readiness_boundary(readiness_path: Path = READINESS_PATH) -> dict[str
     else:
         require(
             current == "blocked",
-            "accessibility gate cannot open before every current lesson and application target is human-approved",
+            "accessibility gate cannot open before every current lesson and platform-specific application target is human-approved",
         )
     return summary
 
@@ -467,7 +506,9 @@ def main() -> int:
                 print(rendered, end="")
         elif args.command == "verify-review":
             review = verify_review(args.review)
-            print(f"MTH1W accessibility review verified: {review['review_id']} decision={review['decision']}")
+            platform = review["target"].get("platform")
+            suffix = f" platform={platform}" if platform else ""
+            print(f"MTH1W accessibility review verified: {review['review_id']} decision={review['decision']}{suffix}")
         elif args.command == "verify-directory":
             print(json.dumps(verify_directory(), indent=2, sort_keys=True))
         else:
