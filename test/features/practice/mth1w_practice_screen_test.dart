@@ -91,7 +91,10 @@ void main() {
     expect(find.text('Technical details'), findsOneWidget);
     expect(find.textContaining(item.itemDigest), findsNothing);
 
-    await tester.tap(find.text('Technical details'));
+    final technicalDetails = find.text('Technical details');
+    await tester.ensureVisible(technicalDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(technicalDetails);
     await tester.pumpAndSettle();
     expect(find.textContaining(item.itemDigest), findsOneWidget);
 
@@ -109,7 +112,10 @@ void main() {
     expect(find.text('Verification details'), findsOneWidget);
     expect(find.textContaining(MathAnswerVerifier.verifierId), findsNothing);
 
-    await tester.tap(find.text('Verification details'));
+    final verificationDetails = find.text('Verification details');
+    await tester.ensureVisible(verificationDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(verificationDetails);
     await tester.pumpAndSettle();
     expect(find.textContaining(MathAnswerVerifier.verifierId), findsOneWidget);
   });
