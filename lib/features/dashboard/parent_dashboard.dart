@@ -23,9 +23,8 @@ class ParentDashboard extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       'Useful now',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     _ActionCard(
@@ -126,17 +125,14 @@ class _ActionCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
             Text(description),
             const SizedBox(height: 14),
-            FilledButton.tonal(
-              onPressed: onPressed,
-              child: Text(buttonLabel),
-            ),
+            FilledButton.tonal(onPressed: onPressed, child: Text(buttonLabel)),
           ],
         ),
       ),
