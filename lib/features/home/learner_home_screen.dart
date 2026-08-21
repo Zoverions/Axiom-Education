@@ -218,7 +218,7 @@ class _PrimaryLearningCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Preview status: lesson and practice activity is not saved as an '
-              'authoritative learner record, grade, credit, or mastery result.',
+              'official learner record, grade, credit, or mastery result.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -303,7 +303,7 @@ class _CurrentBoundaryCard extends StatelessWidget {
             const _StatusRow(
               icon: Icons.pending_actions_rounded,
               text:
-                  'AI tutoring, authoritative saved progress, grades, credits, and school-equivalency claims are not enabled.',
+                  'AI tutoring, official saved progress, grades, credits, and claims that this replaces a school course are not enabled.',
             ),
           ],
         ),
