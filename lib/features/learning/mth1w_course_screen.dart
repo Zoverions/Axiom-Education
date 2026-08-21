@@ -212,7 +212,7 @@ class _DraftUnitEntry extends StatelessWidget {
               );
             },
             icon: Icon(unit.icon),
-            label: Text('Open source-mapped draft Unit ${unit.unitNumber}'),
+            label: Text('Open draft Unit ${unit.unitNumber}'),
           ),
           const SizedBox(height: 8),
           Text(
@@ -261,8 +261,9 @@ class _CourseOverviewCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'This is not a complete MTH1W course, credit, grade, transcript, '
-              'or Ministry-approved resource. Official inventory mapping is '
-              'verified, human review is still pending, and no progress is saved.',
+              'or Ministry-approved resource. The draft is linked to the official '
+              'course expectations, but educator review is still pending and no '
+              'progress is saved.',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: colors.onPrimaryContainer),
@@ -320,7 +321,7 @@ class _LessonTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      'Derived topic reference ${lesson.expectationId} • About '
+                      'Curriculum reference ${lesson.expectationId} • About '
                       '${lesson.estimatedMinutes} minutes',
                     ),
                     const SizedBox(height: 10),
@@ -385,7 +386,7 @@ class Mth1wLessonScreen extends StatelessWidget {
                     Text('About ${lesson.estimatedMinutes} minutes'),
                     const SizedBox(height: 6),
                     Text(
-                      'Derived topic reference ${lesson.expectationId}; official curriculum mapping is under review.',
+                      'Curriculum reference ${lesson.expectationId}; educator review of this draft is still pending.',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
