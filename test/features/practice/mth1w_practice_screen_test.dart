@@ -88,10 +88,12 @@ void main() {
 
     expect(find.textContaining('MTH1W-A1'), findsOneWidget);
     expect(find.textContaining('uncalibrated'), findsOneWidget);
-    expect(
-      find.textContaining(item.itemDigest.substring(0, 12)),
-      findsOneWidget,
-    );
+    expect(find.text('Technical details'), findsOneWidget);
+    expect(find.textContaining(item.itemDigest), findsNothing);
+
+    await tester.tap(find.text('Technical details'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining(item.itemDigest), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), item.canonicalAnswer);
     final checkButton = tester.widget<FilledButton>(
@@ -99,10 +101,16 @@ void main() {
     );
     expect(checkButton.onPressed, isNotNull);
     checkButton.onPressed!();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Exact deterministic verification'), findsOneWidget);
     expect(find.textContaining('Correct.'), findsOneWidget);
+    expect(find.text('Verification details'), findsOneWidget);
+    expect(find.textContaining(MathAnswerVerifier.verifierId), findsNothing);
+
+    await tester.tap(find.text('Verification details'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining(MathAnswerVerifier.verifierId), findsOneWidget);
   });
 
   testWidgets('shows an ephemeral exact-verification session summary', (
@@ -169,7 +177,7 @@ void main() {
         if (itemIndex < 2) {
           tester
               .widget<TextButton>(
-                find.widgetWithText(TextButton, 'New item, same expectation'),
+                find.widgetWithText(TextButton, 'Another question'),
               )
               .onPressed!();
           await tester.pump();
@@ -184,7 +192,7 @@ void main() {
     },
   );
 
-  testWidgets('reveals deterministic scaffolded hints', (tester) async {
+  testWidgets('reveals hints one step at a time', (tester) async {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
@@ -195,7 +203,7 @@ void main() {
     hintButton.onPressed!();
     await tester.pump();
 
-    expect(find.text('Scaffolded hints'), findsOneWidget);
+    expect(find.text('Hints'), findsOneWidget);
     expect(find.textContaining('Multiply'), findsOneWidget);
   });
 
