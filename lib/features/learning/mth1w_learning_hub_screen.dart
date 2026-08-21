@@ -343,11 +343,11 @@ class _HubLoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Semantics(
         liveRegion: true,
         label: 'Loading Grade 9 Math',
-        child: CircularProgressIndicator(),
+        child: const CircularProgressIndicator(),
       ),
     );
   }
