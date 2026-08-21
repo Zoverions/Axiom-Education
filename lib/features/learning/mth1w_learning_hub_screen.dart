@@ -310,9 +310,9 @@ class _DraftCourseCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             const Text(
-              'Nine source-mapped unit drafts are available for exploration. They '
-              'are machine-verified drafts with human educator and cultural review '
-              'still required, so they are kept separate from the simple start-here path.',
+              'Nine draft units are available for exploration. They are linked '
+              'to official course expectations, but educator and cultural review '
+              'is still required, so they remain separate from the simple start-here path.',
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(
@@ -381,7 +381,7 @@ class _HubErrorState extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'The local foundation references are incomplete or unavailable. '
+                    'The required lesson references are incomplete or unavailable. '
                     'No lesson or practice result was inferred.',
                     textAlign: TextAlign.center,
                   ),
