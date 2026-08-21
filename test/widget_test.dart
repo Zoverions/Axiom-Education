@@ -36,19 +36,19 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('opens a searchable local curriculum browser from home', (
-    tester,
-  ) async {
+  testWidgets('opens a searchable curriculum library from home', (tester) async {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Open curriculum library'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Ontario Secondary Curriculum Pack'), findsOneWidget);
+    expect(find.text('Curriculum library'), findsOneWidget);
+    expect(find.text('Ontario secondary curriculum'), findsOneWidget);
     expect(find.text('3 courses • 31 expectations'), findsOneWidget);
     expect(find.textContaining('Arts Foundations'), findsOneWidget);
-    expect(find.text('A'), findsNWidgets(2));
+    expect(find.text('A'), findsOneWidget);
+    expect(find.textContaining('Browsing here does not enrol'), findsOneWidget);
 
     await tester.enterText(find.byType(EditableText), 'English');
     await tester.pump();
@@ -67,7 +67,10 @@ void main() {
     await tester.pump();
 
     expect(find.text('No courses match “not-a-course”'), findsOneWidget);
-    expect(find.text('Search by course code or course name.'), findsOneWidget);
+    expect(
+      find.text('Try a course code, subject, or a shorter search.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('opens honest family tools and the home learning guide', (
