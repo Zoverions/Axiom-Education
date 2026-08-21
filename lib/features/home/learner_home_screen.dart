@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../dashboard/parent_dashboard.dart';
 import '../diagnostic/diagnostic_screen.dart';
-import '../learning/mth1w_course_screen.dart';
+import '../learning/mth1w_learning_hub_screen.dart';
 import '../practice/mth1w_practice_screen.dart';
 
 class LearnerHomeScreen extends StatelessWidget {
@@ -34,7 +34,7 @@ class LearnerHomeScreen extends StatelessWidget {
                     _PrimaryLearningCard(
                       onOpenCourse: () => _push(
                         context,
-                        const Mth1wCourseScreen(),
+                        const Mth1wLearningHubScreen(),
                       ),
                       onOpenPractice: () => _push(
                         context,
@@ -198,8 +198,8 @@ class _PrimaryLearningCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       const Text(
-                        'Open the guided foundation lessons and source-mapped draft units, '
-                        'or jump straight into deterministic practice.',
+                        'Start with four guided foundation lessons, each leading '
+                        'directly into exact local practice.',
                       ),
                     ],
                   ),
