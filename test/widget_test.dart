@@ -98,6 +98,9 @@ void main() {
     expect(find.text('Home learning guide'), findsOneWidget);
     expect(find.text('A 45-minute session'), findsOneWidget);
     expect(find.text('Two learners, one device'), findsOneWidget);
+    expect(find.textContaining('Use Another question'), findsOneWidget);
+    expect(find.text('Ready to try the routine?'), findsOneWidget);
+    expect(find.text('Start mixed practice'), findsOneWidget);
   });
 
   testWidgets(
