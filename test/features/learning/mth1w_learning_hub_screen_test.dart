@@ -51,32 +51,37 @@ void main() {
 
   Widget buildHub({List<CurriculumItem> items = expectations}) {
     return ProviderScope(
-      overrides: [
-        mth1wGoldenPathProvider.overrideWith((ref) async => items),
-      ],
+      overrides: [mth1wGoldenPathProvider.overrideWith((ref) async => items)],
       child: const MaterialApp(home: Mth1wLearningHubScreen()),
     );
   }
 
-  testWidgets('puts the four foundation lessons before draft-course exploration', (
-    tester,
-  ) async {
-    await tester.pumpWidget(buildHub());
-    await tester.pumpAndSettle();
+  testWidgets(
+    'puts the four foundation lessons before draft-course exploration',
+    (tester) async {
+      await tester.pumpWidget(buildHub());
+      await tester.pumpAndSettle();
 
-    expect(find.text('Build the foundations, then practise'), findsOneWidget);
-    expect(find.text('Start here'), findsOneWidget);
-    expect(find.text('Order of operations with rational numbers'), findsOneWidget);
-    expect(find.text('Percentages and proportional reasoning'), findsOneWidget);
-    expect(find.text('Solving linear equations'), findsOneWidget);
-    expect(find.text('Equation of a line from two points'), findsOneWidget);
-    expect(find.text('Start mixed practice'), findsOneWidget);
-    expect(find.text('Explore more Grade 9 Math'), findsOneWidget);
-    expect(find.text('Explore draft units'), findsOneWidget);
+      expect(find.text('Build the foundations, then practise'), findsOneWidget);
+      expect(find.text('Start here'), findsOneWidget);
+      expect(
+        find.text('Order of operations with rational numbers'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Percentages and proportional reasoning'),
+        findsOneWidget,
+      );
+      expect(find.text('Solving linear equations'), findsOneWidget);
+      expect(find.text('Equation of a line from two points'), findsOneWidget);
+      expect(find.text('Start mixed practice'), findsOneWidget);
+      expect(find.text('Explore more Grade 9 Math'), findsOneWidget);
+      expect(find.text('Explore draft units'), findsOneWidget);
 
-    expect(find.text('Open source-mapped draft Unit 1'), findsNothing);
-    expect(find.text('Open source-mapped draft Unit 9'), findsNothing);
-  });
+      expect(find.text('Open source-mapped draft Unit 1'), findsNothing);
+      expect(find.text('Open source-mapped draft Unit 9'), findsNothing);
+    },
+  );
 
   testWidgets('opens a foundation lesson directly from the learner hub', (
     tester,
@@ -84,23 +89,32 @@ void main() {
     await tester.pumpWidget(buildHub());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('hub-open-foundation-MTH1W-A1')));
+    await tester.tap(
+      find.byKey(const ValueKey('hub-open-foundation-MTH1W-A1')),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Math foundations lesson'), findsOneWidget);
     expect(find.text('Lesson 1 of 4'), findsOneWidget);
-    expect(find.text('Order of operations with rational numbers'), findsOneWidget);
+    expect(
+      find.text('Order of operations with rational numbers'),
+      findsOneWidget,
+    );
     expect(find.text('Learning goals'), findsOneWidget);
   });
 
-  testWidgets('fails closed when a required local foundation reference is missing', (
-    tester,
-  ) async {
-    await tester.pumpWidget(buildHub(items: expectations.take(3).toList()));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'fails closed when a required local foundation reference is missing',
+    (tester) async {
+      await tester.pumpWidget(buildHub(items: expectations.take(3).toList()));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Grade 9 Math could not be prepared'), findsOneWidget);
-    expect(find.textContaining('No lesson or practice result was inferred'), findsOneWidget);
-    expect(find.text('Start here'), findsNothing);
-  });
+      expect(find.text('Grade 9 Math could not be prepared'), findsOneWidget);
+      expect(
+        find.textContaining('No lesson or practice result was inferred'),
+        findsOneWidget,
+      );
+      expect(find.text('Start here'), findsNothing);
+    },
+  );
 }
