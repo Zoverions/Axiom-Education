@@ -16,7 +16,8 @@ historical C0 discovery
   + content-addressed human source identity/scope review
   + content-addressed human licensing/redistribution review
   + exact-byte-gated C2 candidate intake
-  + canonical C2 records and normalization review
+  + content-addressed human normalization review
+  + fail-closed canonical C2 promotion
   + later pack/staging/activation evidence
   -> derived readiness
 ```
@@ -153,7 +154,7 @@ The dossier packages **no captured Ontario curriculum source bytes**. Blank temp
 
 ## C2 candidate intake — 0/16 eligible
 
-C2 normalization now has an explicit pre-canonical gate rather than an implied transition from C1.
+C2 normalization has an explicit pre-canonical gate rather than an implied transition from C1.
 
 `tools/ontario_elementary_c2_intake.py` currently supports **reference-only candidate intake only**. A source becomes eligible only when:
 
@@ -165,19 +166,58 @@ An exact-byte match proves only that the operator input matches the historical C
 
 `external-reference-only`, `prohibited`, `unresolved`, missing licensing evidence, or missing source approval all block candidate intake. Even a future verbatim-redistribution permission exposes only `reference-only` candidate mode in C2 intake v1. Paraphrase and verbatim candidate modes remain intentionally unsupported until a separately reviewed licensing-aware canonicalization boundary exists.
 
-Current committed state: **0/16 eligible sources** and **0 canonical C2 records**.
+Current committed state: **0/16 eligible sources, 0 committed C2 candidates, and 0 canonical C2 records**.
 
 The existing HPE Grade 1 artifact remains a deterministic C1-bound **construction fixture**, not proof that the official source was source-byte-derived, normalized correctly, and human-reviewed.
 
+## Human normalization review and canonical C2 promotion — 0 candidates / 0 reviews / 0 canonical records
+
+The transition from a verified C2 candidate to the canonical `records-v2` directory is now an executable gate rather than a documentation-only follow-up.
+
+`tools/ontario_elementary_c2_promotion.py` builds content-addressed review targets for exact current candidates in `curriculum/ontario-elementary/c2-candidates/`. A target binds:
+
+- the candidate `record_id` and canonical `content_digest`;
+- the exact current source ID;
+- the current C1 source-lock digest;
+- the historical C1 source-byte SHA-256 and byte length; and
+- `reference-only` content mode.
+
+A qualified-human normalization review must bind that exact target and exact source evidence. An approval requires explicit confirmation that the reviewer checked:
+
+- the exact C1 source bytes;
+- official structure and identifiers;
+- education context and grade/level scope;
+- hierarchy and relationships;
+- absence of embedded source wording in reference-only mode;
+- C1 provenance binding;
+- separation of Axiom-authored metadata from official fields; and
+- the absence of any implied completeness or activation claim.
+
+Negative findings and `changes-required`/`rejected` decisions remain provenance. The latest valid review controls the disposition of that exact candidate revision.
+
+Canonical promotion re-runs the earlier gates. `promote` requires the exact C1 source bytes again, re-verifies the reference-only candidate through the C2 intake gate, verifies the exact approved human normalization review, and copies the **unchanged candidate bytes** into `records-v2`. It refuses a different existing canonical file or an output outside the canonical directory.
+
+`verify-canonical` is part of `tools/verify.py` and CI. Every future canonical record must exactly match a retained current candidate whose source/licensing evidence is still eligible and whose exact current normalization target has an approved review. A canonical record without that evidence fails closed.
+
+Current committed state remains deliberately empty:
+
+- committed reference-only C2 candidates: **0**;
+- submitted human normalization reviews: **0**;
+- approved normalization targets: **0**;
+- canonical C2 records: **0**.
+
+This gate closes the architectural transition but creates no curriculum content or human approval.
+
 ## What remains incomplete
 
-Base source capture completion does not advance the later gates automatically. The current readiness verifier still reports:
+Base source capture completion does not advance the later gates automatically. The current readiness state still reports:
 
 - **human source identity/scope review:** 0/16 approved;
 - **licensing and redistribution review:** 0/16 resolved;
 - **reference-only C2 candidate eligibility:** 0/16;
-- **canonical reviewed C2 curriculum extraction:** 0 canonical records;
-- **normalization/source-content review:** not yet established;
+- **committed C2 candidates:** 0;
+- **human normalization reviews:** 0;
+- **canonical reviewed C2 curriculum records:** 0;
 - **crosswalk review:** incomplete beyond bounded construction/evidence work;
 - **deterministic full curriculum pack verification:** incomplete;
 - **accessible and printable alternatives:** incomplete at whole-program level;
@@ -211,7 +251,12 @@ The source and review pipeline rejects attempts to:
 - admit C2 candidate normalization without current source approval and compatible licensing evidence;
 - accept operator source bytes whose digest or byte length differs from the C1 lock;
 - expose paraphrase or verbatim C2 candidate modes through the v1 intake gate;
-- infer canonical C2 promotion, full-pack verification, governed activation, or Ministry approval from any earlier evidence stage.
+- accept a stale human normalization review whose candidate digest, C1 lock, or C1 byte evidence no longer matches;
+- approve normalization while required confirmations are false or open findings remain;
+- promote a candidate whose current source/licensing eligibility has become blocked;
+- promote bytes that differ from the reviewed candidate;
+- leave a canonical C2 record without a retained matching candidate and current exact approved normalization review;
+- infer full-pack verification, governed activation, curriculum completeness, or Ministry approval from canonical C2 presence or any earlier evidence stage.
 
 ## Current derived state
 
@@ -234,8 +279,11 @@ The machine-verifiable source/readiness state is therefore:
 - resolved licensing reviews: **0/16**;
 - verbatim redistribution permissions: **0**;
 - reference-only C2 intake eligibility: **0/16**;
+- committed C2 candidates: **0**;
+- submitted human normalization reviews: **0**;
+- approved normalization targets: **0**;
 - canonical C2 records: **0**;
 - deterministic full-pack verification: **incomplete**;
 - governed activation: **unavailable**.
 
-That boundary is intentional: **all required sources are captured, while human source review, licensing, and source-derived C2 normalization remain evidence-gated and unpromoted.**
+That boundary is intentional: **all required sources are captured, while human source review, licensing, source-derived C2 candidate creation, human normalization review, and canonical promotion remain evidence-gated and unpromoted.**
