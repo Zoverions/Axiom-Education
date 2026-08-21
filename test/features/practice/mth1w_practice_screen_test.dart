@@ -299,7 +299,10 @@ void main() {
     expect(find.textContaining('MTH1W-B2'), findsNothing);
     expect(find.text('Practice topic 3 of 4'), findsOneWidget);
 
-    await tester.tap(find.text('Curriculum details'));
+    final curriculumDetails = find.text('Curriculum details');
+    await tester.ensureVisible(curriculumDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(curriculumDetails);
     await tester.pumpAndSettle();
     expect(find.textContaining('MTH1W-B2'), findsOneWidget);
   });
