@@ -72,7 +72,7 @@ void main() {
     );
   }
 
-  testWidgets('checks an entered answer with exact local verification', (
+  testWidgets('keeps evidence details available without leading with jargon', (
     tester,
   ) async {
     const generator = MathPracticeGenerator();
@@ -86,10 +86,21 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
-    expect(find.textContaining('uncalibrated'), findsOneWidget);
+    expect(find.text("What you're practising"), findsOneWidget);
+    expect(find.text('Curriculum details'), findsOneWidget);
+    expect(find.textContaining('MTH1W-A1'), findsNothing);
+    expect(find.textContaining('uncalibrated'), findsNothing);
     expect(find.text('Technical details'), findsOneWidget);
     expect(find.textContaining(item.itemDigest), findsNothing);
+
+    final curriculumDetails = find.text('Curriculum details');
+    await tester.ensureVisible(curriculumDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(curriculumDetails);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
+    expect(find.textContaining('uncalibrated'), findsOneWidget);
+    expect(find.textContaining('review pending'), findsOneWidget);
 
     final technicalDetails = find.text('Technical details');
     await tester.ensureVisible(technicalDetails);
@@ -107,9 +118,10 @@ void main() {
     checkButton.onPressed!();
     await tester.pumpAndSettle();
 
-    expect(find.text('Exact deterministic verification'), findsOneWidget);
+    expect(find.text('Correct'), findsOneWidget);
     expect(find.textContaining('Correct.'), findsOneWidget);
     expect(find.text('Verification details'), findsOneWidget);
+    expect(find.textContaining('Exact deterministic verification'), findsNothing);
     expect(find.textContaining(MathAnswerVerifier.verifierId), findsNothing);
 
     final verificationDetails = find.text('Verification details');
@@ -117,6 +129,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(verificationDetails);
     await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Exact deterministic verification'),
+      findsOneWidget,
+    );
     expect(find.textContaining(MathAnswerVerifier.verifierId), findsOneWidget);
   });
 
@@ -277,15 +293,19 @@ void main() {
     await tester.pumpWidget(buildScreen(initialExpectationId: 'MTH1W-B2'));
     await tester.pumpAndSettle();
 
+    expect(find.textContaining('MTH1W-B2'), findsNothing);
+    expect(find.text('Practice topic 3 of 4'), findsOneWidget);
+
+    await tester.tap(find.text('Curriculum details'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('MTH1W-B2'), findsOneWidget);
-    expect(find.text('Foundations topic 3 of 4'), findsOneWidget);
   });
 
   testWidgets('fails closed when the verifier is unavailable', (tester) async {
     await tester.pumpWidget(buildScreen(verifierAvailable: false));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Fail-closed mode'), findsOneWidget);
+    expect(find.textContaining('Answer checking is unavailable'), findsWidgets);
     final button = tester.widget<FilledButton>(
       find.widgetWithText(FilledButton, 'Check answer'),
     );
