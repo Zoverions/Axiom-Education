@@ -188,11 +188,11 @@ class _ReferenceLoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Semantics(
         liveRegion: true,
         label: 'Loading course reference',
-        child: CircularProgressIndicator(),
+        child: const CircularProgressIndicator(),
       ),
     );
   }
