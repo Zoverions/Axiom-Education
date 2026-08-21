@@ -204,7 +204,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('MTH1W-A1'), findsOneWidget);
-    expect(find.text('Practice item'), findsOneWidget);
+    expect(find.text('Practice question'), findsOneWidget);
   });
 
   testWidgets('fails closed when a lesson expectation is unavailable', (
