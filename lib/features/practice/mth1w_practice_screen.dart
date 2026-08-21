@@ -288,12 +288,12 @@ class _PracticeBody extends StatelessWidget {
                     TextButton.icon(
                       onPressed: onNewItem,
                       icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('New item, same expectation'),
+                      label: const Text('Another question'),
                     ),
                     FilledButton.tonalIcon(
                       onPressed: onNextExpectation,
                       icon: const Icon(Icons.arrow_forward_rounded),
-                      label: const Text('Next expectation'),
+                      label: const Text('Next topic'),
                     ),
                   ],
                 ),
@@ -383,10 +383,10 @@ class _StatusBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 verifierAvailable
-                    ? 'Foundations preview: offline deterministic practice is '
-                          'active. Curriculum mapping is under review; this is '
-                          'not a complete course or grade. No tutor provider '
-                          'or learner record is used.'
+                    ? 'Offline practice is ready. Answers are checked locally '
+                          'with exact arithmetic. This preview is not a complete '
+                          'course or grade, and it does not use an AI tutor or '
+                          'learner record.'
                     : 'Fail-closed mode: the verifier is unavailable, so '
                           'answers cannot be submitted or treated as correct.',
               ),
@@ -413,7 +413,7 @@ class _ExpectationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Derived topic reference ${item.expectationId}',
+              'Practice focus • ${item.expectationId}',
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -428,10 +428,15 @@ class _ExpectationCard extends StatelessWidget {
                 Chip(label: Text(expectation.strand)),
                 Chip(
                   label: Text(
-                    'Difficulty ${item.difficultyValue.toStringAsFixed(1)} — uncalibrated',
+                    'Practice difficulty ${item.difficultyValue.toStringAsFixed(1)} — uncalibrated',
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Local topic reference; official curriculum mapping remains under review.',
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -456,7 +461,7 @@ class _QuestionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Practice item',
+              'Practice question',
               style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(height: 8),
@@ -464,11 +469,23 @@ class _QuestionCard extends StatelessWidget {
               item.prompt,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Generator ${PracticeItem.generatorVersion} • seed '
-              '${item.generatorSeed} • digest ${item.itemDigest.substring(0, 12)}…',
-              style: Theme.of(context).textTheme.bodySmall,
+            const SizedBox(height: 10),
+            ExpansionTile(
+              key: const ValueKey('practice-technical-details'),
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: const EdgeInsets.only(bottom: 4),
+              title: const Text('Technical details'),
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: SelectableText(
+                    'Generator ${PracticeItem.generatorVersion}\n'
+                    'Seed ${item.generatorSeed}\n'
+                    'Item digest ${item.itemDigest}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -491,7 +508,7 @@ class _HintCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Scaffolded hints',
+              'Hints',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -547,10 +564,21 @@ class _VerificationCard extends StatelessWidget {
                 Text('Normalized answer: ${result.normalizedAnswer}'),
               ],
               const SizedBox(height: 6),
-              Text(
-                'Verifier ${MathAnswerVerifier.verifierId} • item '
-                '${result.itemDigest.substring(0, 12)}…',
-                style: Theme.of(context).textTheme.bodySmall,
+              ExpansionTile(
+                key: const ValueKey('verification-technical-details'),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: 4),
+                title: const Text('Verification details'),
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SelectableText(
+                      'Verifier ${MathAnswerVerifier.verifierId}\n'
+                      'Item digest ${result.itemDigest}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
