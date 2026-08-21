@@ -10,8 +10,10 @@ void main() {
     expect(find.text('Two learners, one device'), findsOneWidget);
     expect(find.textContaining('not a complete MTH1W course'), findsOneWidget);
     expect(
-      find.textContaining('three different practice items'),
+      find.textContaining('three different practice questions'),
       findsOneWidget,
     );
+    expect(find.text('Ready to try the routine?'), findsOneWidget);
+    expect(find.text('Start mixed practice'), findsOneWidget);
   });
 }
