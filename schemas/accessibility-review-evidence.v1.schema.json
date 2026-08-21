@@ -29,11 +29,15 @@
     "target": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["target_id", "lesson_id", "unit_id", "target_sha256"],
+      "required": ["target_id", "lesson_id", "unit_id", "platform", "target_sha256"],
       "properties": {
         "target_id": {"type": "string", "minLength": 1},
         "lesson_id": {"type": ["string", "null"]},
         "unit_id": {"type": ["string", "null"]},
+        "platform": {
+          "type": ["string", "null"],
+          "enum": [null, "android", "windows", "macos", "ios"]
+        },
         "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }
     },
