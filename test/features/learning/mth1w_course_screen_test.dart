@@ -203,8 +203,14 @@ void main() {
     focusedPracticeButton.onPressed!();
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
+    expect(find.textContaining('MTH1W-A1'), findsNothing);
     expect(find.text('Practice question'), findsOneWidget);
+    final curriculumDetails = find.text('Curriculum details');
+    await tester.ensureVisible(curriculumDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(curriculumDetails);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
   });
 
   testWidgets('fails closed when a lesson expectation is unavailable', (
