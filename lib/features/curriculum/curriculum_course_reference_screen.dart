@@ -84,7 +84,12 @@ class _CourseReferenceBody extends StatelessWidget {
                   children: [
                     for (final expectation in strand.expectations)
                       ListTile(
-                        contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+                        contentPadding: const EdgeInsets.fromLTRB(
+                          24,
+                          8,
+                          24,
+                          12,
+                        ),
                         title: SelectableText(expectation.text),
                         subtitle: expectation.tags.isEmpty
                             ? null
@@ -153,9 +158,9 @@ class _ReferenceHeader extends StatelessWidget {
             Text(
               'Reference view only. Opening or reading an expectation does not '
               'mark it complete, save progress, create a grade, or establish mastery.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colors.onPrimaryContainer,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.onPrimaryContainer),
             ),
             if (isMth1w) ...[
               const SizedBox(height: 14),
