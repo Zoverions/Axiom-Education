@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../practice/mth1w_practice_screen.dart';
+
 class HomeLearningGuideScreen extends StatelessWidget {
   const HomeLearningGuideScreen({super.key});
 
@@ -14,9 +16,9 @@ class HomeLearningGuideScreen extends StatelessWidget {
             Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 760),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const [
+                  children: [
                     _BoundaryCard(),
                     SizedBox(height: 12),
                     _GuideSection(
@@ -25,7 +27,7 @@ class HomeLearningGuideScreen extends StatelessWidget {
                       items: [
                         '5 minutes: warm up with one earlier example.',
                         '15 minutes: read one lesson and copy the worked example by hand.',
-                        '20 minutes: check three different practice items. Use New item between questions.',
+                        '20 minutes: check three different practice questions. Use Another question between them.',
                         '5 minutes: correct one error and explain the method aloud or in writing.',
                       ],
                     ),
@@ -37,7 +39,7 @@ class HomeLearningGuideScreen extends StatelessWidget {
                         'Day 2: percentages and proportional reasoning.',
                         'Day 3: linear-equation foundations.',
                         'Day 4: lines-from-points foundations.',
-                        'Day 5: mixed review with a new item from every available topic.',
+                        'Day 5: mixed review with one new question from every available topic.',
                       ],
                     ),
                     _GuideSection(
@@ -45,7 +47,7 @@ class HomeLearningGuideScreen extends StatelessWidget {
                       title: 'Two learners, one device',
                       items: [
                         'Each learner keeps a separate paper notebook.',
-                        'Copy the date, topic, different items attempted, and corrections into the notebook.',
+                        'Copy the date, topic, questions attempted, and corrections into the notebook.',
                         'Close the practice screen between learners so temporary counters reset.',
                         'Do not compare learners by speed or treat the on-screen count as a grade.',
                       ],
@@ -59,6 +61,7 @@ class HomeLearningGuideScreen extends StatelessWidget {
                         'What do you need explained by a teacher or tutor?',
                       ],
                     ),
+                    _StartPracticeCard(),
                   ],
                 ),
               ),
@@ -151,6 +154,51 @@ class _GuideSection extends StatelessWidget {
                   ],
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StartPracticeCard extends StatelessWidget {
+  const _StartPracticeCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      color: colors.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Ready to try the routine?',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colors.onSecondaryContainer,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Open mixed Grade 9 Math practice. Feedback stays temporary and local.',
+              style: TextStyle(color: colors.onSecondaryContainer),
+            ),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              key: const ValueKey('guide-start-mixed-practice'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => const Mth1wPracticeScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.edit_rounded),
+              label: const Text('Start mixed practice'),
+            ),
           ],
         ),
       ),
