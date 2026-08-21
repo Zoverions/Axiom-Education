@@ -78,7 +78,7 @@ class _FamilyStatusCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Support learning without invented progress data',
+              'Family support that stays honest',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: colors.onPrimaryContainer,
                 fontWeight: FontWeight.bold,
@@ -87,9 +87,9 @@ class _FamilyStatusCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'This preview does not currently maintain an authoritative saved '
-              'learner record. Family tools therefore show routines and privacy '
-              'guidance instead of fake study time, task counts, levels, grades, '
-              'or activity history.',
+              'learner record. Family tools focus on routines and privacy guidance '
+              'rather than estimated or made-up study time, task counts, levels, '
+              'grades, or activity history.',
               style: TextStyle(color: colors.onPrimaryContainer),
             ),
           ],
