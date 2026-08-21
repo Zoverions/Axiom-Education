@@ -205,11 +205,7 @@ class _FoundationLessonCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text('About ${lesson.estimatedMinutes} minutes'),
                     const SizedBox(height: 6),
-                    Text(
-                      lesson.whyItMatters,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    Text(lesson.whyItMatters),
                   ],
                 ),
               ),
