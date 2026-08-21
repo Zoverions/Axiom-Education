@@ -135,17 +135,17 @@ class _HubIntroCard extends StatelessWidget {
             Text(
               'Lessons and answer checking work locally and without an AI tutor. '
               'Choose a lesson below or use mixed practice when you want review.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: colors.onPrimaryContainer,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: colors.onPrimaryContainer),
             ),
             const SizedBox(height: 10),
             Text(
               'Preview status: this is not a complete MTH1W course, grade, credit, '
               'transcript, or Ministry-approved resource, and progress is not saved.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colors.onPrimaryContainer,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.onPrimaryContainer),
             ),
           ],
         ),
@@ -238,10 +238,7 @@ class _PracticeCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.edit_rounded,
-              color: colors.onSecondaryContainer,
-            ),
+            Icon(Icons.edit_rounded, color: colors.onSecondaryContainer),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -311,9 +308,9 @@ class _DraftCourseCard extends StatelessWidget {
           children: [
             Text(
               'Explore more Grade 9 Math',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
             const Text(
