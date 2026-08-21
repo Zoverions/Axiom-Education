@@ -8,6 +8,7 @@ from pathlib import Path
 from tools.mth1w_accessibility_review_evidence import (
     AccessibilityReviewError,
     APPLICATION_CONFIRMATION_KEYS,
+    APPLICATION_PLATFORMS,
     LESSON_CONFIRMATION_KEYS,
     build_plan,
     verify_directory,
@@ -42,6 +43,7 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
                 "target_id": target["target_id"],
                 "lesson_id": target["lesson_id"],
                 "unit_id": target["unit_id"],
+                "platform": target["platform"],
                 "target_sha256": target["target_sha256"],
             },
             "reviewer": {
@@ -67,11 +69,12 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
-    def test_plan_has_43_lesson_targets_and_one_application_target(self) -> None:
+    def test_plan_has_43_lesson_targets_and_four_platform_application_targets(self) -> None:
         plan = build_plan()
-        self.assertEqual(plan["target_count"], 44)
+        self.assertEqual(plan["target_count"], 47)
         self.assertEqual(plan["lesson_alternative_targets"], 43)
-        self.assertEqual(plan["application_surface_targets"], 1)
+        self.assertEqual(plan["application_surface_targets"], 4)
+        self.assertEqual(plan["application_platforms"], list(APPLICATION_PLATFORMS))
         lesson_targets = [
             target
             for target in plan["targets"]
@@ -83,35 +86,55 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
             if target["review_scope"] == "learner-application-surface"
         ]
         self.assertEqual(len(lesson_targets), 43)
-        self.assertEqual(len(app_targets), 1)
+        self.assertEqual(len(app_targets), 4)
+        self.assertTrue(all(target["platform"] is None for target in lesson_targets))
+        self.assertEqual(
+            {target["platform"] for target in app_targets}, set(APPLICATION_PLATFORMS)
+        )
         self.assertTrue(all(len(target["target_sha256"]) == 64 for target in plan["targets"]))
-        self.assertEqual(len(app_targets[0]["binding"]["files"]), 10)
+        self.assertTrue(all(len(target["binding"]["files"]) == 10 for target in app_targets))
 
     def test_current_directory_has_no_implicit_human_approval(self) -> None:
         summary = verify_directory()
-        self.assertEqual(summary["targets"], 44)
+        self.assertEqual(summary["targets"], 47)
         self.assertEqual(summary["reviews"], 0)
         self.assertEqual(summary["latest_approved_targets"], 0)
+        self.assertEqual(summary["latest_approved_application_platforms"], [])
         self.assertFalse(summary["all_current_targets_approved"])
-        self.assertEqual(len(summary["unreviewed_target_ids"]), 44)
+        self.assertEqual(len(summary["unreviewed_target_ids"]), 47)
 
     def test_content_addressed_lesson_review_can_verify(self) -> None:
         target = self.target()
         review = verify_review(self.write_review(self.review_payload(target)))
         self.assertEqual(review["decision"], "approved")
+        self.assertIsNone(review["target"]["platform"])
         self.assertEqual(set(review["confirmations"]), LESSON_CONFIRMATION_KEYS)
 
-    def test_content_addressed_application_review_can_verify(self) -> None:
-        target = self.target(-1)
-        review = verify_review(self.write_review(self.review_payload(target)))
-        self.assertEqual(review["decision"], "approved")
-        self.assertEqual(set(review["confirmations"]), APPLICATION_CONFIRMATION_KEYS)
+    def test_each_platform_application_review_can_verify_independently(self) -> None:
+        app_targets = build_plan()["targets"][-4:]
+        self.assertEqual(
+            {target["platform"] for target in app_targets}, set(APPLICATION_PLATFORMS)
+        )
+        for index, target in enumerate(app_targets):
+            payload = self.review_payload(
+                target, review_id=f"accessibility-app-{target['platform']}-{index}"
+            )
+            review = verify_review(self.write_review(payload, filename=f"{index}.json"))
+            self.assertEqual(review["target"]["platform"], target["platform"])
+            self.assertEqual(set(review["confirmations"]), APPLICATION_CONFIRMATION_KEYS)
 
     def test_stale_target_digest_is_rejected(self) -> None:
         target = self.target()
         payload = self.review_payload(target)
         payload["target"]["target_sha256"] = "0" * 64
         with self.assertRaisesRegex(AccessibilityReviewError, "target content changed"):
+            verify_review(self.write_review(payload))
+
+    def test_application_platform_substitution_is_rejected(self) -> None:
+        target = build_plan()["targets"][-1]
+        payload = self.review_payload(target)
+        payload["target"]["platform"] = "android"
+        with self.assertRaisesRegex(AccessibilityReviewError, "platform binding mismatch"):
             verify_review(self.write_review(payload))
 
     def test_scope_specific_confirmation_set_is_required(self) -> None:
@@ -122,7 +145,7 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
             verify_review(self.write_review(payload))
 
     def test_approved_review_requires_every_confirmation(self) -> None:
-        target = self.target(-1)
+        target = build_plan()["targets"][-1]
         payload = self.review_payload(target)
         payload["confirmations"]["screen_reader_navigation_reviewed"] = False
         with self.assertRaisesRegex(AccessibilityReviewError, "every in-scope confirmation"):
@@ -151,7 +174,7 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
             verify_review(self.write_review(payload))
 
     def test_changes_required_is_valid_negative_provenance(self) -> None:
-        target = self.target(-1)
+        target = build_plan()["targets"][-1]
         payload = self.review_payload(target, decision="changes-required")
         payload["findings"] = [
             {
@@ -197,7 +220,7 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
             self.assertNotIn(target["target_id"], summary["latest_nonapproved_target_ids"])
 
     def test_later_negative_review_blocks_earlier_approval(self) -> None:
-        target = self.target(-1)
+        target = build_plan()["targets"][-1]
         with tempfile.TemporaryDirectory() as tmp:
             directory = Path(tmp)
             earlier = self.review_payload(
@@ -226,6 +249,16 @@ class Mth1wAccessibilityReviewEvidenceTests(unittest.TestCase):
             summary = verify_directory(directory)
             self.assertEqual(summary["latest_approved_targets"], 0)
             self.assertIn(target["target_id"], summary["latest_nonapproved_target_ids"])
+
+    def test_one_platform_approval_cannot_satisfy_cross_platform_gate(self) -> None:
+        target = build_plan()["targets"][-1]
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            self.write_review(self.review_payload(target), directory)
+            summary = verify_directory(directory)
+            self.assertEqual(summary["latest_approved_application_surfaces"], 1)
+            self.assertEqual(summary["latest_approved_application_platforms"], [target["platform"]])
+            self.assertFalse(summary["all_current_targets_approved"])
 
     def test_current_readiness_gate_remains_blocked_without_reviews(self) -> None:
         summary = verify_readiness_boundary()
