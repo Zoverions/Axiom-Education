@@ -15,6 +15,7 @@ if str(ROOT) not in sys.path:
 
 from tools.mth1w_accessible_export import EXPECTED_LESSONS, verify_determinism  # noqa: E402
 from tools.mth1w_accessibility_review_evidence import (  # noqa: E402
+    APPLICATION_PLATFORMS,
     EXPECTED_APPLICATION_TARGETS,
     EXPECTED_LESSON_TARGETS,
     EXPECTED_TARGETS,
@@ -77,6 +78,10 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
         review_summary["application_surface_targets"] == EXPECTED_APPLICATION_TARGETS,
         "accessibility app-surface target count mismatch",
     )
+    require(
+        review_summary["application_platforms"] == list(APPLICATION_PLATFORMS),
+        "accessibility application platform matrix mismatch",
+    )
 
     human = evidence.get("human_review_evidence")
     require(isinstance(human, dict), "accessibility human review evidence declaration missing")
@@ -100,6 +105,10 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
     require(
         human.get("application_surface_targets") == EXPECTED_APPLICATION_TARGETS,
         "accessibility app target claim mismatch",
+    )
+    require(
+        human.get("application_platforms") == list(APPLICATION_PLATFORMS),
+        "accessibility app platform claim mismatch",
     )
     require(
         human.get("submitted_review_records") == review_summary["reviews"],
@@ -131,6 +140,11 @@ def verify(path: Path = READINESS_PATH) -> dict[str, object]:
             "accessibility gate cannot be satisfied without all current human approvals",
         )
         require(
+            set(review_summary["latest_approved_application_platforms"])
+            == set(APPLICATION_PLATFORMS),
+            "accessibility gate cannot be satisfied without current approval on every supported learner platform",
+        )
+        require(
             evidence.get("human_accessibility_review_status") == "completed",
             "satisfied accessibility gate requires completed human review status",
         )
@@ -159,7 +173,8 @@ def main() -> int:
     print(
         "MTH1W accessibility readiness verified: "
         f"{evidence['lesson_exports']} deterministic lesson alternatives; "
-        f"{human['approved_current_targets']}/{human['content_addressed_targets']} current human accessibility targets approved"
+        f"{human['approved_current_targets']}/{human['content_addressed_targets']} current human accessibility targets approved across "
+        + ", ".join(human["application_platforms"])
     )
     return 0
 
