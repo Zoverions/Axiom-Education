@@ -14,8 +14,10 @@ on:
       - 'tools/curriculum_standard_record.py'
       - 'tools/ontario_elementary_c2_intake.py'
       - 'tools/ontario_elementary_c2_promotion.py'
+      - 'tools/ontario_elementary_c2_normalization_templates.py'
       - 'tests/test_ontario_elementary_c2_intake.py'
       - 'tests/test_ontario_elementary_c2_promotion.py'
+      - 'tests/test_ontario_elementary_c2_normalization_templates.py'
       - '.github/workflows/ontario-elementary-c2-promotion.yml'
   workflow_dispatch:
 
@@ -52,15 +54,31 @@ jobs:
           python tools/ontario_elementary_c2_promotion.py verify-directory
           python tools/ontario_elementary_c2_promotion.py verify-canonical
 
-      - name: Run C2 intake and promotion mutation tests
+      - name: Build deterministic non-valid normalization review templates
+        run: |
+          python tools/ontario_elementary_c2_normalization_templates.py verify
+          python tools/ontario_elementary_c2_normalization_templates.py build \
+            --output /tmp/ontario-elementary-c2-normalization-templates
+          python -m json.tool /tmp/ontario-elementary-c2-normalization-templates/manifest.json >/dev/null
+
+      - name: Run C2 intake, promotion, and template mutation tests
         run: |
           python -m unittest tests.test_ontario_elementary_c2_intake -v
           python -m unittest tests.test_ontario_elementary_c2_promotion -v
+          python -m unittest tests.test_ontario_elementary_c2_normalization_templates -v
 
       - name: Upload short-lived promotion review plan
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
           name: ontario-elementary-c2-promotion-plan-${{ github.sha }}
           path: /tmp/ontario-elementary-c2-promotion-plan.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload short-lived normalization review templates
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-c2-normalization-templates-${{ github.sha }}
+          path: /tmp/ontario-elementary-c2-normalization-templates
           if-no-files-found: error
           retention-days: 7
