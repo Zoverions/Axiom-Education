@@ -137,6 +137,10 @@ def verification_commands(flutter: str, dart: str) -> list[tuple[str, list[str]]
             [python, "-m", "unittest", "tests.test_ontario_elementary_c2_intake", "-q"],
         ),
         (
+            "Verify fail-closed Ontario Elementary C2 normalization and promotion gate",
+            [python, "tools/ontario_elementary_c2_promotion.py", "verify-canonical"],
+        ),
+        (
             "Verify official MTH1W expectation inventory",
             [
                 python,
