@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../curriculum/curriculum_library_screen.dart';
 import '../dashboard/parent_dashboard.dart';
-import '../diagnostic/diagnostic_screen.dart';
 import '../learning/mth1w_learning_hub_screen.dart';
 import '../practice/mth1w_practice_screen.dart';
 
@@ -61,7 +61,7 @@ class LearnerHomeScreen extends StatelessWidget {
                             buttonLabel: 'Open curriculum library',
                             onPressed: () => _push(
                               context,
-                              const DiagnosticScreen(),
+                              const CurriculumLibraryScreen(),
                             ),
                           ),
                           _HomeActionCard(
