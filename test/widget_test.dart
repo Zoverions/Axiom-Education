@@ -79,12 +79,13 @@ void main() {
     await tester.tap(find.text('Open family tools'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.text('Support learning without invented progress data'),
-      findsOneWidget,
-    );
+    expect(find.text('Family support that stays honest'), findsOneWidget);
     expect(find.text('Saved progress is not enabled yet'), findsOneWidget);
-    expect(find.textContaining('fake study time'), findsOneWidget);
+    expect(find.textContaining('made-up study time'), findsOneWidget);
+    expect(find.text('45 mins today'), findsNothing);
+    expect(find.text('5 / 7 tasks'), findsNothing);
+    expect(find.text('Level 3 (75%)'), findsNothing);
+    expect(find.text('Score: 90%'), findsNothing);
 
     await tester.tap(find.text('Open home learning guide'));
     await tester.pumpAndSettle();
