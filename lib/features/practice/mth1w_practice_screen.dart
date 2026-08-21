@@ -29,9 +29,10 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
   int _expectationIndex = 0;
   int _itemSequence = 0;
   int _visibleHintCount = 0;
-  int _sessionCheckCount = 0;
-  int _sessionCorrectCount = 0;
+  int _sessionAttemptCount = 0;
+  bool _answerHasContent = false;
   final Set<String> _checkedItemIds = <String>{};
+  final Set<String> _correctItemIds = <String>{};
   VerificationResult? _result;
 
   @override
@@ -54,9 +55,18 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
     _answerController.clear();
     _result = null;
     _visibleHintCount = 0;
+    _answerHasContent = false;
+  }
+
+  void _onAnswerChanged(String value) {
+    final hasContent = value.trim().isNotEmpty;
+    if (hasContent == _answerHasContent) return;
+    setState(() => _answerHasContent = hasContent);
   }
 
   void _checkAnswer(PracticeItem item) {
+    if (_answerController.text.trim().isEmpty) return;
+
     final verifier = widget.verifier;
     if (verifier == null) {
       setState(() {
@@ -74,10 +84,10 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
     final result = verifier.verify(item, _answerController.text);
     setState(() {
       _result = result;
-      _sessionCheckCount += 1;
+      _sessionAttemptCount += 1;
       _checkedItemIds.add(item.itemId);
       if (result.status == VerificationStatus.correct) {
-        _sessionCorrectCount += 1;
+        _correctItemIds.add(item.itemId);
       }
     });
   }
@@ -146,12 +156,14 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
                 position: currentIndex + 1,
                 total: expectations.length,
                 answerController: _answerController,
+                answerHasContent: _answerHasContent,
                 result: _result,
                 visibleHintCount: _visibleHintCount,
-                sessionCheckCount: _sessionCheckCount,
-                sessionCorrectCount: _sessionCorrectCount,
+                sessionAttemptCount: _sessionAttemptCount,
+                distinctCorrectCount: _correctItemIds.length,
                 distinctItemCount: _checkedItemIds.length,
                 verifierAvailable: widget.verifier != null,
+                onAnswerChanged: _onAnswerChanged,
                 onCheck: () => _checkAnswer(item),
                 onShowHint: () => _showNextHint(item),
                 onNewItem: _newItem,
@@ -176,12 +188,14 @@ class _PracticeBody extends StatelessWidget {
     required this.position,
     required this.total,
     required this.answerController,
+    required this.answerHasContent,
     required this.result,
     required this.visibleHintCount,
-    required this.sessionCheckCount,
-    required this.sessionCorrectCount,
+    required this.sessionAttemptCount,
+    required this.distinctCorrectCount,
     required this.distinctItemCount,
     required this.verifierAvailable,
+    required this.onAnswerChanged,
     required this.onCheck,
     required this.onShowHint,
     required this.onNewItem,
@@ -193,12 +207,14 @@ class _PracticeBody extends StatelessWidget {
   final int position;
   final int total;
   final TextEditingController answerController;
+  final bool answerHasContent;
   final VerificationResult? result;
   final int visibleHintCount;
-  final int sessionCheckCount;
-  final int sessionCorrectCount;
+  final int sessionAttemptCount;
+  final int distinctCorrectCount;
   final int distinctItemCount;
   final bool verifierAvailable;
+  final ValueChanged<String> onAnswerChanged;
   final VoidCallback onCheck;
   final VoidCallback onShowHint;
   final VoidCallback onNewItem;
@@ -206,6 +222,8 @@ class _PracticeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final canCheck = verifierAvailable && answerHasContent;
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
@@ -218,8 +236,8 @@ class _PracticeBody extends StatelessWidget {
                 _StatusBanner(verifierAvailable: verifierAvailable),
                 const SizedBox(height: 12),
                 _SessionSummary(
-                  checkCount: sessionCheckCount,
-                  correctCount: sessionCorrectCount,
+                  attemptCount: sessionAttemptCount,
+                  distinctCorrectCount: distinctCorrectCount,
                   distinctItemCount: distinctItemCount,
                 ),
                 const SizedBox(height: 12),
@@ -247,10 +265,11 @@ class _PracticeBody extends StatelessWidget {
                         ? 'Integer, decimal, or fraction'
                         : 'y = mx + b',
                     helperText: verifierAvailable
-                        ? 'Checked locally with exact arithmetic.'
+                        ? 'Enter an answer to enable exact local checking.'
                         : 'Answer checking is disabled because the verifier is unavailable.',
                   ),
-                  onSubmitted: verifierAvailable ? (_) => onCheck() : null,
+                  onChanged: onAnswerChanged,
+                  onSubmitted: canCheck ? (_) => onCheck() : null,
                 ),
                 const SizedBox(height: 12),
                 Wrap(
@@ -258,7 +277,7 @@ class _PracticeBody extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     FilledButton.icon(
-                      onPressed: verifierAvailable ? onCheck : null,
+                      onPressed: canCheck ? onCheck : null,
                       icon: const Icon(Icons.verified_rounded),
                       label: const Text('Check answer'),
                     ),
@@ -308,21 +327,21 @@ class _PracticeBody extends StatelessWidget {
 
 class _SessionSummary extends StatelessWidget {
   const _SessionSummary({
-    required this.checkCount,
-    required this.correctCount,
+    required this.attemptCount,
+    required this.distinctCorrectCount,
     required this.distinctItemCount,
   });
 
-  final int checkCount;
-  final int correctCount;
+  final int attemptCount;
+  final int distinctCorrectCount;
   final int distinctItemCount;
 
   @override
   Widget build(BuildContext context) {
-    final checks = checkCount == 1 ? '1 check' : '$checkCount checks';
-    final successes = correctCount == 1
-        ? '1 exact success'
-        : '$correctCount exact successes';
+    final attempts = attemptCount == 1 ? '1 attempt' : '$attemptCount attempts';
+    final correct = distinctCorrectCount == 1
+        ? '1 question correct'
+        : '$distinctCorrectCount questions correct';
 
     return Card(
       child: Padding(
@@ -335,9 +354,9 @@ class _SessionSummary extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 6),
-            Text('$checks • $successes'),
+            Text('$attempts • $correct'),
             const SizedBox(height: 4),
-            Text('$distinctItemCount of 3 different items checked'),
+            Text('$distinctItemCount of 3 different questions checked'),
             if (distinctItemCount >= 3) ...[
               const SizedBox(height: 4),
               const Text(
@@ -346,8 +365,8 @@ class _SessionSummary extends StatelessWidget {
             ],
             const SizedBox(height: 4),
             Text(
-              'Temporary on-screen feedback only. Nothing is saved to a '
-              'learner record.',
+              'Repeated checks of the same question do not increase the '
+              'correct-question total. Nothing is saved to a learner record.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
