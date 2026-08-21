@@ -294,11 +294,11 @@ class _LibraryLoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Semantics(
         liveRegion: true,
         label: 'Loading curriculum library',
-        child: CircularProgressIndicator(),
+        child: const CircularProgressIndicator(),
       ),
     );
   }
