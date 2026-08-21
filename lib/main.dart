@@ -36,14 +36,10 @@ class MyApp extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
       filledButtonTheme: const FilledButtonThemeData(
-        style: ButtonStyle(
-          minimumSize: WidgetStatePropertyAll(Size(0, 48)),
-        ),
+        style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(0, 48))),
       ),
       outlinedButtonTheme: const OutlinedButtonThemeData(
-        style: ButtonStyle(
-          minimumSize: WidgetStatePropertyAll(Size(0, 48)),
-        ),
+        style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(0, 48))),
       ),
     );
   }
