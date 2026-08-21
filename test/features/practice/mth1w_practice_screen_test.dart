@@ -121,7 +121,10 @@ void main() {
     expect(find.text('Correct'), findsOneWidget);
     expect(find.textContaining('Correct.'), findsOneWidget);
     expect(find.text('Verification details'), findsOneWidget);
-    expect(find.textContaining('Exact deterministic verification'), findsNothing);
+    expect(
+      find.textContaining('Exact deterministic verification'),
+      findsNothing,
+    );
     expect(find.textContaining(MathAnswerVerifier.verifierId), findsNothing);
 
     final verificationDetails = find.text('Verification details');
