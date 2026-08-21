@@ -1,0 +1,62 @@
+name: MTH1W Accessibility Review Evidence
+
+on:
+  pull_request:
+    paths:
+      - 'curriculum/content/mth1w/**'
+      - 'curriculum/reviews/mth1w-accessibility/**'
+      - 'config/curriculum-readiness.json'
+      - 'lib/main.dart'
+      - 'lib/features/home/**'
+      - 'lib/features/curriculum/**'
+      - 'lib/features/learning/**'
+      - 'lib/features/practice/**'
+      - 'schemas/accessibility-review-evidence.v1.schema.json'
+      - 'tools/mth1w_accessible_export.py'
+      - 'tools/mth1w_accessibility_review_evidence.py'
+      - 'tools/check_mth1w_accessibility_readiness.py'
+      - 'tests/test_mth1w_accessibility_review_evidence.py'
+      - '.github/workflows/mth1w-accessibility-review.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-accessibility-review-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Validate accessibility review schema
+        run: python -m json.tool schemas/accessibility-review-evidence.v1.schema.json >/dev/null
+
+      - name: Generate exact current accessibility review plan
+        run: |
+          python tools/mth1w_accessibility_review_evidence.py plan \
+            --output /tmp/mth1w-accessibility-review-plan.json
+          python -m json.tool /tmp/mth1w-accessibility-review-plan.json >/dev/null
+
+      - name: Verify committed accessibility review evidence and readiness boundary
+        run: |
+          python tools/mth1w_accessibility_review_evidence.py verify-directory
+          python tools/mth1w_accessibility_review_evidence.py verify-readiness
+          python tools/check_mth1w_accessibility_readiness.py
+
+      - name: Run accessibility review mutation tests
+        run: python -m unittest tests.test_mth1w_accessibility_review_evidence -v
+
+      - name: Upload short-lived accessibility review plan
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: mth1w-accessibility-review-plan-${{ github.sha }}
+          path: /tmp/mth1w-accessibility-review-plan.json
+          if-no-files-found: error
+          retention-days: 7
