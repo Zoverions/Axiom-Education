@@ -43,10 +43,7 @@ void main() {
     test('rejects empty prompts', () async {
       final model = Phi3MiniModel();
 
-      await expectLater(
-        model.generateResponse('   '),
-        throwsFormatException,
-      );
+      await expectLater(model.generateResponse('   '), throwsFormatException);
     });
 
     test('fails closed when the model is uninitialized', () async {

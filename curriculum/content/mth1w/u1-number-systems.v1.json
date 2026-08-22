@@ -1,0 +1,715 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u1",
+  "title": "Unit 1: Number systems, histories, and big ideas",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "A history of zero",
+      "publisher": "MacTutor History of Mathematics, University of St Andrews",
+      "url": "https://mathshistory.st-andrews.ac.uk/HistTopics/Zero/",
+      "use": "Teacher background for distinguishing zero as placeholder, number, notation, and historically developing idea."
+    },
+    {
+      "title": "Inka khipu",
+      "publisher": "Smithsonian National Museum of the American Indian",
+      "url": "https://americanindian.si.edu/exhibitions/infinityofnations/andes/143866.html",
+      "use": "Museum evidence for a culturally specific quantitative recording object and careful claim boundaries."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u1-l1",
+      "title": "Numbers across cultures: evidence and context",
+      "official_expectation_ids": ["B1.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Distinguish a historical artifact or record, a scholarly interpretation, and an unsupported claim.",
+        "Explain a number idea in a specific cultural and historical context without reducing a community to a stereotype.",
+        "Connect the idea with a current mathematical use while stating uncertainty honestly."
+      ],
+      "success_criteria": [
+        "My account uses at least two credible sources and identifies who produced each source.",
+        "I separate what the evidence shows from what a writer infers.",
+        "I demonstrate the mathematics and explain a present connection without claiming that one person or culture did everything."
+      ],
+      "vocabulary": [
+        {"term": "artifact", "meaning": "an object made or used by people that can provide evidence about a time and place"},
+        {"term": "primary evidence", "meaning": "material or a record originating in the period being studied"},
+        {"term": "interpretation", "meaning": "a reasoned explanation of evidence that may change when new evidence appears"},
+        {"term": "place value", "meaning": "a system in which a symbol's position contributes to its numerical value"},
+        {"term": "provenance", "meaning": "the documented origin and history of an object or source"}
+      ],
+      "why_it_matters": "The numerals and recording methods used today developed through many communities, languages, and practical needs. Studying evidence builds mathematical understanding and protects against confident but inaccurate cultural stories.",
+      "direct_instruction": [
+        {
+          "heading": "Separate the idea, symbol, name, and use",
+          "body": "A mathematical concept may exist before a familiar symbol or name. Zero, for example, can be discussed as a placeholder, a number, a written symbol, and part of calculation rules. A responsible history states which aspect the evidence supports instead of compressing them into a single invention claim."
+        },
+        {
+          "heading": "Build a source triangle",
+          "body": "Start with an artifact or historical record when one is available. Add a museum, archive, or scholarly account that explains the evidence. Use a second independent account to test dates, scope, and uncertainty. Record the institution, author when known, date, evidence used, and limits of each source."
+        },
+        {
+          "heading": "Write bounded claims",
+          "body": "Prefer language such as 'this record shows', 'the museum identifies', or 'historians disagree about'. Avoid claims about what every member of a culture believed. Show the mathematical feature directly, then connect it with a modern use without claiming a simple line of ownership or superiority."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "evidence-timeline",
+          "title": "Evidence-timeline route",
+          "steps": [
+            "Name one precise mathematical feature rather than a whole civilization's mathematics.",
+            "Place dated artifacts, records, or accounts on a timeline and label the source of each date.",
+            "Mark which claims are direct evidence, later interpretation, or disputed.",
+            "Demonstrate the mathematical feature with a small example.",
+            "Add one present-day connection and one limit on the claim."
+          ],
+          "when_useful": "Use this route when development over time and the difference between early evidence and later interpretation are central.",
+          "check": "Every timeline entry must identify its evidence and must not imply that missing evidence proves an event did not occur."
+        },
+        {
+          "id": "case-comparison",
+          "title": "Case-comparison route",
+          "steps": [
+            "Choose two specific records or systems that address a comparable need such as recording quantity.",
+            "Describe how each represents quantity using only evidence supported by the selected sources.",
+            "Compare mathematical features without ranking cultures as advanced or primitive.",
+            "Identify what cannot be concluded from the available evidence.",
+            "Connect each case with a current mathematical or information practice."
+          ],
+          "when_useful": "Use this route to show that communities may solve related problems through different representations.",
+          "check": "The comparison must use the same dimensions for both cases and acknowledge differences in time, purpose, and surviving evidence."
+        }
+      ],
+      "representations": [
+        {
+          "id": "evidence-timeline",
+          "label": "Evidence timeline",
+          "description": "A horizontal sequence of dated evidence cards with separate bands for artifact, interpretation, and present connection.",
+          "text_alternative": "Read each card in date order. Each card states the date or range, evidence source, supported mathematical claim, and uncertainty."
+        },
+        {
+          "id": "claim-evidence-context-matrix",
+          "label": "Claim-evidence-context matrix",
+          "description": "A table with columns for claim, supporting record, who interprets it, confidence, cultural context, and claim limit.",
+          "text_alternative": "The table links every claim to named evidence and places uncertainty and contextual limits beside the claim rather than in a footnote."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u1-l1-we1",
+          "prompt": "Revise the statement 'One person invented zero and everyone immediately adopted it' into a claim that matches the historical evidence summarized by MacTutor.",
+          "method_route_id": "evidence-timeline",
+          "steps": [
+            {"label": "Separate meanings", "explanation": "List zero as a placeholder, as a number, as a symbol, and as part of calculation rules. These are related but not identical developments."},
+            {"label": "Locate supported evidence", "explanation": "The source describes place-value placeholders in more than one historical setting, established Indian use of zero as a number, and later transmission and refinement."},
+            {"label": "Mark uncertainty", "explanation": "The source explains that surviving evidence does not support a single simple inventor story and that dates and influences are debated."},
+            {"label": "Write the bounded claim", "explanation": "State that ideas and notation associated with zero developed over time; Indian mathematicians made central documented contributions to zero as a number and decimal place-value practice, which later travelled and changed through other scholarly communities."}
+          ],
+          "answer": "Zero has several mathematical roles whose histories developed over time. Surviving evidence documents central contributions from Indian mathematicians to zero as a number and decimal place-value practice, followed by transmission and further work in other scholarly communities; it does not support one instant invention-and-adoption story.",
+          "verification": "The revision distinguishes mathematical roles, names supported contribution without exclusivity, includes transmission, and states the evidence limit."
+        },
+        {
+          "id": "mth1w-u1-l1-we2",
+          "prompt": "What can and cannot be concluded from the Smithsonian record for an Inka khipu dated to the Late Horizon period?",
+          "method_route_id": "case-comparison",
+          "steps": [
+            {"label": "Identify the record", "explanation": "The museum describes a cotton-cord khipu, provides a date range and place, and identifies it as a quantitative recording object."},
+            {"label": "State supported use", "explanation": "The museum explains that variations in knots, cords, and colour could record information such as labour or tax quantities."},
+            {"label": "Bound the claim", "explanation": "One catalogued object does not prove that all khipus had the same purpose, that every Inka person read them, or that modern interpretations recover every meaning."},
+            {"label": "Connect mathematically", "explanation": "The object demonstrates that quantitative information can be encoded through structured physical features rather than written digit symbols."}
+          ],
+          "answer": "The record supports that this khipu is an Inka quantitative recording object using structured cord and knot features. It does not justify universal claims about every khipu, every user, or every encoded meaning.",
+          "verification": "The answer names museum-supported evidence, avoids cultural generalization, and identifies a mathematical representation connection."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A familiar modern symbol proves the complete concept began at the same moment.", "correction": "Concept, notation, name, and rules may appear at different times and places."},
+        {"claim": "A missing written record proves a community had no related mathematical knowledge.", "correction": "Surviving evidence is incomplete; absence of evidence limits a claim but is not automatically evidence of absence."},
+        {"claim": "Comparing systems requires ranking cultures.", "correction": "Compare purpose, representation, operations, evidence, and constraints without a hierarchy of peoples."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {
+            "id": "mth1w-u1-l1-g1",
+            "prompt": "Which source most directly supports a claim about the material and date of a museum object?",
+            "response": {"type": "selected", "options": ["the museum catalogue record for the object", "an anonymous social-media caption", "a search-result title with no page opened", "a fictional story inspired by the object"], "correct_answer": "the museum catalogue record for the object"},
+            "rationale": "A collection record documents the institution's object identification, material, provenance information, and assigned date. It still has limits, but it is more direct than the other choices."
+          },
+          {
+            "id": "mth1w-u1-l1-g2",
+            "prompt": "Which wording best keeps a historical claim within its evidence?",
+            "response": {"type": "selected", "options": ["This dated record shows that the notation was used in this setting.", "This proves everyone in the culture used the notation in the same way.", "This culture invented all later mathematics.", "No earlier example will ever be found."], "correct_answer": "This dated record shows that the notation was used in this setting."},
+            "rationale": "The correct statement says what the specific record supports without turning one example into a universal or final claim."
+          },
+          {
+            "id": "mth1w-u1-l1-g3",
+            "prompt": "Revise 'The khipu proves every Inka record was only an accounting device' into a bounded claim.",
+            "response": {"type": "constructed", "criteria": ["names the museum record as evidence", "states a supported quantitative-recording use", "does not generalize to every khipu", "states at least one limit"], "sample_response": "The museum record identifies this khipu as a quantitative recording object and describes possible accounting uses. It does not establish that every khipu served only that purpose or that all meanings are known.", "educator_review_required": true},
+            "rationale": "A bounded claim preserves the supported mathematical point and makes the scope of the evidence visible."
+          }
+        ],
+        "independent": [
+          {
+            "id": "mth1w-u1-l1-i1",
+            "prompt": "A webpage provides no author, institution, sources, or object record but says a number symbol is 'exactly 20,000 years old.' What is the best first action?",
+            "response": {"type": "selected", "options": ["repeat the date because it is precise", "look for the evidence and compare it with museum or scholarly sources", "assume the claim is false because it is online", "round the date and remove the quotation marks"], "correct_answer": "look for the evidence and compare it with museum or scholarly sources"},
+            "rationale": "Precision is not evidence. The claim should be traced to its basis and compared with independent, accountable sources."
+          },
+          {
+            "id": "mth1w-u1-l1-i2",
+            "prompt": "Which pair names two distinct roles of zero?",
+            "response": {"type": "selected", "options": ["placeholder and number", "numerator and denominator", "prime and composite", "ratio and angle"], "correct_answer": "placeholder and number"},
+            "rationale": "Zero can mark an empty place in positional notation and can also be treated as a number in operations and relationships."
+          },
+          {
+            "id": "mth1w-u1-l1-i3",
+            "prompt": "Which conclusion is supported by a museum description of one khipu as a counting record?",
+            "response": {"type": "selected", "options": ["structured knots and cords could encode quantitative information", "every knot on every khipu has been translated", "all Inka communication used one identical khipu code", "knotted records are mathematically inferior to digit notation"], "correct_answer": "structured knots and cords could encode quantitative information"},
+            "rationale": "The conclusion stays with the described object and quantitative representation; the other options add unsupported universals or rankings."
+          },
+          {
+            "id": "mth1w-u1-l1-i4",
+            "prompt": "Name one current use of place value and explain the connection in one or two sentences.",
+            "response": {"type": "constructed", "criteria": ["names a current use", "explains how position changes numerical value", "uses a correct numerical example"], "sample_response": "Digital spreadsheets use decimal place value when storing quantities such as 205. In 205, the 2 represents two hundreds because of its position, while the zero preserves the empty tens place.", "educator_review_required": true},
+            "rationale": "A current connection must demonstrate the mathematical feature rather than merely naming a technology."
+          },
+          {
+            "id": "mth1w-u1-l1-i5",
+            "prompt": "Prepare a 250- to 400-word research brief about one number concept in a specific cultural context.",
+            "response": {"type": "constructed", "criteria": ["uses at least two credible and identified sources", "demonstrates one precise mathematical feature", "separates evidence and interpretation", "includes cultural and historical context", "states uncertainty or a claim limit", "connects to a current use without ranking cultures"], "sample_response": "A complete response will vary. It should identify the selected evidence, demonstrate the mathematics, and make bounded claims rather than repeat a single-inventor story.", "educator_review_required": true},
+            "rationale": "The brief is the lesson's transfer task and requires source judgment, mathematical explanation, and responsible contextual writing."
+          }
+        ],
+        "retrieval": [
+          {
+            "id": "mth1w-u1-l1-r1",
+            "prompt": "Which statement is an interpretation rather than direct object evidence?",
+            "response": {"type": "selected", "options": ["the cord is made of cotton", "the catalogue assigns a date range", "the pattern may have recorded labour obligations", "the object has multiple hanging cords"], "correct_answer": "the pattern may have recorded labour obligations"},
+            "rationale": "Material, dimensions, and catalogued dates are record observations; a possible purpose is an interpretation supported to varying degrees."
+          },
+          {
+            "id": "mth1w-u1-l1-r2",
+            "prompt": "Why should a historical mathematics account use more than one accountable source?",
+            "response": {"type": "constructed", "criteria": ["mentions checking evidence or scope", "mentions differing interpretations or uncertainty", "does not claim that source count alone guarantees truth"], "sample_response": "A second accountable source can confirm evidence, reveal disagreement, and expose a claim that exceeds its record. Agreement alone is not proof, so the evidence and methods still matter.", "educator_review_required": true},
+            "rationale": "Independent comparison helps evaluate evidence and uncertainty; it is not a vote-counting exercise."
+          },
+          {
+            "id": "mth1w-u1-l1-r3",
+            "prompt": "Complete the sentence: 'This source shows ___, but it does not establish ___.'",
+            "response": {"type": "constructed", "criteria": ["first blank states a supported claim", "second blank states a real limit", "both refer to the same source"], "sample_response": "This source shows that the object encoded quantitative information, but it does not establish that every similar object had the same purpose.", "educator_review_required": true},
+            "rationale": "The sentence frame makes evidential scope and uncertainty part of the mathematical account."
+          }
+        ]
+      },
+      "reflection_prompt": "Which sentence in your account carries the most uncertainty, and what additional evidence would most improve it?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "All timelines and matrices are also supplied as ordered text and labelled tables.",
+        "response_options": ["typed or handwritten brief", "audio-recorded explanation with a written source list", "accessible slide or poster with full text alternative"]
+      }
+    },
+    {
+      "id": "mth1w-u1-l2",
+      "title": "Map the real-number family",
+      "official_expectation_ids": ["B1.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Define natural, whole, integer, rational, irrational, and real numbers using testable properties.",
+        "Place a value in the smallest course-defined set and identify every larger set that contains it.",
+        "Compare nested number sets and other property-based subsets using examples and counterexamples."
+      ],
+      "success_criteria": [
+        "I state the course convention that natural numbers begin at 1 while acknowledging that conventions can differ.",
+        "I simplify or interpret a value before classifying it.",
+        "I justify membership with a property, not appearance alone."
+      ],
+      "vocabulary": [
+        {"term": "set", "meaning": "a collection whose membership rule is stated clearly"},
+        {"term": "subset", "meaning": "a set whose every member also belongs to another set"},
+        {"term": "rational number", "meaning": "a number expressible as a ratio of integers with a non-zero denominator"},
+        {"term": "irrational number", "meaning": "a real number that cannot be expressed as a ratio of integers"},
+        {"term": "counterexample", "meaning": "one valid example that disproves a universal claim"}
+      ],
+      "why_it_matters": "Number-set language communicates which operations, forms, and assumptions are available. Classification also develops proof habits: a value belongs because it satisfies a definition, not because it looks familiar.",
+      "direct_instruction": [
+        {
+          "heading": "Use an explicit convention",
+          "body": "In this unit, natural numbers are the counting numbers 1, 2, 3, and so on. Whole numbers add 0. Integers extend in both signed directions. Some sources include 0 among natural numbers, so mathematical communication should state the convention instead of treating the word alone as universal."
+        },
+        {
+          "heading": "Classify by the smallest nested set",
+          "body": "Every natural number is whole, every whole number is an integer, every integer is rational because it can be written over 1, and every rational number is real. Irrational numbers are real but not rational. Naming the smallest set communicates the most specific nested classification while the larger memberships remain true."
+        },
+        {
+          "heading": "Simplify before deciding",
+          "body": "A written form may hide its value. The square root of 49 is 7 and belongs to the natural numbers. A terminating or repeating decimal is rational. A non-terminating, non-repeating decimal is irrational. A negative sign does not prevent a value from being rational."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "nested-set-route",
+          "title": "Nested-set route",
+          "steps": [
+            "Simplify the value when possible.",
+            "Test natural-number membership under the stated convention.",
+            "Move outward through whole, integer, rational, and real sets until membership is established.",
+            "If the real value cannot be expressed as an integer ratio, classify it as irrational.",
+            "State the smallest set and list the containing sets."
+          ],
+          "when_useful": "Use this route for the standard real-number family and when several memberships are simultaneously true.",
+          "check": "Do not place irrational numbers inside the rational branch; both branches belong to the real numbers."
+        },
+        {
+          "id": "property-counterexample-route",
+          "title": "Property-and-counterexample route",
+          "steps": [
+            "Write the membership property for the proposed set.",
+            "Test the value against that property.",
+            "Give a confirming example when the property holds.",
+            "Use one counterexample to reject an overly broad subset claim.",
+            "Compare where two sets overlap or differ."
+          ],
+          "when_useful": "Use this route for sets such as even, odd, prime, square, triangular, or student-defined sets that are not a single nested chain.",
+          "check": "A few matching examples suggest a rule but do not prove that every value satisfies it."
+        }
+      ],
+      "representations": [
+        {
+          "id": "nested-family",
+          "label": "Nested real-number family",
+          "description": "Boxes inside boxes show natural numbers inside whole numbers, inside integers, inside rational numbers, with irrational numbers beside rational numbers inside the real numbers.",
+          "text_alternative": "Natural is a subset of whole; whole is a subset of integer; integer is a subset of rational; rational and irrational are separate subsets of real."
+        },
+        {
+          "id": "property-table",
+          "label": "Membership property table",
+          "description": "Rows name number sets and columns state a defining property, one member, one non-member, and containing sets.",
+          "text_alternative": "Read each row as a test: for example, an integer has no fractional part, while a rational number can be written as an integer ratio with a non-zero denominator."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u1-l2-we1",
+          "prompt": "Classify -3 in the smallest standard set and list its larger containing sets.",
+          "method_route_id": "nested-set-route",
+          "steps": [
+            {"label": "Natural test", "explanation": "-3 is not a positive counting number, so it is not natural under this unit's convention."},
+            {"label": "Whole test", "explanation": "Whole numbers are 0 and positive counting numbers, so -3 is not whole."},
+            {"label": "Integer test", "explanation": "Integers include negative whole-number values, zero, and positive whole-number values, so -3 is an integer."},
+            {"label": "Containing sets", "explanation": "Because -3 = -3/1, it is rational, and every rational value is real."}
+          ],
+          "answer": "The smallest set is integers. The value is also rational and real.",
+          "verification": "The value satisfies the integer definition and the ratio -3/1 confirms rational membership."
+        },
+        {
+          "id": "mth1w-u1-l2-we2",
+          "prompt": "Compare sqrt(49) and sqrt(2) by number-set membership.",
+          "method_route_id": "property-counterexample-route",
+          "steps": [
+            {"label": "Simplify where exact", "explanation": "sqrt(49) = 7 because 7 squared is 49."},
+            {"label": "Classify sqrt(49)", "explanation": "7 is natural, and therefore also whole, integer, rational, and real."},
+            {"label": "Test sqrt(2)", "explanation": "sqrt(2) is a real value but cannot be written as a ratio of integers."},
+            {"label": "Compare", "explanation": "Both are real square roots, but only sqrt(49) is rational; sqrt(2) is irrational."}
+          ],
+          "answer": "sqrt(49) is natural and belongs to every larger nested set through real. sqrt(2) is irrational and real.",
+          "verification": "The classification is based on simplified values and the integer-ratio property."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A number belongs to only one set.", "correction": "Nested membership means a natural number also belongs to whole, integer, rational, and real sets."},
+        {"claim": "Every square root is irrational.", "correction": "Square roots of perfect squares are integers; simplify before classifying."},
+        {"claim": "Every non-terminating decimal is irrational.", "correction": "Repeating decimals are rational; irrational decimals neither terminate nor repeat."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {
+            "id": "mth1w-u1-l2-g1",
+            "prompt": "Under this unit's convention, what is the smallest set containing 0?",
+            "response": {"type": "selected", "options": ["natural", "whole", "irrational", "prime"], "correct_answer": "whole"},
+            "rationale": "Natural numbers begin at 1 in this unit. Whole numbers include 0 and the positive counting numbers."
+          },
+          {
+            "id": "mth1w-u1-l2-g2",
+            "prompt": "What is the smallest standard set containing 0.75?",
+            "response": {"type": "selected", "options": ["integer", "rational", "irrational", "natural"], "correct_answer": "rational"},
+            "rationale": "0.75 = 3/4, a ratio of integers with a non-zero denominator. It is not an integer."
+          },
+          {
+            "id": "mth1w-u1-l2-g3",
+            "prompt": "Explain why every integer is rational.",
+            "response": {"type": "constructed", "criteria": ["represents an arbitrary integer", "writes it as a ratio with denominator 1", "states that the denominator is non-zero"], "sample_response": "Any integer n can be written as n/1. Both n and 1 are integers and the denominator is not zero, so n meets the rational-number definition.", "educator_review_required": true},
+            "rationale": "The ratio definition supplies a general argument rather than a list of examples."
+          }
+        ],
+        "independent": [
+          {
+            "id": "mth1w-u1-l2-i1",
+            "prompt": "What is the smallest standard set containing -8/4?",
+            "response": {"type": "selected", "options": ["natural", "whole", "integer", "irrational"], "correct_answer": "integer"},
+            "rationale": "-8/4 simplifies to -2, which is an integer and is not whole or natural."
+          },
+          {
+            "id": "mth1w-u1-l2-i2",
+            "prompt": "What is the smallest standard set containing 0.333...?",
+            "response": {"type": "selected", "options": ["integer", "rational", "irrational", "whole"], "correct_answer": "rational"},
+            "rationale": "The repeating decimal equals 1/3, so it is rational."
+          },
+          {
+            "id": "mth1w-u1-l2-i3",
+            "prompt": "Which value is irrational?",
+            "response": {"type": "selected", "options": ["sqrt(81)", "-2.5", "sqrt(3)", "7/11"], "correct_answer": "sqrt(3)"},
+            "rationale": "sqrt(81) = 9, -2.5 = -5/2, and 7/11 is already an integer ratio. sqrt(3) is not an integer ratio."
+          },
+          {
+            "id": "mth1w-u1-l2-i4",
+            "prompt": "Disprove the statement 'Every rational number is an integer' with one counterexample and explanation.",
+            "response": {"type": "constructed", "criteria": ["gives a rational non-integer", "shows it is an integer ratio", "shows it is not an integer"], "sample_response": "1/2 is rational because it is a ratio of integers and its denominator is non-zero. It is not an integer, so it disproves the statement.", "educator_review_required": true},
+            "rationale": "One valid counterexample is sufficient to disprove a universal statement."
+          },
+          {
+            "id": "mth1w-u1-l2-i5",
+            "prompt": "Create a set of six real numbers containing at least one natural number, one negative integer, one non-integer rational, and one irrational. Classify every value.",
+            "response": {"type": "constructed", "criteria": ["contains six real values", "meets all four requested categories", "states a smallest set for every value", "classifications are correct under the unit convention"], "sample_response": "One possible set is {3, 0, -4, 2/5, sqrt(2), pi}. Smallest sets: 3 natural, 0 whole, -4 integer, 2/5 rational, sqrt(2) irrational, pi irrational.", "educator_review_required": true},
+            "rationale": "Constructing a set shows that the student can use definitions rather than only recognize supplied examples."
+          }
+        ],
+        "retrieval": [
+          {
+            "id": "mth1w-u1-l2-r1",
+            "prompt": "Which inclusion statement is true?",
+            "response": {"type": "selected", "options": ["Every real number is rational.", "Every rational number is an integer.", "Every whole number is an integer.", "Every irrational number is natural."], "correct_answer": "Every whole number is an integer."},
+            "rationale": "Whole numbers form a subset of the integers. Each other statement reverses or crosses the correct nesting."
+          },
+          {
+            "id": "mth1w-u1-l2-r2",
+            "prompt": "Why must a course state whether 0 is included in the natural numbers?",
+            "response": {"type": "constructed", "criteria": ["recognizes differing conventions", "explains that classification depends on the stated definition"], "sample_response": "Mathematical sources use more than one convention for natural numbers. Stating the convention makes the membership of 0 unambiguous.", "educator_review_required": true},
+            "rationale": "Definitions and conventions must be visible when terminology is not universal."
+          },
+          {
+            "id": "mth1w-u1-l2-r3",
+            "prompt": "Classify sqrt(100) in the smallest set.",
+            "response": {"type": "short_text", "accepted_answers": ["natural", "natural number"], "case_sensitive": false},
+            "rationale": "sqrt(100) = 10, which is a positive counting number."
+          }
+        ]
+      },
+      "reflection_prompt": "Which classification decision required you to simplify or reinterpret the written form before applying a definition?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "The nested diagram is provided as an ordered inclusion statement and every classification table has labelled headers.",
+        "response_options": ["select or type a classification", "explain orally using the same definitions", "use tactile or movable nested-set cards"]
+      }
+    },
+    {
+      "id": "mth1w-u1-l3",
+      "title": "Density, infinity, and approaching a limit",
+      "official_expectation_ids": ["B1.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Use midpoint and decimal constructions to show that more values lie between two distinct values.",
+        "Distinguish an infinite set or process from a numerical value called infinity.",
+        "Describe how a sequence can approach a boundary without reaching it in any finite step."
+      ],
+      "success_criteria": [
+        "I generate a valid value between two supplied values and explain how the process can repeat.",
+        "I do not treat infinity as the last counting number.",
+        "I use a table, graph, or inequality to justify what a sequence approaches and whether it reaches the boundary."
+      ],
+      "vocabulary": [
+        {"term": "dense", "meaning": "having another member of the set between any two distinct members"},
+        {"term": "infinite set", "meaning": "a set that does not have a finite number of members"},
+        {"term": "sequence", "meaning": "an ordered list generated by a stated rule"},
+        {"term": "limit", "meaning": "a value that sequence terms can approach as the sequence continues"},
+        {"term": "bounded", "meaning": "restricted so values do not pass a stated upper or lower boundary"}
+      ],
+      "why_it_matters": "Density and limiting behaviour explain why number lines contain far more than adjacent ticks and prepare students to reason about approximation, measurement, graphs, and later mathematics without pretending that an endless process is completed.",
+      "direct_instruction": [
+        {
+          "heading": "Construct a number in between",
+          "body": "For distinct rational numbers a and b, their midpoint (a + b)/2 is rational and lies strictly between them. The construction can be repeated between either endpoint and the midpoint, so there is no next rational number after a given rational number on the number line."
+        },
+        {
+          "heading": "Keep infinity as a description",
+          "body": "An infinite set has no finite member count, and an infinite process has no final finite step. In this unit, the infinity symbol describes unboundedness or endless continuation; it is not handled as an ordinary real number that comes after every other number."
+        },
+        {
+          "heading": "Approach is not the same as arrive",
+          "body": "In the sequence 1, 1/2, 1/4, 1/8, and so on, every term is positive and each is half the previous term. Terms can be made as close to 0 as desired by continuing, but no term produced by a finite number of halvings equals 0. We say the sequence approaches 0."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "number-line-zoom",
+          "title": "Number-line zoom route",
+          "steps": [
+            "Mark two distinct values in correct order.",
+            "Construct a midpoint or choose a longer decimal that falls between them.",
+            "Zoom into one smaller interval and repeat.",
+            "Explain why every completed interval still contains another constructible value.",
+            "State what the repeated construction shows and what it does not show."
+          ],
+          "when_useful": "Use this route to make density visible and to challenge the idea that displayed tick marks are all the available numbers.",
+          "check": "The new value must be strictly greater than the lower endpoint and strictly less than the upper endpoint."
+        },
+        {
+          "id": "sequence-table",
+          "title": "Sequence-table route",
+          "steps": [
+            "State the starting value and repeat rule.",
+            "Generate several exact terms in a table.",
+            "Track direction, amount of change, and a possible boundary.",
+            "Use the rule to decide whether any finite term reaches the boundary.",
+            "Describe the limiting behaviour without substituting infinity as a term number."
+          ],
+          "when_useful": "Use this route for repeated processes and quantities that get closer to a boundary.",
+          "check": "A pattern from a few terms supports a conjecture; the repeat rule supplies the justification for all finite terms."
+        }
+      ],
+      "representations": [
+        {
+          "id": "zoomed-number-line",
+          "label": "Successively zoomed number line",
+          "description": "Three stacked number lines magnify a chosen interval and mark a new midpoint at each level.",
+          "text_alternative": "Begin with endpoints a and b. Mark m1=(a+b)/2. Then use a and m1 to mark m2=(a+m1)/2. Each new value lies strictly inside the selected interval."
+        },
+        {
+          "id": "sequence-table-graph",
+          "label": "Sequence table and graph",
+          "description": "A table lists term number and exact value while a point graph shows positive values descending toward a horizontal boundary at zero.",
+          "text_alternative": "Term values 1, 1/2, 1/4, 1/8, and 1/16 remain above zero and decrease by a factor of one half."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u1-l3-we1",
+          "prompt": "Find a rational number between 2/5 and 3/5, then find another number between 2/5 and your result.",
+          "method_route_id": "number-line-zoom",
+          "steps": [
+            {"label": "First midpoint", "explanation": "[(2/5)+(3/5)]/2 = (5/5)/2 = 1/2, so 1/2 lies between 2/5 and 3/5."},
+            {"label": "Check order", "explanation": "2/5 = 0.4, 1/2 = 0.5, and 3/5 = 0.6, so the inequalities are strict."},
+            {"label": "Repeat in a smaller interval", "explanation": "The midpoint of 2/5 and 1/2 is [(2/5)+(1/2)]/2 = (9/10)/2 = 9/20."},
+            {"label": "Interpret", "explanation": "9/20 = 0.45 lies between 0.4 and 0.5. The same construction can be repeated again."}
+          ],
+          "answer": "One value is 1/2. A second value between 2/5 and 1/2 is 9/20.",
+          "verification": "2/5 < 9/20 < 1/2 < 3/5. Both constructed values are ratios of integers."
+        },
+        {
+          "id": "mth1w-u1-l3-we2",
+          "prompt": "Describe the long-run behaviour of the sequence a_n = 1/2^(n-1) for positive integer n.",
+          "method_route_id": "sequence-table",
+          "steps": [
+            {"label": "Generate terms", "explanation": "For n=1,2,3,4,5 the terms are 1, 1/2, 1/4, 1/8, and 1/16."},
+            {"label": "Identify the rule", "explanation": "Each term is one half of the preceding positive term."},
+            {"label": "Find a boundary", "explanation": "All finite terms are positive, so 0 is a lower boundary that the terms do not cross."},
+            {"label": "Describe approach", "explanation": "Repeated halving makes the terms arbitrarily close to 0, but no finite term equals 0."}
+          ],
+          "answer": "The sequence is decreasing, remains positive, and approaches 0 without reaching 0 at any finite term.",
+          "verification": "The formula has positive numerator 1 and positive finite denominator 2^(n-1), so every finite term is above 0."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "Two adjacent decimal labels have no numbers between them.", "correction": "Displayed precision is not the full number line; a midpoint or longer decimal can be constructed."},
+        {"claim": "Infinity is the largest real number.", "correction": "There is no largest real number because adding 1 gives a larger real value; infinity describes endlessness or unboundedness here."},
+        {"claim": "If a sequence approaches 0, one sufficiently late term must equal 0.", "correction": "Approaching a limit does not require any finite term to equal the limit."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {
+            "id": "mth1w-u1-l3-g1",
+            "prompt": "Which value lies strictly between 0.3 and 0.4?",
+            "response": {"type": "selected", "options": ["0.25", "0.35", "0.4", "0.45"], "correct_answer": "0.35"},
+            "rationale": "0.3 < 0.35 < 0.4. Equality with an endpoint would not count as strictly between."
+          },
+          {
+            "id": "mth1w-u1-l3-g2",
+            "prompt": "Find the midpoint of 1/3 and 2/3.",
+            "response": {"type": "short_text", "accepted_answers": ["1/2", "0.5"], "case_sensitive": false},
+            "rationale": "[(1/3)+(2/3)]/2 = 1/2."
+          },
+          {
+            "id": "mth1w-u1-l3-g3",
+            "prompt": "Explain why there is no largest integer.",
+            "response": {"type": "constructed", "criteria": ["starts with an arbitrary integer", "constructs a larger integer such as n+1", "concludes the original cannot be largest"], "sample_response": "If n is any integer, then n+1 is also an integer and is larger than n. Therefore no chosen integer can be the largest integer.", "educator_review_required": true},
+            "rationale": "The construction works for every proposed integer and proves unboundedness above."
+          }
+        ],
+        "independent": [
+          {
+            "id": "mth1w-u1-l3-i1",
+            "prompt": "Which expression always produces a rational value strictly between distinct rational values a and b when a<b?",
+            "response": {"type": "selected", "options": ["a+b", "(a+b)/2", "a-b", "2b"], "correct_answer": "(a+b)/2"},
+            "rationale": "The arithmetic mean of two distinct ordered values lies strictly between them, and rational operations preserve rationality here."
+          },
+          {
+            "id": "mth1w-u1-l3-i2",
+            "prompt": "Find a fraction between 5/8 and 3/4.",
+            "response": {"type": "short_text", "accepted_answers": ["11/16", "22/32", "0.6875"], "case_sensitive": false},
+            "rationale": "The midpoint is [(5/8)+(6/8)]/2 = 11/16, which is between 10/16 and 12/16. Equivalent forms are accepted."
+          },
+          {
+            "id": "mth1w-u1-l3-i3",
+            "prompt": "The sequence 10, 5, 2.5, 1.25, ... continues by halving. Which statement is correct?",
+            "response": {"type": "selected", "options": ["It reaches 0 after ten terms.", "It becomes negative after enough terms.", "It approaches 0 while every finite term remains positive.", "Its next-to-last term is 0.5."], "correct_answer": "It approaches 0 while every finite term remains positive."},
+            "rationale": "Halving a positive finite value produces another positive value. Terms decrease toward 0 but no finite halving produces 0."
+          },
+          {
+            "id": "mth1w-u1-l3-i4",
+            "prompt": "Compare the sequences 1,2,3,4,... and 1,1/2,1/4,1/8,... using the words infinite, unbounded, bounded, and limit.",
+            "response": {"type": "constructed", "criteria": ["identifies both sequences as infinite", "identifies the counting sequence as unbounded above", "identifies the halving sequence as bounded below by 0", "states that the halving sequence has limit 0", "does not call infinity an ordinary term"], "sample_response": "Both sequences have infinitely many terms. The counting sequence is unbounded above. The halving sequence is bounded below by 0 and has limit 0, although no finite term equals 0.", "educator_review_required": true},
+            "rationale": "An infinite number of terms does not determine whether their values are bounded."
+          },
+          {
+            "id": "mth1w-u1-l3-i5",
+            "prompt": "A graph shows only tick marks at 1.20 and 1.21. A student says they are consecutive real numbers. Correct the claim with two examples between them.",
+            "response": {"type": "constructed", "criteria": ["gives two values strictly between 1.20 and 1.21", "orders the values correctly", "explains that tick spacing is display precision rather than adjacency"], "sample_response": "1.201 and 1.205 both lie between 1.20 and 1.21. The graph labels selected ticks; it does not show every real number in the interval.", "educator_review_required": true},
+            "rationale": "Density persists even when a display rounds labels or shows only selected points."
+          }
+        ],
+        "retrieval": [
+          {
+            "id": "mth1w-u1-l3-r1",
+            "prompt": "What does density of the rational numbers mean?",
+            "response": {"type": "selected", "options": ["Rational numbers are close together on a printed page.", "Between any two distinct rational numbers there is another rational number.", "Every rational number is an integer.", "Rational numbers have a largest member."], "correct_answer": "Between any two distinct rational numbers there is another rational number."},
+            "rationale": "Density is a between-values property, not a statement about physical spacing or size."
+          },
+          {
+            "id": "mth1w-u1-l3-r2",
+            "prompt": "Does the sequence 1/n ever equal 0 for a positive integer n? Explain.",
+            "response": {"type": "constructed", "criteria": ["answers no", "states that every positive integer n is finite and non-zero", "explains that 1 divided by a positive finite value is positive", "may state the limit is 0"], "sample_response": "No. For every positive integer n, 1/n is positive, so it cannot equal 0. The values approach 0 as n increases.", "educator_review_required": true},
+            "rationale": "The formula justifies every finite term while the limiting statement describes long-run behaviour."
+          },
+          {
+            "id": "mth1w-u1-l3-r3",
+            "prompt": "Which statement correctly uses infinity in this unit?",
+            "response": {"type": "selected", "options": ["Infinity is the final integer.", "Infinity is a real number that can be reached by repeated addition.", "The integers form an infinite set with no largest member.", "Infinity minus one is the second-largest real number."], "correct_answer": "The integers form an infinite set with no largest member."},
+            "rationale": "The correct statement uses infinite to describe the set; it does not treat infinity as an ordinary real value."
+          }
+        ]
+      },
+      "reflection_prompt": "Which idea changed most when you moved from a static number-line picture to a repeatable construction or sequence rule?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every zoom and graph is paired with ordered inequalities, exact term tables, and a verbal description of direction and boundary.",
+        "response_options": ["write exact values and inequalities", "explain the construction orally", "use tactile number-line markers or a spreadsheet table"]
+      }
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u1-quiz",
+      "title": "Unit 1 knowledge and reasoning check",
+      "estimated_minutes": 35,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {
+          "id": "mth1w-u1-q1",
+          "official_expectation_ids": ["B1.1"],
+          "prompt": "Which research note most clearly distinguishes evidence from interpretation?",
+          "response": {"type": "selected", "options": ["The museum records the object's material as cotton; its exact full meaning remains under study.", "The object proves every person used the same code.", "The culture invented all data systems.", "The oldest-looking object must be the first one ever made."], "correct_answer": "The museum records the object's material as cotton; its exact full meaning remains under study."},
+          "rationale": "The statement identifies a documented observation and separately marks interpretive uncertainty."
+        },
+        {
+          "id": "mth1w-u1-q2",
+          "official_expectation_ids": ["B1.1"],
+          "prompt": "Why is 'zero was invented once' usually too broad for a historical account?",
+          "response": {"type": "constructed", "criteria": ["distinguishes at least two roles of zero", "mentions development across time or communities", "states an evidence limit"], "sample_response": "Zero can mean a placeholder, number, symbol, or calculation rule, and these roles have different records and developments. The evidence does not reduce them to one instant event.", "educator_review_required": true},
+          "rationale": "A strong answer separates mathematical aspects and treats historical claims as evidence-bounded."
+        },
+        {
+          "id": "mth1w-u1-q3",
+          "official_expectation_ids": ["B1.2"],
+          "prompt": "What is the smallest standard set containing -15?",
+          "response": {"type": "selected", "options": ["natural", "whole", "integer", "irrational"], "correct_answer": "integer"},
+          "rationale": "-15 is a negative integer; it is also rational and real but those are larger containing sets."
+        },
+        {
+          "id": "mth1w-u1-q4",
+          "official_expectation_ids": ["B1.2"],
+          "prompt": "What is the smallest standard set containing sqrt(121)?",
+          "response": {"type": "selected", "options": ["natural", "integer", "rational", "irrational"], "correct_answer": "natural"},
+          "rationale": "sqrt(121)=11, a positive counting number."
+        },
+        {
+          "id": "mth1w-u1-q5",
+          "official_expectation_ids": ["B1.2"],
+          "prompt": "Give a counterexample to 'Every real number is rational.'",
+          "response": {"type": "constructed", "criteria": ["gives an irrational real value", "states that it is real", "states that it cannot be written as an integer ratio"], "sample_response": "sqrt(2) is real but irrational, so it cannot be written as a ratio of integers and disproves the claim.", "educator_review_required": true},
+          "rationale": "One irrational real value disproves the universal statement."
+        },
+        {
+          "id": "mth1w-u1-q6",
+          "official_expectation_ids": ["B1.2"],
+          "prompt": "Which value is rational?",
+          "response": {"type": "selected", "options": ["pi", "sqrt(5)", "0.121212...", "a non-terminating non-repeating decimal"], "correct_answer": "0.121212..."},
+          "rationale": "A repeating decimal can be expressed as a ratio of integers."
+        },
+        {
+          "id": "mth1w-u1-q7",
+          "official_expectation_ids": ["B1.3"],
+          "prompt": "Find the midpoint between 7/10 and 4/5.",
+          "response": {"type": "short_text", "accepted_answers": ["3/4", "0.75", "6/8"], "case_sensitive": false},
+          "rationale": "4/5=8/10, and the midpoint of 7/10 and 8/10 is 15/20=3/4."
+        },
+        {
+          "id": "mth1w-u1-q8",
+          "official_expectation_ids": ["B1.3"],
+          "prompt": "Which statement about the integers is correct?",
+          "response": {"type": "selected", "options": ["They have a largest member.", "They are infinite and unbounded in both directions.", "They are dense because an integer lies between any two integers.", "They contain every real number."], "correct_answer": "They are infinite and unbounded in both directions."},
+          "rationale": "Adding or subtracting 1 always constructs another integer farther in either direction. Integers are not dense."
+        },
+        {
+          "id": "mth1w-u1-q9",
+          "official_expectation_ids": ["B1.3"],
+          "prompt": "The sequence 3, 1, 1/3, 1/9, ... continues by dividing by 3. Describe its limit behaviour.",
+          "response": {"type": "constructed", "criteria": ["states that terms remain positive", "states that terms approach 0", "states that no finite term equals 0", "uses the repeat rule as justification"], "sample_response": "Every finite term is positive because a positive value divided by 3 stays positive. Repeated division makes the terms approach 0, but no finite term equals 0.", "educator_review_required": true},
+          "rationale": "The repeat rule establishes positivity at every finite stage and supports the limiting description."
+        },
+        {
+          "id": "mth1w-u1-q10",
+          "official_expectation_ids": ["B1.1", "B1.2", "B1.3"],
+          "prompt": "Explain how a precise definition or evidence boundary changed one conclusion you made in this unit.",
+          "response": {"type": "constructed", "criteria": ["names a specific initial conclusion", "uses a definition or source boundary", "states a corrected conclusion", "explains the mathematical reason"], "sample_response": "I first treated every square root as irrational. The rational-number definition and simplification showed that sqrt(49)=7, so its smallest set is natural. The written root sign alone does not determine the set.", "educator_review_required": true},
+          "rationale": "The synthesis item checks whether the learner uses definitions and evidence to revise reasoning."
+        }
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u1-number-systems-brief",
+      "title": "Number-system evidence exhibit",
+      "estimated_minutes": 120,
+      "official_expectation_ids": ["B1.1", "B1.2", "B1.3", "AA1", "A1", "A2"],
+      "prompt": "Create an accessible exhibit about one culturally situated number concept. Include a sourced evidence story, a correct number-set or number-relationship demonstration, and an explanation of density, infinity, or limiting behaviour where relevant. State what the evidence does and does not support.",
+      "required_components": [
+        "two or more accountable sources with a source-quality note",
+        "one demonstrated mathematical feature rather than a name-only cultural reference",
+        "one connected visual, physical, tabular, or symbolic representation plus a text alternative",
+        "one comparison or counterexample that clarifies number-set membership or number relationships",
+        "one explicit uncertainty or claim limit",
+        "one present-day connection",
+        "a plan-monitor-evaluate reflection"
+      ],
+      "rubric": [
+        {"dimension": "mathematical accuracy", "criteria": "Definitions, classifications, constructions, and examples are correct and justified."},
+        {"dimension": "evidence and context", "criteria": "Claims are tied to accountable sources, context is specific, and uncertainty is visible."},
+        {"dimension": "reasoning and representations", "criteria": "At least two connected ways of showing the idea are explained, not merely displayed."},
+        {"dimension": "communication and accessibility", "criteria": "The exhibit is organized, age-respectful, readable without colour alone, and includes text alternatives."},
+        {"dimension": "reflection and revision", "criteria": "The learner identifies a changed idea, feedback used, and one remaining question."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}

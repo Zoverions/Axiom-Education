@@ -55,7 +55,10 @@ void main() {
     ),
   ];
 
-  Widget buildScreen({bool verifierAvailable = true}) {
+  Widget buildScreen({
+    bool verifierAvailable = true,
+    String? initialExpectationId,
+  }) {
     return ProviderScope(
       overrides: [
         mth1wGoldenPathProvider.overrideWith((ref) async => expectations),
@@ -63,12 +66,13 @@ void main() {
       child: MaterialApp(
         home: Mth1wPracticeScreen(
           verifier: verifierAvailable ? const MathAnswerVerifier() : null,
+          initialExpectationId: initialExpectationId,
         ),
       ),
     );
   }
 
-  testWidgets('checks an entered answer with exact local verification', (
+  testWidgets('keeps evidence details available without leading with jargon', (
     tester,
   ) async {
     const generator = MathPracticeGenerator();
@@ -82,26 +86,198 @@ void main() {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
-    expect(find.text('MTH1W-A1'), findsOneWidget);
+    expect(find.text("What you're practising"), findsOneWidget);
+    expect(find.text('Curriculum details'), findsOneWidget);
+    expect(find.textContaining('MTH1W-A1'), findsNothing);
+    expect(find.textContaining('uncalibrated'), findsNothing);
+    expect(find.text('Technical details'), findsOneWidget);
+    expect(find.textContaining(item.itemDigest), findsNothing);
+
+    final curriculumDetails = find.text('Curriculum details');
+    await tester.ensureVisible(curriculumDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(curriculumDetails);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('MTH1W-A1'), findsOneWidget);
     expect(find.textContaining('uncalibrated'), findsOneWidget);
-    expect(
-      find.textContaining(item.itemDigest.substring(0, 12)),
-      findsOneWidget,
-    );
+    expect(find.textContaining('review pending'), findsOneWidget);
+
+    final technicalDetails = find.text('Technical details');
+    await tester.ensureVisible(technicalDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(technicalDetails);
+    await tester.pumpAndSettle();
+    expect(find.textContaining(item.itemDigest), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), item.canonicalAnswer);
+    await tester.pump();
     final checkButton = tester.widget<FilledButton>(
       find.widgetWithText(FilledButton, 'Check answer'),
     );
     expect(checkButton.onPressed, isNotNull);
     checkButton.onPressed!();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    expect(find.text('Exact deterministic verification'), findsOneWidget);
+    expect(find.text('Correct'), findsOneWidget);
     expect(find.textContaining('Correct.'), findsOneWidget);
+    expect(find.text('Verification details'), findsOneWidget);
+    expect(
+      find.textContaining('Exact deterministic verification'),
+      findsNothing,
+    );
+    expect(find.textContaining(MathAnswerVerifier.verifierId), findsNothing);
+
+    final verificationDetails = find.text('Verification details');
+    await tester.ensureVisible(verificationDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(verificationDetails);
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Exact deterministic verification'),
+      findsOneWidget,
+    );
+    expect(find.textContaining(MathAnswerVerifier.verifierId), findsOneWidget);
   });
 
-  testWidgets('reveals deterministic scaffolded hints', (tester) async {
+  testWidgets('requires a non-blank answer before checking', (tester) async {
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    FilledButton checkButton() => tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Check answer'),
+    );
+
+    expect(checkButton().onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '   ');
+    await tester.pump();
+    expect(checkButton().onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '1');
+    await tester.pump();
+    expect(checkButton().onPressed, isNotNull);
+  });
+
+  testWidgets('shows an ephemeral distinct-question session summary', (
+    tester,
+  ) async {
+    const generator = MathPracticeGenerator();
+    final item = generator.generate(
+      expectationId: expectations.first.id,
+      expectationText: expectations.first.expectation,
+      difficultyValue: expectations.first.irtB,
+      seed: 0,
+    );
+
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Session summary'), findsOneWidget);
+    expect(find.text('0 attempts • 0 questions correct'), findsOneWidget);
+    expect(find.text('0 of 3 different questions checked'), findsOneWidget);
+    expect(find.textContaining('Nothing is saved'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'not an answer');
+    await tester.pump();
+    tester
+        .widget<FilledButton>(find.widgetWithText(FilledButton, 'Check answer'))
+        .onPressed!();
+    await tester.pump();
+    expect(find.text('1 attempt • 0 questions correct'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), item.canonicalAnswer);
+    await tester.pump();
+    tester
+        .widget<FilledButton>(find.widgetWithText(FilledButton, 'Check answer'))
+        .onPressed!();
+    await tester.pump();
+    expect(find.text('2 attempts • 1 question correct'), findsOneWidget);
+    expect(find.text('1 of 3 different questions checked'), findsOneWidget);
+  });
+
+  testWidgets('rechecking one correct question does not inflate success', (
+    tester,
+  ) async {
+    const generator = MathPracticeGenerator();
+    final item = generator.generate(
+      expectationId: expectations.first.id,
+      expectationText: expectations.first.expectation,
+      difficultyValue: expectations.first.irtB,
+      seed: 0,
+    );
+
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), item.canonicalAnswer);
+    await tester.pump();
+
+    for (var attempt = 0; attempt < 2; attempt += 1) {
+      tester
+          .widget<FilledButton>(
+            find.widgetWithText(FilledButton, 'Check answer'),
+          )
+          .onPressed!();
+      await tester.pump();
+    }
+
+    expect(find.text('2 attempts • 1 question correct'), findsOneWidget);
+    expect(find.text('1 of 3 different questions checked'), findsOneWidget);
+    expect(
+      find.textContaining('Repeated checks of the same question'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets(
+    'counts distinct checked questions and gives a non-mastery stop cue',
+    (tester) async {
+      await tester.pumpWidget(buildScreen());
+      await tester.pumpAndSettle();
+
+      for (var itemIndex = 0; itemIndex < 3; itemIndex += 1) {
+        await tester.enterText(find.byType(TextField), 'not an answer');
+        await tester.pump();
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Check answer'),
+            )
+            .onPressed!();
+        await tester.pump();
+
+        if (itemIndex == 0) {
+          await tester.enterText(find.byType(TextField), 'still not an answer');
+          await tester.pump();
+          tester
+              .widget<FilledButton>(
+                find.widgetWithText(FilledButton, 'Check answer'),
+              )
+              .onPressed!();
+          await tester.pump();
+          expect(
+            find.text('1 of 3 different questions checked'),
+            findsOneWidget,
+          );
+        }
+
+        if (itemIndex < 2) {
+          tester
+              .widget<TextButton>(
+                find.widgetWithText(TextButton, 'Another question'),
+              )
+              .onPressed!();
+          await tester.pump();
+        }
+      }
+
+      expect(find.text('3 of 3 different questions checked'), findsOneWidget);
+      expect(
+        find.textContaining('not a grade or mastery result'),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets('reveals hints one step at a time', (tester) async {
     await tester.pumpWidget(buildScreen());
     await tester.pumpAndSettle();
 
@@ -112,15 +288,30 @@ void main() {
     hintButton.onPressed!();
     await tester.pump();
 
-    expect(find.text('Scaffolded hints'), findsOneWidget);
+    expect(find.text('Hints'), findsOneWidget);
     expect(find.textContaining('Multiply'), findsOneWidget);
+  });
+
+  testWidgets('starts with a lesson-selected expectation', (tester) async {
+    await tester.pumpWidget(buildScreen(initialExpectationId: 'MTH1W-B2'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('MTH1W-B2'), findsNothing);
+    expect(find.text('Practice topic 3 of 4'), findsOneWidget);
+
+    final curriculumDetails = find.text('Curriculum details');
+    await tester.ensureVisible(curriculumDetails);
+    await tester.pumpAndSettle();
+    await tester.tap(curriculumDetails);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('MTH1W-B2'), findsOneWidget);
   });
 
   testWidgets('fails closed when the verifier is unavailable', (tester) async {
     await tester.pumpWidget(buildScreen(verifierAvailable: false));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Fail-closed mode'), findsOneWidget);
+    expect(find.textContaining('Answer checking is unavailable'), findsWidgets);
     final button = tester.widget<FilledButton>(
       find.widgetWithText(FilledButton, 'Check answer'),
     );

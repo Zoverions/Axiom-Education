@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-english-beginners-grades-4-8-2013",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "fbed71470df3de0103ba7e13ce6e5d33d82512f3991ec2336aec9c97f13b6702",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T20:59:20.963473Z",
+  "source_locator": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+  "resolved_locator": "https://www.edu.gov.on.ca/fre/curriculum/elementary/anglaispd48curr2013.pdf",
+  "media_type": "application/pdf",
+  "byte_length": 3887969,
+  "sha256": "3f16c79225fa0a3b4de504a6843598389d729f14ecce00b7adaf58f95bcfe845",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 8a21856ccae5ffc64afc981b6bb1645d952603bf0a11402e8e21257739360115. GitHub run 32416994073 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution. Promoted together with the regular Anglais source after each matched three independent hosted stability recaptures."
+}

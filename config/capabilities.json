@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-07-30",
+  "verified_at": "2026-08-20",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -11,8 +11,9 @@
   },
   "integration_target": {
     "platform": "AXIOM-MESH",
-    "minimum_kernel": "0.12.0-dev.0",
-    "mode": "governed-domain-capability-pack"
+    "minimum_kernel": "0.12.0-dev.3",
+    "mode": "governed-domain-capability-pack",
+    "compatibility_profile": "config/axiom-mesh-compatibility.v1.json"
   },
   "status_definitions": {
     "implemented": "Production-path behavior exists with tests and no synthetic success fallback.",
@@ -61,11 +62,37 @@
       "id": "curriculum.ontario-data",
       "family": "curriculum",
       "status": "experimental",
-      "summary": "The current corpus deterministically produces 293 records across 21 courses, but upstream official-document digests, licensing review, and course-by-course human verification remain incomplete.",
+      "summary": "The current secondary corpus deterministically produces 293 experimental records across 21 courses, but broader upstream official-document digests, licensing review, and course-by-course human verification remain incomplete; an official-source audit found known identifier conflicts in the preliminary MTH1W snapshot.",
       "evidence": [
         "assets/curriculum/ontario_curriculum_full.json",
         "assets/curriculum/ontario_curriculum.sqlite",
-        "curriculum/source-ledger.v1.json"
+        "curriculum/source-ledger.v1.json",
+        "config/curriculum-readiness.json",
+        "docs/curriculum/MTH1W-SOURCE-AUDIT.md",
+        "tools/check_curriculum_readiness.py"
+      ]
+    },
+    {
+      "id": "curriculum.ontario-elementary-evidence",
+      "family": "curriculum",
+      "status": "experimental",
+      "summary": "Ontario Elementary evidence infrastructure has 16/16 bounded metadata-only C1 source snapshots, 5 strict PDF and 11 observational HTML monitoring surfaces, deterministic human source-review and licensing-review targets, a reviewer dossier, and a fail-closed reference-only C2 intake gate. Human source approvals are 0/16, licensing decisions are 0/16, C2 eligibility is 0/16, and canonical C2 records remain 0.",
+      "evidence": [
+        "docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md",
+        "curriculum/ontario-elementary/source-locks",
+        "curriculum/ontario-elementary/source-monitoring.v1.json",
+        "curriculum/reviews/ontario-elementary/sources",
+        "curriculum/licensing/ontario-elementary/reviews",
+        "tools/ontario_elementary_readiness.py",
+        "tools/ontario_elementary_source_review.py",
+        "tools/ontario_elementary_licensing_review.py",
+        "tools/ontario_elementary_reviewer_dossier.py",
+        "tools/ontario_elementary_c2_intake.py",
+        "tests/test_ontario_elementary_readiness.py",
+        "tests/test_ontario_elementary_source_review.py",
+        "tests/test_ontario_elementary_licensing_review.py",
+        "tests/test_ontario_elementary_reviewer_dossier.py",
+        "tests/test_ontario_elementary_c2_intake.py"
       ]
     },
     {
@@ -85,10 +112,50 @@
       ]
     },
     {
+      "id": "instruction.mth1w-foundation",
+      "family": "instruction",
+      "status": "experimental",
+      "summary": "A four-lesson Grade 9 Math Foundations Preview and all nine source-mapped MTH1W unit drafts provide goals, prerequisites, human-authored instruction, worked examples, at least two valid reasoning routes, multiple representations, metacognitive prompts, and offline practice without an AI tutor. All 43 planned primary lesson slots are authored and machine verified, but they account for 63.75 of the 110 planning hours; 46.25 hours plus educator/cultural review, licensing, reviewed course-wide coverage, cumulative assessment review, accessibility, governed progress, and educator workflows remain incomplete.",
+      "evidence": [
+        "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md",
+        "docs/rebuild/COURSE-COMPLETION-ROADMAP.md",
+        "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md",
+        "docs/curriculum/MTH1W-COVERAGE-LEDGER.md",
+        "curriculum/official/ontario-mth1w-2021.inventory.json",
+        "curriculum/courses/ontario-mth1w-2021.course.json",
+        "curriculum/content/mth1w/u1-number-systems.v1.json",
+        "curriculum/content/mth1w/u2-powers.v1.json",
+        "curriculum/content/mth1w/u3-rational-applications.v1.json",
+        "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
+        "curriculum/content/mth1w/u5-coding-relationships.v1.json",
+        "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
+        "curriculum/content/mth1w/u7-data-modelling.v1.json",
+        "curriculum/content/mth1w/u8/manifest.v1.json",
+        "curriculum/content/mth1w/u9/manifest.v1.json",
+        "tools/check_mth1w_split_unit_content.py",
+        "tests/test_mth1w_split_unit_content.py",
+        "docs/home-learning/START-HERE.md",
+        "docs/vertical-slices/MTH1W-PHASE-1.md",
+        "lib/core/learning/mth1w_foundation.dart",
+        "lib/core/learning/mth1w_unit_content.dart",
+        "lib/core/providers/mth1w_unit_content_provider.dart",
+        "lib/features/learning/home_learning_guide_screen.dart",
+        "lib/features/learning/mth1w_course_screen.dart",
+        "lib/features/learning/mth1w_draft_unit_screen.dart",
+        "lib/features/learning/mth1w_split_draft_unit_screen.dart",
+        "test/features/learning/home_learning_guide_screen_test.dart",
+        "test/core/learning/mth1w_foundation_test.dart",
+        "test/core/learning/mth1w_unit_content_test.dart",
+        "test/core/providers/mth1w_unit_content_provider_test.dart",
+        "test/features/learning/mth1w_draft_unit_screen_test.dart",
+        "test/features/learning/mth1w_course_screen_test.dart"
+      ]
+    },
+    {
       "id": "assessment.mth1w-deterministic-practice",
       "family": "assessment",
       "status": "experimental",
-      "summary": "MTH1W A1, A2, B2, and B4 have deterministic seed-based practice items bound to exact expectation IDs, local scaffolded hints, digest evidence, actual answer entry, and fail-closed exact verification; learner records, tutor inference, review, and export remain unavailable.",
+      "summary": "Four derived Grade 9 math topics have deterministic seed-based practice; the nine source-mapped unit drafts add 473 authored guided/independent/retrieval practice items, nine 10-item delayed-feedback quizzes with correction attempts, and nine educator-reviewable performance tasks. These are not grades or mastery records, and reviewed full-course and cumulative assessment remain unavailable.",
       "evidence": [
         "docs/vertical-slices/MTH1W-PHASE-1.md",
         "schemas/practice-item.v1.schema.json",
@@ -99,21 +166,76 @@
         "lib/features/practice/mth1w_practice_screen.dart",
         "test/core/practice/math_practice_generator_test.dart",
         "test/core/practice/math_answer_verifier_test.dart",
-        "test/features/practice/mth1w_practice_screen_test.dart"
+        "test/features/practice/mth1w_practice_screen_test.dart",
+        "curriculum/content/mth1w/u1-number-systems.v1.json",
+        "curriculum/content/mth1w/u2-powers.v1.json",
+        "curriculum/content/mth1w/u3-rational-applications.v1.json",
+        "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
+        "curriculum/content/mth1w/u5-coding-relationships.v1.json",
+        "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
+        "curriculum/content/mth1w/u7-data-modelling.v1.json",
+        "curriculum/content/mth1w/u8/manifest.v1.json",
+        "curriculum/content/mth1w/u9/manifest.v1.json",
+        "tools/check_mth1w_split_unit_content.py",
+        "tests/test_mth1w_split_unit_content.py",
+        "test/features/learning/mth1w_draft_unit_screen_test.dart",
+        "test/features/learning/mth1w_course_screen_test.dart"
       ]
     },
     {
       "id": "education.axiom-bridge",
       "family": "integration",
       "status": "experimental",
-      "summary": "A digest-pinned education contract and transport-independent Dart client validate eight bounded AXIOM intent types, exact consent purposes, idempotency, digest fields, and fail-closed Gateway errors; no live transport or provider capsule is enabled.",
+      "summary": "A digest-pinned education contract, bounded relative-path Gateway transport, host-injected binding, and governed learner write/self-read runtime validate eight AXIOM intent types, exact consent purposes, idempotency, response traces, result fields, and fail-closed errors. No default host binding, local learner-record fallback, or production provider capsule is enabled.",
       "evidence": [
         "contracts/axiom-education.v1.json",
         "lib/core/axiom/education_contract.dart",
         "lib/core/axiom/education_client.dart",
+        "lib/core/axiom/gateway_intent_transport.dart",
+        "lib/core/providers/axiom_education_gateway_provider.dart",
         "test/core/axiom/education_client_test.dart",
+        "test/core/axiom/gateway_intent_transport_test.dart",
+        "test/core/providers/axiom_education_gateway_provider_test.dart",
         ".github/workflows/rebuild.yml"
       ]
+    },
+    {
+      "id": "mesh.compatibility-profile",
+      "family": "integration",
+      "status": "experimental",
+      "summary": "A fail-closed compatibility profile pins AXIOM-MESH 0.12.0-dev.3, exact Education and learner-memory contracts, the semantic Gateway intents.submit seam, and the Gateway to Hypervisor to Sandbox to Grid authority path. The observed Mesh head and full Gateway digest are provenance rather than runtime equality gates, and a reviewed host must present compatible Education semantics before the governed runtime can bind.",
+      "evidence": [
+        "config/axiom-mesh-compatibility.v1.json",
+        "schemas/axiom-mesh-compatibility.v1.schema.json",
+        "tools/check_axiom_mesh_compatibility.py",
+        "tests/test_axiom_mesh_compatibility.py",
+        "lib/core/axiom/mesh_compatibility.dart",
+        "test/core/axiom/mesh_compatibility_test.dart"
+      ]
+    },
+    {
+      "id": "mesh.personal-continuity",
+      "family": "portability",
+      "status": "specified",
+      "summary": "Runtime Capsule, Personal Agent Pack, Compute Node Profile, Local Trust Envelope, and Agent Runtime Adapter surfaces are tracked for portable personal-compute continuity, but remain readiness inputs and grant no Axiom Education runtime authority."
+    },
+    {
+      "id": "mesh.delegated-authority",
+      "family": "governance",
+      "status": "specified",
+      "summary": "Delegated human authority and delegated consent remain observed AXIOM-MESH draft/non-production inputs. They cannot be enabled until merged or otherwise stabilized upstream, repinned, independently reviewed, and represented by a new Education compatibility profile."
+    },
+    {
+      "id": "mesh.assurance-graph",
+      "family": "evidence",
+      "status": "specified",
+      "summary": "Assurance Graph and provider-observation foundations have merged into AXIOM-MESH but remain readiness-only for Axiom Education. Their Education adoption flags stay disabled, and graph or observation records are not treated as approval, policy, consent, or execution authority."
+    },
+    {
+      "id": "mesh.axiom-host",
+      "family": "hosting",
+      "status": "specified",
+      "summary": "AXIOM Host remains a draft/non-production input while checkout-freshness foundations have merged upstream. Both remain non-authoritative for Education until an explicit reviewed adoption profile and executable evidence exist; the current runtime accepts only the reviewed relative Gateway requester and compatibility profile."
     },
     {
       "id": "tutor.local-inference",
@@ -185,8 +307,8 @@
     {
       "id": "learner.axiom-records",
       "family": "privacy",
-      "status": "specified",
-      "summary": "Learner events, preferences, accommodations, and progress will be encrypted, purpose-bound, revocable, selectively exportable, and human-appealable."
+      "status": "adapter_required",
+      "summary": "Executable governed learner event, memory-first commit, and self-read clients exist, but encrypted storage, revocation, selective export, appeal handling, and production provider operation remain AXIOM responsibilities requiring an approved adapter and host."
     },
     {
       "id": "assessment.calibrated-irt",
@@ -216,12 +338,17 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
-    "The MTH1W deterministic practice engine covers only A1, A2, B2, and B4 and does not complete the ten-outcome vertical slice.",
+    "Ontario Elementary base source capture is complete for the current 16-source set, but human source review is 0/16 approved, licensing is 0/16 resolved, C2 intake eligibility is 0/16, and canonical C2 records remain 0; none of those later claims may be inferred from C1 capture.",
+    "The current four-lesson Grade 9 Math Foundations Preview and the nine source-mapped authored unit drafts are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
+    "The 110-hour MTH1W value is a planning envelope: authored primary lessons total 63.75 hours and leave 46.25 hours unallocated.",
+    "Known conflicts remain in preliminary local MTH1W identifiers; the official inventory, complete blueprint, and authored lesson slots do not authorize a complete-course claim without educator/cultural review, licensing, reviewed course-wide evidence, cumulative assessment review, accessibility alternatives, governed progress, and educator workflows.",
+    "The deterministic foundation practice engine covers only the locally labelled A1, A2, B2, and B4 topics and does not complete the ten-outcome vertical slice.",
     "The current classroom mesh is not an AXIOM federation or secure production transport.",
     "Local-first architecture alone does not establish legal or regulatory compliance.",
     "Legacy difficulty and IRT-labelled values are uncalibrated heuristics, not validated psychometrics.",
     "A valid pack signature proves integrity and signer possession, not Ministry approval, curriculum correctness, licensing permission, or safe activation.",
-    "The AXIOM education contract and client do not enable a provider, learner-record store, or network authority.",
+    "The AXIOM education contract, compatibility profile, client, transport, and host binding do not enable a provider, learner-record store, or network authority by themselves.",
+    "Observed or merged AXIOM-MESH readiness surfaces do not become Axiom Education runtime capabilities without explicit reviewed adoption and compatible executable evidence.",
     "Installing an education capsule does not grant access to learner data."
   ]
 }

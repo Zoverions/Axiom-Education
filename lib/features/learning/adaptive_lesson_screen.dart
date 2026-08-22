@@ -249,7 +249,7 @@ class _IntroSlide extends StatelessWidget {
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.blue.shade900.withOpacity(0.3),
+          color: Colors.blue.shade900.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.blue.shade700),
         ),
@@ -461,7 +461,7 @@ class _HandwritingReflection extends StatelessWidget {
       Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.green.shade900.withOpacity(0.3),
+          color: Colors.green.shade900.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(prompt, style: const TextStyle(fontSize: 16)),
@@ -597,7 +597,7 @@ class _SessionSummary extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.green.shade900.withOpacity(0.2),
+            color: Colors.green.shade900.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.green.shade700),
           ),

@@ -1,0 +1,523 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u2",
+  "title": "Unit 2: Powers and scientific notation",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+      "publisher": "Ontario Ministry of Education",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary-mathematics/courses/mth1w",
+      "use": "Official course context for exponent patterns, scientific notation, operations with powers, and staged instructional guidance."
+    },
+    {
+      "title": "Properties of Exponents and Scientific Notation",
+      "publisher": "OpenStax, Rice University",
+      "url": "https://openstax.org/books/intermediate-algebra-2e/pages/5-2-properties-of-exponents-and-scientific-notation",
+      "use": "Openly accessible teacher background for definitions, exponent properties, negative exponents, scientific notation, and common error checks."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u2-l1",
+      "title": "Exponent patterns and scientific notation",
+      "official_expectation_ids": ["B2.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Use a pattern to explain positive, zero, and negative integer exponents for a non-zero base.",
+        "Evaluate powers accurately, including rational bases and the effect of grouping a negative sign.",
+        "Convert very large and very small values between standard form and scientific notation and check their scale."
+      ],
+      "success_criteria": [
+        "I can show that decreasing an exponent by 1 divides the power value by its base.",
+        "I distinguish -(a^n) from (-a)^n and explain why a negative exponent creates a reciprocal rather than a negative value.",
+        "I write scientific notation with a coefficient whose absolute value is at least 1 and less than 10, then estimate whether the exponent sign is reasonable."
+      ],
+      "vocabulary": [
+        {"term": "base", "meaning": "the repeated factor in a power expression"},
+        {"term": "exponent", "meaning": "the number that describes how a base participates in a power pattern"},
+        {"term": "reciprocal", "meaning": "a value that multiplies with the original non-zero value to make 1"},
+        {"term": "scientific notation", "meaning": "a coefficient of absolute value from 1 up to but not including 10 multiplied by an integer power of 10"},
+        {"term": "order of magnitude", "meaning": "the power of ten that communicates the approximate scale of a quantity"}
+      ],
+      "why_it_matters": "Powers compress repeated scaling, while scientific notation makes extremely large and small measurements readable and comparable. Pattern-based reasoning lets a learner reconstruct the meaning instead of memorizing disconnected rules.",
+      "direct_instruction": [
+        {
+          "heading": "Read the whole base before evaluating",
+          "body": "In (-3)^4, the parentheses make -3 the base, so four negative factors produce 81. In -(3^4), the exponent applies to 3 and the outside negative is applied afterward, giving -81. A negative exponent has a different role: for a non-zero base, 3^-2 means the reciprocal of 3^2, so its value is 1/9."
+        },
+        {
+          "heading": "Continue the exponent pattern through zero",
+          "body": "Start with a non-zero base such as 4. The values 4^3, 4^2, and 4^1 are 64, 16, and 4. Each time the exponent decreases by 1, divide the previous value by 4. Continuing gives 4^0 = 1, 4^-1 = 1/4, and 4^-2 = 1/16. The same pattern explains zero and negative exponents without changing the relationship."
+        },
+        {
+          "heading": "Use place-value scale in scientific notation",
+          "body": "Scientific notation has the form a x 10^n where 1 <= |a| < 10 and n is an integer. Moving from a large standard number to its coefficient shifts the decimal left and gives a positive exponent. Moving from a small positive decimal to its coefficient shifts the decimal right and gives a negative exponent. Preserve the original sign separately and estimate scale before calculating."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "exponent-pattern-table",
+          "title": "Repeated-scaling pattern route",
+          "steps": [
+            "Choose a non-zero base and evaluate two or more nearby positive exponents.",
+            "Move down one exponent at a time and divide each value by the base.",
+            "Continue through exponent 0 and into negative exponents.",
+            "Write each negative-exponent value as a reciprocal of the matching positive power.",
+            "Check by multiplying reciprocal pairs such as a^3 and a^-3 to obtain 1."
+          ],
+          "when_useful": "Use this route to explain why zero and negative exponents follow from a consistent scaling pattern.",
+          "check": "The ratio between adjacent values must equal the base when reading upward and 1/base when reading downward."
+        },
+        {
+          "id": "place-value-scaling",
+          "title": "Place-value scaling route",
+          "steps": [
+            "Estimate whether the quantity is greater than 1, between 0 and 1, or negative.",
+            "Shift the decimal until the coefficient has absolute value from 1 up to but not including 10.",
+            "Count shifts and assign a positive exponent for large magnitude or a negative exponent for magnitude below 1.",
+            "Keep a leading negative sign on the coefficient when the original quantity is negative.",
+            "Expand the power of ten or reverse the shifts to verify the original standard form."
+          ],
+          "when_useful": "Use this route when converting measurements and comparing quantities whose written decimal forms are unwieldy.",
+          "check": "A positive exponent should scale the coefficient up, a negative exponent should scale it down, and the coefficient range must be valid."
+        }
+      ],
+      "representations": [
+        {
+          "id": "exponent-value-table",
+          "label": "Exponent-value table",
+          "description": "Rows align consecutive integer exponents with expanded form, exact value, and the divide-by-base step from the previous row.",
+          "text_alternative": "Read downward by subtracting 1 from the exponent and dividing the value by the non-zero base; read upward by adding 1 and multiplying by the base."
+        },
+        {
+          "id": "scientific-place-chart",
+          "label": "Scientific-notation place-value chart",
+          "description": "A place-value chart records the original decimal, the normalized coefficient, the direction and count of decimal shifts, and the resulting power of ten.",
+          "text_alternative": "The chart states the coefficient first, then says how many places the decimal moved and whether the power of ten enlarges or reduces the coefficient."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u2-l1-we1",
+          "prompt": "Use a pattern to evaluate 5^0, 5^-1, and 5^-2, then explain the meaning of the negative exponent.",
+          "method_route_id": "exponent-pattern-table",
+          "steps": [
+            {"label": "Start with known powers", "explanation": "Write 5^2 = 25 and 5^1 = 5 so the adjacent-value pattern is visible."},
+            {"label": "Continue to zero", "explanation": "Divide 5 by the base 5 to obtain 5^0 = 1."},
+            {"label": "Continue below zero", "explanation": "Divide by 5 again for 5^-1 = 1/5 and again for 5^-2 = 1/25."},
+            {"label": "Connect the reciprocal", "explanation": "The value 5^-2 is the reciprocal of 5^2 because 25 x 1/25 = 1."}
+          ],
+          "answer": "5^0 = 1, 5^-1 = 1/5, and 5^-2 = 1/25. The negative exponent records reciprocal scaling, not a negative sign on the value.",
+          "verification": "Multiplying 5^2 by 5^-2 gives 25 x 1/25 = 1, which agrees with the exponent pattern."
+        },
+        {
+          "id": "mth1w-u2-l1-we2",
+          "prompt": "Write 0.000072 in scientific notation and convert the result back to standard form.",
+          "method_route_id": "place-value-scaling",
+          "steps": [
+            {"label": "Estimate scale", "explanation": "The value is positive and below 1, so a valid scientific-notation exponent will be negative."},
+            {"label": "Normalize", "explanation": "Move the decimal five places right to make the coefficient 7.2."},
+            {"label": "Write the power", "explanation": "Because the coefficient must be scaled down five places, write 7.2 x 10^-5."},
+            {"label": "Reverse the shift", "explanation": "Multiplying 7.2 by 10^-5 moves the decimal five places left and returns 0.000072."}
+          ],
+          "answer": "0.000072 = 7.2 x 10^-5.",
+          "verification": "The coefficient 7.2 is in the required range, the negative exponent matches a value below 1, and reversing five places reproduces the original decimal."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A negative exponent always makes the value negative.", "correction": "For a non-zero base, a negative exponent indicates the reciprocal of the corresponding positive power."},
+        {"claim": "-2^4 and (-2)^4 have the same value.", "correction": "Parentheses determine the base: -2^4 is -(2^4) = -16, while (-2)^4 = 16."},
+        {"claim": "72 x 10^-6 is already normalized scientific notation.", "correction": "It has the correct value but not normalized form; rewrite it as 7.2 x 10^-5."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {
+            "id": "mth1w-u2-l1-g1",
+            "prompt": "In a base-3 pattern, which value comes immediately after 3^1 as the exponent decreases?",
+            "response": {"type": "selected", "options": ["1", "0", "1/3", "-3"], "correct_answer": "1"},
+            "rationale": "Decreasing the exponent from 1 to 0 divides the value 3 by the base 3, producing 1."
+          },
+          {
+            "id": "mth1w-u2-l1-g2",
+            "prompt": "Which expression has value 1/16?",
+            "response": {"type": "selected", "options": ["2^-4", "-2^4", "(-2)^3", "4^-1/2"], "correct_answer": "2^-4"},
+            "rationale": "For non-zero base 2, 2^-4 is the reciprocal of 2^4, so it equals 1/16."
+          },
+          {
+            "id": "mth1w-u2-l1-g3",
+            "prompt": "Explain from the pattern 7^2, 7^1, 7^0 why 7^0 equals 1.",
+            "response": {"type": "constructed", "criteria": ["uses consecutive exponent values", "states the divide-by-7 relationship", "concludes with 7^0 = 1"], "sample_response": "The values are 49, 7, and then 1 because each step down in the exponent divides by 7. Therefore 7^0 = 7 / 7 = 1.", "educator_review_required": true},
+            "rationale": "The explanation should derive the zero exponent from the same adjacent-value pattern used for positive exponents."
+          }
+        ],
+        "independent": [
+          {
+            "id": "mth1w-u2-l1-i1",
+            "prompt": "Which value is equal to (-3)^4?",
+            "response": {"type": "selected", "options": ["81", "-81", "12", "-12"], "correct_answer": "81"},
+            "rationale": "Four negative factors form two positive pairs, so the even power has value 81."
+          },
+          {
+            "id": "mth1w-u2-l1-i2",
+            "prompt": "Which is normalized scientific notation for 6,430,000?",
+            "response": {"type": "selected", "options": ["6.43 x 10^6", "64.3 x 10^5", "0.643 x 10^7", "6.43 x 10^-6"], "correct_answer": "6.43 x 10^6"},
+            "rationale": "The decimal moves six places left to make a coefficient of 6.43, so the power of ten is positive 6."
+          },
+          {
+            "id": "mth1w-u2-l1-i3",
+            "prompt": "Which standard form equals -4.8 x 10^-3?",
+            "response": {"type": "selected", "options": ["-0.0048", "-4800", "0.0048", "-0.048"], "correct_answer": "-0.0048"},
+            "rationale": "The negative exponent moves the decimal three places left while the coefficient keeps its negative sign."
+          },
+          {
+            "id": "mth1w-u2-l1-i4",
+            "prompt": "Which comparison is true?",
+            "response": {"type": "selected", "options": ["-4 x 10^3 < 4 x 10^-3", "-4 x 10^3 > 4 x 10^-3", "-4 x 10^3 = 4 x 10^-3", "both values are positive"], "correct_answer": "-4 x 10^3 < 4 x 10^-3"},
+            "rationale": "The first value is -4000 and the second is 0.004, so the negative value is smaller."
+          },
+          {
+            "id": "mth1w-u2-l1-i5",
+            "prompt": "Show two connected ways to justify that 10^-3 = 0.001.",
+            "response": {"type": "constructed", "criteria": ["shows a reciprocal or exponent pattern", "shows place-value scaling", "connects both routes to 0.001"], "sample_response": "From the exponent pattern, 10^-3 = 1/10^3 = 1/1000. From place value, dividing 1 by 10 three times moves the decimal left to 0.001. Both routes give the same value.", "educator_review_required": true},
+            "rationale": "Connecting reciprocal and place-value routes strengthens the meaning of a negative power of ten."
+          }
+        ],
+        "retrieval": [
+          {
+            "id": "mth1w-u2-l1-r1",
+            "prompt": "Without calculating fully, which expression represents a quantity below 1?",
+            "response": {"type": "selected", "options": ["8.1 x 10^-4", "2.3 x 10^5", "9 x 10^0", "1.2 x 10^2"], "correct_answer": "8.1 x 10^-4"},
+            "rationale": "A positive coefficient multiplied by a negative power of ten is scaled below 1 here."
+          },
+          {
+            "id": "mth1w-u2-l1-r2",
+            "prompt": "Which statement about 0.00000091 is correct?",
+            "response": {"type": "selected", "options": ["It is 9.1 x 10^-7.", "It is 9.1 x 10^7.", "It is 91 x 10^-7 in normalized form.", "Its order of magnitude must be positive."], "correct_answer": "It is 9.1 x 10^-7."},
+            "rationale": "Moving to the coefficient 9.1 requires seven rightward decimal shifts, so the scaling exponent is -7."
+          },
+          {
+            "id": "mth1w-u2-l1-r3",
+            "prompt": "Describe one check that would catch an incorrect exponent sign in scientific notation.",
+            "response": {"type": "constructed", "criteria": ["uses an estimate or reverse conversion", "connects exponent sign with scale", "states how the check reveals an error"], "sample_response": "I first decide whether the magnitude is above or below 1. A positive coefficient times 10 to a negative exponent should be below 1, so a result in the millions would reveal a sign error.", "educator_review_required": true},
+            "rationale": "A scale estimate or reverse conversion can reveal exponent-sign errors before a result is accepted."
+          }
+        ]
+      },
+      "reflection_prompt": "Which idea is more reliable for you when reconstructing negative exponents: reciprocal scaling or the exponent-value table, and how did you verify it today?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every place-value movement and exponent table is described as an ordered sequence of multiplication or division steps.",
+        "response_options": ["typed or handwritten calculations", "spoken explanation with an adult transcription", "calculator-supported checking after a written estimate"]
+      }
+    },
+    {
+      "id": "mth1w-u2-l2",
+      "title": "Build the exponent laws from patterns",
+      "official_expectation_ids": ["B2.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Derive product, quotient, and power-of-a-power relationships by expanding factors and tracking exponents.",
+        "Simplify numeric and algebraic power expressions with integer exponents while preserving restrictions.",
+        "Decide when an exponent shortcut applies and explain why invalid shortcuts fail."
+      ],
+      "success_criteria": [
+        "I identify the operation, confirm compatible bases or groupings, and choose a matching relationship.",
+        "I can expand a numerical case to justify adding, subtracting, or multiplying exponents.",
+        "I state non-zero restrictions for division and negative exponents and verify a simplified expression with a permitted test value."
+      ],
+      "vocabulary": [
+        {"term": "product of powers", "meaning": "a multiplication expression containing powers, which can combine exponents only when the bases match"},
+        {"term": "quotient of powers", "meaning": "a division expression containing like-base powers and a non-zero denominator"},
+        {"term": "power of a power", "meaning": "an expression in which a power is itself raised to another exponent"},
+        {"term": "restriction", "meaning": "a value excluded because an original expression would be undefined"},
+        {"term": "equivalent expression", "meaning": "an expression with the same value as another for every value allowed by the original expression"}
+      ],
+      "why_it_matters": "Exponent relationships make large products and algebraic models manageable, but using them mechanically can erase grouping or domain restrictions. Deriving each relationship from factors makes the shortcut explainable, checkable, and transferable.",
+      "direct_instruction": [
+        {
+          "heading": "Match the operation before changing exponents",
+          "body": "For the same non-zero base, multiplying powers combines all repeated factors, so exponents add. Dividing cancels common factors, so exponents subtract. Raising a power to a power repeats the entire factor group, so exponents multiply. These are different operations and the exponent change must match the structure."
+        },
+        {
+          "heading": "Expand a case, then generalize",
+          "body": "For example, x^3 times x^2 expands to three x factors followed by two more x factors, giving x^5. The numerical structure supports x^m times x^n = x^(m+n). Expansion also exposes why x^3 + x^2 cannot become x^5: addition does not join factor strings."
+        },
+        {
+          "heading": "Preserve restrictions and verify",
+          "body": "A quotient such as x^5/x^2 requires x not equal to zero even though the simplified expression x^3 can be evaluated at zero. The simplified result is equivalent only on the original expression's allowed inputs. After simplifying, substitute a convenient permitted value in both expressions to check the result."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "expand-regroup",
+          "title": "Expand-and-regroup route",
+          "steps": [
+            "Identify the base and use parentheses to make each complete base visible.",
+            "Rewrite positive powers as repeated factors and negative powers as reciprocal factors.",
+            "Join or cancel factors according to multiplication or division, or repeat the full group for a power of a power.",
+            "Count the factors that remain and rewrite them with an exponent.",
+            "Record any non-zero restriction inherited from a denominator or negative exponent."
+          ],
+          "when_useful": "Use this route when learning or checking a relationship, especially when signs, fractions, or grouping make a shortcut uncertain.",
+          "check": "Every exponent change must correspond to visible factors that were joined, cancelled, or repeated."
+        },
+        {
+          "id": "operation-pattern",
+          "title": "Operation-and-pattern route",
+          "steps": [
+            "Classify the structure as product, quotient, power of a power, product to a power, or quotient to a power.",
+            "Write two small numerical cases with the same structure and evaluate both sides.",
+            "Track how the input exponents change to produce the output exponent.",
+            "State the general relationship and its required restrictions.",
+            "Test the simplified result with a permitted value that makes mental checking easy."
+          ],
+          "when_useful": "Use this route after factor meaning is secure and when selecting efficiently among several exponent relationships.",
+          "check": "A numerical test can challenge a proposed rule but does not replace the factor-based explanation for why it holds generally."
+        }
+      ],
+      "representations": [
+        {
+          "id": "factor-strings",
+          "label": "Grouped factor strings",
+          "description": "Colour-independent brackets and labels show repeated factors, cancelled pairs, and remaining factors before a compact power is written.",
+          "text_alternative": "The expression is read as an ordered list of numerator and denominator factors; each cancellation and remaining factor is named in words."
+        },
+        {
+          "id": "rule-case-table",
+          "label": "Rule beside numerical cases",
+          "description": "A table places the operation structure, two evaluated numerical cases, the exponent change, the general symbolic relationship, and restrictions in aligned columns.",
+          "text_alternative": "For each row, read the original operation, the evaluated case, how the exponents changed, the matching symbolic statement, and its non-zero conditions."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u2-l2-we1",
+          "prompt": "Simplify x^5 times x^-2 and justify the exponent change for x not equal to zero.",
+          "method_route_id": "expand-regroup",
+          "steps": [
+            {"label": "Expand meanings", "explanation": "Write x^5 as five x factors and x^-2 as 1/(x^2), which requires x not equal to zero."},
+            {"label": "Cancel reciprocal factors", "explanation": "Two numerator x factors cancel the two denominator x factors, leaving three x factors."},
+            {"label": "Rewrite compactly", "explanation": "Three remaining x factors form x^3, matching the exponent sum 5 + (-2) = 3."},
+            {"label": "Keep the restriction", "explanation": "The simplified expression is equivalent to the original only for x not equal to zero."}
+          ],
+          "answer": "x^5 times x^-2 = x^3 for x not equal to zero.",
+          "verification": "At x = 2, the original gives 32 times 1/4 = 8 and the simplified expression gives 2^3 = 8."
+        },
+        {
+          "id": "mth1w-u2-l2-we2",
+          "prompt": "Simplify (3a^2)^3 and explain why both the coefficient and variable factor are powered.",
+          "method_route_id": "operation-pattern",
+          "steps": [
+            {"label": "Identify the full base", "explanation": "The parentheses make the entire product 3a^2 the base raised to the third power."},
+            {"label": "Repeat the group", "explanation": "Write (3a^2)(3a^2)(3a^2), so there are three coefficient factors and three groups of a^2."},
+            {"label": "Combine separately", "explanation": "Multiply coefficients to get 3^3 = 27 and add the three exponents 2 + 2 + 2 = 6."},
+            {"label": "Write the result", "explanation": "The equivalent compact expression is 27a^6."}
+          ],
+          "answer": "The simplified expression is (3a^2)^3 = 27a^6.",
+          "verification": "At a = 2, both (3 times 4)^3 and 27 times 64 equal 1728."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "Exponents are added whenever powers appear in the same expression.", "correction": "Exponents add for multiplication of like-base powers; other operations require different reasoning."},
+        {"claim": "(x^3)^2 equals x^5 because 3 + 2 = 5.", "correction": "A power of a power repeats two groups of three factors, so the exponents multiply and the result is x^6."},
+        {"claim": "x^4/x^4 = 1 for every real x.", "correction": "The original quotient excludes x = 0, so it equals 1 only when x is non-zero."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {
+            "id": "mth1w-u2-l2-g1",
+            "prompt": "Which expression is equivalent to 2^3 times 2^4?",
+            "response": {"type": "selected", "options": ["2^7", "2^12", "4^7", "2^1"], "correct_answer": "2^7"},
+            "rationale": "Multiplying like-base powers joins three and four factors of 2, making seven factors in total."
+          },
+          {
+            "id": "mth1w-u2-l2-g2",
+            "prompt": "Which expression is equivalent to (y^3)^4?",
+            "response": {"type": "selected", "options": ["y^12", "y^7", "4y^3", "y"], "correct_answer": "y^12"},
+            "rationale": "Four groups of three y factors make twelve factors, so the exponents multiply."
+          },
+          {
+            "id": "mth1w-u2-l2-g3",
+            "prompt": "Explain why a^6 divided by a^2 simplifies to a^4 only when a is non-zero.",
+            "response": {"type": "constructed", "criteria": ["expands or describes factor cancellation", "identifies division by zero", "states a^4 with a non-zero restriction"], "sample_response": "For non-zero a, two denominator factors cancel two of the six numerator factors, leaving a^4. If a = 0, the original denominator a^2 is zero, so the quotient is undefined.", "educator_review_required": true},
+            "rationale": "A complete equivalence statement preserves the restriction from the original denominator."
+          }
+        ],
+        "independent": [
+          {
+            "id": "mth1w-u2-l2-i1",
+            "prompt": "Simplify m^7 divided by m^3 for m not equal to zero.",
+            "response": {"type": "selected", "options": ["m^4", "m^(7/3)", "m^10", "m^21"], "correct_answer": "m^4"},
+            "rationale": "A quotient of like-base powers subtracts exponents, so 7 - 3 = 4."
+          },
+          {
+            "id": "mth1w-u2-l2-i2",
+            "prompt": "Simplify 5^-2 times 5^6.",
+            "response": {"type": "selected", "options": ["5^4", "5^-12", "10^4", "5^8"], "correct_answer": "5^4"},
+            "rationale": "For the same base, product exponents add: -2 + 6 = 4."
+          },
+          {
+            "id": "mth1w-u2-l2-i3",
+            "prompt": "Which simplification is invalid?",
+            "response": {"type": "selected", "options": ["x^2 + x^3 = x^5", "x^2 times x^3 = x^5", "(x^2)^3 = x^6", "x^5/x^2 = x^3 for x non-zero"], "correct_answer": "x^2 + x^3 = x^5"},
+            "rationale": "The product rule does not apply across addition; unlike terms cannot be joined by adding exponents."
+          },
+          {
+            "id": "mth1w-u2-l2-i4",
+            "prompt": "Simplify (2p^3)^2.",
+            "response": {"type": "selected", "options": ["4p^6", "2p^6", "4p^5", "2p^5"], "correct_answer": "4p^6"},
+            "rationale": "The power applies to both factors: 2^2 = 4 and (p^3)^2 = p^6."
+          },
+          {
+            "id": "mth1w-u2-l2-i5",
+            "prompt": "Create and verify one product-of-powers expression that simplifies to z^-3.",
+            "response": {"type": "constructed", "criteria": ["uses the same non-zero base z", "the exponents add to -3", "verifies with expansion or a permitted numerical value"], "sample_response": "One example is z^2 times z^-5 = z^-3 for z non-zero because 2 + (-5) = -3. At z = 2, 4 times 1/32 = 1/8, which equals 2^-3.", "educator_review_required": true},
+            "rationale": "Constructing a case requires choosing compatible exponents and checking that the general relationship matches an exact value."
+          }
+        ],
+        "retrieval": [
+          {
+            "id": "mth1w-u2-l2-r1",
+            "prompt": "What exponent operation matches a quotient of like-base powers?",
+            "response": {"type": "selected", "options": ["subtract denominator exponent from numerator exponent", "add both exponents", "multiply both exponents", "divide both exponents"], "correct_answer": "subtract denominator exponent from numerator exponent"},
+            "rationale": "Cancelling denominator factors removes that many factors from the numerator, which corresponds to exponent subtraction."
+          },
+          {
+            "id": "mth1w-u2-l2-r2",
+            "prompt": "Which restriction belongs to q^-4?",
+            "response": {"type": "selected", "options": ["q is not zero", "q is positive", "q is an integer", "q is greater than 4"], "correct_answer": "q is not zero"},
+            "rationale": "The expression q^-4 means 1/q^4, so q = 0 would create division by zero."
+          },
+          {
+            "id": "mth1w-u2-l2-r3",
+            "prompt": "A learner writes (ab)^3 = ab^3. Diagnose the error and correct it.",
+            "response": {"type": "constructed", "criteria": ["states that the exponent applies to the entire product", "expands three groups or invokes the product-to-a-power relationship", "gives a^3b^3"], "sample_response": "The parentheses make ab the full base, so (ab)^3 = (ab)(ab)(ab) = a^3b^3. The original answer failed to apply the power to a.", "educator_review_required": true},
+            "rationale": "Grouping determines which factors receive the exponent, and expansion makes the missing factors visible."
+          }
+        ]
+      },
+      "reflection_prompt": "Which exponent relationship can you now reconstruct from factors without a rule sheet, and what restriction or grouping check will you remember?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Factor strings are also written as ordered spoken factor lists with every cancellation, remaining factor, and restriction stated explicitly.",
+        "response_options": ["typed or handwritten symbolic work", "oral factor-by-factor explanation", "physical factor cards followed by a written conclusion"]
+      }
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u2-quiz",
+      "title": "Unit 2 powers and scientific notation quiz",
+      "estimated_minutes": 35,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {
+          "id": "mth1w-u2-q1",
+          "official_expectation_ids": ["B2.1"],
+          "prompt": "Which value equals 4^-2?",
+          "response": {"type": "selected", "options": ["1/16", "-16", "16", "-1/8"], "correct_answer": "1/16"},
+          "rationale": "A negative exponent gives the reciprocal of the positive power: 4^-2 = 1/4^2 = 1/16."
+        },
+        {
+          "id": "mth1w-u2-q2",
+          "official_expectation_ids": ["B2.1"],
+          "prompt": "Which value equals -(2^4)?",
+          "response": {"type": "selected", "options": ["-16", "16", "-8", "8"], "correct_answer": "-16"},
+          "rationale": "The exponent applies to 2 first, then the outside negative sign is applied."
+        },
+        {
+          "id": "mth1w-u2-q3",
+          "official_expectation_ids": ["B2.1"],
+          "prompt": "Which is normalized scientific notation for 0.000305?",
+          "response": {"type": "selected", "options": ["3.05 x 10^-4", "30.5 x 10^-5", "3.05 x 10^4", "0.305 x 10^-3"], "correct_answer": "3.05 x 10^-4"},
+          "rationale": "The decimal moves four places right to form 3.05, so the scaling exponent is -4."
+        },
+        {
+          "id": "mth1w-u2-q4",
+          "official_expectation_ids": ["B2.1"],
+          "prompt": "Write 8.7 x 10^5 in standard form.",
+          "response": {"type": "short_text", "accepted_answers": ["870000", "870,000"], "case_sensitive": false},
+          "rationale": "A power of 10^5 moves the decimal five places right, producing 870000."
+        },
+        {
+          "id": "mth1w-u2-q5",
+          "official_expectation_ids": ["B2.1"],
+          "prompt": "Explain why 6^0 = 1 using an exponent pattern rather than only stating a rule.",
+          "response": {"type": "constructed", "criteria": ["uses consecutive powers of 6", "states division by the base as the exponent decreases", "concludes 6^0 = 1"], "sample_response": "The values 6^2 = 36 and 6^1 = 6 show that each decrease of 1 in the exponent divides by 6. Continuing gives 6^0 = 6/6 = 1.", "educator_review_required": true},
+          "rationale": "The pattern explanation shows why the zero-exponent value preserves the same repeated-scaling relationship."
+        },
+        {
+          "id": "mth1w-u2-q6",
+          "official_expectation_ids": ["B2.2"],
+          "prompt": "Simplify r^4 times r^7.",
+          "response": {"type": "selected", "options": ["r^11", "r^28", "2r^11", "r^3"], "correct_answer": "r^11"},
+          "rationale": "Multiplying like-base powers joins four and seven factors, so the exponents add."
+        },
+        {
+          "id": "mth1w-u2-q7",
+          "official_expectation_ids": ["B2.2"],
+          "prompt": "Simplify t^9 divided by t^4 for t not equal to zero.",
+          "response": {"type": "selected", "options": ["t^5", "t^13", "t^(9/4)", "t^36"], "correct_answer": "t^5"},
+          "rationale": "The quotient of like-base powers subtracts exponents: 9 - 4 = 5."
+        },
+        {
+          "id": "mth1w-u2-q8",
+          "official_expectation_ids": ["B2.2"],
+          "prompt": "Simplify (c^3)^5.",
+          "response": {"type": "selected", "options": ["c^15", "c^8", "5c^3", "c^2"], "correct_answer": "c^15"},
+          "rationale": "Five groups of three c factors make fifteen factors, so the exponents multiply."
+        },
+        {
+          "id": "mth1w-u2-q9",
+          "official_expectation_ids": ["B2.2"],
+          "prompt": "Simplify (2x^2)^3.",
+          "response": {"type": "short_text", "accepted_answers": ["8x^6", "8*x^6"], "case_sensitive": false},
+          "rationale": "The exponent applies to both factors: 2^3 = 8 and (x^2)^3 = x^6."
+        },
+        {
+          "id": "mth1w-u2-q10",
+          "official_expectation_ids": ["B2.2"],
+          "prompt": "Explain why x^6/x^2 = x^4 must retain the restriction x is not zero.",
+          "response": {"type": "constructed", "criteria": ["identifies the original denominator", "states that division by zero is undefined", "limits equivalence to non-zero x"], "sample_response": "Although cancelling two factors gives x^4, the original denominator x^2 would be zero at x = 0. Therefore the expressions are equivalent only for x not equal to zero.", "educator_review_required": true},
+          "rationale": "Simplification cannot add an input that was undefined in the original expression."
+        }
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u2-scale-comparison",
+      "title": "Scale comparison brief",
+      "estimated_minutes": 120,
+      "official_expectation_ids": ["B2", "B2.1", "B2.2"],
+      "prompt": "Choose two quantities from science, technology, geography, or daily life whose magnitudes differ substantially. Produce an accessible comparison that writes each quantity in standard and scientific notation, explains the exponent patterns involved, uses at least two exponent relationships in a valid calculation, and checks the reasonableness and restrictions of every result.",
+      "required_components": [
+        "two sourced contextual quantities with units",
+        "standard and normalized scientific notation for each quantity",
+        "an order-of-magnitude comparison stated in words",
+        "one exponent-value or place-value pattern that explains a zero or negative exponent",
+        "two correctly selected exponent relationships with factor-based justification",
+        "a non-zero restriction wherever division or a negative exponent requires it",
+        "one connected visual or table with a complete text alternative",
+        "an estimate, reverse conversion, or substitution check for every calculated conclusion"
+      ],
+      "rubric": [
+        {"dimension": "mathematical accuracy", "criteria": "Powers, scientific notation, exponent relationships, units, and restrictions are correct."},
+        {"dimension": "reasoning", "criteria": "Patterns or expanded factors explain why each exponent relationship applies instead of presenting rules without support."},
+        {"dimension": "scale and verification", "criteria": "Order of magnitude is interpreted meaningfully and independent checks support the conclusions."},
+        {"dimension": "communication and accessibility", "criteria": "The comparison is organized, defines notation, does not rely on colour alone, and supplies a usable text alternative."},
+        {"dimension": "reflection and revision", "criteria": "The learner identifies a corrected misconception, feedback used, and one decision that improved clarity or accuracy."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}

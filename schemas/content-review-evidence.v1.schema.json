@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/content-review-evidence.v1.schema.json",
+  "title": "Axiom Education Content Review Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "review_id",
+    "course_code",
+    "review_type",
+    "target",
+    "reviewer",
+    "reviewed_at",
+    "decision",
+    "confirmations",
+    "findings",
+    "scope_limitations",
+    "attestation_type"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-content-review-evidence.v1"},
+    "review_id": {"type": "string", "minLength": 1},
+    "course_code": {"const": "MTH1W"},
+    "review_type": {
+      "enum": [
+        "educator-instructional",
+        "cultural-context",
+        "accessibility",
+        "assessment-validity",
+        "licensing"
+      ]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "unit_id", "lesson_id", "target_sha256"],
+      "properties": {
+        "kind": {"const": "lesson"},
+        "unit_id": {"type": "string", "minLength": 1},
+        "lesson_id": {"type": "string", "minLength": 1},
+        "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qualification"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qualification": {"type": "string", "minLength": 1},
+        "organization": {"type": ["string", "null"]},
+        "jurisdiction": {"type": ["string", "null"]}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "decision": {"enum": ["approved", "changes-required", "rejected"]},
+    "confirmations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expectation_binding_confirmed",
+        "content_correctness_confirmed",
+        "pedagogical_suitability_confirmed",
+        "age_appropriateness_confirmed"
+      ],
+      "properties": {
+        "expectation_binding_confirmed": {"type": "boolean"},
+        "content_correctness_confirmed": {"type": "boolean"},
+        "pedagogical_suitability_confirmed": {"type": "boolean"},
+        "age_appropriateness_confirmed": {"type": "boolean"}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "category", "description", "disposition"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["note", "minor", "major", "critical"]},
+          "category": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "disposition": {"enum": ["open", "resolved", "accepted-with-rationale", "not-applicable"]},
+          "resolution_reference": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "scope_limitations": {"type": "array", "items": {"type": "string"}},
+    "attestation_type": {"const": "human-review"},
+    "notes": {"type": "string"}
+  }
+}

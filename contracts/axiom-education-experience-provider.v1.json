@@ -1,0 +1,91 @@
+{
+  "schema": "axiom-education-experience-provider.v1",
+  "contract_id": "axiom.education.experience-provider",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "purpose": "Bound learning missions that execute partly in an external platform or physical/digital environment while preserving Axiom authority and evidence boundaries.",
+  "installation_grants_authority": false,
+  "provider_classes": [
+    "virtual-world",
+    "coding",
+    "robotics-maker",
+    "simulation-lab",
+    "museum-library",
+    "video-oer",
+    "creative-tool",
+    "collaboration",
+    "physical-activity",
+    "employer-apprenticeship",
+    "other-reviewed"
+  ],
+  "mission": {
+    "required_fields": [
+      "mission_id",
+      "mission_version",
+      "subject_id",
+      "provider_id",
+      "provider_version",
+      "purpose",
+      "competency_ids",
+      "input_digest",
+      "audience",
+      "expires_at"
+    ],
+    "optional_fields": [
+      "standards_resolution_digest",
+      "expectation_ids",
+      "team_id",
+      "artifact_profile",
+      "review_profile"
+    ],
+    "raw_learner_record_disclosure_default": false,
+    "provider_receives_minimum_context": true,
+    "single_use_or_expiring_authority": true
+  },
+  "provider_declaration": {
+    "required": [
+      "provider_id",
+      "provider_version",
+      "actions",
+      "requested_data_scopes",
+      "returned_evidence_types",
+      "identity_correlation",
+      "age_eligibility",
+      "privacy_tracking_profile",
+      "moderation_safety_profile",
+      "content_ownership_profile",
+      "retention_profile",
+      "failure_behavior",
+      "effect_destination",
+      "assurance_limitations"
+    ]
+  },
+  "evidence": {
+    "result_must_be_typed": true,
+    "provider_success_is_not_learner_mastery": true,
+    "artifact_publication_is_separate_authority_event": true,
+    "standards_coverage_requires_verified_crosswalk": true,
+    "provider_result_requires_verifier_profile": true,
+    "raw_reflection_in_receipt": false
+  },
+  "social_safety": {
+    "audience_required": true,
+    "mixed_age_requires_profile": true,
+    "direct_messaging_not_ambient": true,
+    "moderation_requirements_explicit": true,
+    "report_block_remedy_required_when_social": true
+  },
+  "privacy": {
+    "advertising_authority": false,
+    "behavioural_targeting_authority": false,
+    "unnecessary_cross_service_identifier_disclosure": false,
+    "provider_may_not_expand_consent": true
+  },
+  "failure": {
+    "missing_provider": "unavailable",
+    "expired_mission": "denied",
+    "invalid_result_evidence": "unverified",
+    "provider_outage": "unavailable",
+    "policy_mismatch": "denied"
+  }
+}

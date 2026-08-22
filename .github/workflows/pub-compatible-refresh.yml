@@ -180,7 +180,21 @@ jobs:
 
       - name: Build Android debug APK
         if: steps.refresh.outputs.changed == 'true'
-        run: flutter build apk --debug --no-pub
+        shell: bash
+        run: |
+          set -euo pipefail
+          attempts=0
+          max_attempts=3
+          until flutter build apk --debug --no-pub; do
+            attempts=$((attempts + 1))
+            if ((attempts >= max_attempts)); then
+              echo "Android debug build failed after ${max_attempts} attempts."
+              exit 1
+            fi
+            sleep_seconds=$((attempts * 30))
+            echo "Transient build failure while resolving Android artifacts; retrying in ${sleep_seconds}s."
+            sleep "${sleep_seconds}"
+          done
 
   propose:
     name: Propose compatible pinned-Flutter lock refresh

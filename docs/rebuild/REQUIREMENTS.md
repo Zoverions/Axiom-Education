@@ -1,7 +1,7 @@
 # Axiom Education Rebuild Requirements
 
 **Current build:** `0.5.0-dev.0`  
-**Updated:** 2026-07-30
+**Updated:** 2026-08-01
 
 The machine-readable status in `config/capabilities.json` is authoritative. A missing dependency, provider, permission, consent, source, verifier, or model artifact must produce an explicit unavailable or denied result, never synthetic success.
 
@@ -26,6 +26,21 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | EDU-CUR-04 | Curriculum activation MUST require a valid signed manifest and MUST preserve the prior active pack for rollback. | Tamper, signer, downgrade, activation, and rollback tests. |
 | EDU-CUR-05 | Retrieval indexes MUST be disposable derived artifacts and MUST NOT replace authoritative curriculum records. | Rebuild and corruption tests. |
 | EDU-CUR-06 | Custom course codes MUST be visibly marked as Axiom Education extensions and MUST NOT imply jurisdictional authority recognition. | UI and export snapshot tests. |
+| EDU-CUR-07 | A known conflict between a local curriculum record and an official source MUST block course-complete, curriculum-aligned, credit, grade, transcript, approval, and school-equivalency claims until the full source and review gates pass. | `config/curriculum-readiness.json`, source audit, fail-closed checker, and student-facing boundary tests. |
+
+## High-school instructional core
+
+| ID | Requirement | Acceptance evidence |
+|---|---|---|
+| EDU-CORE-01 | Every supported course MUST remain teachable and practicable when tutor, adaptive, network, and learner-record capabilities are unavailable. | Provider-absence end-to-end course test. |
+| EDU-CORE-02 | The student surface MUST organize curriculum into a visible course → unit → lesson → practice → assessment sequence rather than exposing an expectation database as the complete learning experience. | Navigation and course-completion tests. |
+| EDU-CORE-03 | Every lesson MUST identify its curriculum binding, learning goals, prerequisite knowledge, direct instruction, at least one worked example, at least two valid reasoning routes and connected representations where the subject permits them, independent practice, and expected scope. | Lesson-contract validation and UI tests. |
+| EDU-CORE-04 | Instruction MUST move from modelling to graduated support to independent work; generated exercises alone MUST NOT be represented as a complete lesson. | Content review and lesson-state tests. |
+| EDU-CORE-05 | Deterministic feedback MUST address the task or answer, allow another attempt, and MUST NOT turn an isolated response into a grade, mastery claim, diagnosis, or ability label. | Feedback, retry, and prohibited-claim tests. |
+| EDU-CORE-06 | Supported courses MUST provide conventional lesson checks, quizzes, unit assessments, cumulative review, transparent scoring rules, and educator-correctable outcomes. | Assessment lifecycle and correction tests. |
+| EDU-CORE-07 | Learners MUST be able to plan, monitor, explain, and reflect within subject lessons without covert attention, emotion, disability, motivation, or diagnosis inference. | UI prompts, schema gates, and prohibited-inference tests. |
+| EDU-CORE-08 | High-school interfaces MUST use age-respectful language, clear structure, meaningful choice, and accessible alternatives without manipulative streaks, artificial urgency, or unvalidated competitive ranking. | Content review, accessibility audit, and dark-pattern gate. |
+| EDU-CORE-09 | Educators MUST be able to assign, inspect, correct, accommodate, return, and review governed student work before the product claims a complete school workflow. | Educator end-to-end workflow and rights tests. |
 
 ## Tutor and deterministic verification
 
@@ -83,7 +98,7 @@ The machine-readable status in `config/capabilities.json` is authoritative. A mi
 | ID | Requirement | Acceptance evidence |
 |---|---|---|
 | EDU-OPS-01 | Release interfaces MUST support keyboard operation, screen readers, text scaling, contrast, reduced motion, focus visibility, and accessible exports. | Automated and manual accessibility report. |
-| EDU-OPS-02 | One documented clean-setup command MUST install exact dependencies with scripts controlled and run the full verification suite. | Protected clean-checkout CI. |
+| EDU-OPS-02 | One documented clean-setup command MUST install exact dependencies with scripts controlled and run the full verification suite. | `python tools/verify.py` and protected clean-checkout CI. |
 | EDU-OPS-03 | Releases MUST include SBOM, provenance, curriculum manifest, model/provider inventory, migration and rollback plan, status registry, and evidence timestamps. | Release verifier. |
 | EDU-OPS-04 | Secrets, model binaries, generated indexes, databases containing learner data, caches, and build artifacts MUST NOT be tracked. | Repository hygiene gate. |
 | EDU-OPS-05 | Security, privacy, curriculum, accessibility, recovery, and model-evaluation findings MUST be tied to an owner and disposition. | Findings-ledger verifier. |

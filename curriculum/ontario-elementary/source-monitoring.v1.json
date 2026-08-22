@@ -1,0 +1,230 @@
+{
+  "schema": "axiom-curriculum-source-monitoring.v1",
+  "jurisdiction_id": "ca:on",
+  "as_of": "2026-08-20",
+  "claim_boundary": "Monitoring classifies transport/source-surface repeatability only. A C1 lock remains evidence that exact bytes were captured at its recorded time. A later differing response or failed request does not by itself prove curriculum content changed, invalidate historical capture evidence, approve a replacement lock, or establish semantic equivalence.",
+  "sources": [
+    {
+      "source_id": "ontario-health-physical-education-grades-1-8-2019",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Official Ministry PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-mathematics-grades-1-8-2020",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Publications Ontario-resolved curriculum PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-fsl-grades-1-8-2013",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "Official Ministry PDF has demonstrated exact-byte recapture stability.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-fr-english-grades-4-8-2006",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "The official Ministry Anglais Grades 4-8 revised 2006 PDF produced the same 382,437-byte SHA-256 3a5efd2a38ab77d600397ba72a2710b7770b2c0f62aafdc19c8fd10412449037 in the bounded C1 capture and all three independent stability recaptures in workflow run 32416994073.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-fr-english-beginners-grades-4-8-2013",
+      "monitoring_mode": "strict-exact-byte",
+      "reason": "The official Ministry Anglais pour debutants Grades 4-8 revised 2013 PDF produced the same 3,887,969-byte SHA-256 3f16c79225fa0a3b4de504a6843598389d729f14ecce00b7adaf58f95bcfe845 in the bounded C1 capture and all three independent stability recaptures in workflow run 32416994073.",
+      "semantic_change_claimed": false
+    },
+    {
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Arts C1 capture and the separate three-request stability job in workflow run 32416994073 returned different SHA-256 signatures at the same 6,297,332-byte length. All three stability requests were mutually identical, so the evidence supports a historical C1 snapshot while demonstrating cross-job DCP HTML response-surface volatility rather than a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297332,
+        "c1_capture_sha256": "1307d903c60d047ecbb9ad49d6fd12b9c157480e7453072438227bc602064830",
+        "three_request_stability_sha256": "38a1da204bd84562de8d175f9499a51499cc403acbeaf593152a069fc8a5d98c",
+        "workflow_run_id": 32416994073
+      },
+      "promotion_blocker": "Keep the current Arts DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-language-grades-1-8-2023",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The current DCP HTML route produced two distinct exact-byte signatures across three successful captures in one hosted run at the same byte length. This demonstrates response-surface byte volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 3,
+        "successful_attempt_count": 3,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6178841,
+        "observed_sha256": [
+          "a3a37dda72d43d1c309cba9426e3361a165485211ab1a7f4e6ac3459c2679ddf",
+          "d0559c37740acb4e296ba8c1be7d439ffae7597d0c1be99006ff1f81084920d0"
+        ],
+        "workflow_run_id": 31543420096
+      },
+      "promotion_blocker": "Resolve a stable authoritative asset or separately reviewed canonicalization before interpreting DCP HTML exact-byte drift semantically or replacing the committed C1 snapshot."
+    },
+    {
+      "source_id": "ontario-science-technology-grades-1-8-2022",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "In one hosted three-attempt run, two successful DCP HTML captures were byte-identical to the committed C1 snapshot and a third request returned HTTP 404. This demonstrates response-surface availability volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 3,
+        "successful_attempt_count": 2,
+        "failed_attempt_count": 1,
+        "distinct_exact_byte_signatures": 1,
+        "successful_sha256": "679713f7310bb4cb08208529e701736ee93d81a9c1120e8faaeeb8e7800ca52f",
+        "successful_byte_length": 6178840,
+        "failure_type": "RemoteCaptureError",
+        "failure_summary": "official source download failed: HTTP Error 404: The requested content does not exist.",
+        "workflow_run_id": 31543420096
+      },
+      "promotion_blocker": "Resolve a stable authoritative asset or separately reviewed availability/canonicalization strategy before treating intermittent DCP HTML response failures as source-document drift."
+    },
+    {
+      "source_id": "ontario-kindergarten-2026",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded C1 capture and a separate three-request stability job in the same workflow run returned different exact-byte SHA-256 signatures at the same byte length. The three stability requests were mutually identical, so this is evidence of cross-job response-surface volatility rather than evidence of curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297329,
+        "c1_capture_sha256": "0a46bc1bd2d5791f32074c5254eff0f0ec2942d1b10c3083a8c0fcf1be4557ea",
+        "three_request_stability_sha256": "5501bb3f2c0e175c29ca2a8ae43dc1d58352fe9550ae814901b6e72d5663384a",
+        "workflow_run_id": 32407467373
+      },
+      "promotion_blocker": "Keep the DCP Kindergarten route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-social-studies-history-geography",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded C1 capture and the separate three-request stability job in workflow run 32411047398 returned different SHA-256 signatures at the same byte length. All three stability requests were mutually identical, so the evidence supports a historical C1 snapshot while demonstrating cross-job DCP response-surface volatility rather than a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6297332,
+        "c1_capture_sha256": "5c003403051f9bba75ad5475c7bd21f93cf07488def91bf2e1722b1d06500176",
+        "three_request_stability_sha256": "6ac0fc3f002a8ea80d8b5bbeb158f7ddfa44950e036f7c0bff2206c48222eb98",
+        "workflow_run_id": 32411047398
+      },
+      "promotion_blocker": "Keep the current DCP SSHG route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-science-technology-grades-1-8-2022",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Science C1 capture and the separate three-request stability job in workflow run 32415167619 returned different SHA-256 signatures at the same 6,459,273-byte length. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "observed_byte_length": 6459273,
+        "c1_capture_sha256": "3c83c83978bd2de489623e3a8ff73484b037d98519503ed8b5fc6eee253d17bc",
+        "three_request_stability_sha256": "b3863b524ea7dcebb650f6bb7298826aaf3d0cb8a047230e8f22d176b501375c",
+        "workflow_run_id": 32415167619
+      },
+      "promotion_blocker": "Keep the French Science DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-social-studies-history-geography",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French SSHG C1 capture and all three separate stability requests in workflow run 32415167619 were byte-identical at 6,459,317 bytes. This supports repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459317,
+        "c1_capture_sha256": "4ee674342675e622856521a021b5e66ea99189ea4d60a1452145dd529b0b0e9e",
+        "three_request_stability_sha256": "4ee674342675e622856521a021b5e66ea99189ea4d60a1452145dd529b0b0e9e",
+        "workflow_run_id": 32415167619
+      },
+      "promotion_blocker": "Keep the French SSHG DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-francais-grades-1-8-2023",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Français C1 capture and all three separate stability requests in workflow run 32421398988 were byte-identical at 6,459,273 bytes. This demonstrates repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459273,
+        "c1_capture_sha256": "0ee8c811b38707cbc6d5b21d2217f7737a5ad12126fec078ddcf1923584978d8",
+        "three_request_stability_sha256": "0ee8c811b38707cbc6d5b21d2217f7737a5ad12126fec078ddcf1923584978d8",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Français DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-mathematics-grades-1-8-2020",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded Mathématiques C1 capture and all three separate stability requests in workflow run 32421398988 were byte-identical at 6,459,278 bytes. This demonstrates repeatability in that hosted run, but the source remains an HTML response surface and is not promoted to strict document monitoring from one run alone.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 1,
+        "observed_byte_length": 6459278,
+        "c1_capture_sha256": "34aacca4b04d2b289d3b417b2eb27b3632c5b2a9dd9bfda3db96ed513868da6d",
+        "three_request_stability_sha256": "34aacca4b04d2b289d3b417b2eb27b3632c5b2a9dd9bfda3db96ed513868da6d",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Mathématiques DCP route observational unless a reviewed source strategy establishes an immutable authoritative asset or an approved semantic canonicalization boundary."
+    },
+    {
+      "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Éducation physique et santé C1 capture and the separate three-request stability job in workflow run 32421398988 returned different SHA-256 signatures and byte lengths. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "c1_capture_byte_length": 6459289,
+        "c1_capture_sha256": "6f2134378de34994e46a50da001aaec523c258a316905c2af22987ec5713cbb4",
+        "three_request_stability_byte_length": 6459325,
+        "three_request_stability_sha256": "505fed1951e94855dba0bbebecaa1a8d44cc65897ef436cd0c4eb579ccc9e98b",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Éducation physique et santé DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    },
+    {
+      "source_id": "ontario-fr-arts-grades-1-8-2009",
+      "monitoring_mode": "observational-response-surface",
+      "reason": "The bounded French Éducation artistique C1 capture and the separate three-request stability job in workflow run 32421398988 returned different SHA-256 signatures and byte lengths. All three stability requests were mutually identical. This demonstrates cross-job DCP HTML response-surface volatility, not a curriculum-content change.",
+      "semantic_change_claimed": false,
+      "observation": {
+        "attempt_count": 4,
+        "successful_attempt_count": 4,
+        "failed_attempt_count": 0,
+        "distinct_exact_byte_signatures": 2,
+        "c1_capture_byte_length": 6459321,
+        "c1_capture_sha256": "bf010080b4357dc2a33697c8f6faf30642d412b2eb55dc258e381c4b4a950b3a",
+        "three_request_stability_byte_length": 6459285,
+        "three_request_stability_sha256": "06a67c21babe40b9271cf8cb085d3f33719c7a3d4332a24c18a7b56bfddd83d4",
+        "workflow_run_id": 32421398988
+      },
+      "promotion_blocker": "Keep the French Éducation artistique DCP route observational until a stable authoritative asset or separately reviewed canonicalization strategy can distinguish transport/template volatility from curriculum-content bytes."
+    }
+  ]
+}

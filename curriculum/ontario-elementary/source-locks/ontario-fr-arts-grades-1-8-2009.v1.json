@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-arts-grades-1-8-2009",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "878274173c0f97e4de77421ba87f1377aff6374d13e790edd1091b2c4524e99b",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T21:51:02.241613Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-artistique",
+  "media_type": "text/html",
+  "byte_length": 6459321,
+  "sha256": "bf010080b4357dc2a33697c8f6faf30642d412b2eb55dc258e381c4b4a950b3a",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted hosted capture from workflow run 32421398988. Candidate bytes differed from the SHA and length shared by all three separate stability probes, demonstrating DCP HTML response-surface volatility rather than curriculum change. Source bytes were discarded after hashing; this historical C1 snapshot does not approve redistribution, normalization, review, staging, or activation."
+}

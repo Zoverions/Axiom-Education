@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-fr-health-physical-education-grades-1-8-2019",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "f5b1e5dc3eb600f65be4dcce166a3ae7331acc8d3e0fabf1f81da84b9fe601f8",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T21:50:55.440121Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/fr/curriculum/elementaire-education-physique-sante",
+  "media_type": "text/html",
+  "byte_length": 6459289,
+  "sha256": "6f2134378de34994e46a50da001aaec523c258a316905c2af22987ec5713cbb4",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted hosted capture from workflow run 32421398988. Candidate bytes differed from the SHA and length shared by all three separate stability probes, demonstrating DCP HTML response-surface volatility rather than curriculum change. Source bytes were discarded after hashing; this historical C1 snapshot does not approve redistribution, normalization, review, staging, or activation."
+}

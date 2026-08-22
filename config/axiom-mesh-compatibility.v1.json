@@ -1,0 +1,174 @@
+{
+  "schema": "axiom-education-mesh-compatibility.v1",
+  "profile_id": "axiom-education.mesh-0.12.0-dev.3-provider-v1",
+  "profile_version": "1.2.0",
+  "verified_at": "2026-08-20",
+  "claim_status": "contract-compatible-not-production-validated",
+  "mesh_baseline": {
+    "repository": "Zoverions/AXIOM-MESH",
+    "branch": "main",
+    "head_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
+    "head_role": "observed-provenance-not-runtime-binding",
+    "kernel_version": "0.12.0-dev.3",
+    "authority_path": ["Gateway", "Hypervisor", "Sandbox", "Grid"],
+    "integration_mode": "released-artifact-pins-no-submodule",
+    "gateway_contract_source_sha": "eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534",
+    "gateway_contract_canonical_sha256": "77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd",
+    "gateway_compatibility_mode": "semantic-intents-submit-seam-with-additive-route-tolerance"
+  },
+  "gateway_intents_submit_seam": {
+    "schema": "axiom-gateway-intents-submit-seam.v1",
+    "sha256": "f595c1274eb98b7bcea33d72756120c491049e056cd0c9b3dd8dfd2d63d34f01",
+    "base_path": "/v1",
+    "boundary": {
+      "request_target": "same-origin-relative-path",
+      "authenticated_transport": "permission-restricted-gateway-ingress",
+      "direct_internal_service_access": false,
+      "token_persistence": "caller-managed-memory-only"
+    },
+    "limits": {
+      "default_timeout_ms": 10000,
+      "maximum_timeout_ms": 30000,
+      "maximum_request_bytes": 1048576,
+      "maximum_response_bytes": 2097152,
+      "idempotency_key_minimum_length": 16,
+      "idempotency_key_maximum_length": 160
+    },
+    "error_contract": {
+      "schema": "axiom-gateway-error.v1",
+      "trace_header": "x-trace-id",
+      "unknown_code_behavior": "preserve-and-present-generic-failure"
+    },
+    "route": {
+      "id": "intents.submit",
+      "method": "POST",
+      "path": "/v1/intents",
+      "access": "authenticated",
+      "idempotency": "required",
+      "path_parameters": [],
+      "query_parameters": [],
+      "request_schema": "axiom-intent-request.v1",
+      "response_schema": "axiom-intent-result.v1",
+      "required_response_fields": ["intent_id", "trace_id", "status", "evidence"],
+      "response_media_type": "application/json"
+    }
+  },
+  "required_runtime_contracts": [
+    {
+      "id": "axiom.education.v1",
+      "path": "mesh/config/domain-contracts/education.v1.json",
+      "sha256": "a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "required-runtime-pin"
+    },
+    {
+      "id": "axiom.education.learner-memory.v1",
+      "path": "mesh/config/domain-contracts/education-learner-memory.v1.json",
+      "sha256": "3763a28919d36721467160ef772e30da1d5a536a8733fd88b65f2c60c9107d78",
+      "source_sha": "2365bf5ed19e0da81288551b2bb4135a7094d02b",
+      "status": "required-runtime-pin"
+    }
+  ],
+  "readiness_only_contracts": [
+    {
+      "id": "axiom.agent-runtime-adapter.v1",
+      "path": "docs/architecture/contracts/agent-runtime-adapter.v1.schema.json",
+      "sha256": "4954c3d1a49ea57fb0bf5a7eea29140b852e8b5fa2bb11634665f004aca2c19c",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    },
+    {
+      "id": "axiom.runtime-capsule.v1",
+      "path": "docs/architecture/contracts/agent-runtime-capsule.v1.schema.json",
+      "sha256": "f86e3c0febbb8c6a7e0ef5e87aedcdcce72e4a6c8c5fa2c432622306bb85eaa5",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    },
+    {
+      "id": "axiom.personal-agent-pack.v1",
+      "path": "docs/architecture/contracts/personal-agent-pack.v1.schema.json",
+      "sha256": "d9a41a752980bbc67e8de88ba1f9b603dd4d0f344c3831950d1109c1d0a5972d",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    },
+    {
+      "id": "axiom.compute-node-profile.v1",
+      "path": "docs/architecture/contracts/compute-node-profile.v1.schema.json",
+      "sha256": "a033dca8d5f560e3677a25c5738d47c890355677d3e02972708f95f5147b5417",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    },
+    {
+      "id": "axiom.local-trust-envelope.v1",
+      "path": "docs/architecture/contracts/local-trust-envelope.v1.schema.json",
+      "sha256": "5dafb467111c743c5f90e2a02e7b888dc7456e75460e667b4ceff58177bc2089",
+      "source_sha": "4d3ddbbe1b9baded8d57d8115a11dee3a1d8e26c",
+      "status": "documentation-readiness-only-no-runtime-authority"
+    }
+  ],
+  "observed_upcoming_drafts": [
+    {
+      "feature_id": "delegated-human-authority",
+      "pull_request": 1050,
+      "head_sha": "f3bfab6c524d61b101018fa5c7c4fa965984e2c7",
+      "status": "draft-not-production",
+      "runtime_adoption_allowed": false,
+      "contract_sha256": {
+        "axiom-human-authority.v1": "bb70bc73cfc8ed7a041e71074a80565764a5f6796138113674d12642c8c15d9c",
+        "axiom-delegated-consent.v1": "d4e0cefb487a52096a757c759c748ff5975e20da59e8ef72252bb8881dc147d1"
+      }
+    },
+    {
+      "feature_id": "axiom-host-profile",
+      "pull_request": 1052,
+      "head_sha": "5f8defd99618690d1eeaeb6b082e7fda7c899f67",
+      "status": "draft-not-production",
+      "runtime_adoption_allowed": false,
+      "contract_sha256": {
+        "axiom-host-profile.v1": "30e01862577f1ed12486406fdf3b2cd17f4e0c76aeb8adc7ea930566c4e1cf53"
+      }
+    },
+    {
+      "feature_id": "assurance-graph-a0",
+      "pull_request": 1057,
+      "head_sha": "ba67408f9e7495a8f23cf070105efcf619cd86d9",
+      "merged_sha": "488073e4f04d8a3ec54d4ba7cd4567063a93305f",
+      "status": "merged-readiness-only-not-adopted",
+      "runtime_adoption_allowed": false
+    },
+    {
+      "feature_id": "provider-observation",
+      "pull_request": 1059,
+      "head_sha": "893968f1607e277a18271102d95b178d2dce7fd1",
+      "merged_sha": "0e3427e6197acf79104b1e30eaf8b01488055df8",
+      "status": "merged-readiness-only-not-adopted",
+      "runtime_adoption_allowed": false
+    },
+    {
+      "feature_id": "checkout-source-freshness",
+      "pull_request": 1060,
+      "head_sha": "7300e38d20ebcbb0963090e5a8a491eda5de6e45",
+      "merged_sha": "0b41429bb1bbb716089874b70cc57a5bb68ea527",
+      "status": "merged-readiness-only-not-adopted",
+      "runtime_adoption_allowed": false
+    }
+  ],
+  "feature_flags": {
+    "native_learner_self_write": true,
+    "native_learner_self_read": true,
+    "delegated_human_authority": false,
+    "axiom_host_profile": false,
+    "assurance_graph": false,
+    "provider_observation": false,
+    "checkout_freshness": false,
+    "local_trust_activation": false
+  },
+  "invariants": {
+    "gateway_is_only_network_authority_entry": true,
+    "direct_internal_service_access_allowed": false,
+    "contract_presence_grants_authority": false,
+    "installation_grants_learner_data_access": false,
+    "drafts_may_promote_themselves": false,
+    "application_owns_kernel_authority": false
+  }
+}

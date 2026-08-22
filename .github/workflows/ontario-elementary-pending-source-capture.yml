@@ -1,0 +1,71 @@
+name: Ontario Elementary Pending Source Capture
+
+on:
+  pull_request:
+    branches:
+      - feature/ontario-elementary-readiness-monitoring-20260811
+      - main
+    paths:
+      - 'curriculum/ontario-elementary/source-discovery-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-discovery-additions.v1.json'
+      - 'curriculum/ontario-elementary/source-discovery-addition-amendments.v1.json'
+      - 'curriculum/ontario-elementary/source-capture-targets.v1.json'
+      - 'curriculum/ontario-elementary/source-locks/**'
+      - 'curriculum/ontario-elementary/source-monitoring.v1.json'
+      - 'tools/curriculum_source_discovery.py'
+      - 'tools/curriculum_source_additions.py'
+      - 'tools/curriculum_source_addition_amendments.py'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/json_schema_validation.py'
+      - 'schemas/curriculum-source-lock.v1.schema.json'
+      - 'requirements-dev.txt'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/attempt_pending_curriculum_capture.py'
+      - 'tools/check_curriculum_source_monitoring.py'
+      - 'tests/test_curriculum_source_discovery.py'
+      - 'tests/test_curriculum_source_additions.py'
+      - 'tests/test_curriculum_source_addition_amendments.py'
+      - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_pending_curriculum_capture.py'
+      - 'tests/test_curriculum_source_monitoring.py'
+      - '.github/workflows/ontario-elementary-pending-source-capture.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-no-untracked-pending-targets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+      - name: Verify discovery, locks, monitoring, and empty pending set
+        run: |
+          python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_curriculum_source_additions -v
+          python -m unittest tests.test_curriculum_source_addition_amendments -v
+          python -m unittest tests.test_remote_curriculum_source_capture -v
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python tools/curriculum_source_lock.py verify-directory \
+            --directory curriculum/ontario-elementary/source-locks
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+          python - <<'PY'
+          from tools.check_curriculum_source_monitoring import verify_policy
+
+          result = verify_policy()
+          pending = result["pending_capture_targets"]
+          if pending:
+              raise SystemExit(f"unexpected pending capture targets: {pending}")
+          if result["sources"] != 16 or result["capture_targets"] != 16:
+              raise SystemExit(f"unexpected source/target counts: {result}")
+          PY

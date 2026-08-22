@@ -13,7 +13,43 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "config" / "capabilities.json"
 PUBSPEC_PATH = ROOT / "pubspec.yaml"
 README_PATH = ROOT / "README.md"
+CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 PRODUCT_DEFINITION_PATH = ROOT / "docs" / "rebuild" / "PRODUCT-DEFINITION.md"
+HIGH_SCHOOL_FOUNDATION_PATH = ROOT / "docs" / "rebuild" / "HIGH-SCHOOL-FOUNDATION.md"
+ONTARIO_ELEMENTARY_READINESS_PATH = ROOT / "docs" / "rebuild" / "ONTARIO-ELEMENTARY-READINESS.md"
+COURSE_ROADMAP_PATH = ROOT / "docs" / "rebuild" / "COURSE-COMPLETION-ROADMAP.md"
+MTH1W_SOURCE_AUDIT_PATH = ROOT / "docs" / "curriculum" / "MTH1W-SOURCE-AUDIT.md"
+MTH1W_COVERAGE_LEDGER_PATH = ROOT / "docs" / "curriculum" / "MTH1W-COVERAGE-LEDGER.md"
+GLOBAL_METHODS_PATH = ROOT / "docs" / "research" / "GLOBAL-INSTRUCTIONAL-METHODS.md"
+MTH1W_OFFICIAL_INVENTORY_PATH = (
+    ROOT / "curriculum" / "official" / "ontario-mth1w-2021.inventory.json"
+)
+MTH1W_COURSE_BLUEPRINT_PATH = (
+    ROOT / "curriculum" / "courses" / "ontario-mth1w-2021.course.json"
+)
+MTH1W_UNIT_1_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u1-number-systems.v1.json"
+)
+MTH1W_UNIT_2_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u2-powers.v1.json"
+)
+MTH1W_UNIT_3_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u3-rational-applications.v1.json"
+)
+MTH1W_UNIT_4_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u4-algebraic-thinking.v1.json"
+)
+MTH1W_UNIT_5_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u5-coding-relationships.v1.json"
+)
+MTH1W_UNIT_6_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u6-relations-linear-models.v1.json"
+)
+MTH1W_UNIT_7_CONTENT_PATH = (
+    ROOT / "curriculum" / "content" / "mth1w" / "u7-data-modelling.v1.json"
+)
+HOME_LEARNING_PATH = ROOT / "docs" / "home-learning" / "START-HERE.md"
+CURRICULUM_READINESS_PATH = ROOT / "config" / "curriculum-readiness.json"
 DEPRECATIONS_PATH = ROOT / "docs" / "DEPRECATIONS.md"
 MIGRATION_PATH = ROOT / "docs" / "REPOSITORY-MIGRATION.md"
 
@@ -28,8 +64,15 @@ ALLOWED_STATUSES = {
 REQUIRED_CAPABILITIES = {
     "app.curriculum-browser",
     "curriculum.ontario-data",
+    "curriculum.ontario-elementary-evidence",
     "curriculum.signed-packs",
+    "instruction.mth1w-foundation",
     "education.axiom-bridge",
+    "mesh.compatibility-profile",
+    "mesh.personal-continuity",
+    "mesh.delegated-authority",
+    "mesh.assurance-graph",
+    "mesh.axiom-host",
     "tutor.local-inference",
     "tools.deterministic-math",
     "canvas.watcher",
@@ -118,6 +161,15 @@ def verify() -> Counter[str]:
         integration_target.get("mode") == "governed-domain-capability-pack",
         "unsupported AXIOM integration mode",
     )
+    require(
+        integration_target.get("minimum_kernel") == "0.12.0-dev.3",
+        "AXIOM minimum kernel pin drifted",
+    )
+    require(
+        integration_target.get("compatibility_profile")
+        == "config/axiom-mesh-compatibility.v1.json",
+        "AXIOM compatibility profile path drifted",
+    )
 
     definitions = registry.get("status_definitions")
     require(isinstance(definitions, dict), "status_definitions must be an object")
@@ -198,7 +250,25 @@ def verify() -> Counter[str]:
 
     for document_path in (
         README_PATH,
+        CHANGELOG_PATH,
         PRODUCT_DEFINITION_PATH,
+        HIGH_SCHOOL_FOUNDATION_PATH,
+        ONTARIO_ELEMENTARY_READINESS_PATH,
+        COURSE_ROADMAP_PATH,
+        MTH1W_SOURCE_AUDIT_PATH,
+        MTH1W_COVERAGE_LEDGER_PATH,
+        GLOBAL_METHODS_PATH,
+        MTH1W_OFFICIAL_INVENTORY_PATH,
+        MTH1W_COURSE_BLUEPRINT_PATH,
+        MTH1W_UNIT_1_CONTENT_PATH,
+        MTH1W_UNIT_2_CONTENT_PATH,
+        MTH1W_UNIT_3_CONTENT_PATH,
+        MTH1W_UNIT_4_CONTENT_PATH,
+        MTH1W_UNIT_5_CONTENT_PATH,
+        MTH1W_UNIT_6_CONTENT_PATH,
+        MTH1W_UNIT_7_CONTENT_PATH,
+        HOME_LEARNING_PATH,
+        CURRICULUM_READINESS_PATH,
         DEPRECATIONS_PATH,
         MIGRATION_PATH,
     ):
@@ -212,6 +282,23 @@ def verify() -> Counter[str]:
     readme = README_PATH.read_text(encoding="utf-8")
     require("Zoverions/Axiom-Education" in readme, "README canonical repository is missing")
     require("config/capabilities.json" in readme, "README does not link the registry")
+    require("CHANGELOG.md" in readme, "README does not link the changelog")
+    require(
+        "docs/rebuild/HIGH-SCHOOL-FOUNDATION.md" in readme,
+        "README does not link the high-school foundation strategy",
+    )
+    require(
+        "docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md" in readme,
+        "README does not link Ontario Elementary readiness",
+    )
+    require(
+        "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md" in readme,
+        "README does not link the global instructional methods baseline",
+    )
+    require(
+        "docs/curriculum/MTH1W-COVERAGE-LEDGER.md" in readme,
+        "README does not link the MTH1W coverage ledger",
+    )
     require("not production-ready" in readme, "README production boundary is missing")
     require("docs/DEPRECATIONS.md" in readme, "README does not link deprecations")
     require("docs/REPOSITORY-MIGRATION.md" in readme, "README does not link migration record")

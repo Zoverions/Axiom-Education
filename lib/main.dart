@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'core/services/hive_service.dart';
-import 'features/diagnostic/diagnostic_screen.dart';
+import 'features/home/learner_home_screen.dart';
 
 typedef AppInitializer = Future<void> Function();
 
@@ -25,18 +25,33 @@ class MyApp extends StatelessWidget {
 
   final AppInitializer? initializer;
 
+  ThemeData _theme(Brightness brightness) {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.deepPurple,
+        brightness: brightness,
+      ),
+      useMaterial3: true,
+      inputDecorationTheme: const InputDecorationTheme(
+        border: OutlineInputBorder(),
+      ),
+      filledButtonTheme: const FilledButtonThemeData(
+        style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(0, 48))),
+      ),
+      outlinedButtonTheme: const OutlinedButtonThemeData(
+        style: ButtonStyle(minimumSize: WidgetStatePropertyAll(Size(0, 48))),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Axiom Education',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
-      ),
+      theme: _theme(Brightness.light),
+      darkTheme: _theme(Brightness.dark),
+      themeMode: ThemeMode.system,
       home: AppBootstrapGate(initializer: initializer ?? HiveService.init),
     );
   }
@@ -79,7 +94,7 @@ class _AppBootstrapGateState extends State<AppBootstrapGate> {
           return _StartupErrorScreen(onRetry: _retry);
         }
 
-        return const DiagnosticScreen();
+        return const LearnerHomeScreen();
       },
     );
   }

@@ -1,0 +1,84 @@
+name: Ontario Elementary C2 Promotion Gate
+
+on:
+  pull_request:
+    paths:
+      - 'curriculum/ontario-elementary/c2-candidates/**'
+      - 'curriculum/ontario-elementary/records-v2/**'
+      - 'curriculum/ontario-elementary/source-locks/**'
+      - 'curriculum/reviews/ontario-elementary/sources/**'
+      - 'curriculum/reviews/ontario-elementary/normalization/**'
+      - 'curriculum/licensing/ontario-elementary/reviews/**'
+      - 'schemas/curriculum-standard-record.v2.schema.json'
+      - 'schemas/curriculum-normalization-review-evidence.v1.schema.json'
+      - 'tools/curriculum_standard_record.py'
+      - 'tools/ontario_elementary_c2_intake.py'
+      - 'tools/ontario_elementary_c2_promotion.py'
+      - 'tools/ontario_elementary_c2_normalization_templates.py'
+      - 'tests/test_ontario_elementary_c2_intake.py'
+      - 'tests/test_ontario_elementary_c2_promotion.py'
+      - 'tests/test_ontario_elementary_c2_normalization_templates.py'
+      - '.github/workflows/ontario-elementary-c2-promotion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-c2-promotion-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install exact Python test dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+
+      - name: Validate normalization review schema
+        run: python -m json.tool schemas/curriculum-normalization-review-evidence.v1.schema.json >/dev/null
+
+      - name: Generate current promotion review plan
+        run: |
+          python tools/ontario_elementary_c2_promotion.py plan \
+            --output /tmp/ontario-elementary-c2-promotion-plan.json
+          python -m json.tool /tmp/ontario-elementary-c2-promotion-plan.json >/dev/null
+
+      - name: Verify committed normalization evidence and canonical C2 boundary
+        run: |
+          python tools/ontario_elementary_c2_promotion.py verify-directory
+          python tools/ontario_elementary_c2_promotion.py verify-canonical
+
+      - name: Build deterministic non-valid normalization review templates
+        run: |
+          python tools/ontario_elementary_c2_normalization_templates.py verify
+          python tools/ontario_elementary_c2_normalization_templates.py build \
+            --output /tmp/ontario-elementary-c2-normalization-templates
+          python -m json.tool /tmp/ontario-elementary-c2-normalization-templates/manifest.json >/dev/null
+
+      - name: Run C2 intake, promotion, and template mutation tests
+        run: |
+          python -m unittest tests.test_ontario_elementary_c2_intake -v
+          python -m unittest tests.test_ontario_elementary_c2_promotion -v
+          python -m unittest tests.test_ontario_elementary_c2_normalization_templates -v
+
+      - name: Upload short-lived promotion review plan
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-c2-promotion-plan-${{ github.sha }}
+          path: /tmp/ontario-elementary-c2-promotion-plan.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload short-lived normalization review templates
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: ontario-elementary-c2-normalization-templates-${{ github.sha }}
+          path: /tmp/ontario-elementary-c2-normalization-templates
+          if-no-files-found: error
+          retention-days: 7

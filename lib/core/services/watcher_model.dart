@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -99,17 +97,10 @@ class WatcherModel {
         1,
         (_) => List.generate(
           inputHeight,
-          (y) => List.generate(
-            inputWidth,
-            (x) {
-              final pixel = resizedImage.getPixel(x, y);
-              return <double>[
-                pixel.r / 255.0,
-                pixel.g / 255.0,
-                pixel.b / 255.0,
-              ];
-            },
-          ),
+          (y) => List.generate(inputWidth, (x) {
+            final pixel = resizedImage.getPixel(x, y);
+            return <double>[pixel.r / 255.0, pixel.g / 255.0, pixel.b / 255.0];
+          }),
         ),
       );
       final outputTensor = List.generate(

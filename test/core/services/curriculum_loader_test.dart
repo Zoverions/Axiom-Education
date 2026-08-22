@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ontarioedai/core/services/curriculum_loader.dart';
 import 'package:ontarioedai/core/providers/curriculum_provider.dart';
@@ -57,14 +56,20 @@ void main() {
     await db.insert('Course', {
       'id': 'MTH1W',
       'name': 'Mathematics',
-      'official_url': 'https://example.com/mth1w'
+      'official_url': 'https://example.com/mth1w',
     });
 
-    await db.insert(
-        'Course', {'id': 'ENG1D', 'name': 'English', 'official_url': null});
+    await db.insert('Course', {
+      'id': 'ENG1D',
+      'name': 'English',
+      'official_url': null,
+    });
 
-    await db.insert(
-        'Strand', {'id': 'S1', 'course_id': 'MTH1W', 'name': 'Number Sense'});
+    await db.insert('Strand', {
+      'id': 'S1',
+      'course_id': 'MTH1W',
+      'name': 'Number Sense',
+    });
 
     await db.insert('Expectation', {
       'id': 'E1',
@@ -73,7 +78,7 @@ void main() {
       'text': 'Test expectation 1',
       'irt_a': 1.0,
       'irt_b': 0.0,
-      'irt_c': 0.2
+      'irt_c': 0.2,
     });
 
     await db.insert('Tag', {'expectation_id': 'E1', 'tag': 'math'});
@@ -89,8 +94,10 @@ void main() {
   });
 
   test('CurriculumLoader verificationNote is correct', () {
-    expect(CurriculumLoader.verificationNote,
-        contains('© King\'s Printer for Ontario'));
+    expect(
+      CurriculumLoader.verificationNote,
+      contains('© King\'s Printer for Ontario'),
+    );
   });
 
   test('getExpectationsForCourse returns correct data', () async {
@@ -106,11 +113,15 @@ void main() {
     expect(results[0]['tags'], ['math', 'numbers']);
   });
 
-  test('getExpectationsForCourse returns empty list for unknown course',
-      () async {
-    final results = await CurriculumLoader.getExpectationsForCourse('UNKNOWN');
-    expect(results, isEmpty);
-  });
+  test(
+    'getExpectationsForCourse returns empty list for unknown course',
+    () async {
+      final results = await CurriculumLoader.getExpectationsForCourse(
+        'UNKNOWN',
+      );
+      expect(results, isEmpty);
+    },
+  );
 
   test('officialUrl returns correct url if present', () async {
     final url = await CurriculumLoader.officialUrl('MTH1W');
@@ -135,8 +146,8 @@ void main() {
       const channel = MethodChannel('plugins.flutter.io/path_provider');
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-        return tempDir.path;
-      });
+            return tempDir.path;
+          });
     });
 
     tearDownAll(() {
@@ -151,38 +162,43 @@ void main() {
     });
 
     test(
-        'officialUrl returns fallback URL when course exists but official_url is null',
-        () async {
-      final db = await DatabaseService.database;
-      await db.insert('Course', {
-        'id': 'NULL_URL_COURSE',
-        'name': 'Test Course',
-        'official_url': null
-      });
+      'officialUrl returns fallback URL when course exists but official_url is null',
+      () async {
+        final db = await DatabaseService.database;
+        await db.insert('Course', {
+          'id': 'NULL_URL_COURSE',
+          'name': 'Test Course',
+          'official_url': null,
+        });
 
-      final url = await CurriculumLoader.officialUrl('NULL_URL_COURSE');
-      expect(url, 'https://www.ontario.ca/page/secondary-school-curriculum');
+        final url = await CurriculumLoader.officialUrl('NULL_URL_COURSE');
+        expect(url, 'https://www.ontario.ca/page/secondary-school-curriculum');
 
-      // cleanup
-      await db
-          .delete('Course', where: 'id = ?', whereArgs: ['NULL_URL_COURSE']);
-    });
+        // cleanup
+        await db.delete(
+          'Course',
+          where: 'id = ?',
+          whereArgs: ['NULL_URL_COURSE'],
+        );
+      },
+    );
 
     test(
-        'officialUrl returns course official_url when course exists and has url',
-        () async {
-      final db = await DatabaseService.database;
-      await db.insert('Course', {
-        'id': 'TEST_COURSE',
-        'name': 'Test Course',
-        'official_url': 'https://example.com/course'
-      });
+      'officialUrl returns course official_url when course exists and has url',
+      () async {
+        final db = await DatabaseService.database;
+        await db.insert('Course', {
+          'id': 'TEST_COURSE',
+          'name': 'Test Course',
+          'official_url': 'https://example.com/course',
+        });
 
-      final url = await CurriculumLoader.officialUrl('TEST_COURSE');
-      expect(url, 'https://example.com/course');
+        final url = await CurriculumLoader.officialUrl('TEST_COURSE');
+        expect(url, 'https://example.com/course');
 
-      // cleanup
-      await db.delete('Course', where: 'id = ?', whereArgs: ['TEST_COURSE']);
-    });
+        // cleanup
+        await db.delete('Course', where: 'id = ?', whereArgs: ['TEST_COURSE']);
+      },
+    );
   });
 }

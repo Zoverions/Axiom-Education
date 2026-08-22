@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/curriculum-normalization-review-evidence.v1.schema.json",
+  "title": "Axiom Education Curriculum Normalization Review Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "review_id",
+    "jurisdiction_id",
+    "source_id",
+    "candidate",
+    "review_basis",
+    "reviewer",
+    "reviewed_at",
+    "decision",
+    "confirmations",
+    "findings",
+    "scope_limitations",
+    "attestation_type"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-curriculum-normalization-review-evidence.v1"},
+    "review_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "jurisdiction_id": {"const": "ca-on"},
+    "source_id": {"type": "string", "minLength": 1},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "content_digest", "review_target_sha256"],
+      "properties": {
+        "record_id": {"type": "string", "minLength": 8},
+        "content_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "review_target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "review_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_bytes_sha256", "source_byte_length", "source_lock_sha256"],
+      "properties": {
+        "source_bytes_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_byte_length": {"type": "integer", "minimum": 1},
+        "source_lock_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qualification"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qualification": {"type": "string", "minLength": 1},
+        "organization": {"type": ["string", "null"]}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "decision": {"enum": ["approved", "changes-required", "rejected"]},
+    "confirmations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact_source_bytes_reviewed",
+        "official_structure_and_identifiers_reviewed",
+        "education_context_reviewed",
+        "hierarchy_and_relationships_reviewed",
+        "reference_only_no_source_text_confirmed",
+        "c1_provenance_binding_reviewed",
+        "axiom_metadata_separation_reviewed",
+        "no_completeness_or_activation_claim_confirmed"
+      ],
+      "properties": {
+        "exact_source_bytes_reviewed": {"type": "boolean"},
+        "official_structure_and_identifiers_reviewed": {"type": "boolean"},
+        "education_context_reviewed": {"type": "boolean"},
+        "hierarchy_and_relationships_reviewed": {"type": "boolean"},
+        "reference_only_no_source_text_confirmed": {"type": "boolean"},
+        "c1_provenance_binding_reviewed": {"type": "boolean"},
+        "axiom_metadata_separation_reviewed": {"type": "boolean"},
+        "no_completeness_or_activation_claim_confirmed": {"type": "boolean"}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "description", "disposition"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["note", "minor", "major", "critical"]},
+          "description": {"type": "string", "minLength": 1},
+          "disposition": {"enum": ["open", "resolved", "accepted-with-rationale", "not-applicable"]},
+          "resolution_reference": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "scope_limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "attestation_type": {"const": "human-curriculum-normalization-review"},
+    "notes": {"type": "string"}
+  }
+}

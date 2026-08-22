@@ -1,0 +1,20 @@
+{
+  "schema": "axiom-curriculum-source-lock.v1",
+  "source_id": "ontario-social-studies-history-geography",
+  "jurisdiction_id": "ca:on",
+  "authority_id": "gov:ontario:ministry-of-education",
+  "discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "source_entry_sha256": "4fe7e3c26d685d61e576d108d9339858fdebc58c6aed1c8666c268f10bf71935",
+  "capture_method": "local-file-hash",
+  "captured_at": "2026-08-20T19:53:13.107270Z",
+  "source_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+  "resolved_locator": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+  "media_type": "text/html",
+  "byte_length": 6297332,
+  "sha256": "5c003403051f9bba75ad5475c7bd21f93cf07488def91bf2e1722b1d06500176",
+  "bytes_retained": false,
+  "retained_path": null,
+  "redistribution_status": "review-required",
+  "claim_state": "C1-bytes-captured-digested",
+  "notes": "Allowlisted remote capture target 7837525c9f342fbb869750b1690e2a2a54e980982a2776178c3bb7671a3a571e. GitHub run 32411047398 attempt 1. Downloaded source bytes were discarded after hashing; this lock candidate does not approve redistribution. Deliberately promoted as historical C1 evidence only after separate stability evidence showed same-length cross-job SHA volatility; the live DCP response surface remains observational."
+}

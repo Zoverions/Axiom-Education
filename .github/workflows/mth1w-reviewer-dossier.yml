@@ -1,0 +1,61 @@
+name: MTH1W Reviewer Dossier
+
+on:
+  pull_request:
+    paths:
+      - 'curriculum/content/mth1w/**'
+      - 'curriculum/courses/ontario-mth1w-2021.assessment-plan.json'
+      - 'curriculum/reviews/mth1w/**'
+      - 'curriculum/licensing/mth1w/**'
+      - 'config/curriculum-readiness.json'
+      - 'tools/mth1w_review_evidence.py'
+      - 'tools/mth1w_accessible_export.py'
+      - 'tools/mth1w_source_use_inventory.py'
+      - 'tools/mth1w_reviewer_dossier.py'
+      - 'tests/test_mth1w_reviewer_dossier.py'
+      - 'docs/rebuild/MTH1W-REVIEWER-DOSSIER.md'
+      - '.github/workflows/mth1w-reviewer-dossier.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-reviewer-dossier:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Verify dossier determinism
+        run: python tools/mth1w_reviewer_dossier.py verify
+
+      - name: Build reviewer dossier artifact
+        run: |
+          rm -rf /tmp/mth1w-reviewer-dossier
+          python tools/mth1w_reviewer_dossier.py build \
+            --output /tmp/mth1w-reviewer-dossier
+          test -f /tmp/mth1w-reviewer-dossier/manifest.json
+          test -f /tmp/mth1w-reviewer-dossier/REVIEW-GUIDE.md
+          test -f /tmp/mth1w-reviewer-dossier/lesson-review-plan.json
+          test -f /tmp/mth1w-reviewer-dossier/source-use-inventory.json
+          test -f /tmp/mth1w-reviewer-dossier/accessible-offline/manifest.json
+
+      - name: Prove no captured Ontario source bytes enter the dossier
+        run: |
+          test "$(find /tmp/mth1w-reviewer-dossier -type f -name '*.pdf' | wc -l)" -eq 0
+          test "$(find /tmp/mth1w-reviewer-dossier -type f -name '*.sqlite' | wc -l)" -eq 0
+
+      - name: Upload short-lived reviewer dossier
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: mth1w-reviewer-dossier-${{ github.sha }}
+          path: /tmp/mth1w-reviewer-dossier
+          if-no-files-found: error
+          retention-days: 7

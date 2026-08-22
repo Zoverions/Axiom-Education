@@ -1,0 +1,5 @@
+# Byte-identity artifacts must survive cross-platform checkout unchanged.
+contracts/*.json text eol=lf
+third_party/sqlite/sqlite3.c text eol=lf
+third_party/sqlite/*.json text eol=lf
+third_party/sqlite/*.md text eol=lf

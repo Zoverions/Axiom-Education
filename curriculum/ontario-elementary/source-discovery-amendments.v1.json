@@ -1,0 +1,104 @@
+{
+  "schema": "axiom-curriculum-source-discovery-amendments.v1",
+  "jurisdiction_id": "ca:on",
+  "base_discovery_path": "curriculum/ontario-elementary/source-discovery.v0.json",
+  "claim_boundary": "These amendments update source-discovery metadata only. They do not rewrite the historical base discovery artifact, capture source bytes, approve redistribution, normalize curriculum records, complete human review, or promote any source beyond C0 until separate evidence exists.",
+  "amendments": [
+    {
+      "amendment_id": "ontario-arts-current-dcp-route-20260811",
+      "source_id": "ontario-arts-grades-1-8-2009",
+      "prior_source_entry_sha256": "b945185ecfc1283adaf197e3c0e3d3e2062f771d2c09e5321eb08ea4b29946ff",
+      "resolved_on": "2026-08-11",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-arts",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/the-arts-ontario-curriculum-grades-1-8",
+        "publication_number": "231998_U",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Ontario Curriculum and Resources portal now resolves The Arts, Grades 1-8, 2009 at an exact current DCP route. Publications Ontario remains the official publication record for the Revised 2009 document lineage. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    },
+    {
+      "amendment_id": "ontario-kindergarten-2026-current-dcp-route-20260820",
+      "source_id": "ontario-kindergarten-2026",
+      "prior_source_entry_sha256": "a59001b6d59c5511536f0419b04bf5b06da2566ee9ed2253de49a9769954b88d",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.ontario.ca/page/kindergarten",
+          "classification": "official-effective-date-confirmation"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/CL34638",
+          "classification": "official-publication-record"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/kindergarten",
+        "overview_url": "https://www.ontario.ca/page/kindergarten",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/CL34638",
+        "publication_number": "CL34638",
+        "classification": "official-current-curriculum-portal",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Ontario Curriculum and Resources portal now resolves Kindergarten 2026 at the current DCP route. Ontario's Kindergarten overview confirms the 2026 curriculum replaces the 2016 program beginning in the 2026-27 school year, and Publications Ontario lists the English Kindergarten 2026 extract as publication CL34638. Exact current curriculum response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    },
+    {
+      "amendment_id": "ontario-sshg-current-dcp-route-20260820",
+      "source_id": "ontario-social-studies-history-geography",
+      "prior_source_entry_sha256": "1259ce3379e69edae3d366e821794b912002efcc99017a39a27e3e8bef72888b",
+      "resolved_on": "2026-08-20",
+      "evidence": [
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+          "classification": "official-current-curriculum-portal"
+        },
+        {
+          "url": "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+          "classification": "official-publication-record"
+        },
+        {
+          "url": "https://www.ontario.ca/document/education-ontario-policy-and-program-direction/mandatory-professional-activity-days",
+          "classification": "official-2026-curriculum-update-confirmation"
+        },
+        {
+          "url": "https://www.dcp.edu.gov.on.ca/en/sshg-webinars",
+          "classification": "official-revision-implementation-support"
+        }
+      ],
+      "set": {
+        "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-sshg",
+        "publication_catalog_url": "https://www.publications.gov.on.ca/the-ontario-curriculum-social-studies-grades-1-6-history-and-geography-grades-7-8-2015-revised",
+        "publication_number": "233531",
+        "classification": "official-current-curriculum-portal",
+        "policy_version": "2018-revised-with-2026-history-updates",
+        "effective_context": "2026-2027 school year",
+        "source_locator_status": "exact-official-portal-and-publication-record-captured-bytes-pending",
+        "status_note": "The official Curriculum and Resources portal now resolves the current Social Studies, Grades 1-6, and History and Geography, Grades 7-8 curriculum at the elementary SSHG route. Publications Ontario retains the 2018 revised base publication as 233531. Ontario's 2026-27 mandatory professional-learning direction identifies new 2026 learning in Grades 7 and 8 History on Black history in Canada, so the current DCP route is the capture surface for the revised program. Exact current response bytes remain uncaptured at this amendment stage.",
+        "upstream_document_sha256": null,
+        "upstream_digest_status": "not-captured",
+        "review_status": "source-locator-confirmed-bytes-pending"
+      }
+    }
+  ]
+}

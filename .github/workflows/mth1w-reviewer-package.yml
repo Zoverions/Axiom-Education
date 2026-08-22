@@ -1,0 +1,74 @@
+name: MTH1W Reviewer Package
+
+on:
+  pull_request:
+    paths:
+      - 'curriculum/content/mth1w/**'
+      - 'curriculum/courses/ontario-mth1w-2021.assessment-plan.json'
+      - 'curriculum/reviews/mth1w/**'
+      - 'curriculum/licensing/mth1w/**'
+      - 'config/curriculum-readiness.json'
+      - 'tools/mth1w_review_evidence.py'
+      - 'tools/mth1w_accessible_export.py'
+      - 'tools/mth1w_source_use_inventory.py'
+      - 'tools/mth1w_reviewer_dossier.py'
+      - 'tools/mth1w_review_templates.py'
+      - 'tools/mth1w_reviewer_package.py'
+      - 'tests/test_mth1w_review_templates.py'
+      - 'tests/test_mth1w_reviewer_package.py'
+      - '.github/workflows/mth1w-reviewer-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-reviewer-package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out exact source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Verify review templates and complete package determinism
+        run: |
+          python tools/mth1w_review_templates.py verify
+          python tools/mth1w_reviewer_package.py verify
+
+      - name: Build exact reviewer package
+        run: |
+          rm -rf /tmp/mth1w-reviewer-package
+          python tools/mth1w_reviewer_package.py build \
+            --output /tmp/mth1w-reviewer-package
+          test -f /tmp/mth1w-reviewer-package/manifest.json
+          test -f /tmp/mth1w-reviewer-package/dossier/manifest.json
+          test -f /tmp/mth1w-reviewer-package/templates/manifest.json
+
+      - name: Enforce review-material boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/mth1w-reviewer-package')
+          manifest = json.loads((root / 'manifest.json').read_text())
+          assert manifest['status'] == 'machine-generated-review-package-no-human-evidence'
+          dossier = json.loads((root / 'dossier/manifest.json').read_text())
+          assert dossier['status'] == 'machine-generated-review-inputs-no-approval'
+          templates = json.loads((root / 'templates/manifest.json').read_text())
+          assert templates['status'] == 'machine-generated-templates-no-human-evidence'
+          assert not list(root.rglob('*.pdf'))
+          assert not list(root.rglob('*.sqlite'))
+          PY
+
+      - name: Upload short-lived complete reviewer package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: mth1w-reviewer-package-${{ github.sha }}
+          path: /tmp/mth1w-reviewer-package
+          if-no-files-found: error
+          retention-days: 7

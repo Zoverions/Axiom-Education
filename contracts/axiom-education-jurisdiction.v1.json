@@ -1,0 +1,78 @@
+{
+  "schema": "axiom-education-jurisdiction.v1",
+  "contract_id": "axiom.education.jurisdiction",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "purpose": "Resolve effective-dated education standards from governed jurisdiction and enrollment context without encoding jurisdiction into permanent identity.",
+  "identity_context": {
+    "permanent_identity_contains_jurisdiction": false,
+    "raw_citizenship_required": false,
+    "raw_residency_required_by_domain": false,
+    "claims_are_separate_attestations": true,
+    "claims_may_overlap": true,
+    "claim_types": [
+      "residency",
+      "institution-enrollment",
+      "district-enrollment",
+      "guardian-selection",
+      "learner-selection",
+      "program-enrollment",
+      "homeschool-registration"
+    ]
+  },
+  "authority_levels": [
+    "country",
+    "region",
+    "district",
+    "institution",
+    "program"
+  ],
+  "standards_pack": {
+    "profile": "jurisdictional",
+    "signed_manifest_required": true,
+    "source_provenance_required": true,
+    "effective_dating_required": true,
+    "supersession_explicit": true,
+    "grade_band_required": true,
+    "authority_id_required": true,
+    "manifest_digest_required": true,
+    "installation_grants_authority": false
+  },
+  "resolution": {
+    "minimum_claim_assurance": "A2",
+    "output_is_deterministic": true,
+    "multiple_active_layers_supported": true,
+    "broad_to_specific_order": [
+      "country",
+      "region",
+      "district",
+      "institution",
+      "program"
+    ],
+    "lower_authority_may_extend": true,
+    "lower_authority_may_remove_parent_minimums": false,
+    "parent_replacement_requires_explicit_delegation": true,
+    "ambiguous_same-authority_pack_fails_closed": true,
+    "missing_required_pack_fails_closed": true,
+    "historical_records_remain_bound_to_original_manifest": true
+  },
+  "content_alignment": {
+    "experience_content_targets_stable_competencies": true,
+    "jurisdiction_expectations_map_to_competencies": true,
+    "one_activity_may_map_to_multiple_jurisdictions": true,
+    "unmapped_activity_may_be_used_as_enrichment": true,
+    "unmapped_activity_may_claim_curriculum_coverage": false
+  },
+  "evidence": {
+    "resolution_digest_required": true,
+    "claim_evidence_digests_required": true,
+    "pack_manifest_digests_required": true,
+    "resolved_at_required": true,
+    "as_of_required": true
+  },
+  "privacy": {
+    "data_minimization": true,
+    "downstream_experience_receives_only_required_context": true,
+    "jurisdiction_change_does_not_rewrite_history": true
+  }
+}

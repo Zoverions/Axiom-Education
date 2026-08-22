@@ -1,0 +1,497 @@
+{
+  "schema": "axiom-education-unit-content.v1",
+  "course_code": "MTH1W",
+  "unit_id": "mth1w-u3",
+  "title": "Unit 3: Rational numbers in applications",
+  "version": "1.0.0-draft.1",
+  "source_inventory_records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+  "review": {
+    "authoring_status": "machine_verified_draft",
+    "educator_review_status": "required",
+    "cultural_review_status": "required",
+    "student_availability": "draft_preview_with_adult_review_recommended",
+    "complete_course_claim_allowed": false
+  },
+  "source_notes": [
+    {
+      "title": "The Ontario Curriculum, Grade 9: Mathematics, 2021",
+      "publisher": "Ontario Ministry of Education",
+      "url": "https://www.dcp.edu.gov.on.ca/en/curriculum/secondary-mathematics/courses/mth1w",
+      "use": "Official course context for signed quantities, unit fractions, rational-number operations, rates, percentages, and proportions."
+    },
+    {
+      "title": "Prealgebra 2e: fractions, rates, percents, and proportions",
+      "publisher": "OpenStax, Rice University",
+      "url": "https://openstax.org/books/prealgebra-2e/pages/6-5-solve-proportions-and-their-applications",
+      "use": "Openly accessible teacher background for fraction models, unit rates, percent relationships, proportional equations, and contextual problem checks."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "mth1w-u3-l1",
+      "title": "Signed quantities in place and change",
+      "official_expectation_ids": ["B3.1"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Interpret an integer as a location, direction, amount, or change relative to a stated zero and positive direction.",
+        "Distinguish a negative position from a negative change and connect both with a context.",
+        "Model multi-step signed changes with a number line and an initial-value equation."
+      ],
+      "success_criteria": [
+        "I define the reference point, unit, and positive direction before using a sign.",
+        "I label starting value, signed change, and final value rather than treating them as the same quantity.",
+        "I check that the direction and size of my result match the story."
+      ],
+      "vocabulary": [
+        {"term": "reference point", "meaning": "the agreed zero from which signed locations or amounts are measured"},
+        {"term": "positive direction", "meaning": "the direction selected to be represented by positive signed values"},
+        {"term": "position", "meaning": "a signed location or state measured relative to the reference point"},
+        {"term": "change", "meaning": "a signed difference that moves an initial value to a final value"},
+        {"term": "displacement", "meaning": "the signed change from starting location to final location"}
+      ],
+      "why_it_matters": "Signed quantities describe temperature, elevation, money, rotations, scores, and travel. The sign has meaning only after a reference and direction are defined, so modelling prevents a correct calculation from answering the wrong question.",
+      "direct_instruction": [
+        {
+          "heading": "Define zero and direction",
+          "body": "A sign is relational, not a label of good or bad. An elevation of -12 m could mean 12 m below sea level when sea level is zero. A change of -12 m means the position decreased by 12 m from wherever it started. Always record the reference, unit, and chosen positive direction."
+        },
+        {
+          "heading": "Separate state from change",
+          "body": "Use final = initial + change. If the temperature is -3 C and rises by 9 C, the initial state is negative but the change is positive, giving 6 C. If the temperature is 6 C and falls to -3 C, the change is -9 C. The same two positions can be connected by opposite changes."
+        },
+        {
+          "heading": "Use distance and displacement carefully",
+          "body": "Displacement is final position minus initial position and includes direction. Distance travelled adds the lengths of all path segments and is not negative. A trip from -3 km to +5 km has displacement +8 km and distance 8 km only if the route is direct; a detour could increase distance without changing displacement."
+        }
+      ],
+      "method_routes": [
+        {
+          "id": "directed-number-line",
+          "title": "Directed number-line route",
+          "steps": [
+            "Mark the reference zero, unit, and positive direction.",
+            "Plot the starting position as a signed coordinate.",
+            "Draw each change as a directed movement with its signed amount.",
+            "Read the final coordinate and total displacement.",
+            "Compare the diagram with the context and distinguish distance from displacement."
+          ],
+          "when_useful": "Use this route when location and movement are central or when several sign changes need a visual check.",
+          "check": "Every arrow direction must agree with its sign and its length must represent the absolute size of the change."
+        },
+        {
+          "id": "initial-plus-change",
+          "title": "Initial-value plus signed-change route",
+          "steps": [
+            "Name the initial value with its sign and unit.",
+            "Translate each event into a signed change rather than an unsigned amount.",
+            "Write final = initial + change, combining repeated changes when useful.",
+            "Calculate the final value and separately calculate final minus initial if displacement is requested.",
+            "State the result in context, including what a negative sign means."
+          ],
+          "when_useful": "Use this route for financial balances, temperature, scores, or repeated changes that form a compact expression.",
+          "check": "Substituting the final and initial values into change = final - initial must reproduce the signed total change."
+        }
+      ],
+      "representations": [
+        {
+          "id": "signed-number-line",
+          "label": "Horizontal or vertical signed number line",
+          "description": "A labelled axis shows the reference point, positive direction, start, directed change arrows, and final location without relying on colour.",
+          "text_alternative": "State the start coordinate, then read each signed movement in order and finish with the final coordinate and net change."
+        },
+        {
+          "id": "start-change-result-table",
+          "label": "Start-change-result table",
+          "description": "Each row names an event, initial value, signed change, resulting value, unit, and meaning of the sign.",
+          "text_alternative": "Read each row as initial value plus signed change equals result, followed by a sentence explaining the sign."
+        }
+      ],
+      "worked_examples": [
+        {
+          "id": "mth1w-u3-l1-we1",
+          "prompt": "A train starts 3 km west of a station and ends 5 km east. Find its displacement and explain the signs.",
+          "method_route_id": "directed-number-line",
+          "steps": [
+            {"label": "Define the axis", "explanation": "Let the station be 0 km and east be positive, so west is negative."},
+            {"label": "Plot positions", "explanation": "The starting location is -3 km and the final location is +5 km."},
+            {"label": "Find displacement", "explanation": "Compute final minus initial: 5 - (-3) = 8."},
+            {"label": "Interpret", "explanation": "The positive result means the net change is 8 km east."}
+          ],
+          "answer": "The train's displacement is +8 km, meaning 8 km east from its starting position.",
+          "verification": "Starting at -3 and moving +8 lands at +5, so initial plus displacement equals the final location."
+        },
+        {
+          "id": "mth1w-u3-l1-we2",
+          "prompt": "An account starts at $250 and has four weekly withdrawals of $75. Determine and interpret the final balance.",
+          "method_route_id": "initial-plus-change",
+          "steps": [
+            {"label": "Set the start", "explanation": "The initial balance is +250 dollars relative to a zero balance."},
+            {"label": "Sign the changes", "explanation": "Each withdrawal is -75 dollars, so four withdrawals total 4(-75) = -300 dollars."},
+            {"label": "Combine", "explanation": "Final = 250 + (-300) = -50 dollars."},
+            {"label": "Interpret", "explanation": "A -50 dollar balance means the account is 50 dollars below zero, not that 50 dollars remains available."}
+          ],
+          "answer": "The final balance is -$50, which means the account is $50 below a zero balance.",
+          "verification": "Adding a $300 deposit to -$50 would restore the original $250, confirming the signed change."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A negative number always represents a loss.", "correction": "It can represent a location, direction, amount, or change depending on the defined reference."},
+        {"claim": "A move from -3 to +5 is a change of +2.", "correction": "Change is final minus initial, so 5 - (-3) = +8."},
+        {"claim": "Distance travelled and displacement are always equal.", "correction": "Displacement uses only endpoints and direction; distance adds the length of the path."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u3-l1-g1", "prompt": "With sea level as zero and up positive, how is 30 m below the surface represented?", "response": {"type": "selected", "options": ["-30 m", "+30 m", "0 m", "30 m up"], "correct_answer": "-30 m"}, "rationale": "Below the reference point is opposite the selected positive direction, so the coordinate is -30 m."},
+          {"id": "mth1w-u3-l1-g2", "prompt": "The temperature changes from -4 C to 7 C. What is the signed change?", "response": {"type": "selected", "options": ["+11 C", "+3 C", "-11 C", "-3 C"], "correct_answer": "+11 C"}, "rationale": "Final minus initial is 7 - (-4) = +11 C."},
+          {"id": "mth1w-u3-l1-g3", "prompt": "Explain the difference between a temperature of -6 C and a temperature change of -6 C.", "response": {"type": "constructed", "criteria": ["identifies -6 C as a state relative to zero", "identifies -6 C change as a decrease", "gives a possible start or final example"], "sample_response": "A temperature of -6 C is a location on the scale. A change of -6 C means any starting temperature decreased by 6 C; for example, 2 C plus -6 C gives -4 C.", "educator_review_required": true}, "rationale": "The response must distinguish a signed state from a signed change."}
+        ],
+        "independent": [
+          {"id": "mth1w-u3-l1-i1", "prompt": "A score begins at -2 and gains 7 points. What is the final score?", "response": {"type": "selected", "options": ["5", "-9", "9", "-5"], "correct_answer": "5"}, "rationale": "Initial plus change is -2 + 7 = 5."},
+          {"id": "mth1w-u3-l1-i2", "prompt": "An elevator moves from floor 6 to floor -2. What is its displacement if upward is positive?", "response": {"type": "selected", "options": ["-8 floors", "+8 floors", "-4 floors", "+4 floors"], "correct_answer": "-8 floors"}, "rationale": "Final minus initial is -2 - 6 = -8, so the net movement is downward."},
+          {"id": "mth1w-u3-l1-i3", "prompt": "Which expression models a $40 debt followed by a $65 payment received?", "response": {"type": "selected", "options": ["-40 + 65", "40 - 65", "-40 - 65", "40 + 65"], "correct_answer": "-40 + 65"}, "rationale": "Debt is a state below zero and receiving money is a positive change."},
+          {"id": "mth1w-u3-l1-i4", "prompt": "A diver is at -12 m, rises 5 m, then descends 9 m. What is the final position?", "response": {"type": "selected", "options": ["-16 m", "+2 m", "-8 m", "-26 m"], "correct_answer": "-16 m"}, "rationale": "The signed calculation is -12 + 5 - 9 = -16 m."},
+          {"id": "mth1w-u3-l1-i5", "prompt": "Create a context in which the answer is -7 and identify whether -7 is a position, amount, or change.", "response": {"type": "constructed", "criteria": ["defines a reference or zero", "uses -7 consistently", "labels the quantity type", "includes a correct equation or diagram"], "sample_response": "If sea level is zero, a submarine at -7 m is 7 m below the surface. Here -7 m is a position, represented by 0 + (-7) = -7.", "educator_review_required": true}, "rationale": "Creating a context shows that the learner can assign a precise meaning to the sign."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u3-l1-r1", "prompt": "Which equation always connects signed initial, change, and final values?", "response": {"type": "selected", "options": ["final = initial + change", "final = change - initial", "change = initial + final", "initial = final + change"], "correct_answer": "final = initial + change"}, "rationale": "A signed change is added to the initial state to produce the final state."},
+          {"id": "mth1w-u3-l1-r2", "prompt": "A value changes from 9 to -1. What is the signed change?", "response": {"type": "selected", "options": ["-10", "+10", "-8", "+8"], "correct_answer": "-10"}, "rationale": "Final minus initial is -1 - 9 = -10."},
+          {"id": "mth1w-u3-l1-r3", "prompt": "Explain one reason a reference point must be stated before interpreting a signed value.", "response": {"type": "constructed", "criteria": ["mentions that sign is relative", "identifies zero or direction", "gives a concrete example"], "sample_response": "The sign only tells which side of a chosen zero or direction a value lies. For example, -5 m could mean below sea level or west of a station depending on the reference.", "educator_review_required": true}, "rationale": "A signed value is ambiguous until its coordinate or contextual convention is known."}
+        ]
+      },
+      "reflection_prompt": "When did separating position from change alter your first interpretation, and which representation made the distinction clearest?",
+      "accessibility": {
+        "printable_equivalent": true,
+        "nonvisual_route": "Every number-line movement is also stated as a signed start-change-result equation with units and direction words.",
+        "response_options": ["typed or handwritten equation", "spoken start-change-result explanation", "physical movement along a labelled floor line"]
+      }
+    },
+    {
+      "id": "mth1w-u3-l2",
+      "title": "Unit fractions as measures and operators",
+      "official_expectation_ids": ["B3.2"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Interpret 1/n as one equal part of a whole and use repeated unit fractions to build other amounts.",
+        "Locate improper fractions and mixed numbers on measuring tools and number lines.",
+        "Use a unit fraction as an operator to scale a quantity in a measurement or rate context."
+      ],
+      "success_criteria": [
+        "I identify the whole and confirm that its parts are equal before naming a unit fraction.",
+        "I express a/b as a copies of 1/b and connect improper and mixed forms.",
+        "I estimate the measure, choose an appropriate tool, and verify the result with a second representation."
+      ],
+      "vocabulary": [
+        {"term": "unit fraction", "meaning": "a fraction with numerator 1 representing one equal part of a defined whole"},
+        {"term": "iteration", "meaning": "repeating the same unit fraction to build or measure another amount"},
+        {"term": "operator", "meaning": "a fraction used to scale another quantity rather than only name a location"},
+        {"term": "improper fraction", "meaning": "a fraction whose numerator is at least as large as its positive denominator"},
+        {"term": "benchmark", "meaning": "a familiar reference such as 0, 1/2, or 1 used to estimate a fraction"}
+      ],
+      "why_it_matters": "Recipes, tape measures, time, scale drawings, and rates all depend on a stable fractional unit. Thinking in copies of 1/n connects meaning, measurement, equivalence, mixed numbers, and later fraction operations.",
+      "direct_instruction": [
+        {"heading": "Name the whole first", "body": "The denominator says how many equal parts make the chosen whole. One fourth of a cup and one fourth of a metre are different amounts because the wholes and units differ. Unequal pieces cannot all be called one fourth of the same whole."},
+        {"heading": "Build amounts by iteration", "body": "The fraction 7/4 means seven copies of 1/4. Four copies make 1 whole and three remain, so 7/4 = 1 3/4. On a measuring tool, count equal quarter intervals from zero rather than treating 7 and 4 as unrelated whole numbers."},
+        {"heading": "Use a fraction to scale", "body": "To find 3/4 of 20, first find the unit fraction 1/4 of 20 by dividing 20 into four equal groups, then take three groups: 5 + 5 + 5 = 15. This divide-then-multiply route makes the operator meaning visible."}
+      ],
+      "method_routes": [
+        {"id": "iterate-unit", "title": "Iterate a unit-fraction measure", "steps": ["Define the whole and unit.", "Partition the whole into the denominator's number of equal parts.", "Name one part as the unit fraction 1/n.", "Repeat that unit fraction the numerator's number of times.", "Regroup complete wholes and verify the endpoint on a tool or number line."], "when_useful": "Use this route for measuring, locating, and explaining improper fractions or mixed numbers from first principles.", "check": "Every repeated interval must have equal size, and exactly n intervals must reconstruct one whole."},
+        {"id": "scale-from-one-part", "title": "Scale from one fractional part", "steps": ["Identify the original quantity and the fraction acting on it.", "Divide by the denominator to find the value of one equal part.", "Multiply that unit-part value by the numerator.", "Attach the original measurement unit and estimate against benchmarks.", "Reverse the scaling when possible to verify the original quantity."], "when_useful": "Use this route when a fraction describes part of a quantity, a recipe scale, time, distance, or a proportional amount.", "check": "For a proper positive fraction the result should be smaller than the original positive quantity; improper fractions should scale it above one whole."
+        }
+      ],
+      "representations": [
+        {"id": "fraction-strip-measure", "label": "Fraction strip or measuring tool", "description": "Equal intervals are numbered from zero and grouped into wholes so unit fractions, improper fractions, and mixed numbers share one scale.", "text_alternative": "Count equal 1/n intervals from zero, announcing each endpoint and every complete whole reached."},
+        {"id": "fraction-double-line", "label": "Fraction double number line", "description": "One line counts copies of the unit fraction while the aligned line records the accumulated quantity or measurement.", "text_alternative": "Read each aligned pair as a number of equal fractional parts matched with the total amount those parts make."
+        }
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u3-l2-we1", "prompt": "A recipe needs 1 1/2 cups of flour, but only a 1/4-cup measure is available. How many level measures are needed?", "method_route_id": "iterate-unit", "steps": [{"label": "Use one unit", "explanation": "The available measure is 1/4 cup, so one whole cup contains four level measures."}, {"label": "Rewrite the amount", "explanation": "One and one half cups equals 3/2 cups, which is 6/4 cups."}, {"label": "Count copies", "explanation": "Six copies of 1/4 cup make 6/4 = 1 1/2 cups."}, {"label": "Check", "explanation": "Four measures make 1 cup and two more make 1/2 cup, for six in total."}], "answer": "The recipe needs six level 1/4-cup measures to make 1 1/2 cups.", "verification": "Six times 1/4 cup equals 6/4 cups, which simplifies to 3/2 or 1 1/2 cups."},
+        {"id": "mth1w-u3-l2-we2", "prompt": "Find 3/8 of 40 km by scaling from one unit fraction and explain the result.", "method_route_id": "scale-from-one-part", "steps": [{"label": "Find one eighth", "explanation": "Divide 40 km by 8 to obtain 5 km for 1/8 of the distance."}, {"label": "Take three parts", "explanation": "Multiply 5 km by 3 to obtain 15 km."}, {"label": "Estimate", "explanation": "Three eighths is less than one half, and 15 km is less than half of 40 km."}, {"label": "Reverse", "explanation": "Eight unit parts of 5 km reconstruct the original 40 km."}], "answer": "Three eighths of 40 km is 15 km.", "verification": "The calculation 40 divided by 8 times 3 equals 15, and the benchmark check agrees."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A larger denominator always means a larger fraction.", "correction": "For unit fractions of the same whole, more equal parts make each part smaller."},
+        {"claim": "7/4 must lie between 0 and 1 because it is a fraction.", "correction": "Seven fourths contains more than one whole and equals 1 3/4."},
+        {"claim": "To find 3/5 of a number, divide by 3 and multiply by 5.", "correction": "The denominator finds one fifth; then the numerator selects three of those parts."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u3-l2-g1", "prompt": "How many copies of 1/6 make 5/6?", "response": {"type": "selected", "options": ["5", "6", "1", "11"], "correct_answer": "5"}, "rationale": "The numerator counts five copies of the unit fraction 1/6."},
+          {"id": "mth1w-u3-l2-g2", "prompt": "Which mixed number equals 7/4?", "response": {"type": "selected", "options": ["1 3/4", "1 1/4", "2 3/4", "3 1/4"], "correct_answer": "1 3/4"}, "rationale": "Four fourths make one whole and three fourths remain."},
+          {"id": "mth1w-u3-l2-g3", "prompt": "Explain how a tape measure partitioned into eighths can locate 11/8 inches.", "response": {"type": "constructed", "criteria": ["identifies 1/8-inch equal intervals", "counts eleven intervals from zero", "connects 11/8 with 1 3/8"], "sample_response": "Count eleven equal 1/8-inch intervals from zero. Eight intervals reach 1 inch and three more reach 1 3/8 inches, so that mark is 11/8 inches.", "educator_review_required": true}, "rationale": "A measurement explanation must connect repeated unit intervals with improper and mixed forms."}
+        ],
+        "independent": [
+          {"id": "mth1w-u3-l2-i1", "prompt": "How many 1/3-cup scoops make 2 cups?", "response": {"type": "selected", "options": ["6", "5", "3", "2"], "correct_answer": "6"}, "rationale": "Each cup contains three thirds, so two cups contain six thirds."},
+          {"id": "mth1w-u3-l2-i2", "prompt": "What is 5/6 of 42 minutes?", "response": {"type": "selected", "options": ["35 minutes", "7 minutes", "30 minutes", "47 minutes"], "correct_answer": "35 minutes"}, "rationale": "One sixth of 42 is 7 and five unit parts total 35."},
+          {"id": "mth1w-u3-l2-i3", "prompt": "Which fraction is closest to one whole?", "response": {"type": "selected", "options": ["7/8", "3/8", "5/12", "1/6"], "correct_answer": "7/8"}, "rationale": "Seven eighths is only one eighth below 1, a smaller gap than the alternatives."},
+          {"id": "mth1w-u3-l2-i4", "prompt": "A 1/2-km segment takes 2 minutes to run at a steady rate. How long do 5 km take?", "response": {"type": "selected", "options": ["20 minutes", "10 minutes", "7 minutes", "2.5 minutes"], "correct_answer": "20 minutes"}, "rationale": "Five kilometres contains ten half-kilometre units, each taking 2 minutes."},
+          {"id": "mth1w-u3-l2-i5", "prompt": "Show two ways to determine 3/4 of 28 and explain why they agree.", "response": {"type": "constructed", "criteria": ["uses unit-fraction scaling", "uses a second valid representation or equivalent form", "obtains 21", "connects the methods"], "sample_response": "Divide 28 by 4 to get 7, then take three parts for 21. A double number line can align 0, 7, 14, 21, 28 with 0/4 through 4/4, so both represent the same equal partition.", "educator_review_required": true}, "rationale": "The response should connect a computation with a representation of equal fractional units."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u3-l2-r1", "prompt": "Which unit fraction is larger for the same whole?", "response": {"type": "selected", "options": ["1/5", "1/8", "1/12", "1/20"], "correct_answer": "1/5"}, "rationale": "Dividing the same whole into fewer equal parts makes each unit part larger."},
+          {"id": "mth1w-u3-l2-r2", "prompt": "How many one-twelfths make 3/4?", "response": {"type": "selected", "options": ["9", "4", "3", "12"], "correct_answer": "9"}, "rationale": "Three fourths equals nine twelfths, so it contains nine 1/12 units."},
+          {"id": "mth1w-u3-l2-r3", "prompt": "Explain why the whole must be specified when using a unit fraction.", "response": {"type": "constructed", "criteria": ["states that fraction size depends on the whole", "mentions equal partitioning", "gives two different wholes"], "sample_response": "One fourth means one of four equal parts, but its size depends on the whole. One fourth of a cup is not the same quantity as one fourth of a litre.", "educator_review_required": true}, "rationale": "A unit fraction has no fixed physical size independent of its defined whole."}
+        ]
+      },
+      "reflection_prompt": "Which problem became easier when you first found one unit fraction, and how did your estimate help verify the answer?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Every fraction strip and tool mark is also expressed as an ordered count of equal unit intervals from zero.", "response_options": ["typed or handwritten fraction work", "physical measuring-tool demonstration", "spoken equal-parts explanation with units"]}
+    },
+    {
+      "id": "mth1w-u3-l3",
+      "title": "How signs change ratios, rates, fractions, and decimals",
+      "official_expectation_ids": ["B3.3"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Explain what a positive or negative sign means in a ratio, rate, fraction, decimal, or slope context.",
+        "Recognize equivalent placements of one negative sign in a fraction and the effect of two negative signs.",
+        "Compare signed rational values using direction, order, and magnitude."
+      ],
+      "success_criteria": [
+        "I name the reference direction or compared quantities before interpreting a signed rate.",
+        "I show that -a/b, a/(-b), and -(a/b) are equivalent while (-a)/(-b) is positive for non-zero b.",
+        "I locate or convert signed fractions and decimals and preserve both sign and magnitude."
+      ],
+      "vocabulary": [
+        {"term": "signed rate", "meaning": "a rate whose sign communicates direction or change relative to a convention"},
+        {"term": "magnitude", "meaning": "the non-negative size of a quantity without its direction sign"},
+        {"term": "equivalent fraction", "meaning": "a fraction with the same value as another despite a different written form"},
+        {"term": "slope", "meaning": "a signed rate of vertical change for each unit of horizontal change"},
+        {"term": "opposite", "meaning": "a value the same distance from zero on the other side of zero"}
+      ],
+      "why_it_matters": "A negative sign can describe opposite direction, decreasing quantity, debt, or a negative comparison. Tracking both meaning and algebra prevents sign errors when moving among rates, ratios, fractions, decimals, and graphs.",
+      "direct_instruction": [
+        {"heading": "Attach the sign to a convention", "body": "A velocity of -60 km/h is not a negative speed; its magnitude is 60 km/h and its sign indicates travel opposite the chosen positive direction. A slope of -0.5 means y decreases 0.5 units for each 1-unit increase in x. State the convention before interpreting the sign."},
+        {"heading": "Track one or two negative factors", "body": "For non-zero b, -a/b, a/(-b), and -(a/b) each have one negative factor and the same negative value. The fraction (-a)/(-b) has two negative factors, so its value is positive a/b. Rewriting with a positive denominator usually makes comparison clearer."},
+        {"heading": "Compare sign before magnitude", "body": "Any negative rational value lies left of zero and is less than any positive value. Among two negative values, the one with greater magnitude is smaller: -1.2 is less than -0.7. Convert to a common form or use benchmarks only after signs are interpreted."}
+      ],
+      "method_routes": [
+        {"id": "context-direction", "title": "Context-and-direction route", "steps": ["Define the reference zero and positive direction or change.", "Identify the rate or ratio magnitude without its sign.", "Use the sign to assign direction, increase, decrease, surplus, or deficit.", "Translate the quantity into a sentence and a directed number-line or graph movement.", "Check that reversing the sign reverses the interpreted direction without changing magnitude."], "when_useful": "Use this route for velocity, slope, finance, depth, scoring, or any context in which sign communicates direction.", "check": "The same signed number can have different contextual meanings, but the stated convention must make the interpretation unambiguous."},
+        {"id": "equivalent-sign-tracking", "title": "Equivalent-form sign-tracking route", "steps": ["Count negative factors in the numerator, denominator, and outside the fraction.", "Move a single negative sign to the front while making the denominator positive.", "Cancel pairs of negative factors because their quotient or product is positive.", "Convert to a decimal or number-line location if comparison is needed.", "Verify with a simple numerical substitution or multiplication by the denominator."], "when_useful": "Use this route when simplifying or comparing signed fractions, ratios, decimals, and symbolic forms.", "check": "Moving a negative sign must not change its parity: one unpaired negative stays negative and a pair becomes positive."
+        }
+      ],
+      "representations": [
+        {"id": "signed-ratio-table", "label": "Signed ratio and rate table", "description": "Columns show numerator change, denominator change, resulting sign, magnitude, unit, and contextual interpretation.", "text_alternative": "Read the signs of both changes, determine the quotient sign, then state the magnitude and direction in words."},
+        {"id": "directed-rational-line", "label": "Directed rational-number line", "description": "Equivalent fraction and decimal forms share labelled locations on both sides of zero with magnitude intervals marked.", "text_alternative": "Values are listed from least to greatest with distance from zero and equivalent forms stated beside each coordinate."
+        }
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u3-l3-we1", "prompt": "Interpret a velocity of -60 km/h when east is positive and compare it with +60 km/h.", "method_route_id": "context-direction", "steps": [{"label": "Set convention", "explanation": "East is positive, so west is the opposite negative direction."}, {"label": "Read magnitude", "explanation": "Both rates have speed magnitude 60 km/h."}, {"label": "Apply signs", "explanation": "+60 km/h means eastward travel and -60 km/h means westward travel."}, {"label": "Compare", "explanation": "The velocities are opposites: equal magnitude and opposite directions."}], "answer": "The velocity -60 km/h means travelling west at 60 km/h; +60 km/h means travelling east at the same speed.", "verification": "Changing only the sign reverses direction while preserving the 60 km/h magnitude."},
+        {"id": "mth1w-u3-l3-we2", "prompt": "Show that (-3)/5, 3/(-5), and -(3/5) are equivalent, then identify (-3)/(-5).", "method_route_id": "equivalent-sign-tracking", "steps": [{"label": "Count signs", "explanation": "Each of the first three forms contains one unpaired negative sign."}, {"label": "Normalize", "explanation": "Move the single sign to the front so all three are written as -3/5."}, {"label": "Convert", "explanation": "Dividing gives -0.6, confirming their common value."}, {"label": "Use two signs", "explanation": "The last fraction has two negative factors, so (-3)/(-5) = +3/5 = 0.6."}], "answer": "The first three expressions all equal -3/5 or -0.6; (-3)/(-5) equals +3/5 or 0.6.", "verification": "Multiplying each quotient by its denominator reconstructs the correct signed numerator."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "A negative rate has a negative magnitude.", "correction": "Magnitude is non-negative; the sign usually communicates direction or decreasing change."},
+        {"claim": "A negative sign in the denominator makes a different value from a negative numerator.", "correction": "One negative factor anywhere in the quotient makes the same negative value."},
+        {"claim": "Among negative decimals, -0.3 is less than -0.8 because 3 is less than 8.", "correction": "On the number line -0.8 lies farther left, so -0.8 is less than -0.3."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u3-l3-g1", "prompt": "If upward is positive, what does -2.5 m/s describe?", "response": {"type": "selected", "options": ["movement downward at 2.5 m/s", "movement upward at 2.5 m/s", "no movement", "negative elapsed time"], "correct_answer": "movement downward at 2.5 m/s"}, "rationale": "The magnitude is 2.5 m/s and the negative sign indicates the direction opposite upward."},
+          {"id": "mth1w-u3-l3-g2", "prompt": "Which expression is positive?", "response": {"type": "selected", "options": ["(-4)/(-7)", "(-4)/7", "4/(-7)", "-(4/7)"], "correct_answer": "(-4)/(-7)"}, "rationale": "Two negative factors produce a positive quotient."},
+          {"id": "mth1w-u3-l3-g3", "prompt": "Explain the slope -3/4 using a coordinate convention.", "response": {"type": "constructed", "criteria": ["defines increasing x as positive horizontal change", "states a decrease of 3 for an increase of 4", "connects one negative sign with opposite directions"], "sample_response": "As x increases 4 units to the right, y decreases 3 units. The changes have opposite signs, so their ratio and the line's slope are -3/4.", "educator_review_required": true}, "rationale": "A slope explanation must connect the signed ratio with coordinated changes."}
+        ],
+        "independent": [
+          {"id": "mth1w-u3-l3-i1", "prompt": "Which decimal equals -7/20?", "response": {"type": "selected", "options": ["-0.35", "0.35", "-3.5", "0.035"], "correct_answer": "-0.35"}, "rationale": "Seven twentieths equals 0.35 and the single negative sign makes the value -0.35."},
+          {"id": "mth1w-u3-l3-i2", "prompt": "Which order is least to greatest?", "response": {"type": "selected", "options": ["-1.2, -0.7, 0.4", "-0.7, -1.2, 0.4", "0.4, -0.7, -1.2", "-1.2, 0.4, -0.7"], "correct_answer": "-1.2, -0.7, 0.4"}, "rationale": "The more negative value is least, followed by the other negative and then the positive value."},
+          {"id": "mth1w-u3-l3-i3", "prompt": "A line falls 2 units for every 5 units right. What is its slope?", "response": {"type": "selected", "options": ["-2/5", "2/5", "-5/2", "5/2"], "correct_answer": "-2/5"}, "rationale": "Vertical change is -2 and horizontal change is +5, so the signed rate is -2/5."},
+          {"id": "mth1w-u3-l3-i4", "prompt": "Which form is not equivalent to -0.25?", "response": {"type": "selected", "options": ["(-1)/(-4)", "-1/4", "1/(-4)", "-(25/100)"], "correct_answer": "(-1)/(-4)"}, "rationale": "Two negative signs produce +1/4, while each other form has one negative sign."},
+          {"id": "mth1w-u3-l3-i5", "prompt": "Create a signed-rate context for -1.5 and explain the reference direction, magnitude, and sign.", "response": {"type": "constructed", "criteria": ["defines a unit and reference direction", "uses magnitude 1.5", "explains the negative direction or change", "states the rate in context"], "sample_response": "Let rising water level be positive. A rate of -1.5 cm/h means the water level is falling by 1.5 cm each hour; 1.5 is the magnitude and the negative sign indicates decrease.", "educator_review_required": true}, "rationale": "The context must give separate meanings to magnitude, unit, and sign."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u3-l3-r1", "prompt": "Which value is the opposite of -1.003?", "response": {"type": "selected", "options": ["1.003", "-1.003", "0.997", "-0.003"], "correct_answer": "1.003"}, "rationale": "Opposites have equal magnitude on different sides of zero."},
+          {"id": "mth1w-u3-l3-r2", "prompt": "Which fraction has the same value as 5/(-8)?", "response": {"type": "selected", "options": ["-5/8", "5/8", "-5/-8", "8/5"], "correct_answer": "-5/8"}, "rationale": "One negative factor makes the quotient negative, conventionally written with the sign in front."},
+          {"id": "mth1w-u3-l3-r3", "prompt": "Explain why changing both numerator and denominator signs preserves a fraction's value.", "response": {"type": "constructed", "criteria": ["identifies multiplication by -1 in both parts", "uses two negatives producing a positive factor", "states a non-zero denominator"], "sample_response": "Multiplying numerator and denominator by -1 multiplies the fraction by (-1)/(-1) = 1, so its value is unchanged as long as the denominator is non-zero.", "educator_review_required": true}, "rationale": "Equivalent fractions result from multiplying by a form of 1."}
+        ]
+      },
+      "reflection_prompt": "Which sign error did a context or number-line check expose, and what convention will you state first next time?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Every directed diagram is paired with a sentence naming reference direction, magnitude, and signed change.", "response_options": ["typed or handwritten comparison", "spoken context explanation", "tactile number-line placement with verbal labels"]}
+    },
+    {
+      "id": "mth1w-u3-l4",
+      "title": "Operate with signed fractions in formulas and measurements",
+      "official_expectation_ids": ["B3.4"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Select and perform the required operation with signed fractions or mixed numbers in context.",
+        "Maintain exact values, units, signs, and restrictions through multi-step formulas and measurements.",
+        "Estimate sign and magnitude before computing and verify with a second representation or technology."
+      ],
+      "success_criteria": [
+        "I translate the context into an operation before choosing a procedure.",
+        "I convert mixed numbers and find common units without changing value.",
+        "I simplify only after preserving sign and units, then compare my exact answer with an estimate."
+      ],
+      "vocabulary": [
+        {"term": "common denominator", "meaning": "a shared fractional unit used to add or subtract quantities exactly"},
+        {"term": "improper form", "meaning": "a numerator-over-denominator form useful for multiplication and division of mixed numbers"},
+        {"term": "multiplicative inverse", "meaning": "the reciprocal used so division can be represented as multiplication"},
+        {"term": "exact value", "meaning": "an unrounded fraction or terminating value that preserves the complete result"},
+        {"term": "dimensional check", "meaning": "a verification that units combine in a way that matches the requested quantity"}
+      ],
+      "why_it_matters": "Signed fractions appear in measurements, formulas, rates, slopes, and changes. Combining contextual interpretation with exact fraction structure makes the operations understandable and keeps rounding, sign, and unit errors visible.",
+      "direct_instruction": [
+        {"heading": "Choose the operation from meaning", "body": "A combined change suggests addition, a difference suggests subtraction, a fractional part of a quantity suggests multiplication, and asking how many groups fit suggests division. Estimate the sign and approximate size before applying any procedure."},
+        {"heading": "Create common units for addition", "body": "Fractions can be added or subtracted only after their parts describe the same-size unit. Convert to a common denominator, combine signed numerators, then simplify. Mixed numbers may be converted to improper fractions, but the contextual unit remains unchanged."},
+        {"heading": "Scale and divide with reasons", "body": "For multiplication, multiply signed factors and simplify with cross-cancellation when valid. Division by a non-zero fraction asks how many divisor-sized groups fit; multiply by its reciprocal and apply sign rules. Use decimals or technology as a check, not as a replacement for the exact reasoning."}
+      ],
+      "method_routes": [
+        {"id": "common-unit-computation", "title": "Common-unit fraction route", "steps": ["Identify the requested operation, expected sign, unit, and approximate size.", "Convert mixed numbers to improper form when it simplifies the structure.", "For addition or subtraction create a common denominator; for multiplication or division use factor and reciprocal meaning.", "Compute, simplify, and restore a mixed form only if it improves interpretation.", "Compare with the estimate and verify the unit and sign."], "when_useful": "Use this route when an exact fraction is required or when the structure and procedure need to remain visible.", "check": "Equivalent conversions must preserve value, and the final sign, size, and unit must match the initial estimate and context."},
+        {"id": "decimal-technology-check", "title": "Decimal or technology-supported verification route", "steps": ["Estimate the result and calculate an exact fractional answer first.", "Convert each rational input and the exact answer to decimals with sufficient precision.", "Repeat the operation using a calculator, spreadsheet, table, or formula tool.", "Compare results and diagnose differences from rounding, sign entry, or operation order.", "Report the exact value and only the context-appropriate rounded value when requested."], "when_useful": "Use this route for formula tables, repeated measurements, or an independent check of a multi-step exact calculation.", "check": "Technology input must preserve parentheses and negative signs, and rounding cannot occur before the final step unless the context requires it."
+        }
+      ],
+      "representations": [
+        {"id": "signed-fraction-model", "label": "Signed fraction and direction model", "description": "Equal fraction units are placed on a directed line or bar so combined and removed amounts remain tied to sign and magnitude.", "text_alternative": "Name the common unit, count signed copies added or removed, and state the final signed number of copies."},
+        {"id": "unit-labelled-calculation", "label": "Symbolic calculation with units", "description": "Each line shows the contextual equation, equivalent fraction form, operation, simplification, unit, estimate, and verification value.", "text_alternative": "Read the calculation line by line, including every sign, denominator change, unit, and comparison with the estimate."
+        }
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u3-l4-we1", "prompt": "Calculate -2 1/4 + 5/6 exactly and verify the sign and magnitude.", "method_route_id": "common-unit-computation", "steps": [{"label": "Estimate", "explanation": "The result is about -2.25 + 0.83, so expect a negative value near -1.4."}, {"label": "Convert", "explanation": "Write -2 1/4 as -9/4 and use denominator 12: -27/12 + 10/12."}, {"label": "Combine", "explanation": "The exact sum is -17/12, which is -1 5/12."}, {"label": "Check", "explanation": "The decimal is about -1.4167, matching the estimated sign and size."}], "answer": "The exact sum is -17/12, or -1 5/12.", "verification": "Converting both the original expression and -17/12 to decimals gives approximately -1.4167."},
+        {"id": "mth1w-u3-l4-we2", "prompt": "A rain barrel starts with 12 1/2 L and loses 3/4 L each minute for 6 minutes. How much remains?", "method_route_id": "decimal-technology-check", "steps": [{"label": "Model", "explanation": "Final amount equals 12 1/2 + 6(-3/4) litres."}, {"label": "Compute change", "explanation": "Six times -3/4 is -18/4 = -4 1/2 litres."}, {"label": "Combine", "explanation": "12 1/2 - 4 1/2 = 8 litres remain."}, {"label": "Verify", "explanation": "Decimal checking gives 12.5 + 6(-0.75) = 8.0 litres."}], "answer": "After 6 minutes, exactly 8 L remain in the barrel.", "verification": "The exact fraction and decimal calculations agree, and the loss is smaller than the starting amount."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "Add denominators when adding fractions.", "correction": "Create equal-size fractional units, then combine the signed numerators while keeping the common denominator."},
+        {"claim": "Dividing by 1/4 makes a positive quantity smaller.", "correction": "Division asks how many fourth-sized groups fit, so a positive quantity is multiplied by 4."},
+        {"claim": "A calculator decimal is automatically more accurate than an exact fraction.", "correction": "A displayed decimal may be rounded; retain the exact fraction and use the decimal as a check or contextual approximation."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u3-l4-g1", "prompt": "What is -1/3 + 5/6?", "response": {"type": "selected", "options": ["1/2", "-1/2", "4/9", "2/3"], "correct_answer": "1/2"}, "rationale": "Using sixths gives -2/6 + 5/6 = 3/6 = 1/2."},
+          {"id": "mth1w-u3-l4-g2", "prompt": "What is (-3/5)(10/9)?", "response": {"type": "selected", "options": ["-2/3", "2/3", "-30/14", "-1/6"], "correct_answer": "-2/3"}, "rationale": "The product is negative and cross-cancelling gives -(1 x 2)/(1 x 3) = -2/3."},
+          {"id": "mth1w-u3-l4-g3", "prompt": "Explain why 2 divided by 1/4 equals 8 using a measurement interpretation.", "response": {"type": "constructed", "criteria": ["asks how many quarter units fit in 2", "identifies four quarters per whole", "concludes eight quarter units"], "sample_response": "Division asks how many 1/4-sized measures fit into 2 wholes. Each whole has four quarters, so two wholes contain eight 1/4 units and 2 divided by 1/4 = 8.", "educator_review_required": true}, "rationale": "The measurement meaning explains the reciprocal procedure."}
+        ],
+        "independent": [
+          {"id": "mth1w-u3-l4-i1", "prompt": "What is -3/4 - 2/3?", "response": {"type": "selected", "options": ["-17/12", "-1/12", "17/12", "-5/7"], "correct_answer": "-17/12"}, "rationale": "Using twelfths gives -9/12 - 8/12 = -17/12."},
+          {"id": "mth1w-u3-l4-i2", "prompt": "What is (-5/8) divided by (15/16)?", "response": {"type": "selected", "options": ["-2/3", "2/3", "-75/128", "-3/2"], "correct_answer": "-2/3"}, "rationale": "Multiply -5/8 by 16/15 and simplify to -2/3."},
+          {"id": "mth1w-u3-l4-i3", "prompt": "What is (-2/3)^2?", "response": {"type": "selected", "options": ["4/9", "-4/9", "-2/9", "2/6"], "correct_answer": "4/9"}, "rationale": "Squaring multiplies two negative factors, producing positive 4/9."},
+          {"id": "mth1w-u3-l4-i4", "prompt": "A rectangle is 3 3/4 ft by 1 1/2 ft. What is its exact area?", "response": {"type": "selected", "options": ["5 5/8 square feet", "5 1/4 square feet", "10 1/2 square feet", "4 1/4 square feet"], "correct_answer": "5 5/8 square feet"}, "rationale": "Fifteen fourths times three halves equals 45/8 = 5 5/8 square feet."},
+          {"id": "mth1w-u3-l4-i5", "prompt": "Solve a signed-fraction measurement problem of your own and include an estimate and independent check.", "response": {"type": "constructed", "criteria": ["poses a coherent problem with units", "chooses and performs a correct operation", "includes signed exact work", "estimates sign and magnitude", "uses a second verification route"], "sample_response": "A tank at 2 1/2 L loses 3/8 L twice: 5/2 - 6/8 = 20/8 - 6/8 = 14/8 = 1 3/4 L. I estimated just under 2 L and checked 2.5 - 0.75 = 1.75.", "educator_review_required": true}, "rationale": "Posing and checking a problem demonstrates transfer beyond a rehearsed procedure."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u3-l4-r1", "prompt": "Before calculating -4 1/2 + 1 3/4, which estimate is most reasonable?", "response": {"type": "selected", "options": ["about -3", "about +6", "about 0", "about -7"], "correct_answer": "about -3"}, "rationale": "The positive amount partly offsets -4.5, giving approximately -2.75."},
+          {"id": "mth1w-u3-l4-r2", "prompt": "Which operation finds how many 2/3-metre pieces fit in 4 m?", "response": {"type": "selected", "options": ["4 divided by 2/3", "4 times 2/3", "4 minus 2/3", "4 plus 2/3"], "correct_answer": "4 divided by 2/3"}, "rationale": "The number of equal-sized groups that fit is a division question."},
+          {"id": "mth1w-u3-l4-r3", "prompt": "Explain why estimating sign and magnitude should happen before exact fraction computation.", "response": {"type": "constructed", "criteria": ["mentions predicting a reasonable range", "identifies sign or operation errors", "connects estimate with final verification"], "sample_response": "An estimate creates a target range and sign before detailed arithmetic. If my exact result has the opposite sign or a much larger size, I know to inspect the operation, conversion, or sign entry.", "educator_review_required": true}, "rationale": "Estimation is a diagnostic check rather than a substitute for the exact result."}
+        ]
+      },
+      "reflection_prompt": "Which exact operation did your estimate or decimal verification catch, and how will you preserve units and signs in future formulas?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "All fraction models are paired with line-by-line signed equations, spoken operation names, units, and benchmark estimates.", "response_options": ["typed or handwritten exact work", "calculator-supported check after an estimate", "physical fraction pieces with a verbal conclusion"]}
+    },
+    {
+      "id": "mth1w-u3-l5",
+      "title": "Rates, percentages, and proportional decisions",
+      "official_expectation_ids": ["B3.5"],
+      "estimated_minutes": 90,
+      "learning_goals": [
+        "Recognize when a situation involves a rate, percentage, or proportional relationship and state its units.",
+        "Solve a proportional problem using unit-rate or equivalent-ratio reasoning and compare the methods.",
+        "Pose and justify a real-life proportional decision with estimates, source data, and reasonableness checks."
+      ],
+      "success_criteria": [
+        "I identify the two compared quantities and keep their units attached.",
+        "I show the same scale factor on both parts of a ratio or use a valid proportion equation.",
+        "I distinguish percent change from percentage points and check that my answer fits the context."
+      ],
+      "vocabulary": [
+        {"term": "unit rate", "meaning": "a comparison expressed for one unit of the denominator quantity"},
+        {"term": "proportion", "meaning": "an equation stating that two ratios or rates are equal with non-zero denominators"},
+        {"term": "percent", "meaning": "a ratio measured per one hundred of the reference amount"},
+        {"term": "scale factor", "meaning": "a multiplier applied consistently to corresponding quantities in a proportional relationship"},
+        {"term": "percent change", "meaning": "the change divided by the original reference amount, expressed per hundred"}
+      ],
+      "why_it_matters": "Unit prices, tax, discounts, recipes, maps, slopes, data rates, and measurement comparisons all use proportional reasoning. Naming the reference quantity and units turns a calculation into a defensible decision.",
+      "direct_instruction": [
+        {"heading": "Identify what is compared", "body": "A ratio compares quantities, a rate compares quantities with different units, and a percent compares an amount with a reference of 100. A proportion states that two ratios or rates are equal. Write units and identify the reference amount before solving."},
+        {"heading": "Scale through one or through an equation", "body": "The unit-rate route divides both quantities to find the amount per 1, then scales to the target. The equivalent-ratio route applies the same scale factor to both parts or solves a/b = c/d. Both preserve the multiplicative relationship and should give the same result."},
+        {"heading": "Apply percent changes in sequence", "body": "A 25% discount multiplies price by 0.75. Tax is then applied to the discounted price, not the original price. Sequential percent changes multiply their factors; they cannot generally be combined by simply adding or subtracting percent labels."}
+      ],
+      "method_routes": [
+        {"id": "unit-rate-scale", "title": "Unit-rate and scale-factor route", "steps": ["Name the compared quantities, order, and units.", "Divide both quantities by the denominator amount to find the rate per 1.", "Multiply the unit rate by the target amount.", "Attach units and compare with an estimate or benchmark.", "Use the inverse rate when helpful to verify the relationship."], "when_useful": "Use this route for prices, speed, flow, density, recipes, and comparisons where a per-one value is meaningful.", "check": "The unit rate's units must cancel and combine correctly when it is scaled to the requested quantity."},
+        {"id": "equivalent-ratio-equation", "title": "Equivalent-ratio or percent-equation route", "steps": ["Write corresponding quantities in the same order and unit.", "Create an equality of ratios or write amount/reference = percent/100.", "Use a visible scale factor or solve the equation without losing units.", "Substitute the result into both ratios and compare cross products.", "Interpret whether the result represents an amount, rate, percentage, or percent change."], "when_useful": "Use this route when a missing corresponding value, similar measurement, percent, or scale comparison is central.", "check": "Both ratios must compare corresponding quantities in the same order and neither denominator may be zero."
+        }
+      ],
+      "representations": [
+        {"id": "proportional-double-line", "label": "Proportional double number line", "description": "Aligned scales show corresponding quantities, unit-rate landmarks, target values, and the same multiplicative scale on both lines.", "text_alternative": "Read each aligned pair and state the factor that moves both quantities from one pair to the next."},
+        {"id": "ratio-table-equation", "label": "Ratio table and equation", "description": "A table of corresponding values is paired with a proportion or percent equation and a unit-labelled interpretation.", "text_alternative": "List each pair in consistent order, state the invariant ratio, then read the equation and solved value with units."
+        }
+      ],
+      "worked_examples": [
+        {"id": "mth1w-u3-l5-we1", "prompt": "Store A sells 750 g for $6.45 and Store B sells 1.2 kg for $9.96. Which has the lower price per kilogram?", "method_route_id": "unit-rate-scale", "steps": [{"label": "Align units", "explanation": "Convert 750 g to 0.75 kg while Store B is already 1.2 kg."}, {"label": "Find Store A rate", "explanation": "$6.45 divided by 0.75 kg is $8.60 per kilogram."}, {"label": "Find Store B rate", "explanation": "$9.96 divided by 1.2 kg is $8.30 per kilogram."}, {"label": "Decide", "explanation": "Store B costs $0.30 less per kilogram, assuming product and other costs are comparable."}], "answer": "Store B has the lower unit price at $8.30/kg, compared with Store A at $8.60/kg.", "verification": "Scaling $8.30/kg by 1.2 kg returns $9.96, and scaling $8.60/kg by 0.75 kg returns $6.45."},
+        {"id": "mth1w-u3-l5-we2", "prompt": "An $80 item is discounted 25% and then taxed 13%. What is the final price?", "method_route_id": "equivalent-ratio-equation", "steps": [{"label": "Find discount", "explanation": "Twenty-five percent of $80 is 0.25 x 80 = $20, so the sale price is $60."}, {"label": "Apply tax base", "explanation": "Tax is 13% of the $60 sale price, which is $7.80."}, {"label": "Combine", "explanation": "The final price is $60 + $7.80 = $67.80."}, {"label": "Check factors", "explanation": "The sequential multiplier 0.75 x 1.13 = 0.8475, and 80 x 0.8475 = 67.80."}], "answer": "The final price after the 25% discount and 13% tax is $67.80.", "verification": "Both the amount method and sequential scale-factor method produce the same $67.80 result."
+        }
+      ],
+      "misconceptions": [
+        {"claim": "The larger package price is always the worse deal.", "correction": "Compare equal quantities using a unit price and consider relevant non-price constraints."},
+        {"claim": "A 25% discount followed by 13% tax is a net 12% discount.", "correction": "The percentages use different reference amounts, so apply their multipliers in sequence."},
+        {"claim": "Any relationship that makes a table is proportional.", "correction": "A proportional relationship has a constant multiplicative ratio and passes through the zero-zero pair."}
+      ],
+      "practice_sets": {
+        "guided": [
+          {"id": "mth1w-u3-l5-g1", "prompt": "A car travels 180 km in 3 h at a steady rate. What is the unit rate?", "response": {"type": "selected", "options": ["60 km/h", "540 km/h", "177 km/h", "3/180 km/h"], "correct_answer": "60 km/h"}, "rationale": "Dividing 180 km by 3 h gives 60 kilometres per hour."},
+          {"id": "mth1w-u3-l5-g2", "prompt": "What is 15% of $200?", "response": {"type": "selected", "options": ["$30", "$15", "$185", "$300"], "correct_answer": "$30"}, "rationale": "Fifteen per hundred of 200 is 0.15 x 200 = 30."},
+          {"id": "mth1w-u3-l5-g3", "prompt": "Explain how a unit-rate route and an equivalent-ratio route solve 5 notebooks for $12.50 when finding the cost of 8.", "response": {"type": "constructed", "criteria": ["finds $2.50 per notebook", "scales to $20", "shows a valid proportion or scale factor", "connects both routes"], "sample_response": "The unit rate is $12.50/5 = $2.50 each, so 8 cost $20. Equivalently, 12.50/5 = x/8 gives x = 20; both preserve the same dollars-per-notebook ratio.", "educator_review_required": true}, "rationale": "The response must show that both routes preserve the same multiplicative comparison."}
+        ],
+        "independent": [
+          {"id": "mth1w-u3-l5-i1", "prompt": "A river level falls from 1.08 m at 0.05 m/day. How many days until it reaches 0.28 m?", "response": {"type": "selected", "options": ["16 days", "8 days", "21.6 days", "5.6 days"], "correct_answer": "16 days"}, "rationale": "The total drop is 0.80 m, and 0.80 divided by 0.05 m/day is 16 days."},
+          {"id": "mth1w-u3-l5-i2", "prompt": "A map scale is 1 cm to 4 km. What distance does 7.5 cm represent?", "response": {"type": "selected", "options": ["30 km", "11.5 km", "1.875 km", "300 km"], "correct_answer": "30 km"}, "rationale": "Multiplying the unit rate 4 km/cm by 7.5 cm gives 30 km."},
+          {"id": "mth1w-u3-l5-i3", "prompt": "A quantity rises from 80 to 100. What is the percent increase?", "response": {"type": "selected", "options": ["25%", "20%", "80%", "125%"], "correct_answer": "25%"}, "rationale": "The change is 20 relative to the original 80, and 20/80 = 0.25 = 25%."},
+          {"id": "mth1w-u3-l5-i4", "prompt": "Which situation is proportional?", "response": {"type": "selected", "options": ["cost at $3 per kilogram with no fixed fee", "taxi cost with a $5 start fee plus $2 per kilometre", "temperature in Celsius versus Fahrenheit", "age versus height"], "correct_answer": "cost at $3 per kilogram with no fixed fee"}, "rationale": "The total cost has constant ratio $3/kg and is zero when mass is zero."},
+          {"id": "mth1w-u3-l5-i5", "prompt": "Pose and solve a proportional decision using sourced prices, measurements, or data, and state one limitation.", "response": {"type": "constructed", "criteria": ["identifies source quantities and units", "poses a genuine comparison", "uses a correct unit-rate or proportion route", "checks reasonableness", "states a non-mathematical limitation"], "sample_response": "Two refill packages cost $7.20 for 600 g and $10.50 for 1 kg. Their rates are $12/kg and $10.50/kg, so the second is cheaper per kilogram. This assumes equal quality and that the larger amount will be used before waste occurs.", "educator_review_required": true}, "rationale": "A defensible decision combines proportional mathematics with source and context limits."}
+        ],
+        "retrieval": [
+          {"id": "mth1w-u3-l5-r1", "prompt": "Which equation finds the percent p when 32 is compared with 80?", "response": {"type": "selected", "options": ["32/80 = p/100", "80/32 = p/100", "32p = 80", "32/100 = 80/p"], "correct_answer": "32/80 = p/100"}, "rationale": "Amount divided by reference equals percent divided by 100."},
+          {"id": "mth1w-u3-l5-r2", "prompt": "Which is the better unit price: $4.50 for 3 or $7.00 for 5?", "response": {"type": "selected", "options": ["$7.00 for 5", "$4.50 for 3", "they are equal", "not enough information to compare quantity"], "correct_answer": "$7.00 for 5"}, "rationale": "The unit prices are $1.50 and $1.40, so the five-pack has the lower price per item."},
+          {"id": "mth1w-u3-l5-r3", "prompt": "Explain why corresponding quantities must stay in the same order in a proportion.", "response": {"type": "constructed", "criteria": ["identifies numerator and denominator roles", "states that units or meanings must correspond", "shows or describes an invalid reversal"], "sample_response": "Each ratio must compare the same kind of numerator with the same kind of denominator. If dollars/items is set equal to items/dollars, the units and relationship no longer correspond even if all four numbers appear.", "educator_review_required": true}, "rationale": "Consistent order is what makes two ratios representations of the same relationship."}
+        ]
+      },
+      "reflection_prompt": "Which proportional route made the decision easiest to defend, and what reference amount, unit, or limitation did you initially overlook?",
+      "accessibility": {"printable_equivalent": true, "nonvisual_route": "Every double number line is paired with an ordered ratio table, unit labels, scale factors, and a complete verbal comparison.", "response_options": ["typed or handwritten ratio work", "spoken unit-rate explanation", "spreadsheet-supported comparison with a written estimate"]}
+    }
+  ],
+  "unit_assessment": {
+    "quiz": {
+      "id": "mth1w-u3-quiz",
+      "title": "Unit 3 rational numbers in applications quiz",
+      "estimated_minutes": 45,
+      "attempt_policy": "feedback_after_submission_then_correction_attempt",
+      "items": [
+        {"id": "mth1w-u3-q1", "official_expectation_ids": ["B3.1"], "prompt": "A value changes from -8 to 3. What is the signed change?", "response": {"type": "selected", "options": ["+11", "-11", "+5", "-5"], "correct_answer": "+11"}, "rationale": "Final minus initial is 3 - (-8) = +11."},
+        {"id": "mth1w-u3-q2", "official_expectation_ids": ["B3.1"], "prompt": "Explain the difference between a position of -4 m and a change of -4 m.", "response": {"type": "constructed", "criteria": ["defines a reference for position", "describes decrease for change", "uses a correct example"], "sample_response": "A position of -4 m is four metres on the negative side of a chosen zero. A change of -4 m moves any starting position four metres in the negative direction.", "educator_review_required": true}, "rationale": "The explanation distinguishes a signed state from a signed movement."},
+        {"id": "mth1w-u3-q3", "official_expectation_ids": ["B3.2"], "prompt": "How many 1/8 units make 1 3/4?", "response": {"type": "selected", "options": ["14", "11", "8", "7"], "correct_answer": "14"}, "rationale": "One and three quarters equals 14/8, so it contains fourteen 1/8 units."},
+        {"id": "mth1w-u3-q4", "official_expectation_ids": ["B3.2"], "prompt": "What is 4/7 of 35?", "response": {"type": "short_text", "accepted_answers": ["20", "20 units"], "case_sensitive": false}, "rationale": "One seventh of 35 is 5, and four unit parts total 20."},
+        {"id": "mth1w-u3-q5", "official_expectation_ids": ["B3.3"], "prompt": "Which expression equals +3/5?", "response": {"type": "selected", "options": ["(-3)/(-5)", "(-3)/5", "3/(-5)", "-(3/5)"], "correct_answer": "(-3)/(-5)"}, "rationale": "Two negative factors produce a positive quotient."},
+        {"id": "mth1w-u3-q6", "official_expectation_ids": ["B3.3"], "prompt": "If north is positive, interpret -12.5 km/h.", "response": {"type": "constructed", "criteria": ["states southward direction", "states magnitude 12.5 km/h", "separates sign and magnitude"], "sample_response": "The object travels south at a speed of 12.5 km/h. The negative sign indicates direction opposite north; the magnitude is 12.5 km/h.", "educator_review_required": true}, "rationale": "A signed rate needs a direction convention and non-negative magnitude."},
+        {"id": "mth1w-u3-q7", "official_expectation_ids": ["B3.4"], "prompt": "Calculate -5/6 + 1/4.", "response": {"type": "selected", "options": ["-7/12", "7/12", "-4/10", "-13/12"], "correct_answer": "-7/12"}, "rationale": "Using twelfths gives -10/12 + 3/12 = -7/12."},
+        {"id": "mth1w-u3-q8", "official_expectation_ids": ["B3.4"], "prompt": "Calculate (-3/7) divided by (9/14). Give an exact answer.", "response": {"type": "short_text", "accepted_answers": ["-2/3"], "case_sensitive": false}, "rationale": "Multiplying -3/7 by 14/9 and simplifying gives -2/3."},
+        {"id": "mth1w-u3-q9", "official_expectation_ids": ["B3.5"], "prompt": "A $50 item is discounted 20%. What is the sale price before tax?", "response": {"type": "selected", "options": ["$40", "$30", "$45", "$10"], "correct_answer": "$40"}, "rationale": "A 20% discount is $10, or multiply by 0.80 to obtain $40."},
+        {"id": "mth1w-u3-q10", "official_expectation_ids": ["B3.5"], "prompt": "A mixture uses 3 cups of water for 2 cups of concentrate. How much water corresponds to 5 cups of concentrate?", "response": {"type": "selected", "options": ["7.5 cups", "6 cups", "10 cups", "3.3 cups"], "correct_answer": "7.5 cups"}, "rationale": "The rate is 3/2 = 1.5 cups water per cup concentrate, so 1.5 x 5 = 7.5 cups."
+        }
+      ]
+    },
+    "performance_task": {
+      "id": "mth1w-u3-proportional-decision",
+      "title": "Rational and proportional decision portfolio",
+      "estimated_minutes": 180,
+      "official_expectation_ids": ["B3.1", "B3.2", "B3.3", "B3.4", "B3.5"],
+      "prompt": "Investigate a real decision involving a signed change and a proportional comparison, such as a budget, measurement plan, travel route, recipe, environmental rate, or purchase. Build an accessible portfolio that defines reference directions and units, uses unit-fraction reasoning, performs exact signed-fraction operations, compares rates or percentages through two methods, and verifies every conclusion while stating source and context limits.",
+      "required_components": [
+        "a sourced context with defined reference point, units, and positive direction where relevant",
+        "one initial-change-final model using signed values",
+        "one unit-fraction measurement or scaling explanation",
+        "one conversion or interpretation across a signed fraction, decimal, ratio, or rate",
+        "one exact multi-step signed-fraction calculation with estimate and technology check",
+        "one proportional decision solved by unit-rate and equivalent-ratio routes",
+        "one percent or percent-change calculation with its reference amount identified",
+        "connected representations with complete text alternatives",
+        "a limitation, revision note, and question for educator review"
+      ],
+      "rubric": [
+        {"dimension": "mathematical accuracy", "criteria": "Signs, fractions, operations, rates, percentages, proportions, units, and exact values are correct."},
+        {"dimension": "context and interpretation", "criteria": "Reference points, directions, wholes, compared quantities, sources, and limitations are explicit."},
+        {"dimension": "reasoning and methods", "criteria": "At least two connected routes are explained and selected according to the structure of each task."},
+        {"dimension": "verification and decision", "criteria": "Estimates and independent checks support a conclusion that follows from the evidence without overstating it."},
+        {"dimension": "communication and accessibility", "criteria": "Work is organized, units remain visible, representations have text alternatives, and revisions respond to review criteria."}
+      ],
+      "educator_review_required": true,
+      "status": "machine_verified_draft"
+    }
+  }
+}

@@ -1,0 +1,1019 @@
+{
+  "schema": "axiom-education-course-blueprint.v1",
+  "course": {
+    "code": "MTH1W",
+    "title": "Mathematics, Grade 9, De-streamed",
+    "jurisdiction": "Ontario, Canada",
+    "credit_value": 1.0,
+    "estimated_hours_total": 110,
+    "student_availability": "not_available_course_in_build",
+    "content_status": "partial_machine_verified_draft",
+    "complete_course_claim_allowed": false
+  },
+  "hour_accounting": {
+    "planning_envelope_hours": 110,
+    "authored_primary_lesson_minutes": 3825,
+    "authored_primary_lesson_hours": 63.75,
+    "unallocated_program_minutes": 2775,
+    "unallocated_program_hours": 46.25,
+    "allocation_status": "incomplete",
+    "complete_hour_allocation_claim_allowed": false
+  },
+  "source_inventory": {
+    "path": "curriculum/official/ontario-mth1w-2021.inventory.json",
+    "records_sha256": "d023c3ee1e441c13d0b8ca6bd9a87f9b6004766f92182303385511b517642766",
+    "verbatim_expectation_text_included": false
+  },
+  "coursewide_expectations": {
+    "ids": ["AA1", "A1", "A2"],
+    "delivery": "embedded_in_every_unit",
+    "evidence_required": [
+      "plan-monitor-evaluate prompts",
+      "reasoning and communication tasks",
+      "connections among mathematics, lived contexts, cultures, careers, and other disciplines"
+    ]
+  },
+  "instructional_policy": {
+    "path": "docs/research/GLOBAL-INSTRUCTIONAL-METHODS.md",
+    "minimum_method_routes_per_lesson": 2,
+    "minimum_representations_per_lesson": 2,
+    "fixed_learning_style_labels_allowed": false,
+    "required_practice_phases": ["guided", "independent", "retrieval"]
+  },
+  "authored_unit_content": [
+    {
+      "unit_id": "mth1w-u1",
+      "path": "curriculum/content/mth1w/u1-number-systems.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u2",
+      "path": "curriculum/content/mth1w/u2-powers.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u3",
+      "path": "curriculum/content/mth1w/u3-rational-applications.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u4",
+      "path": "curriculum/content/mth1w/u4-algebraic-thinking.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u5",
+      "path": "curriculum/content/mth1w/u5-coding-relationships.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u6",
+      "path": "curriculum/content/mth1w/u6-relations-linear-models.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    },
+    {
+      "unit_id": "mth1w-u7",
+      "path": "curriculum/content/mth1w/u7-data-modelling.v1.json",
+      "status": "machine_verified_draft",
+      "educator_review_status": "required",
+      "student_availability": "draft_preview_with_adult_review_recommended"
+    }
+  ],
+  "units": [
+    {
+      "id": "mth1w-u1",
+      "sequence": 1,
+      "title": "Number systems, histories, and big ideas",
+      "estimated_hours": 8,
+      "overall_expectations": ["B1"],
+      "specific_expectations": ["B1.1", "B1.2", "B1.3"],
+      "lessons": [
+        {
+          "id": "mth1w-u1-l1",
+          "sequence": 1,
+          "title": "Numbers across cultures: evidence and context",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B1.1"],
+          "outcome": "Investigate a culturally situated number idea, evaluate sources, and connect its development with a responsible present-day use.",
+          "prerequisites": ["distinguish evidence from unsupported claims", "read and compare whole numbers and fractions"],
+          "method_routes": ["source-evidence timeline", "compare two cultural case studies"],
+          "representations": ["annotated timeline", "claim-evidence-context map"],
+          "practice": {
+            "guided": "Classify sample statements as evidence, interpretation, or unsupported claim.",
+            "independent": "Create a short sourced account of one number idea without treating a culture as a stereotype.",
+            "retrieval": "Revisit the account later and explain one mathematical and one contextual connection from memory."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u1-l2",
+          "sequence": 2,
+          "title": "Map the real-number family",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B1.2"],
+          "outcome": "Define and compare nested number sets, classify examples, and justify where boundary cases belong.",
+          "prerequisites": ["recognize common fraction and decimal forms", "interpret square roots on a calculator"],
+          "method_routes": ["nested-set classification", "property-and-counterexample testing"],
+          "representations": ["nested-set diagram", "number line with labelled examples"],
+          "practice": {
+            "guided": "Place provided values in the smallest applicable set and explain each choice.",
+            "independent": "Classify a mixed set containing integers, rational values, roots, and pi-like values.",
+            "retrieval": "Sort new examples without the diagram and reconstruct the nesting relationship."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u1-l3",
+          "sequence": 3,
+          "title": "Density, infinity, and approaching a limit",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B1.3"],
+          "outcome": "Use patterns and number relationships to reason about values between values, unending sets, and quantities that approach a boundary.",
+          "prerequisites": ["order rational and decimal values", "extend numerical patterns"],
+          "method_routes": ["number-line zoom and midpoint construction", "sequence-table pattern analysis"],
+          "representations": ["successively magnified number line", "table and graph of an approaching sequence"],
+          "practice": {
+            "guided": "Generate values between two given numbers and describe what the process suggests.",
+            "independent": "Compare an unbounded sequence with a bounded sequence that approaches a value.",
+            "retrieval": "Explain the difference between infinitely many terms and infinitely large values."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u1-quiz",
+        "performance_task_id": "mth1w-u1-number-systems-brief",
+        "expectation_ids": ["B1.1", "B1.2", "B1.3"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u2",
+      "sequence": 2,
+      "title": "Powers and scientific notation",
+      "estimated_hours": 8,
+      "overall_expectations": ["B2"],
+      "specific_expectations": ["B2.1", "B2.2"],
+      "lessons": [
+        {
+          "id": "mth1w-u2-l1",
+          "sequence": 1,
+          "title": "Exponent patterns and scientific notation",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B2.1"],
+          "outcome": "Use exponent patterns to explain how sign and magnitude affect a power and to express very large or small quantities efficiently.",
+          "prerequisites": ["multiply signed numbers", "understand place value and powers of ten"],
+          "method_routes": ["repeated-multiplication pattern table", "place-value scaling on a number line"],
+          "representations": ["exponent-value table", "scientific-notation place-value chart"],
+          "practice": {
+            "guided": "Extend positive, zero, and negative exponent patterns and check values numerically.",
+            "independent": "Convert contextual measurements between standard and scientific notation and evaluate powers.",
+            "retrieval": "Estimate the order of magnitude of unfamiliar quantities before calculating."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u2-l2",
+          "sequence": 2,
+          "title": "Build the exponent laws from patterns",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B2.2"],
+          "outcome": "Derive and apply relationships for multiplying, dividing, and powering powers, and explain when a rule does not apply.",
+          "prerequisites": ["write repeated multiplication", "combine like factors"],
+          "method_routes": ["expand-and-regroup factors", "compare exponent-pattern tables"],
+          "representations": ["factor strings with grouping", "symbolic rule beside numerical cases"],
+          "practice": {
+            "guided": "Expand examples before generalizing the change to exponents.",
+            "independent": "Simplify numeric and algebraic power expressions and identify invalid shortcuts.",
+            "retrieval": "Choose and justify an exponent relationship in a mixed review."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u2-quiz",
+        "performance_task_id": "mth1w-u2-scale-comparison",
+        "expectation_ids": ["B2.1", "B2.2"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u3",
+      "sequence": 3,
+      "title": "Rational numbers in applications",
+      "estimated_hours": 14,
+      "overall_expectations": ["B3"],
+      "specific_expectations": ["B3.1", "B3.2", "B3.3", "B3.4", "B3.5"],
+      "lessons": [
+        {
+          "id": "mth1w-u3-l1",
+          "sequence": 1,
+          "title": "Signed quantities in place and change",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B3.1"],
+          "outcome": "Interpret integers as locations, directions, amounts, and changes while distinguishing a position from a change in position.",
+          "prerequisites": ["order integers", "add and subtract whole numbers"],
+          "method_routes": ["directed number-line movement", "initial-value plus signed-change equation"],
+          "representations": ["horizontal or vertical number line", "context table with start, change, and result"],
+          "practice": {
+            "guided": "Translate temperature, elevation, finance, and movement statements into signed values.",
+            "independent": "Model multi-step changes and explain the meaning of each sign.",
+            "retrieval": "Distinguish negative location from negative change in new contexts."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u3-l2",
+          "sequence": 2,
+          "title": "Unit fractions as measures and operators",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B3.2"],
+          "outcome": "Use unit fractions to build, compare, measure, and scale fractional quantities with appropriate tools.",
+          "prerequisites": ["identify numerator and denominator", "partition a whole into equal parts"],
+          "method_routes": ["iterate a unit-fraction measure", "scale from one fractional part to the required amount"],
+          "representations": ["fraction strips or measuring tools", "double number line"],
+          "practice": {
+            "guided": "Construct non-unit fractions by repeating a selected unit fraction.",
+            "independent": "Solve measurement and scaling problems using unit-fraction reasoning.",
+            "retrieval": "Estimate and then verify a fractional measure with a different representation."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u3-l3",
+          "sequence": 3,
+          "title": "How signs change ratios, rates, fractions, and decimals",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B3.3"],
+          "outcome": "Explain how positive and negative signs affect equivalent forms and contextual meaning across ratios, rates, fractions, and decimals.",
+          "prerequisites": ["convert among fractions and decimals", "interpret ratios and rates"],
+          "method_routes": ["context-and-direction analysis", "equivalent-form sign tracking"],
+          "representations": ["signed ratio table", "number-line direction model"],
+          "practice": {
+            "guided": "Track sign changes across equivalent numerical forms and attach a contextual meaning.",
+            "independent": "Compare signed rates and ratios and explain which signs describe direction or amount.",
+            "retrieval": "Correct common double-negative and denominator-sign errors."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u3-l4",
+          "sequence": 4,
+          "title": "Operate with signed fractions in formulas and measurements",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B3.4"],
+          "outcome": "Select and carry out operations with positive and negative fractions or mixed numbers in formulas, measurements, and linear contexts.",
+          "prerequisites": ["find common denominators", "convert mixed and improper forms"],
+          "method_routes": ["common-unit fraction computation", "decimal or technology-supported verification"],
+          "representations": ["fraction model with signed direction", "symbolic calculation with units"],
+          "practice": {
+            "guided": "Choose an operation from context and maintain signs, units, and exact values.",
+            "independent": "Solve multi-step formula and measurement problems with signed fractions.",
+            "retrieval": "Estimate sign and magnitude before computing a mixed problem."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u3-l5",
+          "sequence": 5,
+          "title": "Rates, percentages, and proportional decisions",
+          "estimated_minutes": 90,
+          "primary_expectations": ["B3.5"],
+          "outcome": "Pose and solve proportional problems in data, measurement, geometry, linear, and financial contexts, then check reasonableness.",
+          "prerequisites": ["multiply and divide decimals", "interpret a rate per one and a percent per hundred"],
+          "method_routes": ["unit-rate and scale-factor reasoning", "equivalent-ratio or percent equation"],
+          "representations": ["double number line", "ratio table and equation"],
+          "practice": {
+            "guided": "Solve the same proportional situation with two routes and compare efficiency.",
+            "independent": "Pose, solve, and justify a real-life proportional decision with stated units.",
+            "retrieval": "Select among rate, percent, and proportion methods in a mixed set."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u3-quiz",
+        "performance_task_id": "mth1w-u3-proportional-decision",
+        "expectation_ids": ["B3.1", "B3.2", "B3.3", "B3.4", "B3.5"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u4",
+      "sequence": 4,
+      "title": "Algebraic thinking and equations",
+      "estimated_hours": 14,
+      "overall_expectations": ["C1"],
+      "specific_expectations": ["C1.1", "C1.2", "C1.3", "C1.4", "C1.5"],
+      "lessons": [
+        {
+          "id": "mth1w-u4-l1",
+          "sequence": 1,
+          "title": "Algebra across cultures and contexts",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C1.1"],
+          "outcome": "Investigate an algebraic idea in a specific cultural history and connect reliable evidence to a modern application.",
+          "prerequisites": ["evaluate a simple expression", "distinguish primary and secondary source claims"],
+          "method_routes": ["source-evidence timeline", "compare historical and current problem methods"],
+          "representations": ["annotated worked artifact", "context-and-application map"],
+          "practice": {
+            "guided": "Evaluate evidence quality in sample historical mathematics claims.",
+            "independent": "Produce a sourced algebra story with a demonstrated modern connection.",
+            "retrieval": "Explain the algebraic idea without relying on a memorized culture label."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u4-l2",
+          "sequence": 2,
+          "title": "Generalize patterns with expressions",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C1.2"],
+          "outcome": "Create algebraic expressions that generalize relationships shown in words, numbers, and visual patterns.",
+          "prerequisites": ["identify a changing and fixed quantity", "extend arithmetic patterns"],
+          "method_routes": ["build from a term-value table", "decompose a visual pattern into repeated and fixed parts"],
+          "representations": ["visual pattern and labelled parts", "table, words, and symbolic expression"],
+          "practice": {
+            "guided": "Translate a relationship among visual, verbal, numerical, and symbolic forms.",
+            "independent": "Write and test expressions for unfamiliar growing patterns and contexts.",
+            "retrieval": "Match expressions to patterns and explain the role of each term."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u4-l3",
+          "sequence": 3,
+          "title": "Prove expressions equivalent",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C1.3"],
+          "outcome": "Compare expressions using models, values, graphs, and algebra, then justify equivalence or provide a counterexample.",
+          "prerequisites": ["substitute a value for a variable", "use the distributive property"],
+          "method_routes": ["algebra-tile or area-model comparison", "table-and-counterexample testing"],
+          "representations": ["concrete or area model", "value table and symbolic transformation"],
+          "practice": {
+            "guided": "Test candidate pairs with more than one representation.",
+            "independent": "Prove equivalent pairs and disprove non-equivalent pairs with a valid counterexample.",
+            "retrieval": "Identify which property preserves equivalence in a short transformation."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u4-l4",
+          "sequence": 4,
+          "title": "Simplify with operation properties",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C1.4"],
+          "outcome": "Simplify algebraic expressions using valid operation properties and explain why each transformation preserves value.",
+          "prerequisites": ["combine like quantities", "apply distributive and associative properties numerically"],
+          "method_routes": ["algebra-tile grouping", "property-labelled symbolic steps"],
+          "representations": ["algebra tiles or area blocks", "aligned symbolic lines"],
+          "practice": {
+            "guided": "Name the property used at each simplification step.",
+            "independent": "Simplify contextual expressions and verify with substitution.",
+            "retrieval": "Diagnose an invalid combination of unlike terms."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u4-l5",
+          "sequence": 5,
+          "title": "Model, solve, and verify equations",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C1.5"],
+          "outcome": "Create an equation for a context, solve it while preserving equality, and verify that the result answers the original question.",
+          "prerequisites": ["simplify expressions", "use inverse operations with signed numbers"],
+          "method_routes": ["balance-model reasoning", "inverse-operation chain"],
+          "representations": ["balance diagram", "equation steps and substitution check"],
+          "practice": {
+            "guided": "Translate a context into an equation and justify equal changes to both sides.",
+            "independent": "Create, solve, and verify multi-step contextual equations.",
+            "retrieval": "Select an appropriate first inverse operation and explain why."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u4-quiz",
+        "performance_task_id": "mth1w-u4-pattern-model",
+        "expectation_ids": ["C1.1", "C1.2", "C1.3", "C1.4", "C1.5"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u5",
+      "sequence": 5,
+      "title": "Coding mathematical relationships",
+      "estimated_hours": 8,
+      "overall_expectations": ["C2"],
+      "specific_expectations": ["C2.1", "C2.2", "C2.3"],
+      "lessons": [
+        {
+          "id": "mth1w-u5-l1",
+          "sequence": 1,
+          "title": "Variables and conditions in code",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C2.1"],
+          "outcome": "Use variables, parameters, equations, and inequalities in readable pseudocode to demonstrate algebraic relationships.",
+          "prerequisites": ["evaluate and solve simple equations", "read a short sequence of instructions"],
+          "method_routes": ["trace a value table by hand", "translate algebra into pseudocode"],
+          "representations": ["trace table", "pseudocode beside algebraic notation"],
+          "practice": {
+            "guided": "Trace variable updates and conditional branches with supplied inputs.",
+            "independent": "Write bounded pseudocode that represents an equation or inequality relationship.",
+            "retrieval": "Predict output before running or checking the steps."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u5-l2",
+          "sequence": 2,
+          "title": "Decompose a mathematical process",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C2.2"],
+          "outcome": "Break a mathematical situation into ordered computational steps, identify inputs and outputs, and use the process to solve a problem.",
+          "prerequisites": ["identify inputs and desired outputs", "perform a multi-step calculation"],
+          "method_routes": ["flowchart decomposition", "worked-example to algorithm extraction"],
+          "representations": ["flowchart", "numbered pseudocode with input-output table"],
+          "practice": {
+            "guided": "Reorder and complete steps in a partially specified algorithm.",
+            "independent": "Design and test an algorithm for a mathematical situation with edge cases.",
+            "retrieval": "Explain why changing step order changes or preserves the result."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u5-l3",
+          "sequence": 3,
+          "title": "Predict, test, and revise code",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C2.3"],
+          "outcome": "Predict the result of readable code, test the prediction, and revise constraints or parameters for a related mathematical situation.",
+          "prerequisites": ["trace variables and branches", "distinguish a parameter from a computed value"],
+          "method_routes": ["line-by-line trace and invariant check", "input-output pattern testing"],
+          "representations": ["trace table", "before-and-after code diff with outcome graph"],
+          "practice": {
+            "guided": "Predict outputs and locate the first step where an incorrect trace diverges.",
+            "independent": "Alter a parameter or condition and justify the new mathematical outcome.",
+            "retrieval": "Find and correct a small logic error without running the code first."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u5-quiz",
+        "performance_task_id": "mth1w-u5-math-algorithm",
+        "expectation_ids": ["C2.1", "C2.2", "C2.3"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u6",
+      "sequence": 6,
+      "title": "Relations, graphs, and linear models",
+      "estimated_hours": 19,
+      "overall_expectations": ["C3", "C4"],
+      "specific_expectations": ["C3.1", "C3.2", "C3.3", "C4.1", "C4.2", "C4.3", "C4.4"],
+      "lessons": [
+        {
+          "id": "mth1w-u6-l1",
+          "sequence": 1,
+          "title": "Linear and non-linear change",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C3.1"],
+          "outcome": "Compare graph shapes and rates of change, connect them with growing or shrinking patterns, and make justified predictions.",
+          "prerequisites": ["plot ordered pairs", "calculate a change between values"],
+          "method_routes": ["successive-difference table", "graph-shape and steepness analysis"],
+          "representations": ["table with first differences", "linear and curved graphs"],
+          "practice": {
+            "guided": "Match patterns, tables, and graphs and explain the rate behaviour.",
+            "independent": "Classify unfamiliar relations and make bounded predictions.",
+            "retrieval": "Distinguish constant rate from changing rate using sparse evidence."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l2",
+          "sequence": 2,
+          "title": "Connect tables, graphs, materials, and equations",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C3.2"],
+          "outcome": "Represent a linear relation in several forms and explain how rate of change and initial value appear in each form.",
+          "prerequisites": ["extend a constant-rate table", "plot points on a coordinate plane"],
+          "method_routes": ["build-and-count concrete pattern", "rate-and-initial-value equation construction"],
+          "representations": ["concrete pattern or diagram", "table, graph, and equation"],
+          "practice": {
+            "guided": "Translate one relation through every representation and label corresponding features.",
+            "independent": "Construct missing representations from any supplied form.",
+            "retrieval": "Recover rate and initial value from a new table or graph."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l3",
+          "sequence": 3,
+          "title": "Compare two linear models and interpret intersection",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C3.3"],
+          "outcome": "Compare two linear models graphically and algebraically and interpret their intersection within the limits of a context.",
+          "prerequisites": ["identify slope and intercept", "substitute a value into a linear equation"],
+          "method_routes": ["graphical intersection and estimate", "equate expressions and solve"],
+          "representations": ["two-line graph", "comparison table and paired equations"],
+          "practice": {
+            "guided": "Connect the coordinates of an intersection with equal output values.",
+            "independent": "Compare contextual options and explain when each is preferable.",
+            "retrieval": "Estimate an intersection before solving exactly."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l4",
+          "sequence": 4,
+          "title": "Read characteristics across representations",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C4.1"],
+          "outcome": "Compare domain, range, intercepts, rate behaviour, and other visible characteristics across graphs, tables, and equations.",
+          "prerequisites": ["read coordinates and tables", "distinguish linear and non-linear relations"],
+          "method_routes": ["feature-by-feature comparison matrix", "representation translation and consistency check"],
+          "representations": ["annotated graph", "table-equation feature matrix"],
+          "practice": {
+            "guided": "Locate the same characteristic in three representations.",
+            "independent": "Compare relations and identify what each representation reveals or hides.",
+            "retrieval": "Infer a missing characteristic from partial information."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l5",
+          "sequence": 5,
+          "title": "Graph equations and inequalities as points and regions",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C4.2"],
+          "outcome": "Graph selected linear and non-linear equation forms and related inequalities, then describe the points or regions that satisfy them.",
+          "prerequisites": ["plot coordinate pairs", "test whether a value satisfies an equation or inequality"],
+          "method_routes": ["generate-and-plot satisfying pairs", "intercept, boundary, and test-point analysis"],
+          "representations": ["coordinate graph with boundary or region", "equation-value table"],
+          "practice": {
+            "guided": "Create points for each equation form and test a point in an inequality region.",
+            "independent": "Graph mixed equations and inequalities and explain the solution set.",
+            "retrieval": "Predict graph orientation or shape from equation structure."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l6",
+          "sequence": 6,
+          "title": "Transform lines and track equation changes",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C4.3"],
+          "outcome": "Translate, reflect, and rotate lines from a through-origin family and describe the corresponding changes in graph and equation.",
+          "prerequisites": ["graph a line from slope", "recognize translation, reflection, and rotation"],
+          "method_routes": ["coordinate transformation of sample points", "dynamic parameter comparison"],
+          "representations": ["before-and-after graphs", "transformation table with equations"],
+          "practice": {
+            "guided": "Transform points and infer the new line before checking dynamically.",
+            "independent": "Describe and create transformations that meet stated conditions.",
+            "retrieval": "Match equation changes to transformations and justify the match."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u6-l7",
+          "sequence": 7,
+          "title": "Build a line equation from data",
+          "estimated_minutes": 90,
+          "primary_expectations": ["C4.4"],
+          "outcome": "Determine a line equation from a graph, table, or concrete relation by connecting rate with slope and initial value with intercept.",
+          "prerequisites": ["calculate a rate of change", "identify an initial value"],
+          "method_routes": ["change-table and graph route", "slope-formula and substitution route"],
+          "representations": ["graph with rise and run", "table and slope-intercept equation"],
+          "practice": {
+            "guided": "Find the same equation from two representations and compare routes.",
+            "independent": "Build and use equations for unfamiliar linear situations.",
+            "retrieval": "Recover slope and intercept from a sparse table or graph."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u6-quiz",
+        "performance_task_id": "mth1w-u6-linear-model-comparison",
+        "expectation_ids": ["C3.1", "C3.2", "C3.3", "C4.1", "C4.2", "C4.3", "C4.4"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u7",
+      "sequence": 7,
+      "title": "Data analysis and mathematical modelling",
+      "estimated_hours": 17,
+      "overall_expectations": ["D1", "D2"],
+      "specific_expectations": ["D1.1", "D1.2", "D1.3", "D2.1", "D2.2", "D2.3", "D2.4", "D2.5"],
+      "lessons": [
+        {
+          "id": "mth1w-u7-l1",
+          "sequence": 1,
+          "title": "Data at scale: value, risk, and consequence",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D1.1"],
+          "outcome": "Analyse a current large-data context and explain consequences of collection, storage, representation, and use for affected people.",
+          "prerequisites": ["identify a data source and variable", "distinguish benefit, risk, and evidence"],
+          "method_routes": ["data-lifecycle impact map", "stakeholder and scenario comparison"],
+          "representations": ["collection-to-use flow diagram", "benefit-risk-evidence table"],
+          "practice": {
+            "guided": "Trace sample data through its lifecycle and identify affected groups.",
+            "independent": "Evaluate one current context with sourced benefits, risks, and mitigations.",
+            "retrieval": "Explain why a technically accurate graph can still cause harm or mislead."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l2",
+          "sequence": 2,
+          "title": "One-variable data and box plots",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D1.2"],
+          "outcome": "Represent and analyse one-variable data using appropriate summaries, quartiles, and box plots while connecting claims to the distribution.",
+          "prerequisites": ["order numerical data", "calculate centre and spread measures"],
+          "method_routes": ["ordered-list and quartile construction", "technology-supported distribution comparison"],
+          "representations": ["dot plot or histogram", "five-number summary and box plot"],
+          "practice": {
+            "guided": "Construct and annotate a box plot from an ordered data set.",
+            "independent": "Compare real distributions and write claims supported by centre and spread.",
+            "retrieval": "Estimate quartile position and detect unsupported claims from a box plot."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l3",
+          "sequence": 3,
+          "title": "Two-variable data, regression, and prediction",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D1.3"],
+          "outcome": "Create a scatter plot, compare plausible regression models with technology, and make cautious predictions that respect correlation and range limits.",
+          "prerequisites": ["plot coordinate pairs", "describe direction and strength informally"],
+          "method_routes": ["visual trend and residual reasoning", "technology model comparison"],
+          "representations": ["scatter plot with fitted model", "model-comparison and residual table"],
+          "practice": {
+            "guided": "Describe association and compare candidate models without claiming causation.",
+            "independent": "Fit and evaluate a model for a real two-variable data set and bound a prediction.",
+            "retrieval": "Identify interpolation, extrapolation, outliers, and causal overclaiming."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l4",
+          "sequence": 4,
+          "title": "Why mathematical models matter",
+          "estimated_minutes": 75,
+          "primary_expectations": ["D2.1"],
+          "outcome": "Explain how mathematical models simplify situations, support decisions, and remain limited by assumptions and evidence.",
+          "prerequisites": ["interpret a graph or equation in context", "distinguish a model from the real system"],
+          "method_routes": ["decision-scenario comparison", "model-input-output-boundary analysis"],
+          "representations": ["system-to-model map", "decision table with assumptions"],
+          "practice": {
+            "guided": "Identify what a sample model includes, excludes, and helps decide.",
+            "independent": "Critique the value and limits of a model used in a public decision.",
+            "retrieval": "State one useful purpose and one limitation of a remembered model."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l5",
+          "sequence": 5,
+          "title": "Ask a modelable question",
+          "estimated_minutes": 75,
+          "primary_expectations": ["D2.2"],
+          "outcome": "Turn an area of interest into a focused question and identify the data and contextual information needed to investigate it.",
+          "prerequisites": ["identify variables", "distinguish a broad topic from an answerable question"],
+          "method_routes": ["question-funnel refinement", "decision-backward information mapping"],
+          "representations": ["question-variable-data map", "scope and feasibility checklist"],
+          "practice": {
+            "guided": "Revise broad or biased prompts into feasible model questions.",
+            "independent": "Propose a question with named variables, population, timeframe, and needed information.",
+            "retrieval": "Diagnose what information is missing from a new model question."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l6",
+          "sequence": 6,
+          "title": "Plan and collect fit-for-purpose data",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D2.3"],
+          "outcome": "Design and carry out a safe, ethical data plan with appropriate sources, assumptions, changing factors, and controlled factors.",
+          "prerequisites": ["state a focused model question", "recognize basic sampling and measurement bias"],
+          "method_routes": ["prospective collection protocol", "secondary-source quality audit"],
+          "representations": ["data plan table", "assumption and variable map"],
+          "practice": {
+            "guided": "Compare plans for validity, feasibility, privacy, and measurement consistency.",
+            "independent": "Carry out an approved low-risk plan or use a reviewed public data set.",
+            "retrieval": "Identify a hidden assumption and predict its effect on a result."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l7",
+          "sequence": 7,
+          "title": "Build and analyse a model",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D2.4"],
+          "outcome": "Choose displays and analyses that fit the data and context, then construct a model that addresses the original question and assumptions.",
+          "prerequisites": ["clean and summarize data", "select from one- and two-variable representations"],
+          "method_routes": ["representation-first exploratory analysis", "question-first candidate model comparison"],
+          "representations": ["appropriate data display", "model with labelled variables and assumptions"],
+          "practice": {
+            "guided": "Compare displays and models for the same data and justify a selection.",
+            "independent": "Build and test a model linked to the approved question.",
+            "retrieval": "Explain why an attractive display may be a poor fit for a question."
+          },
+          "status": "machine_verified_draft"
+        },
+        {
+          "id": "mth1w-u7-l8",
+          "sequence": 8,
+          "title": "Report fit, limits, and predictions",
+          "estimated_minutes": 90,
+          "primary_expectations": ["D2.5"],
+          "outcome": "Report what a model says, how well it fits, where it is limited, and which predictions are justified by the evidence.",
+          "prerequisites": ["interpret a completed model", "distinguish evidence from conclusion"],
+          "method_routes": ["claim-evidence-limitation report", "prediction stress test across scenarios"],
+          "representations": ["annotated model output", "fit-limit-prediction table"],
+          "practice": {
+            "guided": "Revise overconfident model claims to match the available evidence.",
+            "independent": "Present an answer, fit judgment, limitations, and bounded predictions for the modelling project.",
+            "retrieval": "Name the most consequential assumption and how it could change the conclusion."
+          },
+          "status": "machine_verified_draft"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u7-quiz",
+        "performance_task_id": "mth1w-u7-modelling-investigation",
+        "expectation_ids": ["D1.1", "D1.2", "D1.3", "D2.1", "D2.2", "D2.3", "D2.4", "D2.5"],
+        "status": "machine_verified_draft"
+      }
+    },
+    {
+      "id": "mth1w-u8",
+      "sequence": 8,
+      "title": "Geometry and measurement",
+      "estimated_hours": 14,
+      "overall_expectations": ["E1"],
+      "specific_expectations": ["E1.1", "E1.2", "E1.3", "E1.4", "E1.5", "E1.6"],
+      "lessons": [
+        {
+          "id": "mth1w-u8-l1",
+          "sequence": 1,
+          "title": "Geometry and measurement across cultures and careers",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.1"],
+          "outcome": "Investigate a geometric idea or measurement system in a specific culture or community and connect it responsibly to careers or other disciplines.",
+          "prerequisites": ["measure basic length and angle", "evaluate source credibility"],
+          "method_routes": ["artifact-and-evidence case study", "compare measurement systems in use"],
+          "representations": ["annotated geometric artifact or diagram", "timeline and application map"],
+          "practice": {
+            "guided": "Separate mathematical evidence from cultural generalization in sample accounts.",
+            "independent": "Create a sourced story that demonstrates the mathematics and a present connection.",
+            "retrieval": "Explain the mathematical relationship without reducing it to a culture label."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u8-l2",
+          "sequence": 2,
+          "title": "Design with lines, circles, and triangles",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.2"],
+          "outcome": "Create and analyse a design using valid line, circle, triangle, and angle relationships with manual or digital tools.",
+          "prerequisites": ["measure and construct angles", "identify common triangle and circle properties"],
+          "method_routes": ["constraint-first compass-and-straightedge construction", "dynamic-geometry conjecture and test"],
+          "representations": ["labelled construction", "property-and-justification table"],
+          "practice": {
+            "guided": "Complete partial constructions and justify relationships.",
+            "independent": "Create a design satisfying stated geometric constraints and analyse it.",
+            "retrieval": "Identify which relationship guarantees a required design feature."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u8-l3",
+          "sequence": 3,
+          "title": "Measure and convert across systems",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.3"],
+          "outcome": "Solve measurement problems within and between systems, including culturally or professionally situated units, with clear conversion assumptions.",
+          "prerequisites": ["use ratio and proportion", "attach units to calculations"],
+          "method_routes": ["unit-rate conversion chain", "proportion and benchmark comparison"],
+          "representations": ["conversion map", "double number line or ratio table"],
+          "practice": {
+            "guided": "Convert with dimensional labels and estimate before calculating.",
+            "independent": "Solve multi-step measurement problems and state rounding limits.",
+            "retrieval": "Detect and correct unit cancellation or scale errors."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u8-l4",
+          "sequence": 4,
+          "title": "Scale dimensions and predict measurement change",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.4"],
+          "outcome": "Predict and verify how changes in one or more dimensions affect perimeter, circumference, area, surface area, and volume.",
+          "prerequisites": ["calculate common geometric measures", "use powers and proportional reasoning"],
+          "method_routes": ["scale-factor pattern table", "formula substitution and exponent analysis"],
+          "representations": ["before-and-after dimension diagram", "measurement-ratio table"],
+          "practice": {
+            "guided": "Change one dimension at a time and record the measurement effects.",
+            "independent": "Solve design-change problems and justify linear, square, or cubic effects.",
+            "retrieval": "Predict the effect of a scale factor before using a formula."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u8-l5",
+          "sequence": 5,
+          "title": "Right triangles in composite designs",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.5"],
+          "outcome": "Use the right-triangle side relationship to solve real design and measurement problems, including composite shapes, and verify feasibility.",
+          "prerequisites": ["square and square-root numbers", "identify right triangles within a diagram"],
+          "method_routes": ["decompose-and-label geometric diagram", "coordinate or distance-based calculation"],
+          "representations": ["annotated composite diagram", "symbolic side-length equation"],
+          "practice": {
+            "guided": "Identify the relevant right triangle and unknown side before calculating.",
+            "independent": "Solve multi-shape accessibility or construction problems with units and checks.",
+            "retrieval": "Determine whether the hypotenuse or a leg is unknown and estimate its size."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u8-l6",
+          "sequence": 6,
+          "title": "Connect prism-pyramid and cylinder-cone volume",
+          "estimated_minutes": 90,
+          "primary_expectations": ["E1.6"],
+          "outcome": "Use and explain the volume relationships between matched prisms and pyramids and between matched cylinders and cones across units.",
+          "prerequisites": ["calculate base area and volume", "use fractions and unit conversions"],
+          "method_routes": ["same-base-and-height comparison experiment", "formula relationship and scaling analysis"],
+          "representations": ["matched solid diagrams", "volume table and symbolic formulas"],
+          "practice": {
+            "guided": "Compare matched solids and derive the one-third relationship.",
+            "independent": "Solve multi-unit volume and capacity problems with missing dimensions.",
+            "retrieval": "Choose the correct relationship from a diagram and justify it."
+          },
+          "status": "specified_not_implemented"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u8-quiz",
+        "performance_task_id": "mth1w-u8-accessible-design",
+        "expectation_ids": ["E1.1", "E1.2", "E1.3", "E1.4", "E1.5", "E1.6"],
+        "status": "specified_not_implemented"
+      }
+    },
+    {
+      "id": "mth1w-u9",
+      "sequence": 9,
+      "title": "Financial literacy and decisions",
+      "estimated_hours": 8,
+      "overall_expectations": ["F1"],
+      "specific_expectations": ["F1.1", "F1.2", "F1.3", "F1.4"],
+      "lessons": [
+        {
+          "id": "mth1w-u9-l1",
+          "sequence": 1,
+          "title": "Learn from financial events and context",
+          "estimated_minutes": 75,
+          "primary_expectations": ["F1.1"],
+          "outcome": "Analyse a past or current financial situation and use relevant mathematics and context to explain better-informed decisions without prescribing personal financial action.",
+          "prerequisites": ["interpret percent, rate, and trend", "distinguish fact, assumption, and value judgment"],
+          "method_routes": ["event-factor-impact map", "compare decisions under changed assumptions"],
+          "representations": ["timeline with financial indicators", "decision-evidence table"],
+          "practice": {
+            "guided": "Identify mathematical and contextual factors in a sample financial event.",
+            "independent": "Write a sourced case analysis with more than one possible decision and stated uncertainty.",
+            "retrieval": "Explain how one contextual factor can change the meaning of the same calculation."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u9-l2",
+          "sequence": 2,
+          "title": "Appreciation and depreciation over time",
+          "estimated_minutes": 90,
+          "primary_expectations": ["F1.2"],
+          "outcome": "Interpret and compare graphs of appreciating and depreciating values and answer questions within the supported time range.",
+          "prerequisites": ["read graph axes and scales", "compare linear and non-linear trends"],
+          "method_routes": ["graph-feature and interval analysis", "table-to-graph change comparison"],
+          "representations": ["value-over-time graph", "time-value-change table"],
+          "practice": {
+            "guided": "Read intervals, turning points, and rates without assuming a trend continues forever.",
+            "independent": "Compare asset scenarios and answer evidence-bounded questions.",
+            "retrieval": "Distinguish value, change in value, and percent change from a graph."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u9-l3",
+          "sequence": 3,
+          "title": "Compare borrowing scenarios and total cost",
+          "estimated_minutes": 90,
+          "primary_expectations": ["F1.3"],
+          "outcome": "Use appropriate tools to compare how rate, time, interest method, and down payment affect total borrowing cost, while stating assumptions and fees.",
+          "prerequisites": ["calculate percentages", "use powers and spreadsheets or calculators"],
+          "method_routes": ["scenario table and incremental comparison", "formula or spreadsheet parameter model"],
+          "representations": ["payment and total-cost table", "cost-over-time graph"],
+          "practice": {
+            "guided": "Change one borrowing variable at a time and explain the total-cost effect.",
+            "independent": "Compare multiple disclosed scenarios without recommending a specific financial product.",
+            "retrieval": "Predict which variable change increases total cost and then verify."
+          },
+          "status": "specified_not_implemented"
+        },
+        {
+          "id": "mth1w-u9-l4",
+          "sequence": 4,
+          "title": "Revise a budget when circumstances change",
+          "estimated_minutes": 90,
+          "primary_expectations": ["F1.4"],
+          "outcome": "Modify a budget after a change in income, cost, priority, or timing and justify trade-offs while preserving arithmetic accuracy.",
+          "prerequisites": ["add and subtract decimals", "interpret categories, totals, and balances"],
+          "method_routes": ["constraint-first category adjustment", "scenario comparison and sensitivity analysis"],
+          "representations": ["budget table", "category chart with before-and-after totals"],
+          "practice": {
+            "guided": "Repair an unbalanced budget after one stated change.",
+            "independent": "Create and justify two valid revisions for the same scenario.",
+            "retrieval": "Find an arithmetic or assumption error in a revised budget."
+          },
+          "status": "specified_not_implemented"
+        }
+      ],
+      "assessment": {
+        "quiz_id": "mth1w-u9-quiz",
+        "performance_task_id": "mth1w-u9-financial-scenario",
+        "expectation_ids": ["F1.1", "F1.2", "F1.3", "F1.4"],
+        "status": "specified_not_implemented"
+      }
+    }
+  ],
+  "cumulative_assessment_plan": {
+    "diagnostic": {
+      "id": "mth1w-course-diagnostic",
+      "grading_use": "planning_only_not_a_grade",
+      "status": "specified_not_implemented"
+    },
+    "checkpoints": [
+      {
+        "id": "mth1w-checkpoint-1",
+        "after_unit": "mth1w-u3",
+        "expectation_ids": ["B1.1", "B1.2", "B1.3", "B2.1", "B2.2", "B3.1", "B3.2", "B3.3", "B3.4", "B3.5"],
+        "status": "specified_not_implemented"
+      },
+      {
+        "id": "mth1w-checkpoint-2",
+        "after_unit": "mth1w-u6",
+        "expectation_ids": ["C1.1", "C1.2", "C1.3", "C1.4", "C1.5", "C2.1", "C2.2", "C2.3", "C3.1", "C3.2", "C3.3", "C4.1", "C4.2", "C4.3", "C4.4"],
+        "status": "specified_not_implemented"
+      }
+    ],
+    "final_written_assessment": {
+      "id": "mth1w-final-written",
+      "expectation_scope": "all_specific_expectations",
+      "status": "specified_not_implemented"
+    },
+    "final_performance_task": {
+      "id": "mth1w-final-modelling-and-decision-task",
+      "expectation_scope": "cross_strand_sample_with_coursewide_processes",
+      "status": "specified_not_implemented"
+    },
+    "correction_and_reassessment": {
+      "required": true,
+      "policy_status": "specified_not_implemented"
+    }
+  },
+  "accessibility_and_offline_plan": {
+    "requirements": [
+      "keyboard and switch-compatible navigation",
+      "screen-reader-readable mathematical text and table alternatives",
+      "text descriptions for meaningful diagrams and graphs",
+      "high-contrast and non-colour-only distinctions",
+      "adjustable text without loss of content or function",
+      "printable lesson, practice, and assessment packets",
+      "downloaded course operation without tutor or network",
+      "equivalent response routes that preserve the mathematical outcome"
+    ],
+    "status": "specified_not_implemented"
+  }
+}

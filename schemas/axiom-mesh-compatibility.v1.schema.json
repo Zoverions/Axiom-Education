@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axiom.local/schemas/axiom-mesh-compatibility.v1.schema.json",
+  "title": "Axiom Education to AXIOM-MESH compatibility profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_id",
+    "profile_version",
+    "verified_at",
+    "claim_status",
+    "mesh_baseline",
+    "gateway_intents_submit_seam",
+    "required_runtime_contracts",
+    "readiness_only_contracts",
+    "observed_upcoming_drafts",
+    "feature_flags",
+    "invariants"
+  ],
+  "properties": {
+    "schema": {"const": "axiom-education-mesh-compatibility.v1"},
+    "profile_id": {"type": "string", "minLength": 1, "maxLength": 160},
+    "profile_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "verified_at": {"type": "string", "format": "date"},
+    "claim_status": {"const": "contract-compatible-not-production-validated"},
+    "mesh_baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "branch",
+        "head_sha",
+        "head_role",
+        "kernel_version",
+        "authority_path",
+        "integration_mode",
+        "gateway_contract_source_sha",
+        "gateway_contract_canonical_sha256",
+        "gateway_compatibility_mode"
+      ],
+      "properties": {
+        "repository": {"const": "Zoverions/AXIOM-MESH"},
+        "branch": {"const": "main"},
+        "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "head_role": {"const": "observed-provenance-not-runtime-binding"},
+        "kernel_version": {"type": "string", "minLength": 1},
+        "authority_path": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "Gateway"},
+            {"const": "Hypervisor"},
+            {"const": "Sandbox"},
+            {"const": "Grid"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "integration_mode": {"const": "released-artifact-pins-no-submodule"},
+        "gateway_contract_source_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "gateway_contract_canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "gateway_compatibility_mode": {
+          "const": "semantic-intents-submit-seam-with-additive-route-tolerance"
+        }
+      }
+    },
+    "gateway_intents_submit_seam": {"$ref": "#/$defs/gatewayIntentsSubmitSeam"},
+    "required_runtime_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/contractPin"}
+    },
+    "readiness_only_contracts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/contractPin"}
+    },
+    "observed_upcoming_drafts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["feature_id", "pull_request", "head_sha", "status", "runtime_adoption_allowed"],
+        "properties": {
+          "feature_id": {"type": "string", "minLength": 1},
+          "pull_request": {"type": "integer", "minimum": 1},
+          "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "merged_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "status": {"enum": ["draft-not-production", "merged-readiness-only-not-adopted"]},
+          "runtime_adoption_allowed": {"const": false},
+          "contract_sha256": {
+            "type": "object",
+            "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"status": {"const": "merged-readiness-only-not-adopted"}},
+              "required": ["status"]
+            },
+            "then": {"required": ["merged_sha"]}
+          },
+          {
+            "if": {
+              "properties": {"status": {"const": "draft-not-production"}},
+              "required": ["status"]
+            },
+            "then": {"not": {"required": ["merged_sha"]}}
+          }
+        ]
+      }
+    },
+    "feature_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "native_learner_self_write",
+        "native_learner_self_read",
+        "delegated_human_authority",
+        "axiom_host_profile",
+        "assurance_graph",
+        "provider_observation",
+        "checkout_freshness",
+        "local_trust_activation"
+      ],
+      "properties": {
+        "native_learner_self_write": {"const": true},
+        "native_learner_self_read": {"const": true},
+        "delegated_human_authority": {"const": false},
+        "axiom_host_profile": {"const": false},
+        "assurance_graph": {"const": false},
+        "provider_observation": {"const": false},
+        "checkout_freshness": {"const": false},
+        "local_trust_activation": {"const": false}
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gateway_is_only_network_authority_entry",
+        "direct_internal_service_access_allowed",
+        "contract_presence_grants_authority",
+        "installation_grants_learner_data_access",
+        "drafts_may_promote_themselves",
+        "application_owns_kernel_authority"
+      ],
+      "properties": {
+        "gateway_is_only_network_authority_entry": {"const": true},
+        "direct_internal_service_access_allowed": {"const": false},
+        "contract_presence_grants_authority": {"const": false},
+        "installation_grants_learner_data_access": {"const": false},
+        "drafts_may_promote_themselves": {"const": false},
+        "application_owns_kernel_authority": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "contractPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256", "source_sha", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "status": {"enum": ["required-runtime-pin", "documentation-readiness-only-no-runtime-authority"]}
+      }
+    },
+    "gatewayIntentsSubmitSeam": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "sha256", "base_path", "boundary", "limits", "error_contract", "route"],
+      "properties": {
+        "schema": {"const": "axiom-gateway-intents-submit-seam.v1"},
+        "sha256": {"const": "f595c1274eb98b7bcea33d72756120c491049e056cd0c9b3dd8dfd2d63d34f01"},
+        "base_path": {"const": "/v1"},
+        "boundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["request_target", "authenticated_transport", "direct_internal_service_access", "token_persistence"],
+          "properties": {
+            "request_target": {"const": "same-origin-relative-path"},
+            "authenticated_transport": {"const": "permission-restricted-gateway-ingress"},
+            "direct_internal_service_access": {"const": false},
+            "token_persistence": {"const": "caller-managed-memory-only"}
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["default_timeout_ms", "maximum_timeout_ms", "maximum_request_bytes", "maximum_response_bytes", "idempotency_key_minimum_length", "idempotency_key_maximum_length"],
+          "properties": {
+            "default_timeout_ms": {"const": 10000},
+            "maximum_timeout_ms": {"const": 30000},
+            "maximum_request_bytes": {"const": 1048576},
+            "maximum_response_bytes": {"const": 2097152},
+            "idempotency_key_minimum_length": {"const": 16},
+            "idempotency_key_maximum_length": {"const": 160}
+          }
+        },
+        "error_contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema", "trace_header", "unknown_code_behavior"],
+          "properties": {
+            "schema": {"const": "axiom-gateway-error.v1"},
+            "trace_header": {"const": "x-trace-id"},
+            "unknown_code_behavior": {"const": "preserve-and-present-generic-failure"}
+          }
+        },
+        "route": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "method", "path", "access", "idempotency", "path_parameters", "query_parameters", "request_schema", "response_schema", "required_response_fields", "response_media_type"],
+          "properties": {
+            "id": {"const": "intents.submit"},
+            "method": {"const": "POST"},
+            "path": {"const": "/v1/intents"},
+            "access": {"const": "authenticated"},
+            "idempotency": {"const": "required"},
+            "path_parameters": {"const": []},
+            "query_parameters": {"const": []},
+            "request_schema": {"const": "axiom-intent-request.v1"},
+            "response_schema": {"const": "axiom-intent-result.v1"},
+            "required_response_fields": {"const": ["intent_id", "trace_id", "status", "evidence"]},
+            "response_media_type": {"const": "application/json"}
+          }
+        }
+      }
+    }
+  }
+}

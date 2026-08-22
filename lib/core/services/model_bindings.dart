@@ -44,10 +44,7 @@ class Phi3MiniModel {
         throw const FormatException('Local tutor model artifact is too large.');
       }
       _session = OrtSession.fromBuffer(
-        asset.buffer.asUint8List(
-          asset.offsetInBytes,
-          asset.lengthInBytes,
-        ),
+        asset.buffer.asUint8List(asset.offsetInBytes, asset.lengthInBytes),
         sessionOptions,
       );
       _isInitialized = true;
@@ -82,7 +79,8 @@ class Phi3MiniModel {
 
     throw const ModelUnavailableException(
       capability: 'tutor.local-inference',
-      message: 'Local tutor decoding is disabled until a versioned tokenizer, '
+      message:
+          'Local tutor decoding is disabled until a versioned tokenizer, '
           'bounded autoregressive decoder, and AXIOM provider contract exist.',
     );
   }

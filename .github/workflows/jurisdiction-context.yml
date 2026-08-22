@@ -1,0 +1,134 @@
+name: Jurisdiction and Curriculum Foundation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - architecture/jurisdiction-context-2026-08-10
+      - feature/ontario-elementary-discovery-gates-20260811
+      - feature/ontario-elementary-source-lock-20260811
+      - feature/curriculum-standard-record-v2-20260811
+      - feature/ontario-elementary-remote-source-capture-20260811
+      - feature/ontario-elementary-readiness-monitoring-20260811
+    paths:
+      - 'contracts/axiom-education-jurisdiction.v1.json'
+      - 'contracts/axiom-education-experience-provider.v1.json'
+      - 'curriculum/ontario-elementary/**'
+      - 'schemas/curriculum-source-lock.v1.schema.json'
+      - 'schemas/curriculum-standard-record.v2.schema.json'
+      - 'requirements-dev.txt'
+      - 'tools/jurisdiction_context.py'
+      - 'tools/check_ontario_elementary_discovery.py'
+      - 'tools/curriculum_source_discovery.py'
+      - 'tools/curriculum_source_additions.py'
+      - 'tools/curriculum_source_addition_amendments.py'
+      - 'tools/check_conditional_curriculum_family_evidence.py'
+      - 'tools/curriculum_source_lock.py'
+      - 'tools/curriculum_standard_record.py'
+      - 'tools/remote_curriculum_source_capture.py'
+      - 'tools/check_curriculum_source_monitoring.py'
+      - 'tools/probe_curriculum_source_stability.py'
+      - 'tools/ontario_elementary_readiness.py'
+      - 'tools/ontario_hpe_grade1_c2_proof.py'
+      - 'tools/json_schema_validation.py'
+      - 'tests/test_jurisdiction_context.py'
+      - 'tests/test_ontario_elementary_discovery.py'
+      - 'tests/test_curriculum_source_discovery.py'
+      - 'tests/test_curriculum_source_additions.py'
+      - 'tests/test_curriculum_source_addition_amendments.py'
+      - 'tests/test_conditional_curriculum_family_evidence.py'
+      - 'tests/test_curriculum_source_lock.py'
+      - 'tests/test_curriculum_standard_record.py'
+      - 'tests/test_remote_curriculum_source_capture.py'
+      - 'tests/test_curriculum_source_monitoring.py'
+      - 'tests/test_curriculum_source_stability.py'
+      - 'tests/test_ontario_elementary_readiness.py'
+      - 'tests/test_ontario_hpe_grade1_c2_proof.py'
+      - 'docs/rebuild/JURISDICTION-AND-STANDARDS-RESOLUTION.md'
+      - 'docs/rebuild/CURRICULUM-CAPSULE-FACTORY.md'
+      - 'docs/rebuild/LIFELONG-LEARNING-AND-EXPERIENCE-PROVIDERS.md'
+      - 'docs/rebuild/ONTARIO-ELEMENTARY-READINESS.md'
+      - '.github/workflows/jurisdiction-context.yml'
+      - '.github/workflows/ontario-elementary-source-capture.yml'
+      - '.github/workflows/ontario-elementary-source-drift.yml'
+      - '.github/workflows/ontario-elementary-source-stability.yml'
+      - '.github/workflows/ontario-elementary-pending-source-capture.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned Python verification dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+      - name: Validate architecture JSON
+        run: |
+          python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
+          python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-discovery-amendments.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-discovery-additions.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-discovery-addition-amendments.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-capture-targets.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/source-monitoring.v1.json >/dev/null
+          python -m json.tool curriculum/ontario-elementary/slices/hpe-grade1-c2-proof.v1.json >/dev/null
+          python -m json.tool schemas/curriculum-source-lock.v1.schema.json >/dev/null
+          python -m json.tool schemas/curriculum-standard-record.v2.schema.json >/dev/null
+      - name: Validate Ontario Elementary discovery accounting
+        run: python tools/check_ontario_elementary_discovery.py
+      - name: Validate immutable discovery plus append-only amendments
+        run: python -m unittest tests.test_curriculum_source_discovery -v
+      - name: Validate append-only new source identities
+        run: |
+          python tools/curriculum_source_additions.py
+          python -m unittest tests.test_curriculum_source_additions -v
+      - name: Validate amendments to appended source identities
+        run: |
+          python tools/curriculum_source_addition_amendments.py
+          python -m unittest tests.test_curriculum_source_addition_amendments -v
+      - name: Validate atomic conditional curriculum family evidence
+        run: |
+          python tools/check_conditional_curriculum_family_evidence.py
+          python -m unittest tests.test_conditional_curriculum_family_evidence -v
+      - name: Validate bounded remote capture and monitoring policy without network access
+        run: |
+          python tools/remote_curriculum_source_capture.py validate-targets
+          python tools/check_curriculum_source_monitoring.py
+      - name: Validate real C1 source-lock directory
+        run: |
+          python tools/curriculum_source_lock.py verify-directory \
+            --directory curriculum/ontario-elementary/source-locks
+      - name: Validate C2 normalized-record promotion boundary
+        run: |
+          python tools/curriculum_standard_record.py verify-directory \
+            --directory curriculum/ontario-elementary/records-v2 \
+            --lock-dir curriculum/ontario-elementary/source-locks \
+            --allow-empty
+      - name: Validate derived readiness without rewriting provenance
+        run: python tools/ontario_elementary_readiness.py verify
+      - name: Build twice and verify the C1-bound Grade 1 HPE C2 fixture
+        run: python tools/ontario_hpe_grade1_c2_proof.py verify
+      - name: Run jurisdiction, discovery, source, C2, monitoring, and readiness tests
+        run: |
+          python -m unittest tests.test_jurisdiction_context -v
+          python -m unittest tests.test_ontario_elementary_discovery -v
+          python -m unittest tests.test_curriculum_source_discovery -v
+          python -m unittest tests.test_curriculum_source_additions -v
+          python -m unittest tests.test_curriculum_source_addition_amendments -v
+          python -m unittest tests.test_conditional_curriculum_family_evidence -v
+          python -m unittest tests.test_curriculum_source_lock -v
+          python -m unittest tests.test_curriculum_standard_record -v
+          python -m unittest tests.test_remote_curriculum_source_capture -v
+          python -m unittest tests.test_curriculum_source_monitoring -v
+          python -m unittest tests.test_curriculum_source_stability -v
+          python -m unittest tests.test_ontario_elementary_readiness -v
+          python -m unittest tests.test_ontario_hpe_grade1_c2_proof -v
