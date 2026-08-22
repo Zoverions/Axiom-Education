@@ -21,6 +21,7 @@
     "institution_approved_implies_jurisdiction_approval": false,
     "jurisdiction_approved_implies_accreditation": false,
     "lower_assurance_level_may_claim_accreditation": false,
+    "source_aligned_demonstration_may_claim_ontario_credit": false,
     "source_evidence_required_for_alignment_claim": true,
     "review_evidence_required_for_human_or_higher_review_claim": true,
     "assurance_scope_must_be_explicit": true,
