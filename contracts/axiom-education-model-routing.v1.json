@@ -43,9 +43,13 @@
     "diagnosis_sent_by_default": false,
     "only_explicitly_granted_context_scopes_may_be_materialized": true,
     "remote_egress_requires_explicit_policy_allowance": true,
-    "context_grant_is_task_and_time_bound": true
+    "context_grant_is_task_and_time_bound": true,
+    "context_grant_is_exact_learner_subject_bound": true,
+    "context_grant_may_be_reused_for_another_learner": false,
+    "context_grant_may_be_reused_for_an_unlisted_task_class": false
   },
   "placement_filters": [
+    "exact-learner-subject-and-task-grant",
     "required-modality-and-structured-output-capability",
     "privacy-and-egress-policy",
     "jurisdiction-and-retention-policy",
@@ -73,6 +77,7 @@
     "payer_or_budget_source_becomes_pedagogical_authority": false
   },
   "usage_receipt": {
+    "records_exact_learner_subject": true,
     "records_provider_model_runtime_and_compute_node": true,
     "records_input_output_units": true,
     "records_actual_cost_when_available": true,
