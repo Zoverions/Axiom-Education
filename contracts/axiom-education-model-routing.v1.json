@@ -1,0 +1,113 @@
+{
+  "schema": "axiom-education-model-routing.v1",
+  "contract_id": "axiom.education.model-routing",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Route bounded education inference tasks through the AXIOM personal compute fabric without granting a model authority over learner records, curriculum truth, policy, identity, credentials, grades, or external effects.",
+  "mesh_dependency": {
+    "personal_compute_fabric": true,
+    "model_and_runtime_are_untrusted": true,
+    "model_output_is_data_not_authority": true,
+    "gateway_authority_path_required_for_privileged_effects": true,
+    "education_may_not_bypass_mesh_placement_or_policy": true
+  },
+  "task_classes": [
+    "explain-concept",
+    "socratic-tutor",
+    "generate-practice",
+    "evaluate-practice-draft",
+    "storyboard",
+    "game-or-simulation-plan",
+    "resource-summary",
+    "translation",
+    "accessibility-transform",
+    "collaboration-assist"
+  ],
+  "context_scopes": [
+    "target-competency",
+    "current-learner-input",
+    "assignment-context",
+    "resource-context",
+    "recent-pedagogical-feedback",
+    "misconception-summary",
+    "accessibility-requirements",
+    "language-preference",
+    "story-character-profile"
+  ],
+  "context_invariants": {
+    "full_longitudinal_learner_profile_sent_by_default": false,
+    "raw_social_history_sent_by_default": false,
+    "guardian_identity_sent_by_default": false,
+    "institution_identity_sent_by_default": false,
+    "diagnosis_sent_by_default": false,
+    "only_explicitly_granted_context_scopes_may_be_materialized": true,
+    "remote_egress_requires_explicit_policy_allowance": true,
+    "context_grant_is_task_and-time-bound": true
+  },
+  "placement_filters": [
+    "required-modality-and-structured-output-capability",
+    "privacy-and-egress-policy",
+    "jurisdiction-and-retention-policy",
+    "content-and-age-readiness-policy",
+    "model-admission-and-health",
+    "task-budget",
+    "deadline"
+  ],
+  "ranking_after_filters": [
+    "task-specific-evaluation-quality",
+    "reliability",
+    "latency",
+    "monetary-cost",
+    "energy"
+  ],
+  "usage_budgets": {
+    "max_calls_supported": true,
+    "max_input_units_supported": true,
+    "max_output_units_supported": true,
+    "max_cost_micros_supported": true,
+    "max_wall_time_supported": true,
+    "fallback_cannot_exceed_budget": true,
+    "commercial_margin_may_expand_data_scope": false
+  },
+  "usage_receipt": {
+    "records_provider_model_runtime_and_compute_node": true,
+    "records_input_output_units": true,
+    "records_actual_cost_when_available": true,
+    "records_latency_and_fallback": true,
+    "records_egress_and_retention_class": true,
+    "records_raw_prompt_by_default": false,
+    "records_raw_learner_response_by_default": false,
+    "operational_receipt_is_not_learner_mastery_evidence": true
+  },
+  "education_authority_boundary": {
+    "model_may_choose_curriculum_truth": false,
+    "model_may_create_grade_or_credit": false,
+    "model_may_mint_credential": false,
+    "model_may_change_guardian_or_school_authority": false,
+    "model_may_expand_its_own_context_scope": false,
+    "model_may_raise_its_own_budget": false,
+    "model_may_publish_or_message_without_separate_authority": false,
+    "model_generated_assessment_may_be_used_as_unverified_practice": true,
+    "consequential_assessment_requires_separate_evidence_and_verification": true
+  },
+  "fallback": {
+    "silent_provider_substitution_allowed": false,
+    "fallback_may_cross_egress_boundary_without_permission": false,
+    "fallback_reason_must_be_receipted": true,
+    "no_eligible_model_means_fail_closed_or_use_non_model_learning_path": true
+  },
+  "learner_and_family_visibility": {
+    "provider_and_model_can_be_disclosed": true,
+    "data_scope_can_be_disclosed": true,
+    "cost_and_usage_can_be_disclosed": true,
+    "retention_and_remote_egress_can_be_disclosed": true,
+    "visibility_does_not_imply_transcript_access": true
+  },
+  "non_claims": [
+    "A model recommendation is not curriculum authority, a grade, mastery evidence, accreditation, or a credential.",
+    "A cheaper or more engaging model is not eligible when privacy, safety, jurisdiction, retention, or learner policy excludes it.",
+    "This contract does not activate a production model provider or imply that a named provider is approved for minor data.",
+    "Usage accounting does not authorize school staff, guardians, providers, or administrators to inspect raw learner prompts."
+  ]
+}
