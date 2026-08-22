@@ -7,18 +7,9 @@ enum ContentPolicySource {
   safeguarding,
 }
 
-enum ContentPolicyEffect {
-  allow,
-  defer,
-  prioritize,
-  deny,
-}
+enum ContentPolicyEffect { allow, defer, prioritize, deny }
 
-enum ContentPolicyStrength {
-  advisory,
-  required,
-  nonWaivable,
-}
+enum ContentPolicyStrength { advisory, required, nonWaivable }
 
 enum ContentReadinessStatus {
   allowed,
@@ -78,7 +69,8 @@ class ContentPolicyDirective {
   }) {
     final competencyMatch =
         competencyIds.isEmpty || competencyIds.contains(competencyId);
-    final tagMatch = contentTags.isEmpty || contentTags.any(targetContentTags.contains);
+    final tagMatch =
+        contentTags.isEmpty || contentTags.any(targetContentTags.contains);
     return competencyMatch && tagMatch;
   }
 }

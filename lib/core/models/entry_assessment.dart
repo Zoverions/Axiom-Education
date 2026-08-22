@@ -55,10 +55,7 @@ class EntryAssessmentPlan {
   final List<EntryAssessmentProbe> probes;
   final int probeBudget;
 
-  const EntryAssessmentPlan({
-    required this.probes,
-    required this.probeBudget,
-  });
+  const EntryAssessmentPlan({required this.probes, required this.probeBudget});
 }
 
 class EntryAssessmentException implements Exception {
@@ -87,18 +84,19 @@ class EntryAssessmentSelector {
     }
 
     final requested = competencyIds.toSet();
-    final compatible = candidates
-        .where(
-          (probe) =>
-              requested.contains(probe.competencyId) &&
-              environment.supports(probe),
-        )
-        .toList(growable: false)
-      ..sort((a, b) {
-        final byCost = a.assumptionCost.compareTo(b.assumptionCost);
-        if (byCost != 0) return byCost;
-        return a.probeId.compareTo(b.probeId);
-      });
+    final compatible =
+        candidates
+            .where(
+              (probe) =>
+                  requested.contains(probe.competencyId) &&
+                  environment.supports(probe),
+            )
+            .toList(growable: false)
+          ..sort((a, b) {
+            final byCost = a.assumptionCost.compareTo(b.assumptionCost);
+            if (byCost != 0) return byCost;
+            return a.probeId.compareTo(b.probeId);
+          });
 
     final selected = <EntryAssessmentProbe>[];
     final covered = <String>{};

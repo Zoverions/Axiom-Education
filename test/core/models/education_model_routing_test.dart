@@ -92,86 +92,92 @@ void main() {
     budget: budget,
   );
 
-  test('remote model is excluded when learner context may not leave local trust boundary', () {
-    final contextGrant = grant(
-      grantId: 'grant:model:1',
-      allowedTaskClasses: const <EducationModelTaskClass>{
-        EducationModelTaskClass.explainConcept,
-      },
-      allowedScopes: const <EducationModelContextScope>{
-        EducationModelContextScope.targetCompetency,
-        EducationModelContextScope.currentLearnerInput,
-      },
-      remoteEgressAllowed: false,
-    );
-
-    final decision = router.route(
-      request: request(
-        taskClass: EducationModelTaskClass.explainConcept,
-        scopes: const <EducationModelContextScope>{
+  test(
+    'remote model is excluded when learner context may not leave local trust boundary',
+    () {
+      final contextGrant = grant(
+        grantId: 'grant:model:1',
+        allowedTaskClasses: const <EducationModelTaskClass>{
+          EducationModelTaskClass.explainConcept,
+        },
+        allowedScopes: const <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
           EducationModelContextScope.currentLearnerInput,
         },
-      ),
-      contextGrant: contextGrant,
-      candidates: <EducationModelCandidate>[
-        remoteCandidate(),
-        localCandidate(),
-      ],
-    );
+        remoteEgressAllowed: false,
+      );
 
-    expect(decision.allowed, isTrue);
-    expect(decision.candidate!.candidateId, equals('candidate:local'));
-  });
+      final decision = router.route(
+        request: request(
+          taskClass: EducationModelTaskClass.explainConcept,
+          scopes: const <EducationModelContextScope>{
+            EducationModelContextScope.targetCompetency,
+            EducationModelContextScope.currentLearnerInput,
+          },
+        ),
+        contextGrant: contextGrant,
+        candidates: <EducationModelCandidate>[
+          remoteCandidate(),
+          localCandidate(),
+        ],
+      );
 
-  test('quality ranking happens only after privacy and budget hard filters', () {
-    final contextGrant = grant(
-      grantId: 'grant:model:2',
-      allowedTaskClasses: const <EducationModelTaskClass>{
-        EducationModelTaskClass.socraticTutor,
-      },
-      allowedScopes: const <EducationModelContextScope>{
-        EducationModelContextScope.targetCompetency,
-      },
-    );
+      expect(decision.allowed, isTrue);
+      expect(decision.candidate!.candidateId, equals('candidate:local'));
+    },
+  );
 
-    final overBudgetRemote = EducationModelCandidate(
-      candidateId: 'candidate:expensive',
-      providerId: 'provider:remote',
-      modelId: 'model:expensive',
-      runtimeId: 'runtime:single-agent',
-      computeNodeId: 'node:managed-api',
-      isLocal: false,
-      admitted: true,
-      healthy: true,
-      capabilities: const <EducationModelCapability>{
-        EducationModelCapability.text,
-      },
-      retentionClasses: const <String>{'ephemeral'},
-      estimatedInputUnits: 1000,
-      estimatedOutputUnits: 500,
-      estimatedCostMicros: 900000,
-      estimatedLatency: const Duration(seconds: 2),
-      taskQualityScore: 1,
-      reliabilityScore: 1,
-    );
-
-    final decision = router.route(
-      request: request(
-        taskClass: EducationModelTaskClass.socraticTutor,
-        scopes: const <EducationModelContextScope>{
+  test(
+    'quality ranking happens only after privacy and budget hard filters',
+    () {
+      final contextGrant = grant(
+        grantId: 'grant:model:2',
+        allowedTaskClasses: const <EducationModelTaskClass>{
+          EducationModelTaskClass.socraticTutor,
+        },
+        allowedScopes: const <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
         },
-      ),
-      contextGrant: contextGrant,
-      candidates: <EducationModelCandidate>[
-        overBudgetRemote,
-        localCandidate(quality: 0.7),
-      ],
-    );
+      );
 
-    expect(decision.candidate!.candidateId, equals('candidate:local'));
-  });
+      final overBudgetRemote = EducationModelCandidate(
+        candidateId: 'candidate:expensive',
+        providerId: 'provider:remote',
+        modelId: 'model:expensive',
+        runtimeId: 'runtime:single-agent',
+        computeNodeId: 'node:managed-api',
+        isLocal: false,
+        admitted: true,
+        healthy: true,
+        capabilities: const <EducationModelCapability>{
+          EducationModelCapability.text,
+        },
+        retentionClasses: const <String>{'ephemeral'},
+        estimatedInputUnits: 1000,
+        estimatedOutputUnits: 500,
+        estimatedCostMicros: 900000,
+        estimatedLatency: const Duration(seconds: 2),
+        taskQualityScore: 1,
+        reliabilityScore: 1,
+      );
+
+      final decision = router.route(
+        request: request(
+          taskClass: EducationModelTaskClass.socraticTutor,
+          scopes: const <EducationModelContextScope>{
+            EducationModelContextScope.targetCompetency,
+          },
+        ),
+        contextGrant: contextGrant,
+        candidates: <EducationModelCandidate>[
+          overBudgetRemote,
+          localCandidate(quality: 0.7),
+        ],
+      );
+
+      expect(decision.candidate!.candidateId, equals('candidate:local'));
+    },
+  );
 
   test('router fails closed when requested context exceeds grant', () {
     final contextGrant = grant(
@@ -250,30 +256,33 @@ void main() {
     expect(decision.allowed, isFalse);
   });
 
-  test('usage receipt contains accounting metadata but not raw learner content', () {
-    const receipt = EducationModelUsageReceipt(
-      receiptId: 'receipt:model:1',
-      learnerSubjectId: 'learner:1',
-      taskClass: EducationModelTaskClass.explainConcept,
-      providerId: 'provider:local',
-      modelId: 'model:local',
-      runtimeId: 'runtime:single-agent',
-      computeNodeId: 'node:personal',
-      materializedContextScopes: <EducationModelContextScope>{
-        EducationModelContextScope.targetCompetency,
-      },
-      retentionClass: 'owner-local',
-      remoteEgressOccurred: false,
-      inputUnits: 900,
-      outputUnits: 300,
-      actualCostMicros: 0,
-      latency: Duration(seconds: 2),
-    );
+  test(
+    'usage receipt contains accounting metadata but not raw learner content',
+    () {
+      const receipt = EducationModelUsageReceipt(
+        receiptId: 'receipt:model:1',
+        learnerSubjectId: 'learner:1',
+        taskClass: EducationModelTaskClass.explainConcept,
+        providerId: 'provider:local',
+        modelId: 'model:local',
+        runtimeId: 'runtime:single-agent',
+        computeNodeId: 'node:personal',
+        materializedContextScopes: <EducationModelContextScope>{
+          EducationModelContextScope.targetCompetency,
+        },
+        retentionClass: 'owner-local',
+        remoteEgressOccurred: false,
+        inputUnits: 900,
+        outputUnits: 300,
+        actualCostMicros: 0,
+        latency: Duration(seconds: 2),
+      );
 
-    expect(receipt.containsRawPrompt, isFalse);
-    expect(receipt.containsRawLearnerResponse, isFalse);
-    expect(receipt.establishesMastery, isFalse);
-  });
+      expect(receipt.containsRawPrompt, isFalse);
+      expect(receipt.containsRawLearnerResponse, isFalse);
+      expect(receipt.establishesMastery, isFalse);
+    },
+  );
 
   test('model output cannot create education or governance authority', () {
     expect(outputBoundary.mayCreateGradeOrCredit(), isFalse);

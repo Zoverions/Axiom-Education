@@ -16,65 +16,68 @@ void main() {
       expect(role.grantsAuthority, isFalse);
     });
 
-    test('authority projection fails closed without evidence and outside scope', () {
-      final now = DateTime.utc(2026, 8, 21, 20);
-      final unevidenced = EducationAuthorityGrant(
-        grantId: 'grant:1',
-        actorId: 'actor:teacher:1',
-        institutionId: 'school:1',
-        scopeKind: EducationAuthorityScopeKind.learningGroup,
-        scopeIds: const <String>{'class:math:1'},
-        capabilityIds: const <String>{'education.assignment.create'},
-        evidenceIds: const <String>{},
-        validFrom: now.subtract(const Duration(days: 1)),
-      );
+    test(
+      'authority projection fails closed without evidence and outside scope',
+      () {
+        final now = DateTime.utc(2026, 8, 21, 20);
+        final unevidenced = EducationAuthorityGrant(
+          grantId: 'grant:1',
+          actorId: 'actor:teacher:1',
+          institutionId: 'school:1',
+          scopeKind: EducationAuthorityScopeKind.learningGroup,
+          scopeIds: const <String>{'class:math:1'},
+          capabilityIds: const <String>{'education.assignment.create'},
+          evidenceIds: const <String>{},
+          validFrom: now.subtract(const Duration(days: 1)),
+        );
 
-      expect(
-        unevidenced.permits(
-          capabilityId: 'education.assignment.create',
-          scopeId: 'class:math:1',
-          at: now,
-        ),
-        isFalse,
-      );
+        expect(
+          unevidenced.permits(
+            capabilityId: 'education.assignment.create',
+            scopeId: 'class:math:1',
+            at: now,
+          ),
+          isFalse,
+        );
 
-      final evidenced = EducationAuthorityGrant(
-        grantId: 'grant:2',
-        actorId: 'actor:teacher:1',
-        institutionId: 'school:1',
-        scopeKind: EducationAuthorityScopeKind.learningGroup,
-        scopeIds: const <String>{'class:math:1'},
-        capabilityIds: const <String>{'education.assignment.create'},
-        evidenceIds: const <String>{'mesh:delegation:1'},
-        validFrom: now.subtract(const Duration(days: 1)),
-        validUntil: now.add(const Duration(days: 30)),
-      );
+        final evidenced = EducationAuthorityGrant(
+          grantId: 'grant:2',
+          actorId: 'actor:teacher:1',
+          institutionId: 'school:1',
+          scopeKind: EducationAuthorityScopeKind.learningGroup,
+          scopeIds: const <String>{'class:math:1'},
+          capabilityIds: const <String>{'education.assignment.create'},
+          evidenceIds: const <String>{'mesh:delegation:1'},
+          validFrom: now.subtract(const Duration(days: 1)),
+          validUntil: now.add(const Duration(days: 30)),
+        );
 
-      expect(
-        evidenced.permits(
-          capabilityId: 'education.assignment.create',
-          scopeId: 'class:math:1',
-          at: now,
-        ),
-        isTrue,
-      );
-      expect(
-        evidenced.permits(
-          capabilityId: 'education.assignment.create',
-          scopeId: 'class:science:2',
-          at: now,
-        ),
-        isFalse,
-      );
-      expect(
-        evidenced.permits(
-          capabilityId: 'education.grade.finalize',
-          scopeId: 'class:math:1',
-          at: now,
-        ),
-        isFalse,
-      );
-    });
+        expect(
+          evidenced.permits(
+            capabilityId: 'education.assignment.create',
+            scopeId: 'class:math:1',
+            at: now,
+          ),
+          isTrue,
+        );
+        expect(
+          evidenced.permits(
+            capabilityId: 'education.assignment.create',
+            scopeId: 'class:science:2',
+            at: now,
+          ),
+          isFalse,
+        );
+        expect(
+          evidenced.permits(
+            capabilityId: 'education.grade.finalize',
+            scopeId: 'class:math:1',
+            at: now,
+          ),
+          isFalse,
+        );
+      },
+    );
 
     test('guardian learning preference is input, not a veto or capability', () {
       final now = DateTime.utc(2026, 8, 21, 20);

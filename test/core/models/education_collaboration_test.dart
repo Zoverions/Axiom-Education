@@ -15,12 +15,15 @@ void main() {
     learningGroupId: 'group:math:1',
   );
 
-  test('relationship or institution labels alone never authorize transcript access', () {
-    expect(privacy.guardianRelationshipAloneAllowsTranscriptRead(), isFalse);
-    expect(privacy.educatorRoleAloneAllowsTranscriptRead(), isFalse);
-    expect(privacy.institutionMembershipAloneAllowsTranscriptRead(), isFalse);
-    expect(privacy.publicAudienceAllowedByDefault(), isFalse);
-  });
+  test(
+    'relationship or institution labels alone never authorize transcript access',
+    () {
+      expect(privacy.guardianRelationshipAloneAllowsTranscriptRead(), isFalse);
+      expect(privacy.educatorRoleAloneAllowsTranscriptRead(), isFalse);
+      expect(privacy.institutionMembershipAloneAllowsTranscriptRead(), isFalse);
+      expect(privacy.publicAudienceAllowedByDefault(), isFalse);
+    },
+  );
 
   test('ordinary participant read can use exact evidenced space grant', () {
     final grant = EducationCollaborationAccessGrant(
@@ -178,64 +181,73 @@ void main() {
     expect(decision.allowed, isFalse);
   });
 
-  test('safeguarding break-glass requires authority reason and receipt reservation', () {
-    const space = EducationCollaborationSpace(
-      spaceId: 'space:safeguarding:1',
-      circleId: 'circle:support:1',
-      purpose: EducationCollaborationPurpose.learnerSupport,
-      dataClass: EducationCollaborationDataClass.safeguardingRestricted,
-      participantActorIds: <String>{'learner:1', 'support:1'},
-    );
-    final grant = EducationCollaborationAccessGrant(
-      grantId: 'grant:safeguarding:1',
-      actorId: 'safeguarding:officer:1',
-      spaceId: space.spaceId,
-      permissions: const <EducationCollaborationPermission>{
-        EducationCollaborationPermission.read,
-      },
-      allowedPurposes: const <EducationCollaborationPurpose>{
-        EducationCollaborationPurpose.learnerSupport,
-      },
-      evidenceIds: const <String>{'safeguarding-authority:1'},
-      issuedAt: now.subtract(const Duration(minutes: 5)),
-      expiresAt: now.add(const Duration(minutes: 30)),
-      safeguardingAuthority: true,
-      privilegedRead: true,
-    );
-
-    final missingReceiptReservation = evaluator.evaluate(
-      space: space,
-      request: EducationCollaborationAccessRequest(
-        actorId: 'safeguarding:officer:1',
-        permission: EducationCollaborationPermission.read,
+  test(
+    'safeguarding break-glass requires authority reason and receipt reservation',
+    () {
+      const space = EducationCollaborationSpace(
+        spaceId: 'space:safeguarding:1',
+        circleId: 'circle:support:1',
         purpose: EducationCollaborationPurpose.learnerSupport,
-        requestedAt: now,
-        breakGlass: true,
-        reasonCode: 'immediate-safety-review',
-      ),
-      grants: <EducationCollaborationAccessGrant>[grant],
-    );
-    expect(missingReceiptReservation.allowed, isFalse);
-
-    final authorized = evaluator.evaluate(
-      space: space,
-      request: EducationCollaborationAccessRequest(
+        dataClass: EducationCollaborationDataClass.safeguardingRestricted,
+        participantActorIds: <String>{'learner:1', 'support:1'},
+      );
+      final grant = EducationCollaborationAccessGrant(
+        grantId: 'grant:safeguarding:1',
         actorId: 'safeguarding:officer:1',
-        permission: EducationCollaborationPermission.read,
-        purpose: EducationCollaborationPurpose.learnerSupport,
-        requestedAt: now,
-        breakGlass: true,
-        reasonCode: 'immediate-safety-review',
-        accessReceiptReservationId: 'receipt-reservation:safeguarding:1',
-      ),
-      grants: <EducationCollaborationAccessGrant>[grant],
-    );
-    expect(authorized.allowed, isTrue);
-    expect(authorized.accessReceiptRequired, isTrue);
-  });
+        spaceId: space.spaceId,
+        permissions: const <EducationCollaborationPermission>{
+          EducationCollaborationPermission.read,
+        },
+        allowedPurposes: const <EducationCollaborationPurpose>{
+          EducationCollaborationPurpose.learnerSupport,
+        },
+        evidenceIds: const <String>{'safeguarding-authority:1'},
+        issuedAt: now.subtract(const Duration(minutes: 5)),
+        expiresAt: now.add(const Duration(minutes: 30)),
+        safeguardingAuthority: true,
+        privilegedRead: true,
+      );
 
-  test('raw collaboration logs are not learner records or mastery evidence', () {
-    expect(privacy.rawConversationIsOfficialLearnerRecord(peerSpace), isFalse);
-    expect(privacy.rawConversationIsMasteryEvidence(peerSpace), isFalse);
-  });
+      final missingReceiptReservation = evaluator.evaluate(
+        space: space,
+        request: EducationCollaborationAccessRequest(
+          actorId: 'safeguarding:officer:1',
+          permission: EducationCollaborationPermission.read,
+          purpose: EducationCollaborationPurpose.learnerSupport,
+          requestedAt: now,
+          breakGlass: true,
+          reasonCode: 'immediate-safety-review',
+        ),
+        grants: <EducationCollaborationAccessGrant>[grant],
+      );
+      expect(missingReceiptReservation.allowed, isFalse);
+
+      final authorized = evaluator.evaluate(
+        space: space,
+        request: EducationCollaborationAccessRequest(
+          actorId: 'safeguarding:officer:1',
+          permission: EducationCollaborationPermission.read,
+          purpose: EducationCollaborationPurpose.learnerSupport,
+          requestedAt: now,
+          breakGlass: true,
+          reasonCode: 'immediate-safety-review',
+          accessReceiptReservationId: 'receipt-reservation:safeguarding:1',
+        ),
+        grants: <EducationCollaborationAccessGrant>[grant],
+      );
+      expect(authorized.allowed, isTrue);
+      expect(authorized.accessReceiptRequired, isTrue);
+    },
+  );
+
+  test(
+    'raw collaboration logs are not learner records or mastery evidence',
+    () {
+      expect(
+        privacy.rawConversationIsOfficialLearnerRecord(peerSpace),
+        isFalse,
+      );
+      expect(privacy.rawConversationIsMasteryEvidence(peerSpace), isFalse);
+    },
+  );
 }

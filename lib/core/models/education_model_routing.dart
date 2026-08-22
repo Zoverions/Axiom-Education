@@ -11,13 +11,7 @@ enum EducationModelTaskClass {
   collaborationAssist,
 }
 
-enum EducationModelCapability {
-  text,
-  image,
-  audio,
-  structuredOutput,
-  code,
-}
+enum EducationModelCapability { text, image, audio, structuredOutput, code }
 
 enum EducationModelContextScope {
   targetCompetency,
@@ -185,40 +179,50 @@ class EducationModelRouter {
         'Requested pedagogical task is outside the model context grant.',
       );
     }
-    if (!contextGrant.allowedScopes.containsAll(request.requestedContextScopes)) {
+    if (!contextGrant.allowedScopes.containsAll(
+      request.requestedContextScopes,
+    )) {
       return const EducationModelRouteDecision.denied(
         'Requested learner context exceeds the granted data scope.',
       );
     }
-    if (!contextGrant.allowedRetentionClasses.contains(request.retentionClass)) {
+    if (!contextGrant.allowedRetentionClasses.contains(
+      request.retentionClass,
+    )) {
       return const EducationModelRouteDecision.denied(
         'Requested retention class is not authorized.',
       );
     }
 
-    final eligible = candidates.where((candidate) {
-      if (!candidate.admitted || !candidate.healthy) return false;
-      if (request.localOnly && !candidate.isLocal) return false;
-      if (!candidate.isLocal && !contextGrant.remoteEgressAllowed) return false;
-      if (!candidate.capabilities.containsAll(request.requiredCapabilities)) {
-        return false;
-      }
-      if (!candidate.retentionClasses.contains(request.retentionClass)) {
-        return false;
-      }
-      if (candidate.estimatedInputUnits > request.budget.maxInputUnits) {
-        return false;
-      }
-      if (candidate.estimatedOutputUnits > request.budget.maxOutputUnits) {
-        return false;
-      }
-      if (candidate.estimatedCostMicros > request.budget.maxCostMicros) {
-        return false;
-      }
-      if (candidate.estimatedLatency > request.budget.maxWallTime) return false;
-      if (request.budget.maxCalls < 1) return false;
-      return true;
-    }).toList(growable: false);
+    final eligible = candidates
+        .where((candidate) {
+          if (!candidate.admitted || !candidate.healthy) return false;
+          if (request.localOnly && !candidate.isLocal) return false;
+          if (!candidate.isLocal && !contextGrant.remoteEgressAllowed)
+            return false;
+          if (!candidate.capabilities.containsAll(
+            request.requiredCapabilities,
+          )) {
+            return false;
+          }
+          if (!candidate.retentionClasses.contains(request.retentionClass)) {
+            return false;
+          }
+          if (candidate.estimatedInputUnits > request.budget.maxInputUnits) {
+            return false;
+          }
+          if (candidate.estimatedOutputUnits > request.budget.maxOutputUnits) {
+            return false;
+          }
+          if (candidate.estimatedCostMicros > request.budget.maxCostMicros) {
+            return false;
+          }
+          if (candidate.estimatedLatency > request.budget.maxWallTime)
+            return false;
+          if (request.budget.maxCalls < 1) return false;
+          return true;
+        })
+        .toList(growable: false);
 
     if (eligible.isEmpty) {
       return const EducationModelRouteDecision.denied(

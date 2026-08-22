@@ -47,10 +47,7 @@ class GuardianLearningPreferencePanel extends StatelessWidget {
           const SizedBox(height: 18),
           Text('Pacing', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
-          _PacingChoices(
-            value: pacing,
-            onChanged: onPacingChanged,
-          ),
+          _PacingChoices(value: pacing, onChanged: onPacingChanged),
           const SizedBox(height: 18),
           Text('Content timing', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
@@ -68,10 +65,7 @@ class _PacingChoices extends StatelessWidget {
   final GuardianPacingPreference value;
   final ValueChanged<GuardianPacingPreference> onChanged;
 
-  const _PacingChoices({
-    required this.value,
-    required this.onChanged,
-  });
+  const _PacingChoices({required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +112,7 @@ class _TimingChoices extends StatelessWidget {
   final GuardianContentTimingPreference value;
   final ValueChanged<GuardianContentTimingPreference> onChanged;
 
-  const _TimingChoices({
-    required this.value,
-    required this.onChanged,
-  });
+  const _TimingChoices({required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

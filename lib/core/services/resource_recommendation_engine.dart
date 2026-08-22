@@ -80,7 +80,8 @@ class ResourceRecommendationEngine {
 
         final previous = byId[feedback.resourceId];
         final sameResource = feedback.resourceId == resource.resourceId;
-        final sameFormat = previous != null && previous.format == resource.format;
+        final sameFormat =
+            previous != null && previous.format == resource.format;
 
         for (final signal in feedback.signals) {
           score += _feedbackAdjustment(
@@ -102,7 +103,9 @@ class ResourceRecommendationEngine {
 
         if (sameFormat &&
             feedback.signals.contains(LearningFeedbackSignal.showAnotherWay)) {
-          reasons.add('same format deprioritized after request for another way');
+          reasons.add(
+            'same format deprioritized after request for another way',
+          );
         }
       }
 
@@ -117,13 +120,16 @@ class ResourceRecommendationEngine {
           if (outcome.delta > 0) {
             reasons.add('follow-up evidence improved after this resource');
           } else if (outcome.delta < 0) {
-            reasons.add('follow-up evidence did not improve after this resource');
+            reasons.add(
+              'follow-up evidence did not improve after this resource',
+            );
           }
           continue;
         }
 
         final observedResource = byId[outcome.resourceId];
-        if (observedResource != null && observedResource.format == resource.format) {
+        if (observedResource != null &&
+            observedResource.format == resource.format) {
           score += outcome.delta * 8;
         }
       }

@@ -4,7 +4,9 @@ import 'package:ontarioedai/core/models/learning_resource.dart';
 import 'package:ontarioedai/widgets/learning_resource_feedback.dart';
 
 void main() {
-  testWidgets('primary feedback is explicit and learner controlled', (tester) async {
+  testWidgets('primary feedback is explicit and learner controlled', (
+    tester,
+  ) async {
     LearningFeedbackSignal? signal;
 
     await tester.pumpWidget(
@@ -37,9 +39,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: LearningResourceFeedbackPanel(
-            onFeedback: signals.add,
-          ),
+          body: LearningResourceFeedbackPanel(onFeedback: signals.add),
         ),
       ),
     );
@@ -58,7 +58,9 @@ void main() {
     expect(signals.last, LearningFeedbackSignal.tooFast);
   });
 
-  testWidgets('compact feedback hides the fine grained expansion', (tester) async {
+  testWidgets('compact feedback hides the fine grained expansion', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(

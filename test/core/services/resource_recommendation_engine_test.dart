@@ -5,7 +5,8 @@ import 'package:ontarioedai/core/services/resource_recommendation_engine.dart';
 LearningResource _resource({
   required String id,
   required LearningResourceFormat format,
-  LearningResourceTrustState trust = LearningResourceTrustState.educatorReviewed,
+  LearningResourceTrustState trust =
+      LearningResourceTrustState.educatorReviewed,
   Set<String> accessibility = const <String>{'captions'},
   Set<String> tags = const <String>{},
   LearningResourcePace pace = LearningResourcePace.standard,
@@ -70,61 +71,67 @@ void main() {
     );
 
     expect(recommendations, hasLength(1));
-    expect(recommendations.single.resource.resourceId, 'resource:youtube-reviewed');
+    expect(
+      recommendations.single.resource.resourceId,
+      'resource:youtube-reviewed',
+    );
     expect(recommendations.single.resource.providerId, 'provider:youtube');
   });
 
-  test('direct feedback plus demonstrated outcome can reinforce a useful resource', () {
-    final video = _resource(
-      id: 'resource:video:1',
-      format: LearningResourceFormat.video,
-      provider: 'provider:youtube',
-    );
-    final worked = _resource(
-      id: 'resource:worked:1',
-      format: LearningResourceFormat.workedExample,
-    );
+  test(
+    'direct feedback plus demonstrated outcome can reinforce a useful resource',
+    () {
+      final video = _resource(
+        id: 'resource:video:1',
+        format: LearningResourceFormat.video,
+        provider: 'provider:youtube',
+      );
+      final worked = _resource(
+        id: 'resource:worked:1',
+        format: LearningResourceFormat.workedExample,
+      );
 
-    final recommendations = engine.recommend(
-      resources: <LearningResource>[video, worked],
-      context: ResourceRecommendationContext(
-        learnerSubjectId: 'learner:1',
-        competencyId: 'math:fractions:equivalence',
-        eligibility: const ResourceEligibilityContext(),
-        recentFeedback: <LearningResourceFeedback>[
-          LearningResourceFeedback(
-            feedbackId: 'feedback:1',
-            learnerSubjectId: 'learner:1',
-            resourceId: video.resourceId,
-            competencyId: 'math:fractions:equivalence',
-            signals: const <LearningFeedbackSignal>{
-              LearningFeedbackSignal.helpful,
-              LearningFeedbackSignal.moreLikeThis,
-            },
-            occurredAt: now,
-          ),
-        ],
-        outcomeObservations: <LearningOutcomeObservation>[
-          LearningOutcomeObservation(
-            observationId: 'outcome:1',
-            learnerSubjectId: 'learner:1',
-            competencyId: 'math:fractions:equivalence',
-            resourceId: video.resourceId,
-            confidenceBefore: 0.35,
-            confidenceAfter: 0.70,
-            evidenceId: 'evidence:assessment:1',
-            occurredAt: now.add(const Duration(minutes: 20)),
-          ),
-        ],
-      ),
-    );
+      final recommendations = engine.recommend(
+        resources: <LearningResource>[video, worked],
+        context: ResourceRecommendationContext(
+          learnerSubjectId: 'learner:1',
+          competencyId: 'math:fractions:equivalence',
+          eligibility: const ResourceEligibilityContext(),
+          recentFeedback: <LearningResourceFeedback>[
+            LearningResourceFeedback(
+              feedbackId: 'feedback:1',
+              learnerSubjectId: 'learner:1',
+              resourceId: video.resourceId,
+              competencyId: 'math:fractions:equivalence',
+              signals: const <LearningFeedbackSignal>{
+                LearningFeedbackSignal.helpful,
+                LearningFeedbackSignal.moreLikeThis,
+              },
+              occurredAt: now,
+            ),
+          ],
+          outcomeObservations: <LearningOutcomeObservation>[
+            LearningOutcomeObservation(
+              observationId: 'outcome:1',
+              learnerSubjectId: 'learner:1',
+              competencyId: 'math:fractions:equivalence',
+              resourceId: video.resourceId,
+              confidenceBefore: 0.35,
+              confidenceAfter: 0.70,
+              evidenceId: 'evidence:assessment:1',
+              occurredAt: now.add(const Duration(minutes: 20)),
+            ),
+          ],
+        ),
+      );
 
-    expect(recommendations.first.resource.resourceId, video.resourceId);
-    expect(
-      recommendations.first.reasons,
-      contains('follow-up evidence improved after this resource'),
-    );
-  });
+      expect(recommendations.first.resource.resourceId, video.resourceId);
+      expect(
+        recommendations.first.reasons,
+        contains('follow-up evidence improved after this resource'),
+      );
+    },
+  );
 
   test('show another way steers toward a different presentation format', () {
     final firstVideo = _resource(
@@ -165,51 +172,57 @@ void main() {
     );
 
     expect(recommendations.first.resource.resourceId, worked.resourceId);
-    expect(recommendations.first.resource.format, LearningResourceFormat.workedExample);
+    expect(
+      recommendations.first.resource.format,
+      LearningResourceFormat.workedExample,
+    );
   });
 
-  test('pace and difficulty feedback remain contextual rather than learner labels', () {
-    final prior = _resource(
-      id: 'resource:prior',
-      format: LearningResourceFormat.text,
-      pace: LearningResourcePace.fast,
-      difficulty: 0.8,
-    );
-    final gentler = _resource(
-      id: 'resource:gentler',
-      format: LearningResourceFormat.animation,
-      pace: LearningResourcePace.slow,
-      difficulty: 0.4,
-    );
-    final harderFast = _resource(
-      id: 'resource:hard-fast',
-      format: LearningResourceFormat.animation,
-      pace: LearningResourcePace.fast,
-      difficulty: 0.9,
-    );
+  test(
+    'pace and difficulty feedback remain contextual rather than learner labels',
+    () {
+      final prior = _resource(
+        id: 'resource:prior',
+        format: LearningResourceFormat.text,
+        pace: LearningResourcePace.fast,
+        difficulty: 0.8,
+      );
+      final gentler = _resource(
+        id: 'resource:gentler',
+        format: LearningResourceFormat.animation,
+        pace: LearningResourcePace.slow,
+        difficulty: 0.4,
+      );
+      final harderFast = _resource(
+        id: 'resource:hard-fast',
+        format: LearningResourceFormat.animation,
+        pace: LearningResourcePace.fast,
+        difficulty: 0.9,
+      );
 
-    final recommendations = engine.recommend(
-      resources: <LearningResource>[prior, gentler, harderFast],
-      context: ResourceRecommendationContext(
-        learnerSubjectId: 'learner:1',
-        competencyId: 'math:fractions:equivalence',
-        eligibility: const ResourceEligibilityContext(),
-        recentFeedback: <LearningResourceFeedback>[
-          LearningResourceFeedback(
-            feedbackId: 'feedback:pace',
-            learnerSubjectId: 'learner:1',
-            resourceId: prior.resourceId,
-            competencyId: 'math:fractions:equivalence',
-            signals: const <LearningFeedbackSignal>{
-              LearningFeedbackSignal.tooFast,
-              LearningFeedbackSignal.tooHard,
-            },
-            occurredAt: now,
-          ),
-        ],
-      ),
-    );
+      final recommendations = engine.recommend(
+        resources: <LearningResource>[prior, gentler, harderFast],
+        context: ResourceRecommendationContext(
+          learnerSubjectId: 'learner:1',
+          competencyId: 'math:fractions:equivalence',
+          eligibility: const ResourceEligibilityContext(),
+          recentFeedback: <LearningResourceFeedback>[
+            LearningResourceFeedback(
+              feedbackId: 'feedback:pace',
+              learnerSubjectId: 'learner:1',
+              resourceId: prior.resourceId,
+              competencyId: 'math:fractions:equivalence',
+              signals: const <LearningFeedbackSignal>{
+                LearningFeedbackSignal.tooFast,
+                LearningFeedbackSignal.tooHard,
+              },
+              occurredAt: now,
+            ),
+          ],
+        ),
+      );
 
-    expect(recommendations.first.resource.resourceId, gentler.resourceId);
-  });
+      expect(recommendations.first.resource.resourceId, gentler.resourceId);
+    },
+  );
 }

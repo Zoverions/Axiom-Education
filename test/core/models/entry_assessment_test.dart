@@ -82,7 +82,10 @@ void main() {
       probeBudget: 2,
     );
 
-    expect(plan.probes.map((probe) => probe.probeId), equals(<String>['probe:pattern:tap']));
+    expect(
+      plan.probes.map((probe) => probe.probeId),
+      equals(<String>['probe:pattern:tap']),
+    );
   });
 
   test('available sensor is still skipped without authorization', () {

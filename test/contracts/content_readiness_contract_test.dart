@@ -5,9 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> _contract() {
   return jsonDecode(
-    File('contracts/axiom-education-content-readiness.v1.json')
-        .readAsStringSync(),
-  ) as Map<String, dynamic>;
+        File(
+          'contracts/axiom-education-content-readiness.v1.json',
+        ).readAsStringSync(),
+      )
+      as Map<String, dynamic>;
 }
 
 void main() {
@@ -41,15 +43,22 @@ void main() {
   test('conflict and denial fail closed instead of silently guessing', () {
     final contract = _contract();
     final authority = contract['authority_boundary'] as Map<String, dynamic>;
-    final recommender = contract['recommender_boundary'] as Map<String, dynamic>;
+    final recommender =
+        contract['recommender_boundary'] as Map<String, dynamic>;
 
-    expect(authority['strongest_applicable_binding_denial_fails_closed'], isTrue);
+    expect(
+      authority['strongest_applicable_binding_denial_fails_closed'],
+      isTrue,
+    );
     expect(
       authority['equally_strong_controlling_conflict_requires_review'],
       isTrue,
     );
     expect(recommender['resource_recommender_resolves_governance'], isFalse);
-    expect(recommender['denied_or_review_required_content_is_presented'], isFalse);
+    expect(
+      recommender['denied_or_review_required_content_is_presented'],
+      isFalse,
+    );
   });
 
   test('age is not treated as a complete maturity or capacity model', () {

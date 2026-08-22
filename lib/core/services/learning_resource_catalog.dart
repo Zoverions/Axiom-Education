@@ -28,11 +28,13 @@ class LearningResourceDiscoveryRequest {
       'competency_id': competencyId,
       'formats': formats.map((format) => format.name).toList(growable: false),
       'language': language,
-      'required_accessibility_features':
-          requiredAccessibilityFeatures.toList(growable: false),
+      'required_accessibility_features': requiredAccessibilityFeatures.toList(
+        growable: false,
+      ),
       if (maximumDurationSeconds != null)
         'maximum_duration_seconds': maximumDurationSeconds,
-      if (searchTags.isNotEmpty) 'search_tags': searchTags.toList(growable: false),
+      if (searchTags.isNotEmpty)
+        'search_tags': searchTags.toList(growable: false),
     });
   }
 }
@@ -169,8 +171,9 @@ class LearningResourceAdmissionService {
       format: candidate.format,
       trustState: assignedTrustState,
       language: candidate.language,
-      accessibilityFeatures:
-          Set<String>.unmodifiable(candidate.accessibilityFeatures),
+      accessibilityFeatures: Set<String>.unmodifiable(
+        candidate.accessibilityFeatures,
+      ),
       contentTags: Set<String>.unmodifiable(candidate.contentTags),
       pace: candidate.pace,
       difficulty: candidate.difficulty,

@@ -75,7 +75,9 @@ class InstitutionRosterAdmissionService {
     required Set<EducationRole> admittedRoles,
   }) {
     if (localActorId.trim().isEmpty) {
-      throw const RosterAdmissionException('A local actor binding is required.');
+      throw const RosterAdmissionException(
+        'A local actor binding is required.',
+      );
     }
     if (identityBindingEvidenceIds.isEmpty) {
       throw const RosterAdmissionException(
@@ -97,8 +99,9 @@ class InstitutionRosterAdmissionService {
       localActorId: localActorId,
       institutionId: candidate.institutionId,
       descriptiveRoles: Set<EducationRole>.unmodifiable(admittedRoles),
-      learningGroupIds:
-          Set<String>.unmodifiable(candidate.externalLearningGroupIds),
+      learningGroupIds: Set<String>.unmodifiable(
+        candidate.externalLearningGroupIds,
+      ),
       admissionEvidenceIds: Set<String>.unmodifiable(<String>{
         ...candidate.sourceEvidenceIds,
         ...identityBindingEvidenceIds,
@@ -115,26 +118,26 @@ class InstitutionRosterAdmissionService {
 
     final allowed = switch (subjectKind) {
       ExternalRosterSubjectKind.learner => const <EducationRole>{
-          EducationRole.learner,
-        },
+        EducationRole.learner,
+      },
       ExternalRosterSubjectKind.guardian => const <EducationRole>{
-          EducationRole.guardian,
-        },
+        EducationRole.guardian,
+      },
       ExternalRosterSubjectKind.educator => const <EducationRole>{
-          EducationRole.teacher,
-          EducationRole.assessor,
-          EducationRole.mentor,
-        },
+        EducationRole.teacher,
+        EducationRole.assessor,
+        EducationRole.mentor,
+      },
       ExternalRosterSubjectKind.administrator => const <EducationRole>{
-          EducationRole.principal,
-          EducationRole.administrator,
-        },
+        EducationRole.principal,
+        EducationRole.administrator,
+      },
       ExternalRosterSubjectKind.counselor => const <EducationRole>{
-          EducationRole.guidanceCounselor,
-        },
+        EducationRole.guidanceCounselor,
+      },
       ExternalRosterSubjectKind.support => const <EducationRole>{
-          EducationRole.supportWorker,
-        },
+        EducationRole.supportWorker,
+      },
     };
 
     return roles.every(allowed.contains);

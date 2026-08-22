@@ -16,17 +16,21 @@ class ContentReadinessPolicyResolver {
     required DateTime at,
   }) {
     final applicable = directives
-        .where((directive) =>
-            directive.isEvidenceBacked &&
-            directive.isActiveAt(at) &&
-            directive.appliesTo(
-              competencyId: competencyId,
-              targetContentTags: contentTags,
-            ))
+        .where(
+          (directive) =>
+              directive.isEvidenceBacked &&
+              directive.isActiveAt(at) &&
+              directive.appliesTo(
+                competencyId: competencyId,
+                targetContentTags: contentTags,
+              ),
+        )
         .toList(growable: false);
 
     final binding = applicable
-        .where((directive) => directive.strength != ContentPolicyStrength.advisory)
+        .where(
+          (directive) => directive.strength != ContentPolicyStrength.advisory,
+        )
         .toList(growable: false);
 
     if (binding.isNotEmpty) {
@@ -43,7 +47,9 @@ class ContentReadinessPolicyResolver {
           .where((directive) => directive.priority == highestPriority)
           .toList(growable: false);
 
-      if (controlling.any((directive) => directive.effect == ContentPolicyEffect.deny)) {
+      if (controlling.any(
+        (directive) => directive.effect == ContentPolicyEffect.deny,
+      )) {
         return _decision(
           ContentReadinessStatus.denied,
           controlling,
@@ -82,7 +88,8 @@ class ContentReadinessPolicyResolver {
             ContentReadinessStatus.prioritized,
             controlling,
             sequenceAdjustment: 1,
-            reason: 'Strongest applicable binding policy requires prioritization.',
+            reason:
+                'Strongest applicable binding policy requires prioritization.',
           );
         case ContentPolicyEffect.deny:
           throw StateError('deny handled before effect switch');
@@ -94,8 +101,8 @@ class ContentReadinessPolicyResolver {
       status: adjustment > 0
           ? ContentReadinessStatus.prioritized
           : adjustment < 0
-              ? ContentReadinessStatus.deferred
-              : ContentReadinessStatus.allowed,
+          ? ContentReadinessStatus.deferred
+          : ContentReadinessStatus.allowed,
       sequenceAdjustment: adjustment,
       directiveIds: Set<String>.unmodifiable(
         applicable.map((directive) => directive.directiveId),

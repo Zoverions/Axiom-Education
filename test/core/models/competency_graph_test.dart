@@ -82,37 +82,40 @@ void main() {
     );
   });
 
-  test('demonstrated prerequisite is skipped but emerging evidence is rechecked', () {
-    final graph = buildGraph();
-    final plan = const EntryDiagnosticPlanner().plan(
-      graph: graph,
-      learnerSubjectId: 'learner:1',
-      targetCompetencyId: 'fraction:equivalent',
-      evidence: <CompetencyEvidence>[
-        CompetencyEvidence(
-          learnerSubjectId: 'learner:1',
-          competencyId: 'number:count',
-          state: CompetencyEvidenceState.demonstrated,
-          confidence: 0.9,
-          evidenceId: 'evidence:count:1',
-          observedAt: now,
-        ),
-        CompetencyEvidence(
-          learnerSubjectId: 'learner:1',
-          competencyId: 'fraction:part-whole',
-          state: CompetencyEvidenceState.emerging,
-          confidence: 0.8,
-          evidenceId: 'evidence:fraction:1',
-          observedAt: now,
-        ),
-      ],
-    );
+  test(
+    'demonstrated prerequisite is skipped but emerging evidence is rechecked',
+    () {
+      final graph = buildGraph();
+      final plan = const EntryDiagnosticPlanner().plan(
+        graph: graph,
+        learnerSubjectId: 'learner:1',
+        targetCompetencyId: 'fraction:equivalent',
+        evidence: <CompetencyEvidence>[
+          CompetencyEvidence(
+            learnerSubjectId: 'learner:1',
+            competencyId: 'number:count',
+            state: CompetencyEvidenceState.demonstrated,
+            confidence: 0.9,
+            evidenceId: 'evidence:count:1',
+            observedAt: now,
+          ),
+          CompetencyEvidence(
+            learnerSubjectId: 'learner:1',
+            competencyId: 'fraction:part-whole',
+            state: CompetencyEvidenceState.emerging,
+            confidence: 0.8,
+            evidenceId: 'evidence:fraction:1',
+            observedAt: now,
+          ),
+        ],
+      );
 
-    expect(
-      plan.competencyIdsToProbe,
-      equals(<String>['fraction:part-whole', 'fraction:equivalent']),
-    );
-  });
+      expect(
+        plan.competencyIdsToProbe,
+        equals(<String>['fraction:part-whole', 'fraction:equivalent']),
+      );
+    },
+  );
 
   test('evidence from another learner cannot suppress diagnostic probes', () {
     final graph = buildGraph();
@@ -143,56 +146,62 @@ void main() {
     );
   });
 
-  test('newer weaker evidence causes a previously demonstrated skill to be rechecked', () {
-    final graph = buildGraph();
-    final plan = const EntryDiagnosticPlanner().plan(
-      graph: graph,
-      learnerSubjectId: 'learner:1',
-      targetCompetencyId: 'fraction:equivalent',
-      evidence: <CompetencyEvidence>[
-        CompetencyEvidence(
-          learnerSubjectId: 'learner:1',
-          competencyId: 'number:count',
-          state: CompetencyEvidenceState.demonstrated,
-          confidence: 0.95,
-          evidenceId: 'evidence:old-demonstrated',
-          observedAt: now.subtract(const Duration(days: 30)),
-        ),
-        CompetencyEvidence(
-          learnerSubjectId: 'learner:1',
-          competencyId: 'number:count',
-          state: CompetencyEvidenceState.emerging,
-          confidence: 0.8,
-          evidenceId: 'evidence:new-emerging',
-          observedAt: now,
-        ),
-      ],
-      itemBudget: 3,
-    );
+  test(
+    'newer weaker evidence causes a previously demonstrated skill to be rechecked',
+    () {
+      final graph = buildGraph();
+      final plan = const EntryDiagnosticPlanner().plan(
+        graph: graph,
+        learnerSubjectId: 'learner:1',
+        targetCompetencyId: 'fraction:equivalent',
+        evidence: <CompetencyEvidence>[
+          CompetencyEvidence(
+            learnerSubjectId: 'learner:1',
+            competencyId: 'number:count',
+            state: CompetencyEvidenceState.demonstrated,
+            confidence: 0.95,
+            evidenceId: 'evidence:old-demonstrated',
+            observedAt: now.subtract(const Duration(days: 30)),
+          ),
+          CompetencyEvidence(
+            learnerSubjectId: 'learner:1',
+            competencyId: 'number:count',
+            state: CompetencyEvidenceState.emerging,
+            confidence: 0.8,
+            evidenceId: 'evidence:new-emerging',
+            observedAt: now,
+          ),
+        ],
+        itemBudget: 3,
+      );
 
-    expect(plan.competencyIdsToProbe.first, equals('number:count'));
-  });
+      expect(plan.competencyIdsToProbe.first, equals('number:count'));
+    },
+  );
 
-  test('target with strong demonstrated evidence produces no diagnostic probe', () {
-    final graph = buildGraph();
-    final plan = const EntryDiagnosticPlanner().plan(
-      graph: graph,
-      learnerSubjectId: 'learner:1',
-      targetCompetencyId: 'fraction:equivalent',
-      evidence: <CompetencyEvidence>[
-        CompetencyEvidence(
-          learnerSubjectId: 'learner:1',
-          competencyId: 'fraction:equivalent',
-          state: CompetencyEvidenceState.demonstrated,
-          confidence: 0.95,
-          evidenceId: 'evidence:equivalent:1',
-          observedAt: now,
-        ),
-      ],
-    );
+  test(
+    'target with strong demonstrated evidence produces no diagnostic probe',
+    () {
+      final graph = buildGraph();
+      final plan = const EntryDiagnosticPlanner().plan(
+        graph: graph,
+        learnerSubjectId: 'learner:1',
+        targetCompetencyId: 'fraction:equivalent',
+        evidence: <CompetencyEvidence>[
+          CompetencyEvidence(
+            learnerSubjectId: 'learner:1',
+            competencyId: 'fraction:equivalent',
+            state: CompetencyEvidenceState.demonstrated,
+            confidence: 0.95,
+            evidenceId: 'evidence:equivalent:1',
+            observedAt: now,
+          ),
+        ],
+      );
 
-    expect(plan.isEmpty, isTrue);
-  });
+      expect(plan.isEmpty, isTrue);
+    },
+  );
 
   test('diagnostic plan respects bounded item budget', () {
     final graph = buildGraph();

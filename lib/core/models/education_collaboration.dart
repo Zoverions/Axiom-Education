@@ -125,11 +125,7 @@ class EducationCollaborationAccessDecision {
        );
 
   const EducationCollaborationAccessDecision.deny(String reason)
-    : this._(
-        allowed: false,
-        reason: reason,
-        accessReceiptRequired: false,
-      );
+    : this._(allowed: false, reason: reason, accessReceiptRequired: false);
 }
 
 class EducationCollaborationAccessEvaluator {
@@ -156,12 +152,13 @@ class EducationCollaborationAccessEvaluator {
         continue;
       }
 
-      final isRead = request.permission == EducationCollaborationPermission.read;
+      final isRead =
+          request.permission == EducationCollaborationPermission.read;
       final isSafeguardingRestricted =
           space.dataClass ==
           EducationCollaborationDataClass.safeguardingRestricted;
-      final receiptRequired = isRead &&
-          (grant.privilegedRead || isSafeguardingRestricted);
+      final receiptRequired =
+          isRead && (grant.privilegedRead || isSafeguardingRestricted);
 
       if (isSafeguardingRestricted) {
         if (!request.breakGlass || !grant.safeguardingAuthority) continue;
@@ -226,9 +223,8 @@ class EducationCollaborationPrivacyPolicy {
     EducationCollaborationSpace space,
   ) => false;
 
-  bool rawConversationIsMasteryEvidence(
-    EducationCollaborationSpace space,
-  ) => false;
+  bool rawConversationIsMasteryEvidence(EducationCollaborationSpace space) =>
+      false;
 
   bool guardianRelationshipAloneAllowsTranscriptRead() => false;
 

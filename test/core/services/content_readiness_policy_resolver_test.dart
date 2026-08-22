@@ -28,56 +28,62 @@ void main() {
   const resolver = ContentReadinessPolicyResolver();
   final now = DateTime.utc(2026, 8, 21, 20);
 
-  test('guardian advisory deferral changes sequence but is not a hard denial', () {
-    final decision = resolver.resolve(
-      competencyId: 'health:competency:1',
-      contentTags: const <String>{'maturity:sensitive'},
-      directives: <ContentPolicyDirective>[
-        _directive(
-          id: 'guardian:defer',
-          source: ContentPolicySource.guardianPreference,
-          effect: ContentPolicyEffect.defer,
-          strength: ContentPolicyStrength.advisory,
-          at: now,
-        ),
-      ],
-      at: now,
-    );
+  test(
+    'guardian advisory deferral changes sequence but is not a hard denial',
+    () {
+      final decision = resolver.resolve(
+        competencyId: 'health:competency:1',
+        contentTags: const <String>{'maturity:sensitive'},
+        directives: <ContentPolicyDirective>[
+          _directive(
+            id: 'guardian:defer',
+            source: ContentPolicySource.guardianPreference,
+            effect: ContentPolicyEffect.defer,
+            strength: ContentPolicyStrength.advisory,
+            at: now,
+          ),
+        ],
+        at: now,
+      );
 
-    expect(decision.status, ContentReadinessStatus.deferred);
-    expect(decision.sequenceAdjustment, -1);
-    expect(decision.evidenceIds, contains('evidence:1'));
-  });
+      expect(decision.status, ContentReadinessStatus.deferred);
+      expect(decision.sequenceAdjustment, -1);
+      expect(decision.evidenceIds, contains('evidence:1'));
+    },
+  );
 
-  test('binding allow outranks advisory guardian deferral without erasing it', () {
-    final decision = resolver.resolve(
-      competencyId: 'health:competency:1',
-      contentTags: const <String>{'maturity:sensitive'},
-      directives: <ContentPolicyDirective>[
-        _directive(
-          id: 'guardian:defer',
-          source: ContentPolicySource.guardianPreference,
-          effect: ContentPolicyEffect.defer,
-          strength: ContentPolicyStrength.advisory,
-          at: now,
-        ),
-        _directive(
-          id: 'jurisdiction:allow',
-          source: ContentPolicySource.jurisdictionPolicy,
-          effect: ContentPolicyEffect.allow,
-          strength: ContentPolicyStrength.required,
-          priority: 20,
-          at: now,
-        ),
-      ],
-      at: now,
-    );
+  test(
+    'binding allow outranks advisory guardian deferral without erasing it',
+    () {
+      final decision = resolver.resolve(
+        competencyId: 'health:competency:1',
+        contentTags: const <String>{'maturity:sensitive'},
+        directives: <ContentPolicyDirective>[
+          _directive(
+            id: 'guardian:defer',
+            source: ContentPolicySource.guardianPreference,
+            effect: ContentPolicyEffect.defer,
+            strength: ContentPolicyStrength.advisory,
+            at: now,
+          ),
+          _directive(
+            id: 'jurisdiction:allow',
+            source: ContentPolicySource.jurisdictionPolicy,
+            effect: ContentPolicyEffect.allow,
+            strength: ContentPolicyStrength.required,
+            priority: 20,
+            at: now,
+          ),
+        ],
+        at: now,
+      );
 
-    expect(decision.status, ContentReadinessStatus.allowed);
-    expect(decision.permitsPresentation, isTrue);
-    expect(decision.sequenceAdjustment, -1);
-    expect(decision.directiveIds, contains('jurisdiction:allow'));
-  });
+      expect(decision.status, ContentReadinessStatus.allowed);
+      expect(decision.permitsPresentation, isTrue);
+      expect(decision.sequenceAdjustment, -1);
+      expect(decision.directiveIds, contains('jurisdiction:allow'));
+    },
+  );
 
   test('strongest binding denial fails closed', () {
     final decision = resolver.resolve(

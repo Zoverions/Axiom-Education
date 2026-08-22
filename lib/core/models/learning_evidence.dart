@@ -64,7 +64,8 @@ class LearningEvidenceEnvelope {
 
   String get proposedEventType => switch (recordType) {
     LearningEvidenceRecordType.resourceFeedback => 'resource.feedback.recorded',
-    LearningEvidenceRecordType.outcomeObservation => 'learning.outcome.recorded',
+    LearningEvidenceRecordType.outcomeObservation =>
+      'learning.outcome.recorded',
     LearningEvidenceRecordType.correction => 'learning.evidence.corrected',
     LearningEvidenceRecordType.retraction => 'learning.evidence.retracted',
   };

@@ -25,10 +25,7 @@ void main() {
     expect(evidence.isSubjectOwned, isTrue);
     expect(evidence.meshEventIsAdmitted, isFalse);
     expect(evidence.canReportOfficialPersistence, isFalse);
-    expect(
-      evidence.proposedEventType,
-      equals('resource.feedback.recorded'),
-    );
+    expect(evidence.proposedEventType, equals('resource.feedback.recorded'));
     expect(
       LearningEvidenceEnvelope.proposedMemoryKind,
       equals('education.learning-evidence'),
@@ -97,10 +94,7 @@ void main() {
     );
 
     expect(() => validator.validate(correction), returnsNormally);
-    expect(
-      correction.proposedEventType,
-      equals('learning.evidence.corrected'),
-    );
+    expect(correction.proposedEventType, equals('learning.evidence.corrected'));
   });
 
   test('retraction cannot also masquerade as a correction', () {

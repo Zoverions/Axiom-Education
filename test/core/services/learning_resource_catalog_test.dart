@@ -84,20 +84,23 @@ void main() {
     );
   });
 
-  test('catalog ignores resources that do not cover requested competency', () async {
-    final catalog = LearningResourceCatalog(
-      providers: <LearningResourceCatalogProvider>[
-        _Provider(
-          providerId: 'provider:youtube',
-          results: <LearningResourceCandidate>[
-            _candidate(competencyIds: const <String>{'math:other'}),
-          ],
-        ),
-      ],
-    );
+  test(
+    'catalog ignores resources that do not cover requested competency',
+    () async {
+      final catalog = LearningResourceCatalog(
+        providers: <LearningResourceCatalogProvider>[
+          _Provider(
+            providerId: 'provider:youtube',
+            results: <LearningResourceCandidate>[
+              _candidate(competencyIds: const <String>{'math:other'}),
+            ],
+          ),
+        ],
+      );
 
-    expect(await catalog.discover(request), isEmpty);
-  });
+      expect(await catalog.discover(request), isEmpty);
+    },
+  );
 
   test('admission requires independent review evidence and assigned trust', () {
     const admission = LearningResourceAdmissionService();
