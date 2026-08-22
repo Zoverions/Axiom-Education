@@ -1,0 +1,42 @@
+{
+  "schema": "axiom-education-curriculum-assurance.v1",
+  "contract_id": "axiom.education.curriculum-assurance",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Make curriculum alignment, review, approval, and accreditation claims explicit and evidence-bounded so demonstration capsules cannot silently present themselves as officially verified courses.",
+  "assurance_levels": [
+    "unverified",
+    "source-aligned-demonstration",
+    "machine-audited",
+    "human-reviewed",
+    "institution-approved",
+    "jurisdiction-approved",
+    "accredited"
+  ],
+  "claim_boundaries": {
+    "source_aligned_demonstration_implies_human_review": false,
+    "machine_audited_implies_human_review": false,
+    "human_reviewed_implies_institution_approval": false,
+    "institution_approved_implies_jurisdiction_approval": false,
+    "jurisdiction_approved_implies_accreditation": false,
+    "lower_assurance_level_may_claim_accreditation": false,
+    "source_evidence_required_for_alignment_claim": true,
+    "review_evidence_required_for_human_or_higher_review_claim": true,
+    "assurance_scope_must_be_explicit": true,
+    "superseded_assurance_records_remain_provenance_visible": true
+  },
+  "ontario_demonstration_default": {
+    "level": "source-aligned-demonstration",
+    "claim": "Designed to align as closely as practicable with the identified published Ontario curriculum sources at the time of creation. Unless an assurance record explicitly states otherwise, it is not Ministry-approved, school-board-approved, qualified-human-reviewed, accredited, or an Ontario credit-bearing course.",
+    "may_be_frozen_for_platform_demonstration": true,
+    "frozen_demo_must_retain_source_and_assurance_metadata": true,
+    "later_verified_capsule_should_supersede_not_rewrite_provenance": true
+  },
+  "non_claims": [
+    "Axiom Education does not infer official approval from curriculum similarity.",
+    "Automated source comparison is not a substitute for qualified human review where human review is claimed.",
+    "A demonstration capsule may be useful and highly aligned without being accredited.",
+    "Accreditation is represented only when the applicable authorized body and evidence explicitly support that claim."
+  ]
+}
