@@ -1,0 +1,79 @@
+{
+  "schema": "axiom-education-learning-evidence.v1",
+  "contract_id": "axiom.education.learning-evidence",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-admission-contract-not-mesh-promoted",
+  "purpose": "Define a minimized, learner-controlled evidence envelope for resource feedback and later outcome observations without widening the pinned educator-workflow learner-memory profile.",
+  "record_types": [
+    "resource-feedback",
+    "outcome-observation",
+    "correction",
+    "retraction"
+  ],
+  "ownership": {
+    "record_owner": "subject",
+    "subject_is_learner": true,
+    "observer_or_attestor_may_be_separate_actor": true,
+    "actor_attestation_does_not_change_subject_ownership": true
+  },
+  "minimum_fields": [
+    "evidence_id",
+    "record_type",
+    "learner_subject_id",
+    "competency_id",
+    "occurred_at",
+    "consent_context_id"
+  ],
+  "resource_feedback_fields": [
+    "resource_id",
+    "feedback_signals"
+  ],
+  "outcome_observation_fields": [
+    "evidence_ref",
+    "confidence_before",
+    "confidence_after"
+  ],
+  "correction_semantics": {
+    "immutable_append_only": true,
+    "correction_requires_supersedes_evidence_id": true,
+    "retraction_requires_retracts_evidence_id": true,
+    "historical_record_is_not_rewritten": true
+  },
+  "consent_and_retention": {
+    "purpose": "pedagogical-personalization",
+    "consent_context_required": true,
+    "retention_default": "learner-controlled",
+    "portable_export_required_before_promotion": true,
+    "correction_and_retraction_required_before_promotion": true,
+    "cross_learner_aggregation_allowed_by_default": false
+  },
+  "minimization": {
+    "raw_video_watch_history_required": false,
+    "clickstream_required": false,
+    "raw_conversation_transcript_required": false,
+    "advertising_identifier_allowed": false,
+    "provider_account_identifier_required": false,
+    "retain_only_pedagogically_material_fields": true
+  },
+  "mesh_admission_boundary": {
+    "existing_pinned_profile": "axiom.education.learner-memory@1.1.0",
+    "existing_profile_is_modified": false,
+    "existing_event_type_is_reused_with_incorrect_semantics": false,
+    "proposed_memory_kind": "education.learning-evidence",
+    "proposed_event_types": [
+      "resource.feedback.recorded",
+      "learning.outcome.recorded",
+      "learning.evidence.corrected",
+      "learning.evidence.retracted"
+    ],
+    "mesh_event_admission_currently_claimed": false,
+    "application_may_report_official_persistence_before_mesh_admission": false
+  },
+  "non_claims": [
+    "A learner saying that a resource helped does not establish mastery.",
+    "An outcome observation does not establish a grade, credit, transcript entry, or curriculum approval.",
+    "This contract does not add an admitted AXIOM-MESH learner event or production learner-record provider.",
+    "Historical evidence is corrected or retracted by append-only references rather than silent mutation."
+  ]
+}
