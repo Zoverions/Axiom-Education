@@ -9,11 +9,13 @@ void main() {
     late Map<String, dynamic> contract;
 
     setUpAll(() {
-      contract = jsonDecode(
-        File(
-          'contracts/axiom-education-instructional-effectiveness.v1.json',
-        ).readAsStringSync(),
-      ) as Map<String, dynamic>;
+      contract =
+          jsonDecode(
+                File(
+                  'contracts/axiom-education-instructional-effectiveness.v1.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
     });
 
     test('runtime evidence levels match the contract exactly', () {
@@ -38,11 +40,14 @@ void main() {
 
     test('runtime outcome metrics cover every governed metric class', () {
       final contractMetrics = <String>{
-        ...(contract['primary_learning_metrics'] as List<dynamic>).cast<String>(),
-        ...(contract['learner_regulation_metrics'] as List<dynamic>).cast<String>(),
+        ...(contract['primary_learning_metrics'] as List<dynamic>)
+            .cast<String>(),
+        ...(contract['learner_regulation_metrics'] as List<dynamic>)
+            .cast<String>(),
         ...(contract['access_safety_equity_metrics'] as List<dynamic>)
             .cast<String>(),
-        ...(contract['system_efficiency_metrics'] as List<dynamic>).cast<String>(),
+        ...(contract['system_efficiency_metrics'] as List<dynamic>)
+            .cast<String>(),
       };
       final runtimeMetrics = InstructionalOutcomeMetric.values
           .map((metric) => metric.wireName)
@@ -141,7 +146,9 @@ void main() {
       expect(
         () => filter.filter(
           targetCompetencyId: '   ',
-          candidates: <InstructionalStrategyCandidate>[candidate(id: 'strategy:1')],
+          candidates: <InstructionalStrategyCandidate>[
+            candidate(id: 'strategy:1'),
+          ],
         ),
         throwsA(isA<InstructionalEffectivenessException>()),
       );
@@ -154,10 +161,12 @@ void main() {
 
     InstructionalEvidenceRecord evidence({
       double? effectEstimate = 0.42,
-      String limitations = 'Context-specific estimate; transfer remains uncertain.',
-      Set<InstructionalOutcomeMetric> outcomes = const <InstructionalOutcomeMetric>{
-        InstructionalOutcomeMetric.learningGain,
-      },
+      String limitations =
+          'Context-specific estimate; transfer remains uncertain.',
+      Set<InstructionalOutcomeMetric> outcomes =
+          const <InstructionalOutcomeMetric>{
+            InstructionalOutcomeMetric.learningGain,
+          },
     }) {
       return InstructionalEvidenceRecord(
         recordId: 'evidence:1',
@@ -176,7 +185,8 @@ void main() {
         effectEstimate: effectEstimate,
         uncertaintyAndLimitations: limitations,
         independenceOrConflictNotes: 'No conflict information omitted.',
-        applicabilityNotes: 'Applicability must be checked for the local learner.',
+        applicabilityNotes:
+            'Applicability must be checked for the local learner.',
       );
     }
 
@@ -249,10 +259,16 @@ void main() {
   test('runtime preserves non-engagement and research boundaries', () {
     const boundary = InstructionalEffectivenessBoundary();
 
-    expect(boundary.immediateObservationAloneEstablishesDurableMastery(), isFalse);
+    expect(
+      boundary.immediateObservationAloneEstablishesDurableMastery(),
+      isFalse,
+    );
     expect(boundary.genericEngagementIsLearningOutcome(), isFalse);
     expect(boundary.learnerPreferenceChangesCurriculumTruth(), isFalse);
-    expect(boundary.maySilentlyPoolLearnersIntoPopulationExperiments(), isFalse);
+    expect(
+      boundary.maySilentlyPoolLearnersIntoPopulationExperiments(),
+      isFalse,
+    );
     expect(boundary.supportsDelayedEvidence, isTrue);
     expect(boundary.supportsTransferEvidence, isTrue);
   });
