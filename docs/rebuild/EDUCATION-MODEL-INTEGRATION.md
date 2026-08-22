@@ -110,6 +110,8 @@ Families, learners, and institutions can therefore see meaningful information su
 
 without receiving a surveillance transcript of everything the learner said.
 
+Usage visibility itself is scoped. A learner can see their own usage. A payer may receive billing totals and provider/cost metadata needed for accounting. A school administrator may receive aggregate service-capacity or budget information when authorized. None of those views automatically reveal raw learner prompts, tutoring transcripts, peer conversations, or counseling/support conversations.
+
 Access to raw educational conversations, where they exist, remains governed by the separate collaboration/learner-record privacy rules.
 
 ## Funding and payer separation
@@ -118,7 +120,9 @@ Who pays for a model call is separate from who may see the learner content.
 
 A school may fund a model budget without gaining blanket access to prompts. A guardian may pay for additional inference without receiving every tutoring transcript. A learner may use owner-local compute with no external monetary charge while still producing a usage receipt for capacity and routing decisions.
 
-Later payment/subscription integration should therefore bind payer, budget source, and settlement separately from learner-data authority.
+Later payment/subscription integration should therefore bind payer, budget source, settlement, and billing visibility separately from learner-data authority.
+
+A budget source can constrain spending without becoming pedagogical authority. For example, a school may cap external model spend for an assignment while the learner's privacy policy still decides whether a remote provider is eligible. Likewise, a guardian may authorize a larger monthly budget without gaining the authority to override a school or safeguarding policy.
 
 ## Model evaluation
 
