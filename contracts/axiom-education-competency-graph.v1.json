@@ -1,0 +1,59 @@
+{
+  "schema": "axiom-education-competency-graph.v1",
+  "contract_id": "axiom.education.competency-graph",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Represent learning prerequisites and evidence without assuming chronological age, grade placement, course enrollment, or a single permanent ability level.",
+  "node_semantics": {
+    "node_is_competency_not_grade": true,
+    "grade_or_course_labels_may_be_context_only": true,
+    "curriculum_alignment_requires_separate_crosswalk": true,
+    "competency_node_itself_is_not_official_curriculum": true
+  },
+  "edge_types": [
+    "prerequisite",
+    "supports",
+    "part-of",
+    "extends"
+  ],
+  "graph_invariants": {
+    "unique_node_ids": true,
+    "edge_endpoints_must_exist": true,
+    "self_edges_allowed": false,
+    "prerequisite_cycles_allowed": false
+  },
+  "evidence_states": [
+    "unknown",
+    "attempted",
+    "emerging",
+    "demonstrated"
+  ],
+  "evidence_boundary": {
+    "single_interaction_establishes_permanent_mastery": false,
+    "later_evidence_may_update_prior_estimate": true,
+    "contradictory_evidence_is_preserved": true,
+    "evidence_state_is_not_grade_or_credit": true,
+    "evidence_state_is_not_immutable_identity_label": true
+  },
+  "entry_assessment": {
+    "assumes_grade_level_from_age": false,
+    "assumes_competency_from_enrollment": false,
+    "starts_from_requested_learning_goal": true,
+    "checks_unresolved_prerequisites_before_target_when_needed": true,
+    "skips_prerequisites_with_sufficient_current_evidence": true,
+    "bounded_item_budget_required": true,
+    "diagnostic_plan_is_not_mastery_decision": true
+  },
+  "privacy": {
+    "requires_demographic_profile": false,
+    "requires_diagnosis": false,
+    "requires_engagement_telemetry": false,
+    "minimum_competency_evidence_only": true
+  },
+  "non_claims": [
+    "A competency graph is not an Ontario curriculum map unless a separate reviewed crosswalk establishes that relationship.",
+    "A diagnostic plan is not a grade placement, promotion, credit, transcript, or accreditation decision.",
+    "Demonstrated evidence is contextual and revisable; it is not a permanent learner label."
+  ]
+}

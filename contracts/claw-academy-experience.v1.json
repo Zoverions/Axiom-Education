@@ -1,0 +1,144 @@
+{
+  "schema": "claw-academy-experience.v1",
+  "contract_id": "claw.academy.experience",
+  "contract_version": "1.0.0",
+  "domain": "education-experience",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Define Claw Academy as an adaptive story-driven experience layer over shared Axiom Education competency, evidence, resource, collaboration, model-routing, institutional, privacy, and instructional-effectiveness services.",
+  "shared_dependencies": [
+    "axiom.education.institution",
+    "axiom.education.content-readiness",
+    "axiom.education.resource-intelligence",
+    "axiom.education.learning-evidence",
+    "axiom.education.collaboration-privacy",
+    "axiom.education.entry-assessment",
+    "axiom.education.model-routing",
+    "axiom.education.instructional-effectiveness"
+  ],
+  "experience_node_types": [
+    "story-panel",
+    "comic-panel",
+    "text-explanation",
+    "diagram-or-visual",
+    "worked-example",
+    "learner-choice",
+    "direct-response",
+    "adaptive-hint",
+    "resource-launch",
+    "video-launch",
+    "simulation-launch",
+    "game-launch",
+    "code-or-build-challenge",
+    "creative-construction",
+    "real-world-observation",
+    "peer-task",
+    "group-task",
+    "educator-help-request",
+    "human-tutor-request",
+    "ai-socratic-dialogue",
+    "reflection-prompt",
+    "metacognition-prompt",
+    "retrieval-checkpoint",
+    "transfer-challenge",
+    "project-artifact",
+    "evidence-candidate"
+  ],
+  "node_requirements": [
+    "node-id",
+    "target-competency-ids",
+    "experience-type",
+    "instructional-strategy-ids",
+    "required-device-capabilities",
+    "required-accessibility-capabilities",
+    "content-readiness-tags",
+    "expected-evidence-kinds",
+    "fallback-node-ids"
+  ],
+  "optional_node_context": [
+    "story-location",
+    "learner-selected-character-profile",
+    "language-preference",
+    "recent-pedagogical-feedback",
+    "misconception-summary",
+    "resource-context",
+    "assignment-context"
+  ],
+  "adaptation_invariants": {
+    "target_competency_may_change_without_governed_reason": false,
+    "presentation_path_may_adapt": true,
+    "support_intensity_may_adapt": true,
+    "instructional_strategy_may_adapt": true,
+    "resource_or_tool_may_adapt": true,
+    "one_failure_creates_permanent_ability_label": false,
+    "one_preferred_format_creates_permanent_learning_style": false,
+    "engagement_metric_may_override_learning_evidence": false,
+    "learner_can_request_another_way": true,
+    "learner_can_request_human_help_when_available": true,
+    "non_model_path_must_exist_when_model_is_unavailable_where_practicable": true
+  },
+  "story_and_character_boundary": {
+    "character_profile_required": false,
+    "learner_selected_character_may_personalize_story": true,
+    "character_profile_may_be_sent_to_remote_model_without_context_grant": false,
+    "real_identity_required_for_story_personalization": false,
+    "public_social_identity_required": false,
+    "story_personalization_creates_credential_or_identity_claim": false
+  },
+  "external_tool_boundary": {
+    "tool_launch_uses_admitted_capability_profile": true,
+    "tool_launch_may_bypass_mesh_authority": false,
+    "external_tool_receives_full_learner_profile_by_default": false,
+    "external_tool_result_is_trusted_mastery_evidence_by_default": false,
+    "external_tool_may_self_issue_axiom_credential": false,
+    "supported_adapter_families": [
+      "lti-1.3-or-advantage",
+      "qti-3",
+      "common-cartridge-1.4",
+      "provider-specific-bounded-adapter"
+    ]
+  },
+  "effectiveness_loop": {
+    "uses_instructional_effectiveness_contract": true,
+    "immediate_feedback_supported": true,
+    "delayed_retention_supported": true,
+    "transfer_challenges_supported": true,
+    "misconception_recovery_supported": true,
+    "learner_self_report_supported": true,
+    "human_observation_supported": true,
+    "resource_outcome_observation_supported": true,
+    "usage_cost_is_separate_from_learning_effectiveness": true
+  },
+  "social_boundary": {
+    "peer_help_supported": true,
+    "group_projects_supported": true,
+    "class_discussion_supported": true,
+    "raw_peer_log_becomes_learner_record_by_default": false,
+    "guardian_role_implies_peer_transcript_access": false,
+    "teacher_role_implies_unrelated_social_history_access": false
+  },
+  "authority_boundary": {
+    "claw_experience_may_create_final_grade": false,
+    "claw_experience_may_create_credit": false,
+    "claw_experience_may_mint_credential": false,
+    "claw_experience_may_change_guardian_or_school_authority": false,
+    "claw_experience_may_override_jurisdiction_policy": false,
+    "claw_experience_may_treat_model_output_as_authority": false
+  },
+  "success_definition": [
+    "durable-learning",
+    "transfer",
+    "misconception-recovery",
+    "learner-agency",
+    "accessibility",
+    "safe-and-private-use",
+    "effective-human-or-ai-support",
+    "efficient-use-of-learner-time",
+    "efficient-use-of-human-and-compute-resources"
+  ],
+  "non_claims": [
+    "Claw Academy v2 is not yet a production learning product or accredited school.",
+    "This contract does not claim that generated video, games, stories, or AI tutoring are effective without learner evidence.",
+    "The experience layer does not replace the authority of an applicable school, educator, jurisdiction, credential issuer, or learner-rights policy.",
+    "Novelty is not treated as educational effectiveness."
+  ]
+}

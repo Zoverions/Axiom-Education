@@ -1,0 +1,93 @@
+{
+  "schema": "axiom-education-institution.v1",
+  "contract_id": "axiom.education.institution",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Represent schools and other learning institutions using evidenced relationships and scoped Mesh authority rather than product-specific role permissions.",
+  "product_independent": true,
+  "experience_layers": [
+    "claw-academy",
+    "conventional-school-portal",
+    "homeschool",
+    "post-secondary",
+    "professional-lifelong",
+    "other-reviewed"
+  ],
+  "institution_kinds": [
+    "school",
+    "school-board",
+    "district",
+    "homeschool",
+    "post-secondary",
+    "training-provider",
+    "community-program",
+    "other"
+  ],
+  "role_vocabulary": [
+    "learner",
+    "guardian",
+    "teacher",
+    "principal",
+    "guidance-counselor",
+    "support-worker",
+    "administrator",
+    "assessor",
+    "mentor"
+  ],
+  "authority_boundary": {
+    "role_grants_authority": false,
+    "relationship_grants_authority": false,
+    "self_asserted_guardian_authority_allowed": false,
+    "self_asserted_educator_authority_allowed": false,
+    "mesh_evidence_required_for_consequential_actions": true,
+    "authority_must_be_scoped": true,
+    "authority_must_be_revocable": true,
+    "expired_or_revoked_authority_fails_closed": true,
+    "institution_policy_may_not_silently_lower_nonwaivable_mesh_protections": true
+  },
+  "shared_objects": [
+    "institution",
+    "learning-group",
+    "enrollment",
+    "relationship",
+    "role-assignment",
+    "authority-projection",
+    "assignment",
+    "submission",
+    "assessment",
+    "attendance",
+    "reporting-projection",
+    "guardian-learning-preference"
+  ],
+  "guardian_input": {
+    "supported_pacing_preferences": [
+      "no-preference",
+      "slow-down-when-allowed",
+      "maintain",
+      "accelerate-when-ready",
+      "prioritize"
+    ],
+    "supported_content_timing_preferences": [
+      "no-preference",
+      "defer-when-allowed",
+      "prioritize-when-relevant"
+    ],
+    "preference_is_authorization": false,
+    "preference_is_unconditional_veto": false,
+    "may_suppress_required_content_by_itself": false,
+    "must_be_resolved_with_applicable_learner_rights_safeguarding_institution_and_jurisdiction_policy": true
+  },
+  "learner_boundary": {
+    "learner_rights_are_not_derived_only_from_adult_roles": true,
+    "learner_agency_may_expand_with_applicable_capacity_and_policy": true,
+    "counseling_or_safeguarding_data_not_ambiently_visible_to_guardians_or_staff": true,
+    "least_disclosure_default": true
+  },
+  "non_claims": [
+    "This contract does not itself establish a person's identity, guardianship, employment, professional status, enrollment, or delegated authority.",
+    "This contract does not define Ontario law or school-board policy.",
+    "This contract does not make Claw Academy an accredited school or credential issuer.",
+    "A role label is descriptive context only; authorization remains an evidenced Mesh decision."
+  ]
+}
