@@ -28,15 +28,24 @@ void main() {
         findsOneWidget,
       );
 
+      final previewList = find.byType(ListView).first;
       final continueButton = find.byKey(const ValueKey('claw-continue'));
-      await tester.ensureVisible(continueButton);
+      await tester.scrollUntilVisible(
+        continueButton,
+        240,
+        scrollable: previewList,
+      );
       await tester.tap(continueButton);
       await tester.pumpAndSettle();
 
       expect(find.text('Make the same amount'), findsOneWidget);
 
       final scholarChip = find.byKey(const ValueKey('claw-preset-scholar'));
-      await tester.ensureVisible(scholarChip);
+      await tester.scrollUntilVisible(
+        scholarChip,
+        -240,
+        scrollable: previewList,
+      );
       await tester.tap(scholarChip);
       await tester.pumpAndSettle();
 
