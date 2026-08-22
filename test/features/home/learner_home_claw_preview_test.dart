@@ -7,7 +7,8 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: LearnerHomeScreen()));
 
     final button = find.byKey(const ValueKey('home-open-claw-preview'));
-    await tester.ensureVisible(button);
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pumpAndSettle();
     await tester.tap(button);
     await tester.pumpAndSettle();
 
