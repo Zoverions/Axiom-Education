@@ -43,7 +43,7 @@
     "diagnosis_sent_by_default": false,
     "only_explicitly_granted_context_scopes_may_be_materialized": true,
     "remote_egress_requires_explicit_policy_allowance": true,
-    "context_grant_is_task_and-time-bound": true
+    "context_grant_is_task_and_time_bound": true
   },
   "placement_filters": [
     "required-modality-and-structured-output-capability",
@@ -68,7 +68,9 @@
     "max_cost_micros_supported": true,
     "max_wall_time_supported": true,
     "fallback_cannot_exceed_budget": true,
-    "commercial_margin_may_expand_data_scope": false
+    "commercial_margin_may_expand_data_scope": false,
+    "payer_or_budget_source_becomes_data_authority": false,
+    "payer_or_budget_source_becomes_pedagogical_authority": false
   },
   "usage_receipt": {
     "records_provider_model_runtime_and_compute_node": true,
@@ -79,6 +81,14 @@
     "records_raw_prompt_by_default": false,
     "records_raw_learner_response_by_default": false,
     "operational_receipt_is_not_learner_mastery_evidence": true
+  },
+  "usage_visibility": {
+    "learner_self_usage_view_supported": true,
+    "payer_may_receive_authorized_billing_totals": true,
+    "institution_may_receive_authorized_aggregate_capacity_or_budget_view": true,
+    "billing_visibility_implies_raw_prompt_access": false,
+    "budget_authority_implies_transcript_access": false,
+    "usage_receipt_implies_social_or_support_log_access": false
   },
   "education_authority_boundary": {
     "model_may_choose_curriculum_truth": false,
@@ -108,6 +118,6 @@
     "A model recommendation is not curriculum authority, a grade, mastery evidence, accreditation, or a credential.",
     "A cheaper or more engaging model is not eligible when privacy, safety, jurisdiction, retention, or learner policy excludes it.",
     "This contract does not activate a production model provider or imply that a named provider is approved for minor data.",
-    "Usage accounting does not authorize school staff, guardians, providers, or administrators to inspect raw learner prompts."
+    "Usage accounting does not authorize school staff, guardians, providers, administrators, or payers to inspect raw learner prompts."
   ]
 }
