@@ -1,0 +1,131 @@
+{
+  "contract": "axiom-education-personal-insight-vault",
+  "version": 1,
+  "status": "draft-foundation",
+  "purpose": "Store and use consented, evidence-bound learner insight without turning psychological or health context into uncontrolled profiles, diagnosis-by-model, mastery, grades, credentials, public reputation, or commercial targeting.",
+  "mesh_parent_contracts": {
+    "repository": "Zoverions/AXIOM-MESH",
+    "source_sha": "057433be99fe0b2b7c5c6a1c34316e119f45b46b",
+    "adoption_status": "documentation-readiness-only-no-runtime-authority",
+    "contracts": [
+      {
+        "id": "axiom-sovereign-vault.v1",
+        "path": "docs/architecture/contracts/sovereign-vault.v1.schema.json",
+        "sha256": "02e062e6281e0ffd29920d6973cd0108daeb9644ce80313e31511699824ce6c2"
+      },
+      {
+        "id": "axiom-context-capsule.v1",
+        "path": "docs/architecture/contracts/context-capsule.v1.schema.json",
+        "sha256": "31d2d1a2594b968407604466462cbf537d7490b4bdb9cf22002bd98717c24a17"
+      }
+    ]
+  },
+  "mesh_inheritance_invariants": {
+    "education_profile_may_weaken_parent_vault_invariants": false,
+    "direct_external_vault_access": false,
+    "local_companion_access_requires_mesh_lease": true,
+    "future_external_materialization_requires_context_capsule": true,
+    "context_capsule_grants_vault_access": false,
+    "context_capsule_grants_execution_authority": false,
+    "contract_presence_grants_runtime_authority": false
+  },
+  "sensitivity_classes": [
+    "ordinary-preference",
+    "educational-sensitive",
+    "psychological-sensitive",
+    "clinical-health-restricted"
+  ],
+  "source_types": [
+    "learner-self-report",
+    "guardian-observation",
+    "educator-observation",
+    "task-evidence",
+    "structured-assessment",
+    "clinician-provided",
+    "model-hypothesis"
+  ],
+  "purposes": [
+    "presentation-adaptation",
+    "instructional-strategy",
+    "metacognitive-feedback",
+    "learner-self-reflection",
+    "accessibility-support",
+    "wellbeing-support",
+    "educator-support",
+    "guardian-support",
+    "clinical-accommodation"
+  ],
+  "permissions": [
+    "read",
+    "use",
+    "propose-revision",
+    "confirm",
+    "dispute",
+    "correct",
+    "revoke"
+  ],
+  "revision_types": [
+    "confirm",
+    "dispute",
+    "correct",
+    "revoke"
+  ],
+  "record_requirements": {
+    "exact_learner_subject": true,
+    "explicit_claim_type": true,
+    "explicit_source_type": true,
+    "provenance_evidence_required": true,
+    "domain_scope_required": true,
+    "limitations_required": true,
+    "review_time_required": true,
+    "expiry_time_required": true,
+    "model_hypothesis_requires_confidence": true,
+    "model_hypothesis_may_create_clinical_diagnosis": false,
+    "clinical_diagnosis_claim_requires_clinician_provided_source": true
+  },
+  "access_requirements": {
+    "exact_actor": true,
+    "exact_learner_subject": true,
+    "purpose_bound": true,
+    "permission_bound": true,
+    "sensitivity_bound": true,
+    "domain_bound": true,
+    "evidence_backed_grant": true,
+    "grant_expiry_required": true,
+    "grant_revocable": true,
+    "sensitive_read_or_use_requires_access_receipt_reservation": true,
+    "descriptive_role_alone_creates_access": false
+  },
+  "revision_invariants": {
+    "corrections_are_append_only": true,
+    "correction_rewrites_original_provenance": false,
+    "learner_confirmation_turns_model_hypothesis_into_clinician_fact": false,
+    "dispute_is_preserved_in_history": true,
+    "revocation_blocks_future_use_without_silently_rewriting_history": true
+  },
+  "model_materialization_boundary": {
+    "vault_grant_alone_authorizes_model_materialization": false,
+    "separate_education_model_context_grant_required": true,
+    "remote_egress_requires_separate_model_context_authority": true,
+    "retention_requires_separate_model_context_authority": true
+  },
+  "non_authority_invariants": {
+    "insight_establishes_mastery": false,
+    "insight_creates_grade_or_credit": false,
+    "insight_mints_credential": false,
+    "insight_creates_public_profile_by_default": false,
+    "insight_federates_across_services_by_default": false,
+    "sensitive_insight_may_be_used_for_commercial_targeting": false,
+    "generic_psychological_score_is_learning_truth": false,
+    "permanent_learning_style_label_is_allowed": false
+  },
+  "learner_agency": {
+    "inspect_source_and_provenance": true,
+    "inspect_confidence_and_limitations_where_applicable": true,
+    "confirm": true,
+    "dispute": true,
+    "correct": true,
+    "revoke_future_use": true,
+    "inspect_sensitive_access_receipts": true
+  }
+}
