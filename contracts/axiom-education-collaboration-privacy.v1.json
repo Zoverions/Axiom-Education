@@ -1,0 +1,105 @@
+{
+  "schema": "axiom-education-collaboration-privacy.v1",
+  "contract_id": "axiom.education.collaboration-privacy",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Use AXIOM social/circle primitives for educational collaboration while restricting conversation and activity-log access to evidenced, purpose-bound need-to-know authority.",
+  "mesh_social_dependency": {
+    "reuse_social_layer": true,
+    "education_builds_parallel_social_network": false,
+    "supported_audience_projection": ["circle"],
+    "public_or_follower_audience_allowed_by_default": false,
+    "circle_membership_itself_grants_log_access": false,
+    "social_publication_authority_effect_remains_none": true
+  },
+  "collaboration_purposes": [
+    "assignment-discussion",
+    "peer-help",
+    "group-project",
+    "teacher-announcement",
+    "tutoring",
+    "office-hours",
+    "study-group",
+    "learner-support"
+  ],
+  "data_classes": [
+    "shared-instructional",
+    "assignment-context",
+    "peer-conversation",
+    "support-conversation",
+    "safeguarding-restricted"
+  ],
+  "access_invariants": {
+    "role_label_alone_grants_access": false,
+    "institution_membership_alone_grants_access": false,
+    "guardian_relationship_alone_grants_full_transcript_access": false,
+    "teacher_relationship_alone_grants_all_learner_log_access": false,
+    "principal_role_alone_grants_all_learner_log_access": false,
+    "counselor_role_alone_grants_all_learner_log_access": false,
+    "purpose_bound_access_required": true,
+    "scope_bound_access_required": true,
+    "time_bound_access_required_for_privileged_reads": true,
+    "evidence_bound_authority_required": true,
+    "access_receipt_required_for_privileged_reads": true
+  },
+  "default_visibility": {
+    "teacher_announcement": "assigned-circle",
+    "assignment_discussion": "assigned-circle",
+    "peer_help": "participant-circle",
+    "group_project": "project-circle",
+    "tutoring": "participants-and-explicitly-authorized-support",
+    "office_hours": "participants-and-explicitly-authorized-support",
+    "support_conversation": "participants-and-explicitly-authorized-support",
+    "safeguarding_restricted": "explicit-safeguarding-authority-only"
+  },
+  "guardian_boundary": {
+    "may_receive_assignment_and_progress_views_when_authorized": true,
+    "may_receive_policy_and_safety_notices_when_authorized": true,
+    "automatic_peer_chat_transcript_access": false,
+    "automatic_counseling_or_support_transcript_access": false,
+    "automatic_private_teacher_learner_message_access": false,
+    "child_rights_and_applicable_policy_may_limit_disclosure": true
+  },
+  "educator_boundary": {
+    "may_moderate_assigned_learning_space_when_authorized": true,
+    "may_read_threads_needed_for_assigned_instructional_purpose_when_authorized": true,
+    "may_browse_unrelated_learner_social_history": false,
+    "may_access_other_classes_by_role_only": false
+  },
+  "safeguarding_boundary": {
+    "break_glass_read_allowed_by_default": false,
+    "requires_explicit_governed_safeguarding_authority": true,
+    "requires_reason_and_evidence": true,
+    "requires_access_receipt": true,
+    "does_not_convert_to_permanent_browse_authority": true
+  },
+  "logging_and_retention": {
+    "conversation_log_is_official_learner_record_by_default": false,
+    "raw_social_log_is_mastery_evidence_by_default": false,
+    "pedagogically_material_consequence_may_be_projected_separately": true,
+    "access_logs_are_more_restricted_than_general_activity_feeds": true,
+    "retention_must_be_policy_bound": true,
+    "indefinite_retention_by_default": false,
+    "learner_export_and_correction_semantics_required_before_promotion": true
+  },
+  "minimization": {
+    "assignment_links_prefer_content_addressed_reference_over_duplicate_submission_body": true,
+    "presence_status_required": false,
+    "typing_telemetry_required": false,
+    "read_receipt_telemetry_required": false,
+    "attention_or_engagement_scoring_allowed": false,
+    "cross_context_social_graph_exposure_required": false
+  },
+  "attribution": {
+    "class_local_pseudonym_supported": true,
+    "public_identity_disclosure_required": false,
+    "institution_may_require_verified_identity_binding_without_public_display": true
+  },
+  "non_claims": [
+    "A class circle is not a blanket authorization to inspect every member's education or social history.",
+    "Guardian status does not imply unrestricted access to peer, counseling, support, or safeguarding transcripts.",
+    "A raw conversation log is not automatically a learner record, grade, mastery decision, disciplinary finding, or governance score.",
+    "This contract does not claim that AXIOM-MESH currently implements private educational messaging or every required delegated-read capability."
+  ]
+}
