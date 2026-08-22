@@ -370,7 +370,7 @@ class _CurrentBoundaryCard extends StatelessWidget {
             const _StatusRow(
               icon: Icons.privacy_tip_outlined,
               text:
-                  'Practice and Claw preview feedback are temporary and are not written to a learner record.',
+                  'Practice feedback is temporary. Claw preview feedback is also temporary; neither is written to a learner record.',
             ),
             const _StatusRow(
               icon: Icons.pending_actions_rounded,
