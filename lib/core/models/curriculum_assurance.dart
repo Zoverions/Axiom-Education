@@ -43,6 +43,8 @@ class CurriculumAssuranceRecord {
     this.supersedesRecordId,
   });
 
+  bool get claimsAlignment => level != CurriculumAssuranceLevel.unverified;
+
   bool get claimsHumanReview =>
       level.index >= CurriculumAssuranceLevel.humanReviewed.index;
 
@@ -55,7 +57,7 @@ class CurriculumAssuranceRecord {
   bool get claimsAccreditation => level == CurriculumAssuranceLevel.accredited;
 
   bool get evidenceIsSufficientForClaim {
-    if (sourceEvidenceIds.isEmpty) return false;
+    if (claimsAlignment && sourceEvidenceIds.isEmpty) return false;
     if (claimsHumanReview && reviewEvidenceIds.isEmpty) return false;
     return true;
   }
