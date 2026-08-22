@@ -1,0 +1,99 @@
+{
+  "schema": "axiom-education-resource-intelligence.v1",
+  "contract_id": "axiom.education.resource-intelligence",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Select among multiple pedagogical presentations of a competency using accessibility, trust, direct learner feedback, and demonstrated outcomes without optimizing for generic engagement.",
+  "provider_independent": true,
+  "resource_formats": [
+    "video",
+    "text",
+    "audio",
+    "animation",
+    "worked-example",
+    "simulation",
+    "game",
+    "story",
+    "project",
+    "human-instruction",
+    "external-experience"
+  ],
+  "trust_states": [
+    "discovered",
+    "machine-analyzed",
+    "community-reviewed",
+    "educator-reviewed",
+    "institution-approved",
+    "jurisdiction-approved"
+  ],
+  "feedback_signals": [
+    "helpful",
+    "not-helpful",
+    "still-confused",
+    "too-fast",
+    "too-slow",
+    "too-easy",
+    "too-hard",
+    "liked-example",
+    "show-another-way",
+    "more-like-this",
+    "already-knew-this"
+  ],
+  "selection_inputs": {
+    "required": [
+      "target-competency",
+      "resolved-resource-eligibility",
+      "resource-trust-state"
+    ],
+    "supported": [
+      "required-accessibility-features",
+      "accepted-language",
+      "preferred-duration",
+      "recent-learner-feedback",
+      "later-demonstrated-outcome-evidence",
+      "contextual-format-fit",
+      "difficulty-fit",
+      "pace-fit"
+    ],
+    "forbidden_optimization_targets": [
+      "watch-time",
+      "click-through-rate",
+      "advertising-yield",
+      "streak-maximization",
+      "generic-engagement"
+    ]
+  },
+  "policy_boundary": {
+    "recommendation_engine_invents_age_or_maturity_policy": false,
+    "recommendation_engine_invents_guardian_authority": false,
+    "recommendation_engine_invents_jurisdiction_rules": false,
+    "resolved_policy_is_consumed_as_input": true,
+    "denied_resource_is_hard_filtered": true,
+    "missing_required_accessibility_feature_is_hard_filtered": true,
+    "below_minimum_trust_is_hard_filtered": true
+  },
+  "feedback_boundary": {
+    "learner_feedback_changes_curriculum_truth": false,
+    "learner_feedback_may_change_presentation_and_sequence": true,
+    "later_outcome_evidence_may_confirm_or_contradict_self_report": true,
+    "permanent_learning_style_labels": false,
+    "resource_popularity_is_not_mastery_evidence": true
+  },
+  "external_resource_boundary": {
+    "youtube_is_generic_provider_not_platform_dependency": true,
+    "provider_receives_full_learner_profile_by_default": false,
+    "external_success_is_not_mastery": true,
+    "provider_integration_uses_experience_provider_contract": "axiom.education.experience-provider"
+  },
+  "privacy": {
+    "retain_minimum_pedagogically_useful_evidence": true,
+    "raw_surveillance_history_required": false,
+    "cross_learner_aggregation_requires_separate_governance_and_privacy_controls": true
+  },
+  "non_claims": [
+    "A high recommendation score does not establish mastery, accreditation, or curriculum approval.",
+    "A learner preference does not by itself authorize otherwise restricted content.",
+    "A popular resource is not necessarily an appropriate resource for a particular learner or moment."
+  ]
+}
