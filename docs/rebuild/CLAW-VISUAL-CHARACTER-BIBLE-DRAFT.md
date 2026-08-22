@@ -1,39 +1,55 @@
 # Claw Academy visual and character bible — provisional
 
-Status: **draft comparison scaffold; no character design is canonical yet.**
+Status: **draft comparison scaffold; current Claw v2 character canon is not yet locked.**
 
-This document converts recovered C.L.A.W. Academy material into a structured creative-development surface. It must be read with `CLAW-LEGACY-VISUAL-MANIFEST.md` and `CLAW-LEGACY-SALVAGE.md`.
+This document now incorporates both the early C.L.A.W. blueprint material and the recovered 2026-08-22 application archive. Read it with:
+
+- `CLAW-LEGACY-ARCHIVE-AUDIT.md`
+- `CLAW-LEGACY-VISUAL-MANIFEST.md`
+- `CLAW-LEGACY-SALVAGE.md`
+- `CLAW-LEGACY-FEATURE-MATRIX.md`
+
+## Source hierarchy
+
+For reconstructing **legacy history**, use this order of weight:
+
+1. repeated later archive code + repeated later archive visuals;
+2. later archive seed/story source or a clearly labeled visual;
+3. archive design documents;
+4. earlier pasted blueprints/summaries;
+5. filenames or isolated generated labels.
+
+This hierarchy does **not** choose current Claw v2 canon automatically. It only prevents an early description or misleading filename from outweighing stronger later historical evidence.
 
 ## Creative north star
 
-The strongest visual direction recovered so far is an **optimistic science-adventure academy**: a place where learning feels like exploration, investigation, building, simulation, and discovery rather than passive classroom compliance.
+The recovered material repeatedly supports an **optimistic science-adventure academy** where learning feels like exploration, investigation, building, simulation, story, and discovery rather than passive classroom compliance.
 
-The current Claw architecture does not require one art style. A story/comic panel, logic puzzle, simulation, builder challenge, local multiplayer game, or conventional text explanation may render differently while sharing the same governed competency/evidence graph.
+Current Claw architecture should not require one art style. Comic panels, logic puzzles, simulations, builder challenges, local multiplayer, dialogue scenes, and conventional explanations may use different renderers while sharing the same governed competency/evidence graph.
 
-The visual system should therefore provide continuity without forcing every learning mode into one aesthetic.
+Continuity should come from characters, environments, iconography, recurring props, accessible interface language, and a versioned visual system—not from forcing every learning mode into one aesthetic.
 
-## Current visual anchors from recovered reference 001
+## Environment language — strong legacy candidate
 
-Provisional environment language:
+Repeated recovered material supports:
 
 - clean futuristic architecture;
 - large interactive learning surfaces;
-- world, science, systems, map, and space imagery;
-- white/light-grey environmental base;
-- cyan/dark-teal interface family;
-- warmer accent colours on characters and equipment;
-- rounded, readable forms suitable for children without becoming babyish;
-- technology presented as a tool for inquiry rather than spectacle for its own sake.
+- science, systems, map, world and space imagery;
+- white/light-grey environmental bases;
+- cyan/dark-teal interfaces;
+- warmer character/equipment accents;
+- rounded readable forms suitable for children without becoming babyish;
+- technology framed as a tool for inquiry;
+- academy spaces that can open into field/adventure settings.
 
-These are candidate principles, not final colour specifications.
+These are candidate design principles, not final palette specifications.
 
 ## Character-design rule
 
-Characters should first be defined by **narrative/instructional function**, then by name, species, age presentation, wardrobe, and visual silhouette.
+Characters are first defined by **narrative/instructional function**, then by name, species, age presentation, wardrobe and silhouette.
 
-A character role can survive even if the old literal character changes.
-
-For example:
+A role can survive even if the old literal character changes.
 
 ```text
 analyst role
@@ -44,126 +60,186 @@ analyst role
 not
 
 analyst character
-  -> is always right because the script says they are analytical
+  -> is always right because the script calls them analytical
 ```
 
-No character role creates educational authority. A mentor, analyst, or empath can be mistaken inside a story when the learning design calls for evaluation, correction, or uncertainty.
+No character role creates educational authority. Mentor, analyst, empath, protector or curious character may be mistaken, revise a belief, need another person's skill, or model uncertainty.
 
-## Legacy cast — candidate status
+## Professor Zov — strongest recovered legacy identity
 
-The following details are **source-derived legacy descriptions**, not current canon.
+### Early blueprint evidence
 
-| Legacy name | Legacy description | Durable role worth preserving | Canon decision still open |
-| --- | --- | --- | --- |
-| Professor Zov | Adult cat; wise, kind mentor; one text says black cat; reference 001 shows an orange cat instructor | Socratic mentor / guide | colour, species details, clothing, identity of reference-001 instructor |
-| Xavier | Human, 12; learner/team leader; later described as Zov's adopted son and Side Bag wearer | learner/leader / synthesis role | name, age, human depiction, family relationship, default-player status |
-| Callie | Human teen; analytical skeptic; later description includes glasses/tablet | analyst / evidence role | name, age, appearance, human depiction |
-| Marnell | Monkey, 15; strong, impulsive protector; later described as Capuchin | protector / action-before-reflection arc | name, age, species, framing |
-| David | Monkey, 14; jester who pushes boundaries; later described as Spider Monkey | playful-chaos / boundary-testing role | name, age, species, whether one recurring character should bear most conflict |
-| Luca | Monkey, 13; sensitive/socially aware; later described as Marmoset | empath / perspective-taking role | name, age, species, avoiding a one-note empathy character |
-| James | Albino monkey, 10; curious youngest; later described as Pygmy Marmoset | foundational-question / curiosity role | name, age, species, visual depiction |
-| Sylus | Human, 17; principled, systems-thinking role model | advanced systems-thinking role | whether needed in core cast, name/age/appearance |
-| Trinity | Human, 21; compassionate, intellectual-honesty role model | advanced ethical/intellectual-honesty role | whether needed in core cast, name/age/appearance |
+- adult cat;
+- wise, authoritative and kind mentor;
+- Socratic/system-2 guide;
+- one later prose summary called him a **black cat** in explorer gear.
 
-Exact ages should not be used to derive learner difficulty or instructional stage.
+### Later archive evidence
 
-## Professor Zov — unresolved design fork
+The recovered implementation repeatedly converges on:
 
-Professor Zov should remain open until the recovered art set is larger.
+- **orange tabby cat**;
+- orange/grey futuristic/explorer/space suit;
+- green technical nodes/details on the character-sheet suit;
+- central instructor/mentor presence;
+- same orange design across character sheet, classroom, portrait, faculty imagery and later seed source.
 
-### What appears durable
+The later seed data explicitly describes Professor Zov as an orange tabby wearing a futuristic space suit.
 
-- cat-like mentor identity;
+### Current conclusion
+
+Orange-tabby Zov is now a **strong later legacy-canon candidate**, not merely one side of an equal orange/black ambiguity. The black-cat description remains provenance for an earlier iteration.
+
+For Claw v2, exact appearance still requires explicit creative approval. The durable role is already strong enough to retain:
+
 - warm rather than punitive authority;
+- Socratic mentor;
 - explorer/science-guide energy;
-- asks questions and scaffolds thinking rather than merely announcing answers;
-- can bridge story, instruction, reflection, and help-seeking.
+- models uncertainty and revision;
+- bridges story, explanation, reflection and help-seeking.
 
-### What is unresolved
+Open decisions include exact suit details, title, voice, whether Zov is physically present in every mode, and whether old family relationships remain canon.
 
-- orange versus black fur;
-- exact costume and silhouette;
-- whether `Professor` remains the title;
-- whether Zov is always physically present or sometimes appears through interfaces, field notes, audio, comics, or optional AI tutoring;
-- whether legacy family relationships remain part of canon.
+## Core legacy cast — evolution table
 
-Do not choose one fork merely because one image is visually stronger.
+| Character | Early blueprint | Later archive evidence | Durable role | Current v2 status |
+| --- | --- | --- | --- | --- |
+| Professor Zov | adult cat; one summary says black | repeated orange-tabby art + source description | Socratic mentor/guide | orange design is strong candidate; explicit approval still required |
+| Xavier | human, 12; learner/team leader; Zov's adopted son in one summary; Side Bag wearer | ensemble art/later source presents monkey/chimp learner with blue C.L.A.W. shirt and cross-body bag | learner/leader/synthesis | species, age, family relationship and default-avatar status unresolved |
+| Callie | human teen; skeptic/analyst; glasses/tablet | ensemble artwork depicts human girl with glasses/tablet; one seed script categorizes her as chimp | analyst/evidence/uncertainty | human depiction visually stronger, but taxonomy conflict remains |
+| Marnell | monkey, 15; protector; later called Capuchin | later ensemble art depicts large muscular ape/chimp-like student | protector/action/system role | broad role retained; exact species/age open |
+| David | monkey, 14; jester/boundary-pusher; later called Spider Monkey | later ensemble art depicts lanky long-tailed monkey in playful styling | play/chaos/boundary-testing | retain role but do not make recurring designated wrongdoer |
+| Luca | monkey, 13; sensitive/socially aware; later called Marmoset | later ensemble art depicts small monkey-like student | perspective/empathy role | retain but keep multidimensional |
+| James | albino monkey, 10; youngest/curious; later called Pygmy Marmoset | later ensemble art depicts pale small monkey-like student | foundational-question/curiosity | strong role candidate; exact species/age open |
+| Sylus | human, 17; principled systems-thinking role model | later concept sheet exists but labeling/source generation is inconsistent | advanced systems-thinking | research/candidate |
+| Trinity | human, 21; compassion/intellectual-honesty role model | later concept sheet exists but includes generated-label noise | advanced ethical/intellectual-honesty | research/candidate |
+
+Exact character age must never derive learner difficulty, intelligence or instructional placement.
+
+## Later legacy roster discovered in the archive
+
+Later planning/source expands the world well beyond the first blueprint.
+
+### Main/student candidates
+
+- Xavier
+- Marnell
+- David
+- Luca
+- James
+- Callie
+- Xylar — alien student; later story notes include disguise/reveal ideas
+- Byte — robot/AI student; personhood/rights story potential
+- Leo, Maya, Noah — human trio appearing clearly in recovered art
+- DJ, Christian, Kam — chimp/student trio
+- Pip, Blink, Rex, Luna, Rusty, Sam, Dash, Zoe and other supporting-student concepts
+
+### Faculty/staff candidates
+
+- Professor Zov
+- Principal Minerva — grey cat/purple-robed visual direction in recovered ensemble art
+- Professor Nimbus
+- Professor Terra
+- Coach Rumble
+- Chef Anya
+- Janitor Bob
+- Counselor Kiko
+
+### Antagonistic/story-role candidates
+
+- Vector / Jack
+- Gloom
+- Zed
+- Blaze
+
+“Villain” or antagonist status in old material does not create a permanent moral essence. Current stories may reinterpret motives, roles and redemption arcs rather than encode fixed good/bad character scores.
+
+## Visual-file reliability warning
+
+Several archive filenames do not identify the visible character content:
+
+- `character-callie.webp` visibly labels Leo, Maya, Noah;
+- `character-david.webp` visibly labels Zed and Blaze;
+- `character-jax.webp` visibly labels Xylar;
+- `character-marnell.webp` visibly labels Byte;
+- `character-luca.webp` visibly labels Sylus and Trinity;
+- `character-trinity.webp` visibly labels Vector (Jack) and Gloom;
+- `character-sylus.webp` is actually the main student/faculty ensemble sheet.
+
+Generated sheets also include duplicate or malformed labels.
+
+**Rule:** filename != identity. Current canon records must cite inspected reference assets and approval provenance.
 
 ## Ensemble writing principles
 
-The legacy roles are useful if the cast remains multidimensional.
+The recovered roles are most useful when characters remain multidimensional.
 
-- The analyst should sometimes need empathy or creative intuition.
-- The empath should be capable of evidence-based correction rather than serving only as the emotional conscience.
-- The protector can be thoughtful and technically skilled, not only impulsive.
-- The jester should not become the designated bad actor in every social puzzle.
-- The curious younger character should sometimes challenge adult assumptions successfully.
-- The mentor should model revision and uncertainty, not infallibility.
-
-This supports the modern Claw goal of teaching reasoning, perspective-taking, metacognition, collaboration, and system repair without assigning moral value to personality types.
+- The analyst sometimes needs empathy, imagination or domain expertise.
+- The empath can challenge weak evidence and change their mind.
+- The protector can be thoughtful and technically skilled, not a synonym for impulsive.
+- The jester should not be the designated source of every problem.
+- The curious younger character can successfully challenge older assumptions.
+- The mentor models correction rather than infallibility.
+- Human, animal, alien and synthetic characters should not map species to moral/cognitive worth.
+- A robot/AI character such as Byte can support agency/personhood questions only when the lesson clearly separates open philosophical questions from established fact.
 
 ## Learner/avatar relationship
 
-The current architecture should not require the learner to identify as Xavier or any other fixed protagonist.
+Current Claw should not require the learner to identify as Xavier or any fixed protagonist.
 
-Preferred options:
+Supported directions should include:
 
 - observe the ensemble as story characters;
 - choose a fictional academy identity/avatar;
-- optionally play as a story character in a bounded scenario;
-- use a low-story or textbook-like presentation with the same learning target.
+- optionally play as a named character in a bounded scenario;
+- use a low-story/conventional presentation with the same learning target.
 
-A learner's real identity should not be required to generate narrative continuity.
+A learner's real identity or likeness is not required for narrative continuity.
 
 ## Presentation presets and visuals
 
-The legacy Sprout / Scout / Explorer / Analyst / Scholar names may survive as optional presentation presets, but visual treatment must not imply intelligence ranking or social status.
+Sprout / Scout / Explorer / Analyst / Scholar can survive as reversible **presentation-support presets**, not intelligence ranks or age bands.
 
 A preset may change:
 
 - text density;
 - audio prominence;
 - icon support;
-- number of simultaneous clues;
-- amount of scaffolding;
+- simultaneous clue load;
+- scaffolding;
 - vocabulary density;
-- explicit metacognitive labels.
+- explicit metacognitive terminology;
+- visual complexity where an equivalent accessible representation exists.
 
-The underlying character dignity, access to necessary help, curriculum truth, and competency target stay unchanged.
+It may not change character dignity, necessary help access, curriculum truth, competency target, grade, mastery or credential authority.
 
 ## Environment families
 
-Candidate recurring spaces from legacy concepts can become graph-renderer themes rather than fixed curriculum silos:
-
 ### Academy command/classroom
 
-Best for briefing, reflection, maps, evidence boards, progress overviews, and switching between missions.
+Briefing, maps, evidence boards, reflection, mission selection, system overviews and cross-mode transitions.
 
 ### Hall of Hearts
 
-Dialogue/perspective-taking environment. It should support uncertainty and multiple perspectives rather than emotion-recognition answer keys alone.
+Dialogue/perspective environment. Modern version should emphasize uncertainty, context and multiple constructive responses rather than face/emotion answer keys.
 
 ### Labyrinth of Logic
 
-Evidence/reasoning puzzle environment. Claims, observations, assumptions, patterns, and counterexamples can become spatial or interactive mechanics.
+Evidence/reasoning puzzle space where claims, observations, assumptions, counterexamples and uncertainty can become interactive mechanics.
 
 ### Builder's Workshop / Creation Canyon
 
-Construction, coding, engineering, design, modelling, and creative-system challenges.
+Construction, coding, engineering, design, modelling and creative-system challenges.
 
 ### Field/adventure spaces
 
-Story worlds can move beyond the academy so transfer tasks feel like applications rather than repeated classroom exercises.
-
-These spaces may share character/environment language while using different interaction models.
+Transfer/application contexts beyond the academy so skills are used rather than merely repeated.
 
 ## Interface language
 
-The legacy image suggests a useful **diegetic interface** approach: learning information appears through consoles, maps, evidence boards, field tools, notebooks, badges, and the Side Bag rather than only conventional menus.
+Recovered art strongly supports diegetic interfaces: consoles, maps, evidence boards, field tools, notebooks, badges, story objects and the Side Bag.
 
-This should never reduce usability. Every diegetic control needs a clear accessible equivalent.
-
-Candidate UI motifs:
+Candidate motifs:
 
 - world/system maps;
 - evidence cards;
@@ -173,42 +249,29 @@ Candidate UI motifs:
 - workshop inventory;
 - dialogue/perspective cards;
 - simulation controls;
-- medallions/badges as evidence-linked artifacts.
+- medallions/badges with explicit evidence status.
+
+Every diegetic control needs a clear accessible equivalent.
 
 ## My Side Bag
 
-Retain as a learner-owned experience hub, potentially containing:
+Retain as learner-owned experience hub for things such as:
 
-- appearance/cosmetic items;
+- appearance/cosmetics;
 - collected story artifacts;
-- earned badges whose evidence status is explicit;
-- accessibility and presentation shortcuts;
+- cosmetic badges and, separately, evidence-backed achievements;
+- accessibility/presentation shortcuts;
 - saved fictional story choices;
 - learner-chosen favourites;
 - optional local game-night tools.
 
-Do not turn the Side Bag into a scarcity store, streak dashboard, advertising surface, or hidden behavioural profile.
+Do **not** inherit the old reward shop/points economy as the Side Bag's core. It must not become a scarcity store, streak dashboard, advertising surface, behavioural profile or educational-advantage marketplace.
 
-## Accessibility requirements for art and character systems
+## Generated-media consistency
 
-Every canonical visual system should support:
+If generated media is used, it should render from a versioned character specification rather than free-form prompt memory.
 
-- meaningful alt text or equivalent descriptions where visuals carry content;
-- high-contrast and non-colour-only state cues;
-- scalable text independent of illustrated lettering;
-- audio and non-audio alternatives;
-- reduced-motion presentation where applicable;
-- controls that remain usable without precise pointing, camera, microphone, or rapid response;
-- captions/transcripts for voiced story content;
-- content that remains understandable when decorative art is absent.
-
-A visually elaborate Claw route must have a valid lower-bandwidth or lower-sensory-load fallback without becoming an inferior curriculum.
-
-## Generated-media character consistency
-
-If generated media is used later, the system should generate from a versioned character specification rather than free-form prompt memory.
-
-A future canonical character record should minimally define:
+A future canonical record should minimally define:
 
 ```text
 character_id
@@ -216,7 +279,7 @@ canon_version
 name
 narrative_roles
 species/presentation
-age-presentation range if relevant
+age-presentation range if narratively relevant
 silhouette anchors
 wardrobe anchors
 forbidden drift
@@ -227,20 +290,40 @@ reference asset ids
 approval provenance
 ```
 
-Model output is a derivative renderer, not a source of canon.
+Model output is derivative media, not a source of canon.
 
-## Visual canon decision process
+## Accessibility requirements
 
-When more legacy images are recovered:
+Canonical visual systems should support:
 
-1. add each to the visual manifest with a digest and source context;
-2. compare recurring versus contradictory traits;
-3. separate character identity evidence from general art-style evidence;
-4. identify what still serves the current Claw architecture;
-5. create explicit candidate sheets rather than silently averaging images;
-6. choose and approve canonical designs;
-7. version the canon so later redesigns do not rewrite provenance.
+- meaningful alt text/equivalent descriptions where visuals carry content;
+- high-contrast and non-colour-only cues;
+- scalable text independent of illustrated lettering;
+- audio and non-audio alternatives;
+- reduced motion where applicable;
+- controls usable without precise pointing, camera, microphone or rapid response;
+- captions/transcripts for voiced content;
+- coherent learning when decorative art is absent;
+- lower-bandwidth/lower-sensory-load routes without an inferior curriculum.
 
-## Current non-canon statement
+## Canon decision process
 
-As of 2026-08-22, the futuristic academy tone is a strong candidate direction, the role-based ensemble is worth preserving, and Professor Zov remains a cat-like mentor candidate. **No exact character appearance, cast roster, age, species subtype, family relationship, or palette is yet locked as Claw v2 canon.**
+1. Register each recovered source with provenance/digest.
+2. Distinguish repeated later implementation evidence from earlier concept prose.
+3. Separate visible identity evidence from filenames and generated labels.
+4. Resolve major contradictions explicitly.
+5. Create candidate sheets rather than silently averaging conflicting generations.
+6. Check accessibility, story function and current architecture fit.
+7. Explicitly approve canonical designs.
+8. Version canon so later redesigns do not rewrite history.
+
+## Current provisional conclusion
+
+As of 2026-08-22:
+
+- the optimistic futuristic science-adventure academy is a strong visual direction;
+- the role-based ensemble is worth preserving and expanding;
+- **orange-tabby Professor Zov is the strongest recovered later-legacy design**;
+- the later archive roster is richer than the early blueprint and should be mined rather than discarded;
+- Xavier and Callie demonstrate why current canon must be approval-based rather than inferred from a single source;
+- no exact full cast roster, age set, species mapping, family relationship or palette is yet locked as Claw v2 canon.
