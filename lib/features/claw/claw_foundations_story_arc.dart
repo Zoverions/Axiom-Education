@@ -205,10 +205,7 @@ class ClawFoundationsStoryArc {
     ),
   };
 
-  static const presentationVariants = <
-    String,
-    Map<ClawPresentationPreset, ClawPresentationVariant>
-  >{
+  static const presentationVariants = <String, Map<ClawPresentationPreset, ClawPresentationVariant>>{
     'arrival': <ClawPresentationPreset, ClawPresentationVariant>{
       ClawPresentationPreset.sprout: ClawPresentationVariant(
         title: 'The four-lantern bridge',
@@ -262,7 +259,11 @@ class ClawFoundationsStoryArc {
         title: 'See the same amount',
         body:
             'Shade half of a shape. Now cut the same shape into 4 equal pieces. The shaded half covers 2 pieces. That is 2/4.',
-        bullets: <String>['1 of 2 pieces.', '2 of 4 pieces.', 'Same shaded amount.'],
+        bullets: <String>[
+          '1 of 2 pieces.',
+          '2 of 4 pieces.',
+          'Same shaded amount.',
+        ],
       ),
       ClawPresentationPreset.scout: ClawPresentationVariant(
         body:
@@ -319,7 +320,8 @@ class ClawFoundationsStoryArc {
     'complete': <ClawPresentationPreset, ClawPresentationVariant>{
       ClawPresentationPreset.sprout: ClawPresentationVariant(
         title: 'You found the match',
-        body: '1/2 and 2/4 can show the same amount. Nice work checking the match.',
+        body:
+            '1/2 and 2/4 can show the same amount. Nice work checking the match.',
       ),
       ClawPresentationPreset.scout: ClawPresentationVariant(
         body:
