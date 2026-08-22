@@ -173,7 +173,10 @@ void main() {
   test('sensitive read or use requires an access receipt reservation', () {
     const evaluator = PersonalInsightAccessEvaluator();
     const projector = PersonalInsightRevisionProjector();
-    final view = projector.project(record: modelHypothesis(), revisions: const []);
+    final view = projector.project(
+      record: modelHypothesis(),
+      revisions: const [],
+    );
 
     final denied = evaluator.evaluate(
       view: view,
@@ -192,63 +195,70 @@ void main() {
     expect(allowed.grantId, 'grant:1');
   });
 
-  test('ordinary presentation preference can be read without sensitive receipt', () {
-    const evaluator = PersonalInsightAccessEvaluator();
-    const projector = PersonalInsightRevisionProjector();
-    final record = PersonalInsightRecord(
-      insightId: 'insight:1',
-      learnerSubjectId: 'learner:1',
-      claimType: 'presentation.story-theme',
-      statement: 'Learner selected space exploration as a preferred story theme.',
-      sensitivity: PersonalInsightSensitivity.ordinaryPreference,
-      sourceType: PersonalInsightSourceType.learnerSelfReport,
-      evidenceIds: const {'preference-event:1'},
-      domainScopes: const {'presentation'},
-      limitations: 'Preference is revisable and not a learning-style claim.',
-      createdAt: createdAt,
-      reviewAt: reviewAt,
-      expiresAt: expiresAt,
-    );
-    final view = projector.project(record: record, revisions: const []);
-    final ordinaryGrant = PersonalInsightAccessGrant(
-      grantId: 'grant:ordinary',
-      actorId: 'actor:tutor',
-      learnerSubjectId: 'learner:1',
-      allowedPurposes: const {PersonalInsightPurpose.presentationAdaptation},
-      permissions: const {PersonalInsightPermission.read},
-      allowedSensitivities: const {
-        PersonalInsightSensitivity.ordinaryPreference,
-      },
-      allowedDomainScopes: const {'presentation'},
-      evidenceIds: const {'authority:ordinary'},
-      issuedAt: createdAt,
-      expiresAt: expiresAt,
-    );
-    final ordinaryRequest = PersonalInsightAccessRequest(
-      actorId: 'actor:tutor',
-      learnerSubjectId: 'learner:1',
-      insightId: 'insight:1',
-      purpose: PersonalInsightPurpose.presentationAdaptation,
-      permission: PersonalInsightPermission.read,
-      sensitivity: PersonalInsightSensitivity.ordinaryPreference,
-      domainScope: 'presentation',
-      requestedAt: requestedAt,
-    );
+  test(
+    'ordinary presentation preference can be read without sensitive receipt',
+    () {
+      const evaluator = PersonalInsightAccessEvaluator();
+      const projector = PersonalInsightRevisionProjector();
+      final record = PersonalInsightRecord(
+        insightId: 'insight:1',
+        learnerSubjectId: 'learner:1',
+        claimType: 'presentation.story-theme',
+        statement:
+            'Learner selected space exploration as a preferred story theme.',
+        sensitivity: PersonalInsightSensitivity.ordinaryPreference,
+        sourceType: PersonalInsightSourceType.learnerSelfReport,
+        evidenceIds: const {'preference-event:1'},
+        domainScopes: const {'presentation'},
+        limitations: 'Preference is revisable and not a learning-style claim.',
+        createdAt: createdAt,
+        reviewAt: reviewAt,
+        expiresAt: expiresAt,
+      );
+      final view = projector.project(record: record, revisions: const []);
+      final ordinaryGrant = PersonalInsightAccessGrant(
+        grantId: 'grant:ordinary',
+        actorId: 'actor:tutor',
+        learnerSubjectId: 'learner:1',
+        allowedPurposes: const {PersonalInsightPurpose.presentationAdaptation},
+        permissions: const {PersonalInsightPermission.read},
+        allowedSensitivities: const {
+          PersonalInsightSensitivity.ordinaryPreference,
+        },
+        allowedDomainScopes: const {'presentation'},
+        evidenceIds: const {'authority:ordinary'},
+        issuedAt: createdAt,
+        expiresAt: expiresAt,
+      );
+      final ordinaryRequest = PersonalInsightAccessRequest(
+        actorId: 'actor:tutor',
+        learnerSubjectId: 'learner:1',
+        insightId: 'insight:1',
+        purpose: PersonalInsightPurpose.presentationAdaptation,
+        permission: PersonalInsightPermission.read,
+        sensitivity: PersonalInsightSensitivity.ordinaryPreference,
+        domainScope: 'presentation',
+        requestedAt: requestedAt,
+      );
 
-    final decision = evaluator.evaluate(
-      view: view,
-      request: ordinaryRequest,
-      grants: [ordinaryGrant],
-    );
+      final decision = evaluator.evaluate(
+        view: view,
+        request: ordinaryRequest,
+        grants: [ordinaryGrant],
+      );
 
-    expect(decision.allowed, isTrue);
-    expect(decision.accessReceiptRequired, isFalse);
-  });
+      expect(decision.allowed, isTrue);
+      expect(decision.accessReceiptRequired, isFalse);
+    },
+  );
 
   test('access grant is exact-subject, exact-purpose, and exact-scope', () {
     const evaluator = PersonalInsightAccessEvaluator();
     const projector = PersonalInsightRevisionProjector();
-    final view = projector.project(record: modelHypothesis(), revisions: const []);
+    final view = projector.project(
+      record: modelHypothesis(),
+      revisions: const [],
+    );
 
     final wrongSubject = evaluator.evaluate(
       view: view,
@@ -369,20 +379,26 @@ void main() {
     );
   });
 
-  test('policy requires a second model-context gate and forbids public/commercial authority', () {
-    const boundary = PersonalInsightPolicyBoundary();
+  test(
+    'policy requires a second model-context gate and forbids public/commercial authority',
+    () {
+      const boundary = PersonalInsightPolicyBoundary();
 
-    expect(boundary.vaultGrantAloneAuthorizesModelMaterialization(), isFalse);
-    expect(boundary.separateModelContextGrantRequired(), isTrue);
-    expect(boundary.modelHypothesisMayCreateClinicalDiagnosis(), isFalse);
-    expect(boundary.insightMayCreateMastery(), isFalse);
-    expect(boundary.insightMayCreateGradeOrCredit(), isFalse);
-    expect(boundary.insightMayMintCredential(), isFalse);
-    expect(boundary.insightMayCreatePublicProfileByDefault(), isFalse);
-    expect(boundary.insightMayFederateAcrossServicesByDefault(), isFalse);
-    expect(boundary.sensitiveInsightMayBeUsedForCommercialTargeting(), isFalse);
-    expect(boundary.descriptiveRoleAloneCreatesAccess(), isFalse);
-    expect(boundary.learnerCorrectionRewritesOriginalProvenance(), isFalse);
-    expect(boundary.correctionsAreAppendOnly(), isTrue);
-  });
+      expect(boundary.vaultGrantAloneAuthorizesModelMaterialization(), isFalse);
+      expect(boundary.separateModelContextGrantRequired(), isTrue);
+      expect(boundary.modelHypothesisMayCreateClinicalDiagnosis(), isFalse);
+      expect(boundary.insightMayCreateMastery(), isFalse);
+      expect(boundary.insightMayCreateGradeOrCredit(), isFalse);
+      expect(boundary.insightMayMintCredential(), isFalse);
+      expect(boundary.insightMayCreatePublicProfileByDefault(), isFalse);
+      expect(boundary.insightMayFederateAcrossServicesByDefault(), isFalse);
+      expect(
+        boundary.sensitiveInsightMayBeUsedForCommercialTargeting(),
+        isFalse,
+      );
+      expect(boundary.descriptiveRoleAloneCreatesAccess(), isFalse);
+      expect(boundary.learnerCorrectionRewritesOriginalProvenance(), isFalse);
+      expect(boundary.correctionsAreAppendOnly(), isTrue);
+    },
+  );
 }
