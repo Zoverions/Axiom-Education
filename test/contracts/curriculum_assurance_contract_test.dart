@@ -15,15 +15,14 @@ void main() {
     final boundaries = contract['claim_boundaries'] as Map<String, dynamic>;
     final ontario =
         contract['ontario_demonstration_default'] as Map<String, dynamic>;
+    final claim = (ontario['claim'] as String).toLowerCase();
 
     expect(ontario['level'], 'source-aligned-demonstration');
+    expect(claim, contains('not ministry-approved'));
+    expect(claim, contains('ontario credit-bearing course'));
     expect(
-      (ontario['claim'] as String).toLowerCase(),
-      contains('not ministry-approved'),
-    );
-    expect(
-      (ontario['claim'] as String).toLowerCase(),
-      contains('not an ontario credit-bearing course'),
+      boundaries['source_aligned_demonstration_may_claim_ontario_credit'],
+      isFalse,
     );
     expect(
       boundaries['source_aligned_demonstration_implies_human_review'],
