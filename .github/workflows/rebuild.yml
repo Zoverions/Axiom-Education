@@ -15,45 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  claw-format-once:
-    name: Apply pinned Claw formatter output once
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.head_ref == 'codex/claw-experience-graph-20260822'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      contents: write
-    steps:
-      - name: Check out exact pull-request branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
-      - name: Set up pinned Flutter
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
-        with:
-          flutter-version: '3.41.1'
-          channel: stable
-          cache: true
-
-      - name: Format only Dart source and tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          dart format lib test
-          if git diff --quiet -- lib test; then
-            echo 'Pinned formatter produced no changes.'
-            exit 0
-          fi
-          git config user.name 'axiom-education-format[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add lib test
-          git diff --cached --name-only
-          git commit -m 'Apply pinned Dart format to Claw graph runtime'
-          git push origin "HEAD:${GITHUB_HEAD_REF}"
-
   capability-registry:
     name: Capability registry
     runs-on: ubuntu-24.04
