@@ -4,26 +4,28 @@ import 'package:ontarioedai/core/models/claw_experience_presentation.dart';
 import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
 
 void main() {
-  test('foundations arc validates against admitted competency and strategies', () {
-    const validator = ClawExperienceGraphValidator();
+  test(
+    'foundations arc validates against admitted competency and strategies',
+    () {
+      const validator = ClawExperienceGraphValidator();
 
-    expect(
-      () => validator.validate(
-        ClawFoundationsStoryArc.graph,
-        knownCompetencyIds: ClawFoundationsStoryArc.knownCompetencyIds,
-        knownInstructionalStrategyIds:
-            ClawFoundationsStoryArc.knownInstructionalStrategyIds,
-      ),
-      returnsNormally,
-    );
-  });
+      expect(
+        () => validator.validate(
+          ClawFoundationsStoryArc.graph,
+          knownCompetencyIds: ClawFoundationsStoryArc.knownCompetencyIds,
+          knownInstructionalStrategyIds:
+              ClawFoundationsStoryArc.knownInstructionalStrategyIds,
+        ),
+        returnsNormally,
+      );
+    },
+  );
 
   test('every story node preserves the same governed target competency', () {
     for (final node in ClawFoundationsStoryArc.graph.nodes.values) {
-      expect(
-        node.targetCompetencyIds,
-        const <String>{ClawFoundationsStoryArc.competencyId},
-      );
+      expect(node.targetCompetencyIds, const <String>{
+        ClawFoundationsStoryArc.competencyId,
+      });
     }
   });
 
