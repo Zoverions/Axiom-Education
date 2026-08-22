@@ -115,6 +115,47 @@ jobs:
             --require-signature
           rm -f /tmp/axiom-education-ontario-private.pem /tmp/axiom-education-ontario-public.pem
 
+  formatter-repair:
+    name: One-time pinned Dart formatter repair
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'codex/education-institution-resource-feedback-20260821' &&
+      github.actor == 'Zoverions'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Set up pinned Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: '3.41.1'
+          channel: stable
+          cache: true
+
+      - name: Apply pinned Dart formatter only
+        run: dart format lib test
+
+      - name: Commit exact formatter output
+        shell: bash
+        run: |
+          if git diff --quiet -- lib test; then
+            echo 'No formatter repair required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lib test
+          git commit -m 'Apply pinned Dart formatter'
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
   flutter:
     name: Flutter analyze, test, and Android smoke build
     runs-on: ubuntu-24.04
