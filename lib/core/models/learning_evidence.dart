@@ -93,6 +93,7 @@ class LearningEvidenceValidator {
           );
         }
         _requireNoRevisionPointers(evidence);
+        return;
       case LearningEvidenceRecordType.outcomeObservation:
         if (evidence.evidenceRef == null ||
             evidence.evidenceRef!.trim().isEmpty ||
@@ -105,6 +106,7 @@ class LearningEvidenceValidator {
         _requireUnitInterval(evidence.confidenceBefore!);
         _requireUnitInterval(evidence.confidenceAfter!);
         _requireNoRevisionPointers(evidence);
+        return;
       case LearningEvidenceRecordType.correction:
         if (evidence.supersedesEvidenceId == null ||
             evidence.supersedesEvidenceId!.trim().isEmpty ||
@@ -113,6 +115,7 @@ class LearningEvidenceValidator {
             'Corrections must reference exactly one superseded evidence record.',
           );
         }
+        return;
       case LearningEvidenceRecordType.retraction:
         if (evidence.retractsEvidenceId == null ||
             evidence.retractsEvidenceId!.trim().isEmpty ||
@@ -121,6 +124,7 @@ class LearningEvidenceValidator {
             'Retractions must reference exactly one retracted evidence record.',
           );
         }
+        return;
     }
   }
 
