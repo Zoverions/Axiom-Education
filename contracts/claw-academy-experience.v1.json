@@ -43,6 +43,20 @@
     "project-artifact",
     "evidence-candidate"
   ],
+  "transition_triggers": [
+    "automatic",
+    "learner-choice",
+    "learner-requests-another-way",
+    "learner-requests-human-help",
+    "evidence-satisfied",
+    "evidence-insufficient",
+    "resource-unavailable",
+    "model-unavailable",
+    "tool-unavailable",
+    "accessibility-unavailable",
+    "content-readiness-denied",
+    "explicit-retry"
+  ],
   "node_requirements": [
     "node-id",
     "target-competency-ids",
@@ -54,6 +68,19 @@
     "expected-evidence-kinds",
     "fallback-node-ids"
   ],
+  "graph_invariants": {
+    "entry_node_must_exist": true,
+    "transition_endpoints_must_exist": true,
+    "node_ids_are_unique": true,
+    "transition_ids_are_unique": true,
+    "presentation_fallback_preserves_target_competency": true,
+    "fallback_node_preserves_target_competency": true,
+    "target_competency_change_requires_governed_reason": true,
+    "ai_socratic_dialogue_requires_non_model_fallback": true,
+    "evidence_producing_nodes_declare_expected_evidence": true,
+    "availability_filter_runs_before_path_selection": true,
+    "transition_selection_uses_engagement_ranking": false
+  },
   "optional_node_context": [
     "story-location",
     "learner-selected-character-profile",
