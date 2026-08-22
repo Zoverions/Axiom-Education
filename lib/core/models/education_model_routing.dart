@@ -33,6 +33,8 @@ enum EducationModelContextScope {
 
 class EducationModelContextGrant {
   final String grantId;
+  final String learnerSubjectId;
+  final Set<EducationModelTaskClass> allowedTaskClasses;
   final Set<EducationModelContextScope> allowedScopes;
   final bool remoteEgressAllowed;
   final Set<String> allowedRetentionClasses;
@@ -41,6 +43,8 @@ class EducationModelContextGrant {
 
   const EducationModelContextGrant({
     required this.grantId,
+    required this.learnerSubjectId,
+    required this.allowedTaskClasses,
     required this.allowedScopes,
     required this.remoteEgressAllowed,
     required this.allowedRetentionClasses,
@@ -114,6 +118,7 @@ class EducationModelCandidate {
 }
 
 class EducationModelRouteRequest {
+  final String learnerSubjectId;
   final EducationModelTaskClass taskClass;
   final Set<EducationModelCapability> requiredCapabilities;
   final Set<EducationModelContextScope> requestedContextScopes;
@@ -123,6 +128,7 @@ class EducationModelRouteRequest {
   final bool localOnly;
 
   const EducationModelRouteRequest({
+    required this.learnerSubjectId,
     required this.taskClass,
     required this.requiredCapabilities,
     required this.requestedContextScopes,
@@ -143,10 +149,10 @@ class EducationModelRouteDecision {
   });
 
   const EducationModelRouteDecision.selected(EducationModelCandidate candidate)
-      : this._(candidate: candidate, reason: 'eligible-candidate-selected');
+    : this._(candidate: candidate, reason: 'eligible-candidate-selected');
 
   const EducationModelRouteDecision.denied(String reason)
-      : this._(candidate: null, reason: reason);
+    : this._(candidate: null, reason: reason);
 
   bool get allowed => candidate != null;
 }
@@ -159,9 +165,24 @@ class EducationModelRouter {
     required EducationModelContextGrant contextGrant,
     required Iterable<EducationModelCandidate> candidates,
   }) {
+    if (request.learnerSubjectId.trim().isEmpty) {
+      return const EducationModelRouteDecision.denied(
+        'Learner subject ID is required for model routing.',
+      );
+    }
     if (!contextGrant.isCurrentAt(request.requestedAt)) {
       return const EducationModelRouteDecision.denied(
         'Model context grant is expired or not yet active.',
+      );
+    }
+    if (contextGrant.learnerSubjectId != request.learnerSubjectId) {
+      return const EducationModelRouteDecision.denied(
+        'Model context grant belongs to a different learner subject.',
+      );
+    }
+    if (!contextGrant.allowedTaskClasses.contains(request.taskClass)) {
+      return const EducationModelRouteDecision.denied(
+        'Requested pedagogical task is outside the model context grant.',
       );
     }
     if (!contextGrant.allowedScopes.containsAll(request.requestedContextScopes)) {
@@ -223,6 +244,7 @@ class EducationModelRouter {
 
 class EducationModelUsageReceipt {
   final String receiptId;
+  final String learnerSubjectId;
   final EducationModelTaskClass taskClass;
   final String providerId;
   final String modelId;
@@ -239,6 +261,7 @@ class EducationModelUsageReceipt {
 
   const EducationModelUsageReceipt({
     required this.receiptId,
+    required this.learnerSubjectId,
     required this.taskClass,
     required this.providerId,
     required this.modelId,
