@@ -1,7 +1,4 @@
-enum ClawLocalEvidenceRoute {
-  satisfied,
-  insufficient,
-}
+enum ClawLocalEvidenceRoute { satisfied, insufficient }
 
 class ClawExperienceChoicePresentation {
   final String choiceId;
