@@ -1,4 +1,4 @@
-enum CompetencyEdgeType { prerequisite, supports, partOf, extends }
+enum CompetencyEdgeType { prerequisite, supports, partOf, extendsTo }
 
 enum CompetencyEvidenceState { unknown, attempted, emerging, demonstrated }
 
@@ -120,9 +120,7 @@ class CompetencyGraph {
 
   List<String> prerequisitesOf(String competencyId) {
     if (!nodes.containsKey(competencyId)) {
-      throw CompetencyGraphException(
-        'Unknown competency $competencyId.',
-      );
+      throw CompetencyGraphException('Unknown competency $competencyId.');
     }
     return edges
         .where(
@@ -162,10 +160,14 @@ class EntryDiagnosticPlanner {
     int itemBudget = 8,
   }) {
     if (itemBudget <= 0) {
-      throw const CompetencyGraphException('Diagnostic item budget must be positive.');
+      throw const CompetencyGraphException(
+        'Diagnostic item budget must be positive.',
+      );
     }
     if (!graph.nodes.containsKey(targetCompetencyId)) {
-      throw CompetencyGraphException('Unknown target competency $targetCompetencyId.');
+      throw CompetencyGraphException(
+        'Unknown target competency $targetCompetencyId.',
+      );
     }
 
     final bestEvidence = <String, CompetencyEvidence>{};
@@ -173,7 +175,8 @@ class EntryDiagnosticPlanner {
       final current = bestEvidence[item.competencyId];
       if (current == null ||
           item.state.index > current.state.index ||
-          (item.state == current.state && item.observedAt.isAfter(current.observedAt))) {
+          (item.state == current.state &&
+              item.observedAt.isAfter(current.observedAt))) {
         bestEvidence[item.competencyId] = item;
       }
     }
