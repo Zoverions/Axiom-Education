@@ -17,7 +17,8 @@ extension InstructionalEvidenceLevelWire on InstructionalEvidenceLevel {
       'systematic-review-or-meta-analysis',
     InstructionalEvidenceLevel.randomizedControlledTrial =>
       'randomized-controlled-trial',
-    InstructionalEvidenceLevel.strongQuasiExperimentalOrReplicatedFieldEvidence =>
+    InstructionalEvidenceLevel
+        .strongQuasiExperimentalOrReplicatedFieldEvidence =>
       'strong-quasi-experimental-or-replicated-field-evidence',
     InstructionalEvidenceLevel.observationalOrImplementationEvidence =>
       'observational-or-implementation-evidence',
@@ -68,7 +69,8 @@ extension InstructionalStrategyKindWire on InstructionalStrategyKind {
     InstructionalStrategyKind.workedExample => 'worked-example',
     InstructionalStrategyKind.guidedPractice => 'guided-practice',
     InstructionalStrategyKind.independentPractice => 'independent-practice',
-    InstructionalStrategyKind.retrievalWithFeedback => 'retrieval-with-feedback',
+    InstructionalStrategyKind.retrievalWithFeedback =>
+      'retrieval-with-feedback',
     InstructionalStrategyKind.spacedReview => 'spaced-review',
     InstructionalStrategyKind.interleaving => 'interleaving',
     InstructionalStrategyKind.multipleRepresentations =>
@@ -77,7 +79,8 @@ extension InstructionalStrategyKindWire on InstructionalStrategyKind {
     InstructionalStrategyKind.selfExplanation => 'self-explanation',
     InstructionalStrategyKind.metacognitionAndSelfRegulation =>
       'metacognition-and-self-regulation',
-    InstructionalStrategyKind.masteryOrientedPacing => 'mastery-oriented-pacing',
+    InstructionalStrategyKind.masteryOrientedPacing =>
+      'mastery-oriented-pacing',
     InstructionalStrategyKind.peerExplanation => 'peer-explanation',
     InstructionalStrategyKind.peerTutoring => 'peer-tutoring',
     InstructionalStrategyKind.smallGroupTutoring => 'small-group-tutoring',
