@@ -188,8 +188,9 @@ class PersonalInsightEffectiveView {
     required this.disputed,
     required this.revoked,
     required List<PersonalInsightRevision> appliedRevisions,
-  }) : appliedRevisions =
-           List<PersonalInsightRevision>.unmodifiable(appliedRevisions);
+  }) : appliedRevisions = List<PersonalInsightRevision>.unmodifiable(
+         appliedRevisions,
+       );
 }
 
 class PersonalInsightRevisionProjector {
@@ -199,18 +200,19 @@ class PersonalInsightRevisionProjector {
     required PersonalInsightRecord record,
     required Iterable<PersonalInsightRevision> revisions,
   }) {
-    final ordered = revisions
-        .where(
-          (revision) =>
-              revision.insightId == record.insightId &&
-              revision.learnerSubjectId == record.learnerSubjectId,
-        )
-        .toList(growable: false)
-      ..sort((a, b) {
-        final time = a.occurredAt.compareTo(b.occurredAt);
-        if (time != 0) return time;
-        return a.revisionId.compareTo(b.revisionId);
-      });
+    final ordered =
+        revisions
+            .where(
+              (revision) =>
+                  revision.insightId == record.insightId &&
+                  revision.learnerSubjectId == record.learnerSubjectId,
+            )
+            .toList(growable: false)
+          ..sort((a, b) {
+            final time = a.occurredAt.compareTo(b.occurredAt);
+            if (time != 0) return time;
+            return a.revisionId.compareTo(b.revisionId);
+          });
 
     var statement = record.statement;
     var confidence = record.confidence;
@@ -480,7 +482,8 @@ class PersonalInsightValidator {
       );
     }
     if (record.sourceType == PersonalInsightSourceType.clinicianProvided &&
-        (record.sourceActorId == null || record.sourceActorId!.trim().isEmpty)) {
+        (record.sourceActorId == null ||
+            record.sourceActorId!.trim().isEmpty)) {
       throw const PersonalInsightException(
         'Clinician-provided insight requires an attributed source actor.',
       );
