@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../claw/claw_foundations_preview_screen.dart';
 import '../curriculum/curriculum_library_screen.dart';
 import '../dashboard/parent_dashboard.dart';
 import '../learning/mth1w_learning_hub_screen.dart';
@@ -35,6 +36,13 @@ class LearnerHomeScreen extends StatelessWidget {
                           _push(context, const Mth1wLearningHubScreen()),
                       onOpenPractice: () =>
                           _push(context, const Mth1wPracticeScreen()),
+                    ),
+                    const SizedBox(height: 12),
+                    _ClawPreviewCard(
+                      onOpenClaw: () => _push(
+                        context,
+                        const ClawFoundationsPreviewScreen(),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -228,6 +236,72 @@ class _PrimaryLearningCard extends StatelessWidget {
   }
 }
 
+class _ClawPreviewCard extends StatelessWidget {
+  const _ClawPreviewCard({required this.onOpenClaw});
+
+  final VoidCallback onOpenClaw;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      color: colors.tertiaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              Icons.auto_awesome_rounded,
+              color: colors.onTertiaryContainer,
+              size: 32,
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Try Claw Academy',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: colors.onTertiaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Walk through a small story-driven adaptive lesson. Ask for '
+                    'another explanation and see the path change without changing '
+                    'the learning target.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colors.onTertiaryContainer,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  FilledButton.tonalIcon(
+                    key: const ValueKey('home-open-claw-preview'),
+                    onPressed: onOpenClaw,
+                    icon: const Icon(Icons.play_arrow_rounded),
+                    label: const Text('Open Claw preview'),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Preview responses are temporary and do not create grades, '
+                    'mastery, credits, or saved learner records.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colors.onTertiaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _HomeActionCard extends StatelessWidget {
   const _HomeActionCard({
     required this.icon,
@@ -293,12 +367,12 @@ class _CurrentBoundaryCard extends StatelessWidget {
             const _StatusRow(
               icon: Icons.offline_bolt_rounded,
               text:
-                  'Offline lessons, curriculum browsing, and local practice are available.',
+                  'Offline lessons, curriculum browsing, local practice, and the Claw adaptive preview are available.',
             ),
             const _StatusRow(
               icon: Icons.privacy_tip_outlined,
               text:
-                  'Practice feedback is temporary and is not written to a learner record.',
+                  'Practice and Claw preview feedback are temporary and are not written to a learner record.',
             ),
             const _StatusRow(
               icon: Icons.pending_actions_rounded,
