@@ -1,5 +1,6 @@
 import '../../core/models/claw_experience_graph.dart';
 import '../../core/models/claw_experience_presentation.dart';
+import '../../core/models/claw_presentation_preset.dart';
 
 class ClawFoundationsStoryArc {
   static const competencyId = 'math:fractions:equivalence';
@@ -202,6 +203,139 @@ class ClawFoundationsStoryArc {
       supportingText:
           'This preview creates no grade, credit, credential, or saved learner record.',
     ),
+  };
+
+  static const presentationVariants = <String, Map<ClawPresentationPreset, ClawPresentationVariant>>{
+    'arrival': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        title: 'The four-lantern bridge',
+        body:
+            'Two fraction pictures can show the same amount. Let’s find a matching pair.',
+        continueLabel: 'Go to the bridge',
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        body:
+            'The bridge needs two fractions that show the same amount. We will find out why two different-looking fractions can match.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        body:
+            'The bridge compares fraction representations. Your task is to identify an invariant: the amount can stay constant even when the numerator and denominator change together.',
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        body:
+            'The bridge tests fraction equivalence: different symbolic representations can denote the same rational value. Track what changes and what remains invariant.',
+      ),
+    },
+    'worked': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        title: 'Make the same amount',
+        body:
+            'Start with 1/2. Double the top number and the bottom number. 1 becomes 2. 2 becomes 4. Now we have 2/4.',
+        bullets: <String>['1/2 = 2/4.', 'The amount stayed the same.'],
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        body:
+            'Start with 1/2. Multiply both numbers by 2. The top becomes 2 and the bottom becomes 4. So 1/2 and 2/4 show the same amount.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        body:
+            'Scale 1/2 by the factor 2/2. Because 2/2 equals 1, multiplying by it changes the representation but not the value: 1/2 × 2/2 = 2/4.',
+        bullets: <String>[
+          'The scaling factor is applied to numerator and denominator together.',
+          'The representation changes while the ratio stays invariant.',
+        ],
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        body:
+            'Fraction equivalence follows from multiplying by a form of 1. Since 2/2 = 1, (1/2)(2/2) = 2/4 without changing the represented rational number.',
+        bullets: <String>[
+          'Equivalent fractions are distinct representations of the same value.',
+          'Scaling numerator and denominator by the same non-zero factor preserves the ratio.',
+        ],
+      ),
+    },
+    'visual': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        title: 'See the same amount',
+        body:
+            'Shade half of a shape. Now cut the same shape into 4 equal pieces. The shaded half covers 2 pieces. That is 2/4.',
+        bullets: <String>[
+          '1 of 2 pieces.',
+          '2 of 4 pieces.',
+          'Same shaded amount.',
+        ],
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        body:
+            'Shade 1 of 2 equal parts. If each part is split in half again, there are 4 equal parts and 2 are shaded. The picture still shows the same amount.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        body:
+            'Partition the same whole more finely. Splitting each half into two equal subparts doubles both the total part count and the shaded part count, so the shaded proportion is unchanged.',
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        body:
+            'Refining the partition changes the unit of counting but preserves measure. One of two equal regions and two of four equal regions occupy the same proportion of the whole.',
+      ),
+    },
+    'checkpoint': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        eyebrow: 'Quick check',
+        title: 'Which one is the same as 1/2?',
+        body: 'Pick the fraction that shows the same amount.',
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        eyebrow: 'Quick check',
+        body: 'Choose the fraction that has the same value as 1/2.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        eyebrow: 'Evidence checkpoint',
+        body:
+            'Choose the representation that preserves the ratio 1:2. The response only routes this local preview.',
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        eyebrow: 'Evidence checkpoint',
+        body:
+            'Select the rational representation equivalent to 1/2. This single response is routing evidence, not a mastery inference.',
+      ),
+    },
+    'retry': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        title: 'Try doubling both numbers',
+        body: 'Double 1. Double 2. You get 2/4. Look for that choice.',
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        body:
+            'Try the same change to both numbers. Multiply 1 by 2 and multiply 2 by 2. That makes 2/4.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        body:
+            'Use a common scaling factor. Multiplying numerator and denominator by 2 preserves the ratio and produces 2/4.',
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        body:
+            'Apply the identity factor 2/2. The product is 2/4, which is equivalent to 1/2 because multiplying by 1 preserves value.',
+      ),
+    },
+    'complete': <ClawPresentationPreset, ClawPresentationVariant>{
+      ClawPresentationPreset.sprout: ClawPresentationVariant(
+        title: 'You found the match',
+        body:
+            '1/2 and 2/4 can show the same amount. Nice work checking the match.',
+      ),
+      ClawPresentationPreset.scout: ClawPresentationVariant(
+        body:
+            'You matched 1/2 with 2/4. The numbers look different, but the amount is the same.',
+      ),
+      ClawPresentationPreset.analyst: ClawPresentationVariant(
+        body:
+            'You recognized an invariant under scaling: 1/2 and 2/4 use different numbers but preserve the same ratio and value.',
+      ),
+      ClawPresentationPreset.scholar: ClawPresentationVariant(
+        body:
+            'You identified equivalent rational representations and the transformation that preserves their value. The presentation changed; the governed competency did not.',
+      ),
+    },
   };
 
   static const availability = ClawExperienceAvailability();
