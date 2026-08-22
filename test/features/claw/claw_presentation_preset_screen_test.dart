@@ -28,12 +28,12 @@ void main() {
         findsOneWidget,
       );
 
-      final previewList = find.byType(ListView).first;
+      final previewScrollable = find.byType(Scrollable).first;
       final continueButton = find.byKey(const ValueKey('claw-continue'));
       await tester.scrollUntilVisible(
         continueButton,
         240,
-        scrollable: previewList,
+        scrollable: previewScrollable,
       );
       await tester.tap(continueButton);
       await tester.pumpAndSettle();
@@ -44,7 +44,7 @@ void main() {
       await tester.scrollUntilVisible(
         scholarChip,
         -240,
-        scrollable: previewList,
+        scrollable: previewScrollable,
       );
       await tester.tap(scholarChip);
       await tester.pumpAndSettle();
