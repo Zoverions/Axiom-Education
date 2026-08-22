@@ -8,9 +8,13 @@ void main() {
   late Map<String, dynamic> contract;
 
   setUpAll(() {
-    contract = jsonDecode(
-      File('contracts/claw-academy-experience.v1.json').readAsStringSync(),
-    ) as Map<String, dynamic>;
+    contract =
+        jsonDecode(
+              File(
+                'contracts/claw-academy-experience.v1.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
   });
 
   test('transition triggers match the Claw contract exactly', () {
@@ -45,7 +49,10 @@ void main() {
       invariants['evidence_producing_nodes_declare_expected_evidence'],
       isTrue,
     );
-    expect(invariants['availability_filter_runs_before_path_selection'], isTrue);
+    expect(
+      invariants['availability_filter_runs_before_path_selection'],
+      isTrue,
+    );
     expect(invariants['transition_selection_uses_engagement_ranking'], isFalse);
   });
 }

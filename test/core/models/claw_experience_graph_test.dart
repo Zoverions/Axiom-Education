@@ -34,7 +34,8 @@ void main() {
 
   ClawExperienceGraph graph({
     required List<ClawExperienceNode> nodes,
-    List<ClawExperienceTransition> transitions = const <ClawExperienceTransition>[],
+    List<ClawExperienceTransition> transitions =
+        const <ClawExperienceTransition>[],
     String entry = 'intro',
   }) {
     return ClawExperienceGraph(
@@ -50,9 +51,13 @@ void main() {
 
   group('contract parity', () {
     test('runtime node types match the contract exactly', () {
-      final contract = jsonDecode(
-        File('contracts/claw-academy-experience.v1.json').readAsStringSync(),
-      ) as Map<String, dynamic>;
+      final contract =
+          jsonDecode(
+                File(
+                  'contracts/claw-academy-experience.v1.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
       final contractTypes = (contract['experience_node_types'] as List<dynamic>)
           .cast<String>();
       final runtimeTypes = ClawExperienceNodeType.values
@@ -264,73 +269,76 @@ void main() {
   group('adaptation selection', () {
     const selector = ClawExperienceAdaptationSelector();
 
-    test('another-way request filters on device, accessibility, and readiness', () {
-      final value = graph(
-        nodes: <ClawExperienceNode>[
-          node(id: 'intro', type: ClawExperienceNodeType.textExplanation),
-          node(
-            id: 'diagram',
-            type: ClawExperienceNodeType.diagramOrVisual,
-            accessibility: const <String>{'alt-text'},
-          ),
-          node(
-            id: 'simulation',
-            type: ClawExperienceNodeType.simulationLaunch,
-            devices: const <String>{'pointer-input'},
-          ),
-          node(
-            id: 'mature-story',
-            type: ClawExperienceNodeType.storyPanel,
-            readiness: const <String>{'sensitive-topic'},
-          ),
-        ],
-        transitions: const <ClawExperienceTransition>[
-          ClawExperienceTransition(
-            transitionId: 'a-diagram',
-            fromNodeId: 'intro',
-            toNodeId: 'diagram',
-            trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
-          ),
-          ClawExperienceTransition(
-            transitionId: 'b-simulation',
-            fromNodeId: 'intro',
-            toNodeId: 'simulation',
-            trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
-          ),
-          ClawExperienceTransition(
-            transitionId: 'c-story',
-            fromNodeId: 'intro',
-            toNodeId: 'mature-story',
-            trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
-          ),
-        ],
-      );
+    test(
+      'another-way request filters on device, accessibility, and readiness',
+      () {
+        final value = graph(
+          nodes: <ClawExperienceNode>[
+            node(id: 'intro', type: ClawExperienceNodeType.textExplanation),
+            node(
+              id: 'diagram',
+              type: ClawExperienceNodeType.diagramOrVisual,
+              accessibility: const <String>{'alt-text'},
+            ),
+            node(
+              id: 'simulation',
+              type: ClawExperienceNodeType.simulationLaunch,
+              devices: const <String>{'pointer-input'},
+            ),
+            node(
+              id: 'mature-story',
+              type: ClawExperienceNodeType.storyPanel,
+              readiness: const <String>{'sensitive-topic'},
+            ),
+          ],
+          transitions: const <ClawExperienceTransition>[
+            ClawExperienceTransition(
+              transitionId: 'a-diagram',
+              fromNodeId: 'intro',
+              toNodeId: 'diagram',
+              trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
+            ),
+            ClawExperienceTransition(
+              transitionId: 'b-simulation',
+              fromNodeId: 'intro',
+              toNodeId: 'simulation',
+              trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
+            ),
+            ClawExperienceTransition(
+              transitionId: 'c-story',
+              fromNodeId: 'intro',
+              toNodeId: 'mature-story',
+              trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
+            ),
+          ],
+        );
 
-      final decision = selector.eligibleTransitions(
-        graph: value,
-        currentNodeId: 'intro',
-        trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
-        availability: const ClawExperienceAvailability(
-          accessibilityCapabilities: <String>{'alt-text'},
-          deniedContentReadinessTags: <String>{'sensitive-topic'},
-        ),
-      );
+        final decision = selector.eligibleTransitions(
+          graph: value,
+          currentNodeId: 'intro',
+          trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
+          availability: const ClawExperienceAvailability(
+            accessibilityCapabilities: <String>{'alt-text'},
+            deniedContentReadinessTags: <String>{'sensitive-topic'},
+          ),
+        );
 
-      expect(
-        decision.eligibleTransitions.map((value) => value.transitionId),
-        <String>['a-diagram'],
-      );
-      expect(
-        decision.excludedTransitionReasons['b-simulation'],
-        'required-device-capability-unavailable',
-      );
-      expect(
-        decision.excludedTransitionReasons['c-story'],
-        'content-readiness-denied',
-      );
-      expect(decision.performsEngagementRanking, isFalse);
-      expect(decision.changesGovernedCompetencyByInference, isFalse);
-    });
+        expect(
+          decision.eligibleTransitions.map((value) => value.transitionId),
+          <String>['a-diagram'],
+        );
+        expect(
+          decision.excludedTransitionReasons['b-simulation'],
+          'required-device-capability-unavailable',
+        );
+        expect(
+          decision.excludedTransitionReasons['c-story'],
+          'content-readiness-denied',
+        );
+        expect(decision.performsEngagementRanking, isFalse);
+        expect(decision.changesGovernedCompetencyByInference, isFalse);
+      },
+    );
 
     test('AI and human help availability are explicit', () {
       final value = graph(
@@ -342,10 +350,7 @@ void main() {
             fallbacks: const <String>{'worked'},
           ),
           node(id: 'worked', type: ClawExperienceNodeType.workedExample),
-          node(
-            id: 'human',
-            type: ClawExperienceNodeType.humanTutorRequest,
-          ),
+          node(id: 'human', type: ClawExperienceNodeType.humanTutorRequest),
         ],
         transitions: const <ClawExperienceTransition>[
           ClawExperienceTransition(

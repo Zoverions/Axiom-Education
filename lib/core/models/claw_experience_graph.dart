@@ -364,14 +364,15 @@ class ClawExperienceAdaptationSelector {
 
     final eligible = <ClawExperienceTransition>[];
     final excluded = <String, String>{};
-    final candidates = graph.transitions
-        .where(
-          (transition) =>
-              transition.fromNodeId == currentNodeId &&
-              transition.trigger == trigger,
-        )
-        .toList(growable: false)
-      ..sort((a, b) => a.transitionId.compareTo(b.transitionId));
+    final candidates =
+        graph.transitions
+            .where(
+              (transition) =>
+                  transition.fromNodeId == currentNodeId &&
+                  transition.trigger == trigger,
+            )
+            .toList(growable: false)
+          ..sort((a, b) => a.transitionId.compareTo(b.transitionId));
 
     for (final transition in candidates) {
       final destination = graph.nodes[transition.toNodeId]!;
@@ -415,8 +416,7 @@ class ClawExperienceAdaptationSelector {
       return 'model-unavailable';
     }
     if ((node.experienceType == ClawExperienceNodeType.educatorHelpRequest ||
-            node.experienceType ==
-                ClawExperienceNodeType.humanTutorRequest) &&
+            node.experienceType == ClawExperienceNodeType.humanTutorRequest) &&
         !availability.humanHelpAvailable) {
       return 'human-help-unavailable';
     }
