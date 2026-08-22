@@ -6,10 +6,22 @@ void main() {
 
   CompetencyGraph buildGraph() => CompetencyGraph(
     nodes: const <CompetencyNode>[
-      CompetencyNode(competencyId: 'pattern:basic', title: 'Recognize a simple pattern'),
-      CompetencyNode(competencyId: 'number:count', title: 'Count small quantities'),
-      CompetencyNode(competencyId: 'fraction:part-whole', title: 'Understand part and whole'),
-      CompetencyNode(competencyId: 'fraction:equivalent', title: 'Recognize equivalent fractions'),
+      CompetencyNode(
+        competencyId: 'pattern:basic',
+        title: 'Recognize a simple pattern',
+      ),
+      CompetencyNode(
+        competencyId: 'number:count',
+        title: 'Count small quantities',
+      ),
+      CompetencyNode(
+        competencyId: 'fraction:part-whole',
+        title: 'Understand part and whole',
+      ),
+      CompetencyNode(
+        competencyId: 'fraction:equivalent',
+        title: 'Recognize equivalent fractions',
+      ),
     ],
     edges: const <CompetencyEdge>[
       CompetencyEdge(
@@ -53,11 +65,13 @@ void main() {
     final graph = buildGraph();
     final plan = const EntryDiagnosticPlanner().plan(
       graph: graph,
+      learnerSubjectId: 'learner:1',
       targetCompetencyId: 'fraction:equivalent',
       evidence: const <CompetencyEvidence>[],
       itemBudget: 3,
     );
 
+    expect(plan.learnerSubjectId, equals('learner:1'));
     expect(
       plan.competencyIdsToProbe,
       equals(<String>[
@@ -72,6 +86,7 @@ void main() {
     final graph = buildGraph();
     final plan = const EntryDiagnosticPlanner().plan(
       graph: graph,
+      learnerSubjectId: 'learner:1',
       targetCompetencyId: 'fraction:equivalent',
       evidence: <CompetencyEvidence>[
         CompetencyEvidence(
@@ -99,10 +114,70 @@ void main() {
     );
   });
 
+  test('evidence from another learner cannot suppress diagnostic probes', () {
+    final graph = buildGraph();
+    final plan = const EntryDiagnosticPlanner().plan(
+      graph: graph,
+      learnerSubjectId: 'learner:1',
+      targetCompetencyId: 'fraction:equivalent',
+      evidence: <CompetencyEvidence>[
+        CompetencyEvidence(
+          learnerSubjectId: 'learner:2',
+          competencyId: 'number:count',
+          state: CompetencyEvidenceState.demonstrated,
+          confidence: 1,
+          evidenceId: 'evidence:other-learner',
+          observedAt: now,
+        ),
+      ],
+      itemBudget: 3,
+    );
+
+    expect(
+      plan.competencyIdsToProbe,
+      equals(<String>[
+        'number:count',
+        'fraction:part-whole',
+        'fraction:equivalent',
+      ]),
+    );
+  });
+
+  test('newer weaker evidence causes a previously demonstrated skill to be rechecked', () {
+    final graph = buildGraph();
+    final plan = const EntryDiagnosticPlanner().plan(
+      graph: graph,
+      learnerSubjectId: 'learner:1',
+      targetCompetencyId: 'fraction:equivalent',
+      evidence: <CompetencyEvidence>[
+        CompetencyEvidence(
+          learnerSubjectId: 'learner:1',
+          competencyId: 'number:count',
+          state: CompetencyEvidenceState.demonstrated,
+          confidence: 0.95,
+          evidenceId: 'evidence:old-demonstrated',
+          observedAt: now.subtract(const Duration(days: 30)),
+        ),
+        CompetencyEvidence(
+          learnerSubjectId: 'learner:1',
+          competencyId: 'number:count',
+          state: CompetencyEvidenceState.emerging,
+          confidence: 0.8,
+          evidenceId: 'evidence:new-emerging',
+          observedAt: now,
+        ),
+      ],
+      itemBudget: 3,
+    );
+
+    expect(plan.competencyIdsToProbe.first, equals('number:count'));
+  });
+
   test('target with strong demonstrated evidence produces no diagnostic probe', () {
     final graph = buildGraph();
     final plan = const EntryDiagnosticPlanner().plan(
       graph: graph,
+      learnerSubjectId: 'learner:1',
       targetCompetencyId: 'fraction:equivalent',
       evidence: <CompetencyEvidence>[
         CompetencyEvidence(
@@ -123,12 +198,16 @@ void main() {
     final graph = buildGraph();
     final plan = const EntryDiagnosticPlanner().plan(
       graph: graph,
+      learnerSubjectId: 'learner:1',
       targetCompetencyId: 'fraction:equivalent',
       evidence: const <CompetencyEvidence>[],
       itemBudget: 2,
     );
 
     expect(plan.competencyIdsToProbe.length, equals(2));
-    expect(plan.competencyIdsToProbe, equals(<String>['number:count', 'fraction:part-whole']));
+    expect(
+      plan.competencyIdsToProbe,
+      equals(<String>['number:count', 'fraction:part-whole']),
+    );
   });
 }
