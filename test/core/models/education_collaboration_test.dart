@@ -22,7 +22,7 @@ void main() {
     expect(privacy.publicAudienceAllowedByDefault(), isFalse);
   });
 
-  test('current evidenced purpose-bound grant authorizes exact space and purpose', () {
+  test('ordinary participant read can use exact evidenced space grant', () {
     final grant = EducationCollaborationAccessGrant(
       grantId: 'grant:1',
       actorId: 'learner:1',
@@ -52,6 +52,56 @@ void main() {
 
     expect(decision.allowed, isTrue);
     expect(decision.grantId, equals('grant:1'));
+    expect(decision.accessReceiptRequired, isFalse);
+  });
+
+  test('privileged transcript read requires an audit receipt reservation', () {
+    final grant = EducationCollaborationAccessGrant(
+      grantId: 'grant:teacher-read',
+      actorId: 'teacher:1',
+      spaceId: peerSpace.spaceId,
+      permissions: const <EducationCollaborationPermission>{
+        EducationCollaborationPermission.read,
+      },
+      allowedPurposes: const <EducationCollaborationPurpose>{
+        EducationCollaborationPurpose.peerHelp,
+      },
+      evidenceIds: const <String>{'teacher-delegation:1'},
+      issuedAt: now.subtract(const Duration(hours: 1)),
+      expiresAt: now.add(const Duration(hours: 1)),
+      privilegedRead: true,
+    );
+
+    final missingReservation = evaluator.evaluate(
+      space: peerSpace,
+      request: EducationCollaborationAccessRequest(
+        actorId: 'teacher:1',
+        permission: EducationCollaborationPermission.read,
+        purpose: EducationCollaborationPurpose.peerHelp,
+        requestedAt: now,
+      ),
+      grants: <EducationCollaborationAccessGrant>[grant],
+    );
+    expect(missingReservation.allowed, isFalse);
+
+    final authorized = evaluator.evaluate(
+      space: peerSpace,
+      request: EducationCollaborationAccessRequest(
+        actorId: 'teacher:1',
+        permission: EducationCollaborationPermission.read,
+        purpose: EducationCollaborationPurpose.peerHelp,
+        requestedAt: now,
+        accessReceiptReservationId: 'receipt-reservation:1',
+      ),
+      grants: <EducationCollaborationAccessGrant>[grant],
+    );
+
+    expect(authorized.allowed, isTrue);
+    expect(authorized.accessReceiptRequired, isTrue);
+    expect(
+      authorized.accessReceiptReservationId,
+      equals('receipt-reservation:1'),
+    );
   });
 
   test('grant for another purpose cannot be reused to browse conversation', () {
@@ -128,7 +178,7 @@ void main() {
     expect(decision.allowed, isFalse);
   });
 
-  test('safeguarding break-glass requires explicit authority reason and receipt', () {
+  test('safeguarding break-glass requires authority reason and receipt reservation', () {
     const space = EducationCollaborationSpace(
       spaceId: 'space:safeguarding:1',
       circleId: 'circle:support:1',
@@ -150,9 +200,10 @@ void main() {
       issuedAt: now.subtract(const Duration(minutes: 5)),
       expiresAt: now.add(const Duration(minutes: 30)),
       safeguardingAuthority: true,
+      privilegedRead: true,
     );
 
-    final missingReceipt = evaluator.evaluate(
+    final missingReceiptReservation = evaluator.evaluate(
       space: space,
       request: EducationCollaborationAccessRequest(
         actorId: 'safeguarding:officer:1',
@@ -164,7 +215,7 @@ void main() {
       ),
       grants: <EducationCollaborationAccessGrant>[grant],
     );
-    expect(missingReceipt.allowed, isFalse);
+    expect(missingReceiptReservation.allowed, isFalse);
 
     final authorized = evaluator.evaluate(
       space: space,
@@ -175,11 +226,12 @@ void main() {
         requestedAt: now,
         breakGlass: true,
         reasonCode: 'immediate-safety-review',
-        accessReceiptId: 'receipt:access:1',
+        accessReceiptReservationId: 'receipt-reservation:safeguarding:1',
       ),
       grants: <EducationCollaborationAccessGrant>[grant],
     );
     expect(authorized.allowed, isTrue);
+    expect(authorized.accessReceiptRequired, isTrue);
   });
 
   test('raw collaboration logs are not learner records or mastery evidence', () {
