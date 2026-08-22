@@ -6,64 +6,61 @@ import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
 import 'package:ontarioedai/widgets/claw_experience_renderer.dart';
 
 void main() {
-  testWidgets('learner can request another representation without target drift', (
-    tester,
-  ) async {
-    final evidence = <ClawLocalEvidenceCandidate>[];
+  testWidgets(
+    'learner can request another representation without target drift',
+    (tester) async {
+      final evidence = <ClawLocalEvidenceCandidate>[];
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: SingleChildScrollView(
-            child: ClawExperiencePlayer(
-              graph: ClawFoundationsStoryArc.graph,
-              presentations: ClawFoundationsStoryArc.presentations,
-              availability: ClawFoundationsStoryArc.availability,
-              onEvidenceCandidate: evidence.add,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: ClawExperiencePlayer(
+                graph: ClawFoundationsStoryArc.graph,
+                presentations: ClawFoundationsStoryArc.presentations,
+                availability: ClawFoundationsStoryArc.availability,
+                onEvidenceCandidate: evidence.add,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(find.text('The bridge with four lanterns'), findsOneWidget);
-    expect(
-      find.text(
-        'Learning target: ${ClawFoundationsStoryArc.competencyId}',
-      ),
-      findsOneWidget,
-    );
+      expect(find.text('The bridge with four lanterns'), findsOneWidget);
+      expect(
+        find.text('Learning target: ${ClawFoundationsStoryArc.competencyId}'),
+        findsOneWidget,
+      );
 
-    await _tap(tester, const ValueKey('claw-continue'));
-    expect(find.text('One half can wear another name'), findsOneWidget);
+      await _tap(tester, const ValueKey('claw-continue'));
+      expect(find.text('One half can wear another name'), findsOneWidget);
 
-    await _tap(tester, const ValueKey('claw-another-way'));
-    expect(find.text('Picture the same whole'), findsOneWidget);
-    expect(
-      find.text(
-        'Learning target: ${ClawFoundationsStoryArc.competencyId}',
-      ),
-      findsOneWidget,
-    );
+      await _tap(tester, const ValueKey('claw-another-way'));
+      expect(find.text('Picture the same whole'), findsOneWidget);
+      expect(
+        find.text('Learning target: ${ClawFoundationsStoryArc.competencyId}'),
+        findsOneWidget,
+      );
 
-    await _tap(tester, const ValueKey('claw-continue'));
-    expect(find.text('Which fraction matches 1/2?'), findsOneWidget);
+      await _tap(tester, const ValueKey('claw-continue'));
+      expect(find.text('Which fraction matches 1/2?'), findsOneWidget);
 
-    await _tap(tester, const ValueKey('claw-choice-three-fourths'));
-    expect(find.text('Keep the amount fixed'), findsOneWidget);
-    expect(evidence, hasLength(1));
-    expect(evidence.single.route, ClawLocalEvidenceRoute.insufficient);
-    expect(evidence.single.createsMasteryClaim, isFalse);
+      await _tap(tester, const ValueKey('claw-choice-three-fourths'));
+      expect(find.text('Keep the amount fixed'), findsOneWidget);
+      expect(evidence, hasLength(1));
+      expect(evidence.single.route, ClawLocalEvidenceRoute.insufficient);
+      expect(evidence.single.createsMasteryClaim, isFalse);
 
-    await _tap(tester, const ValueKey('claw-continue'));
-    expect(find.text('Which fraction matches 1/2?'), findsOneWidget);
+      await _tap(tester, const ValueKey('claw-continue'));
+      expect(find.text('Which fraction matches 1/2?'), findsOneWidget);
 
-    await _tap(tester, const ValueKey('claw-choice-two-fourths'));
-    expect(find.text('You found an equivalent fraction'), findsOneWidget);
-    expect(evidence, hasLength(2));
-    expect(evidence.last.route, ClawLocalEvidenceRoute.satisfied);
-    expect(evidence.last.persistsLearnerRecord, isFalse);
-  });
+      await _tap(tester, const ValueKey('claw-choice-two-fourths'));
+      expect(find.text('You found an equivalent fraction'), findsOneWidget);
+      expect(evidence, hasLength(2));
+      expect(evidence.last.route, ClawLocalEvidenceRoute.satisfied);
+      expect(evidence.last.persistsLearnerRecord, isFalse);
+    },
+  );
 
   testWidgets('missing presentation fails visibly without invented content', (
     tester,
