@@ -57,17 +57,27 @@ class CompetencyGraph {
   final Map<String, CompetencyNode> nodes;
   final List<CompetencyEdge> edges;
 
-  CompetencyGraph({
+  factory CompetencyGraph({
     required Iterable<CompetencyNode> nodes,
     required Iterable<CompetencyEdge> edges,
-  }) : nodes = Map<String, CompetencyNode>.unmodifiable({
-         for (final node in nodes) node.competencyId: node,
-       }),
-       edges = List<CompetencyEdge>.unmodifiable(edges) {
-    final nodeList = nodes.toList(growable: false);
-    if (this.nodes.length != nodeList.length) {
+  }) {
+    final nodeList = List<CompetencyNode>.unmodifiable(nodes);
+    final edgeList = List<CompetencyEdge>.unmodifiable(edges);
+    final nodeMap = <String, CompetencyNode>{
+      for (final node in nodeList) node.competencyId: node,
+    };
+
+    if (nodeMap.length != nodeList.length) {
       throw const CompetencyGraphException('Competency IDs must be unique.');
     }
+
+    return CompetencyGraph._(
+      Map<String, CompetencyNode>.unmodifiable(nodeMap),
+      edgeList,
+    );
+  }
+
+  CompetencyGraph._(this.nodes, this.edges) {
     _validateEdges();
     _validatePrerequisiteAcyclic();
   }
@@ -100,17 +110,19 @@ class CompetencyGraph {
     final visited = <String>{};
 
     void visit(String nodeId) {
-      if (visiting.contains(nodeId)) {
+      if (visited.contains(nodeId)) return;
+      if (!visiting.add(nodeId)) {
         throw const CompetencyGraphException(
           'Prerequisite relationships must be acyclic.',
         );
       }
-      if (!visited.add(nodeId)) return;
-      visiting.add(nodeId);
+
       for (final next in adjacency[nodeId] ?? const <String>[]) {
         visit(next);
       }
+
       visiting.remove(nodeId);
+      visited.add(nodeId);
     }
 
     for (final nodeId in nodes.keys) {
@@ -134,11 +146,13 @@ class CompetencyGraph {
 }
 
 class EntryDiagnosticPlan {
+  final String learnerSubjectId;
   final String targetCompetencyId;
   final List<String> competencyIdsToProbe;
   final int itemBudget;
 
   const EntryDiagnosticPlan({
+    required this.learnerSubjectId,
     required this.targetCompetencyId,
     required this.competencyIdsToProbe,
     required this.itemBudget,
@@ -155,13 +169,26 @@ class EntryDiagnosticPlanner {
 
   EntryDiagnosticPlan plan({
     required CompetencyGraph graph,
+    required String learnerSubjectId,
     required String targetCompetencyId,
     required Iterable<CompetencyEvidence> evidence,
     int itemBudget = 8,
+    double demonstratedConfidenceThreshold = 0.7,
   }) {
+    if (learnerSubjectId.trim().isEmpty) {
+      throw const CompetencyGraphException(
+        'Learner subject ID must not be empty.',
+      );
+    }
     if (itemBudget <= 0) {
       throw const CompetencyGraphException(
         'Diagnostic item budget must be positive.',
+      );
+    }
+    if (demonstratedConfidenceThreshold < 0 ||
+        demonstratedConfidenceThreshold > 1) {
+      throw const CompetencyGraphException(
+        'Demonstrated confidence threshold must be between 0 and 1.',
       );
     }
     if (!graph.nodes.containsKey(targetCompetencyId)) {
@@ -170,26 +197,32 @@ class EntryDiagnosticPlanner {
       );
     }
 
-    final bestEvidence = <String, CompetencyEvidence>{};
+    final latestEvidence = <String, CompetencyEvidence>{};
     for (final item in evidence) {
-      final current = bestEvidence[item.competencyId];
-      if (current == null ||
-          item.state.index > current.state.index ||
-          (item.state == current.state &&
-              item.observedAt.isAfter(current.observedAt))) {
-        bestEvidence[item.competencyId] = item;
+      if (item.learnerSubjectId != learnerSubjectId) continue;
+      if (!graph.nodes.containsKey(item.competencyId)) continue;
+
+      final current = latestEvidence[item.competencyId];
+      if (current == null || item.observedAt.isAfter(current.observedAt)) {
+        latestEvidence[item.competencyId] = item;
+        continue;
+      }
+      if (item.observedAt == current.observedAt &&
+          item.state.index > current.state.index) {
+        latestEvidence[item.competencyId] = item;
       }
     }
 
     bool sufficientlyDemonstrated(String competencyId) {
-      final item = bestEvidence[competencyId];
+      final item = latestEvidence[competencyId];
       return item != null &&
           item.state == CompetencyEvidenceState.demonstrated &&
-          item.confidence >= 0.7;
+          item.confidence >= demonstratedConfidenceThreshold;
     }
 
     if (sufficientlyDemonstrated(targetCompetencyId)) {
       return EntryDiagnosticPlan(
+        learnerSubjectId: learnerSubjectId,
         targetCompetencyId: targetCompetencyId,
         competencyIdsToProbe: const <String>[],
         itemBudget: itemBudget,
@@ -217,6 +250,7 @@ class EntryDiagnosticPlanner {
     }
 
     return EntryDiagnosticPlan(
+      learnerSubjectId: learnerSubjectId,
       targetCompetencyId: targetCompetencyId,
       competencyIdsToProbe: List<String>.unmodifiable(ordered),
       itemBudget: itemBudget,
