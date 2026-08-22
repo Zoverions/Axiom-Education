@@ -121,8 +121,8 @@ class PersonalInsightRecord {
     required this.statement,
     required this.sensitivity,
     required this.sourceType,
-    required this.evidenceIds,
-    required this.domainScopes,
+    required Set<String> evidenceIds,
+    required Set<String> domainScopes,
     required this.limitations,
     required this.createdAt,
     required this.reviewAt,
@@ -164,7 +164,7 @@ class PersonalInsightRevision {
     required this.actorId,
     required this.type,
     required this.occurredAt,
-    required this.evidenceIds,
+    required Set<String> evidenceIds,
     required this.reason,
     this.replacementStatement,
     this.replacementConfidence,
@@ -219,19 +219,18 @@ class PersonalInsightRevisionProjector {
     var revoked = false;
 
     for (final revision in ordered) {
-      switch (revision.type) {
-        case PersonalInsightRevisionType.confirm:
-          confirmed = true;
-          disputed = false;
-        case PersonalInsightRevisionType.dispute:
-          disputed = true;
-          confirmed = false;
-        case PersonalInsightRevisionType.correct:
-          statement = revision.replacementStatement!;
-          confidence = revision.replacementConfidence ?? confidence;
-          disputed = false;
-        case PersonalInsightRevisionType.revoke:
-          revoked = true;
+      if (revision.type == PersonalInsightRevisionType.confirm) {
+        confirmed = true;
+        disputed = false;
+      } else if (revision.type == PersonalInsightRevisionType.dispute) {
+        disputed = true;
+        confirmed = false;
+      } else if (revision.type == PersonalInsightRevisionType.correct) {
+        statement = revision.replacementStatement!;
+        confidence = revision.replacementConfidence ?? confidence;
+        disputed = false;
+      } else if (revision.type == PersonalInsightRevisionType.revoke) {
+        revoked = true;
       }
     }
 
@@ -264,11 +263,11 @@ class PersonalInsightAccessGrant {
     required this.grantId,
     required this.actorId,
     required this.learnerSubjectId,
-    required this.allowedPurposes,
-    required this.permissions,
-    required this.allowedSensitivities,
-    required this.allowedDomainScopes,
-    required this.evidenceIds,
+    required Set<PersonalInsightPurpose> allowedPurposes,
+    required Set<PersonalInsightPermission> permissions,
+    required Set<PersonalInsightSensitivity> allowedSensitivities,
+    required Set<String> allowedDomainScopes,
+    required Set<String> evidenceIds,
     required this.issuedAt,
     required this.expiresAt,
     this.revoked = false,
@@ -345,14 +344,25 @@ class PersonalInsightAccessEvaluator {
   const PersonalInsightAccessEvaluator();
 
   PersonalInsightAccessDecision evaluate({
-    required PersonalInsightRecord record,
+    required PersonalInsightEffectiveView view,
     required PersonalInsightAccessRequest request,
     required Iterable<PersonalInsightAccessGrant> grants,
   }) {
+    final record = view.original;
     if (record.insightId != request.insightId ||
         record.learnerSubjectId != request.learnerSubjectId) {
       return const PersonalInsightAccessDecision.deny(
         'Insight access request does not match the exact learner subject and insight.',
+      );
+    }
+    if (view.revoked) {
+      return const PersonalInsightAccessDecision.deny(
+        'Insight has been revoked for future use.',
+      );
+    }
+    if (view.disputed && request.permission == PersonalInsightPermission.use) {
+      return const PersonalInsightAccessDecision.deny(
+        'Disputed insight cannot be used until its status is resolved.',
       );
     }
     if (!record.domainScopes.contains(request.domainScope) ||
@@ -367,11 +377,11 @@ class PersonalInsightAccessEvaluator {
       );
     }
 
-    final sensitiveUse =
+    final readOrUse =
         request.permission == PersonalInsightPermission.read ||
         request.permission == PersonalInsightPermission.use;
     final receiptRequired =
-        sensitiveUse &&
+        readOrUse &&
         request.sensitivity != PersonalInsightSensitivity.ordinaryPreference;
 
     for (final grant in grants) {
@@ -443,16 +453,8 @@ class PersonalInsightValidator {
     if (record.statement.trim().isEmpty) {
       throw const PersonalInsightException('Insight statement is required.');
     }
-    if (record.domainScopes.isEmpty) {
-      throw const PersonalInsightException(
-        'At least one domain scope is required.',
-      );
-    }
-    if (record.evidenceIds.isEmpty) {
-      throw const PersonalInsightException(
-        'Every insight requires provenance evidence.',
-      );
-    }
+    _requireNonEmptySet(record.domainScopes, 'domain scope');
+    _requireNonEmptySet(record.evidenceIds, 'provenance evidence ID');
     if (record.limitations.trim().isEmpty) {
       throw const PersonalInsightException(
         'Every insight must state uncertainty or limitations.',
@@ -464,15 +466,9 @@ class PersonalInsightValidator {
         'Insight review and expiry times are invalid.',
       );
     }
-    final confidence = record.confidence;
-    if (confidence != null &&
-        (!confidence.isFinite || confidence < 0 || confidence > 1)) {
-      throw const PersonalInsightException(
-        'Insight confidence must be finite and between zero and one.',
-      );
-    }
+    _validateConfidence(record.confidence, 'Insight confidence');
     if (record.sourceType == PersonalInsightSourceType.modelHypothesis &&
-        confidence == null) {
+        record.confidence == null) {
       throw const PersonalInsightException(
         'Model hypotheses require explicit confidence.',
       );
@@ -483,10 +479,10 @@ class PersonalInsightValidator {
         'Only clinician-provided records may carry a clinical diagnosis claim.',
       );
     }
-    if (record.sourceType == PersonalInsightSourceType.modelHypothesis &&
-        record.clinicalDiagnosisClaim) {
+    if (record.sourceType == PersonalInsightSourceType.clinicianProvided &&
+        (record.sourceActorId == null || record.sourceActorId!.trim().isEmpty)) {
       throw const PersonalInsightException(
-        'A model hypothesis cannot create a clinical diagnosis claim.',
+        'Clinician-provided insight requires an attributed source actor.',
       );
     }
   }
@@ -518,12 +514,43 @@ class PersonalInsightValidator {
         'Correction revisions require replacement text.',
       );
     }
-    final confidence = revision.replacementConfidence;
-    if (confidence != null &&
-        (!confidence.isFinite || confidence < 0 || confidence > 1)) {
+    _validateConfidence(
+      revision.replacementConfidence,
+      'Replacement confidence',
+    );
+  }
+
+  void validateGrant(PersonalInsightAccessGrant grant) {
+    _requireIdentifier(grant.grantId, 'Grant ID');
+    _requireIdentifier(grant.actorId, 'Grant actor ID');
+    _requireIdentifier(grant.learnerSubjectId, 'Grant learner subject ID');
+    if (grant.allowedPurposes.isEmpty ||
+        grant.permissions.isEmpty ||
+        grant.allowedSensitivities.isEmpty) {
       throw const PersonalInsightException(
-        'Replacement confidence must be finite and between zero and one.',
+        'Insight grants require purpose, permission, and sensitivity scope.',
       );
+    }
+    _requireNonEmptySet(grant.allowedDomainScopes, 'grant domain scope');
+    _requireNonEmptySet(grant.evidenceIds, 'grant evidence ID');
+    if (!grant.issuedAt.isBefore(grant.expiresAt)) {
+      throw const PersonalInsightException(
+        'Insight grant expiry must follow issue time.',
+      );
+    }
+  }
+
+  static void _validateConfidence(double? value, String label) {
+    if (value != null && (!value.isFinite || value < 0 || value > 1)) {
+      throw PersonalInsightException(
+        '$label must be finite and between zero and one.',
+      );
+    }
+  }
+
+  static void _requireNonEmptySet(Set<String> values, String label) {
+    if (values.isEmpty || values.any((value) => value.trim().isEmpty)) {
+      throw PersonalInsightException('At least one valid $label is required.');
     }
   }
 
