@@ -96,7 +96,7 @@ class LearningResourceFeedbackPanel extends StatelessWidget {
               ),
               _FeedbackButton(
                 label: 'More like this',
-                icon: Icons.auto_awesome_outlined,
+                icon: Icons.auto_awesome,
                 onPressed: () =>
                     onFeedback(LearningFeedbackSignal.moreLikeThis),
               ),
@@ -117,13 +117,13 @@ class LearningResourceFeedbackPanel extends StatelessWidget {
                     children: <Widget>[
                       _FeedbackButton(
                         label: 'Too fast',
-                        icon: Icons.fast_forward_outlined,
+                        icon: Icons.fast_forward,
                         onPressed: () =>
                             onFeedback(LearningFeedbackSignal.tooFast),
                       ),
                       _FeedbackButton(
                         label: 'Too slow',
-                        icon: Icons.slow_motion_video_outlined,
+                        icon: Icons.slow_motion_video,
                         onPressed: () =>
                             onFeedback(LearningFeedbackSignal.tooSlow),
                       ),
