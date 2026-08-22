@@ -198,8 +198,9 @@ class EducationModelRouter {
         .where((candidate) {
           if (!candidate.admitted || !candidate.healthy) return false;
           if (request.localOnly && !candidate.isLocal) return false;
-          if (!candidate.isLocal && !contextGrant.remoteEgressAllowed)
+          if (!candidate.isLocal && !contextGrant.remoteEgressAllowed) {
             return false;
+          }
           if (!candidate.capabilities.containsAll(
             request.requiredCapabilities,
           )) {
@@ -217,8 +218,9 @@ class EducationModelRouter {
           if (candidate.estimatedCostMicros > request.budget.maxCostMicros) {
             return false;
           }
-          if (candidate.estimatedLatency > request.budget.maxWallTime)
+          if (candidate.estimatedLatency > request.budget.maxWallTime) {
             return false;
+          }
           if (request.budget.maxCalls < 1) return false;
           return true;
         })
