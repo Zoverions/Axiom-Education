@@ -1,0 +1,64 @@
+{
+  "schema": "axiom-education-entry-assessment.v1",
+  "contract_id": "axiom.education.entry-assessment",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Select bounded competency probes compatible with available device and learner interaction channels without assuming literacy, speech, camera access, chronological grade, or a permanent ability profile.",
+  "device_capabilities": [
+    "visual-output",
+    "audio-output",
+    "touch-input",
+    "pointer-input",
+    "keyboard-input",
+    "microphone-input",
+    "camera-input",
+    "haptic-output"
+  ],
+  "interaction_kinds": [
+    "observe-change",
+    "single-select",
+    "match",
+    "sequence",
+    "gesture-or-pointer",
+    "text-response",
+    "spoken-response",
+    "camera-observed-response"
+  ],
+  "selection_invariants": {
+    "required_device_capabilities_must_be_present": true,
+    "camera_is_never_assumed": true,
+    "microphone_is_never_assumed": true,
+    "literacy_is_never_assumed": true,
+    "speech_is_never_assumed": true,
+    "missing_modality_is_not_negative_ability_evidence": true,
+    "probe_budget_is_bounded": true,
+    "lower_assumption_probe_is_preferred_when_equally_informative": true
+  },
+  "learner_boundary": {
+    "chronological_age_required": false,
+    "grade_required": false,
+    "diagnosis_required": false,
+    "demographic_profile_required": false,
+    "previous_school_record_required": false,
+    "current_competency_evidence_may_skip_unnecessary_probes": true
+  },
+  "evidence_boundary": {
+    "single_probe_establishes_permanent_mastery": false,
+    "non_response_is_not_automatically_inability": true,
+    "device_failure_is_not_learner_failure": true,
+    "probe_result_may_update_contextual_competency_evidence": true,
+    "assessment_result_is_not_grade_credit_or_diagnosis": true
+  },
+  "privacy": {
+    "raw_camera_recording_retained_by_default": false,
+    "raw_microphone_recording_retained_by_default": false,
+    "minimum_derived_response_evidence_preferred": true,
+    "sensor_use_requires_applicable_consent_and_policy": true
+  },
+  "non_claims": [
+    "Entry assessment does not determine a learner's worth, intelligence, diagnosis, legal capacity, grade placement, or permanent learning style.",
+    "Camera or microphone availability does not authorize their use.",
+    "A device-incompatible probe must be skipped rather than scored as learner failure."
+  ]
+}
