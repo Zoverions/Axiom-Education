@@ -39,10 +39,8 @@ class LearnerHomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     _ClawPreviewCard(
-                      onOpenClaw: () => _push(
-                        context,
-                        const ClawFoundationsPreviewScreen(),
-                      ),
+                      onOpenClaw: () =>
+                          _push(context, const ClawFoundationsPreviewScreen()),
                     ),
                     const SizedBox(height: 20),
                     Text(
