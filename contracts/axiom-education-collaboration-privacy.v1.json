@@ -41,7 +41,9 @@
     "scope_bound_access_required": true,
     "time_bound_access_required_for_privileged_reads": true,
     "evidence_bound_authority_required": true,
-    "access_receipt_required_for_privileged_reads": true
+    "access_receipt_required_for_privileged_reads": true,
+    "ordinary_participant_read_is_automatically_privileged": false,
+    "privileged_read_requires_receipt_reservation_before_release": true
   },
   "default_visibility": {
     "teacher_announcement": "assigned-circle",
@@ -67,10 +69,18 @@
     "may_browse_unrelated_learner_social_history": false,
     "may_access_other_classes_by_role_only": false
   },
+  "privileged_read_audit": {
+    "grant_must_explicitly_mark_read_as_privileged": true,
+    "receipt_reservation_required_before_content_release": true,
+    "receipt_should_record_actor_space_grant_purpose_and_time": true,
+    "receipt_should_avoid_raw_conversation_content": true,
+    "receipt_is_not_general_activity_feed": true
+  },
   "safeguarding_boundary": {
     "break_glass_read_allowed_by_default": false,
     "requires_explicit_governed_safeguarding_authority": true,
     "requires_reason_and_evidence": true,
+    "requires_privileged_read_audit": true,
     "requires_access_receipt": true,
     "does_not_convert_to_permanent_browse_authority": true
   },
