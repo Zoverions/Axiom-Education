@@ -4,9 +4,7 @@ import 'package:ontarioedai/features/home/learner_home_screen.dart';
 
 void main() {
   testWidgets('learner home opens the Claw Academy preview', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: LearnerHomeScreen()),
-    );
+    await tester.pumpWidget(const MaterialApp(home: LearnerHomeScreen()));
 
     final button = find.byKey(const ValueKey('home-open-claw-preview'));
     await tester.ensureVisible(button);
