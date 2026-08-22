@@ -1,0 +1,80 @@
+{
+  "schema": "axiom-education-content-readiness.v1",
+  "contract_id": "axiom.education.content-readiness",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "status": "draft-foundation-not-promoted-capability",
+  "purpose": "Resolve evidenced learner, guardian, educator, institution, jurisdiction, and safeguarding inputs into an explicit content sequencing or access decision without inventing legal authority or developmental facts.",
+  "directive_sources": [
+    "learner-preference",
+    "guardian-preference",
+    "educator-recommendation",
+    "institution-policy",
+    "jurisdiction-policy",
+    "safeguarding"
+  ],
+  "effects": [
+    "allow",
+    "defer",
+    "prioritize",
+    "deny"
+  ],
+  "strengths": [
+    "advisory",
+    "required",
+    "non-waivable"
+  ],
+  "decision_statuses": [
+    "allowed",
+    "deferred",
+    "prioritized",
+    "denied",
+    "review-required"
+  ],
+  "authority_boundary": {
+    "source_role_alone_defines_strength": false,
+    "source_role_alone_defines_priority": false,
+    "self_asserted_binding_policy_allowed": false,
+    "binding_directive_requires_evidence": true,
+    "expired_or_revoked_directive_applies": false,
+    "advisory_preference_grants_authority": false,
+    "advisory_preference_may_adjust_sequence": true,
+    "advisory_preference_may_override_stronger_binding_policy": false,
+    "strongest_applicable_binding_denial_fails_closed": true,
+    "equally_strong_controlling_conflict_requires_review": true
+  },
+  "readiness_boundary": {
+    "chronological_age_is_complete_maturity_model": false,
+    "fixed_global_maturity_score_required": false,
+    "system_infers_legal_capacity_from_age_alone": false,
+    "system_infers_guardianship_from_relationship_label_alone": false,
+    "content_tags_are_descriptive_not_authorizing": true,
+    "developmental_or_accessibility_inputs_may_be_contextual": true
+  },
+  "resolution": {
+    "ignore_unevidenced_directives": true,
+    "ignore_inactive_expired_or_revoked_directives": true,
+    "filter_to_applicable_competency_or_content_tags": true,
+    "binding_strength_precedes_policy_priority": true,
+    "policy_priority_is_supplied_by_governed_policy_not_hardcoded_role_hierarchy": true,
+    "deny_is_fail_closed_within_the_controlling_binding_tier": true,
+    "advisory_defer_or_prioritize_may_change_sequence_when_no_stronger_policy_forbids_it": true,
+    "conflict_is_visible": true
+  },
+  "recommender_boundary": {
+    "resource_recommender_resolves_governance": false,
+    "resource_recommender_consumes_resolved_eligibility": true,
+    "denied_or_review_required_content_is_presented": false
+  },
+  "privacy": {
+    "decision_should_expose_minimum_reason_and_evidence_references": true,
+    "raw_sensitive_context_required_in_recommendation_request": false,
+    "learner_or_family_sensitive_details_should_not_be_forwarded_to_external_resource_provider": true
+  },
+  "non_claims": [
+    "This contract does not encode Ontario law, school-board policy, medical maturity, legal capacity, or safeguarding doctrine.",
+    "This contract does not make guardian preferences unconditional vetoes.",
+    "This contract does not make learner preferences unconditional authorization to access restricted material.",
+    "Strength and priority must come from applicable evidenced policy rather than from a hard-coded hierarchy of adult roles."
+  ]
+}
