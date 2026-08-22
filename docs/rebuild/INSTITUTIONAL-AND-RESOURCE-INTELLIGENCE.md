@@ -29,7 +29,26 @@ Guardian pacing and content-timing preferences can express requests such as:
 - defer content when allowed;
 - prioritize content when it becomes relevant.
 
-These preferences are inputs to a later readiness/content-policy resolver. They do not independently suppress required curriculum, override learner rights, override safeguarding obligations, or invent jurisdiction policy.
+These preferences are governed inputs. They do not independently suppress required curriculum, override learner rights, override safeguarding obligations, or invent jurisdiction policy.
+
+## Content/readiness governance
+
+The first content/readiness resolver now accepts evidenced directives from:
+
+- learner preference;
+- guardian preference;
+- educator recommendation;
+- institution policy;
+- jurisdiction policy;
+- safeguarding policy.
+
+Each directive has an explicit effect (`allow`, `defer`, `prioritize`, or `deny`), strength (`advisory`, `required`, or `non-waivable`), governed priority, evidence references, scope, and validity/revocation window.
+
+The resolver does not assign authority based on whether the source is called a parent, teacher, principal, government, or learner. Strength and priority have to arrive from the applicable evidenced policy. Unevidenced, expired, or revoked directives do not become binding.
+
+Within the controlling binding tier, denial fails closed. Equally strong contradictory binding directions produce `review-required` rather than an invented answer. Advisory preferences can change sequencing when allowed but cannot override a stronger binding policy.
+
+Chronological age is deliberately not treated as a complete maturity or legal-capacity model.
 
 ## Resource intelligence
 
@@ -37,7 +56,7 @@ A competency can have many pedagogical presentations. The resource layer treats 
 
 YouTube is one possible external provider. It is not a platform dependency and receives no special learner authority.
 
-Each resource can describe:
+Each admitted resource can describe:
 
 - provider and source;
 - competency alignment;
@@ -49,6 +68,16 @@ Each resource can describe:
 - pace;
 - difficulty;
 - approximate duration.
+
+## Privacy-minimized discovery and explicit admission
+
+External discovery now uses a provider-neutral query containing only pedagogically necessary fields such as target competency, requested format, language, accessibility needs, duration limit, and optional search tags.
+
+The discovery request deliberately has no learner id, guardian id, institution id, learner history, diagnosis, or raw policy context.
+
+A provider returns an untrusted `LearningResourceCandidate`. Candidates do not have a trust state. Therefore an external provider cannot self-assert `educator-reviewed`, `institution-approved`, or `jurisdiction-approved`.
+
+A separate Axiom-side admission step assigns review state only when review evidence is supplied. Provider identity mismatch fails closed.
 
 ## Direct learner feedback
 
@@ -67,6 +96,10 @@ The first feedback vocabulary is:
 - already knew this.
 
 The learner can therefore tell the system whether a particular explanation helped without that signal becoming a permanent claim that the learner has one fixed "learning style".
+
+A reusable Flutter `LearningResourceMoment` and `LearningResourceFeedbackPanel` now provide this feedback surface for any future renderer: video, story/comic panel, simulation, game, generated experience, text, or conventional lesson content.
+
+The UI emits explicit pedagogical signals only. It does not infer mastery or collect passive engagement telemetry.
 
 ## Outcome-aware recommendation
 
@@ -103,13 +136,31 @@ These states describe review provenance. They do not prove learner mastery or ac
 
 ## Policy boundary
 
-The recommender does not decide what a child is legally or developmentally permitted to access. A separate content/readiness policy layer resolves applicable learner state, guardian input, educator/institution policy, safeguarding requirements, learner rights, and jurisdiction rules and passes an eligibility decision into resource selection.
+The recommender does not decide what a child is legally or developmentally permitted to access. The content/readiness policy layer resolves applicable evidenced inputs and passes the resulting eligibility/sequence decision into resource selection.
 
-Denied resources, resources below the required trust floor, or resources missing required accessibility features fail eligibility before ranking.
+Denied resources, review-required content, resources below the required trust floor, or resources missing required accessibility features fail eligibility before ranking/presentation.
+
+## Persistence boundary
+
+Resource feedback and recommendation telemetry are **not** automatically written into the existing official learner-event stream.
+
+The current governed learner-memory profile has a pinned event vocabulary, event-to-memory-kind mapping, and ownership mapping. This slice deliberately does not widen those verified contracts implicitly or write a parallel local shadow record.
+
+Before feedback becomes durable learner-record evidence, a later Mesh-aligned change must explicitly define:
+
+- the admitted event type;
+- memory kind;
+- learner/actor ownership rule;
+- consent requirements;
+- correction/retraction semantics;
+- minimum retained content;
+- portability/export behavior.
+
+This keeps a useful UI signal from silently becoming surveillance or an unofficial second student record.
 
 ## Privacy boundary
 
-The preferred record is pedagogically meaningful consequence rather than surveillance exhaust:
+The preferred durable record is pedagogically meaningful consequence rather than surveillance exhaust:
 
 ```text
 learner encountered competency C
@@ -123,11 +174,24 @@ Raw watch history is not required to make that useful.
 
 Cross-learner aggregation, population-level effectiveness claims, or public ratings require separate privacy and governance work and are intentionally outside this slice.
 
+## Implemented in this slice
+
+- shared institution, learning-group, relationship, role, and scoped-authority models;
+- guardian pacing/content-timing preferences with explicit non-authority invariants;
+- content/readiness directive model and fail-closed conflict resolver;
+- generic resource metadata and trust states;
+- direct learner feedback and later outcome-observation models;
+- outcome-aware deterministic resource recommendation;
+- privacy-minimized external resource discovery;
+- explicit Axiom-side resource review/admission;
+- reusable learner resource-feedback UI;
+- contract tests and focused unit/widget tests for the above boundaries.
+
 ## Next implementation slices
 
-1. governed persistence for feedback and outcome observations through learner memory/events;
-2. content/readiness policy resolver with explicit guardian, learner, educator, institution, safeguarding, and jurisdiction inputs;
-3. school/institution adapters for enrollment, assignments, reporting, and existing interoperability standards;
-4. learner and parent feedback UI;
-5. external resource discovery/admission adapters, beginning with reviewed video/OER resources rather than unrestricted search;
-6. Claw Academy storyboard integration so panels can request an eligible resource, alternate explanation, game, simulation, or generated experience through the same interfaces.
+1. define and admit governed persistence for learner resource feedback/outcome evidence without weakening the pinned learner-memory profile;
+2. school/institution adapters for enrollment, assignments, reporting, and existing interoperability standards;
+3. reviewed video/OER discovery adapters using the generic catalog interface;
+4. parent/guardian dashboard controls that emit governed preferences rather than direct curriculum mutations;
+5. Claw Academy storyboard integration so panels can request an eligible resource, alternate explanation, game, simulation, or generated experience through the same interfaces;
+6. zero-assumption entry-assessment primitives and a broader competency graph beneath grade/course labels.
