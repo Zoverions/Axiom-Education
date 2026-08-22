@@ -93,14 +93,12 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
       ),
     );
 
-    _transition(
-      switch (route) {
-        ClawLocalEvidenceRoute.satisfied =>
-          ClawTransitionTrigger.evidenceSatisfied,
-        ClawLocalEvidenceRoute.insufficient =>
-          ClawTransitionTrigger.evidenceInsufficient,
-      },
-    );
+    _transition(switch (route) {
+      ClawLocalEvidenceRoute.satisfied =>
+        ClawTransitionTrigger.evidenceSatisfied,
+      ClawLocalEvidenceRoute.insufficient =>
+        ClawTransitionTrigger.evidenceInsufficient,
+    });
   }
 
   @override
@@ -127,13 +125,17 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
                 ? () => _transition(ClawTransitionTrigger.automatic)
                 : null,
             onAnotherWay:
-                triggers.contains(ClawTransitionTrigger.learnerRequestsAnotherWay)
+                triggers.contains(
+                  ClawTransitionTrigger.learnerRequestsAnotherWay,
+                )
                 ? () => _transition(
                     ClawTransitionTrigger.learnerRequestsAnotherWay,
                   )
                 : null,
             onHumanHelp:
-                triggers.contains(ClawTransitionTrigger.learnerRequestsHumanHelp)
+                triggers.contains(
+                  ClawTransitionTrigger.learnerRequestsHumanHelp,
+                )
                 ? () => _transition(
                     ClawTransitionTrigger.learnerRequestsHumanHelp,
                   )
