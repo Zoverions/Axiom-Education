@@ -60,34 +60,60 @@ void main() {
         reliabilityScore: 0.98,
       );
 
+  EducationModelContextGrant grant({
+    required String grantId,
+    required Set<EducationModelTaskClass> allowedTaskClasses,
+    required Set<EducationModelContextScope> allowedScopes,
+    bool remoteEgressAllowed = true,
+  }) => EducationModelContextGrant(
+    grantId: grantId,
+    learnerSubjectId: 'learner:1',
+    allowedTaskClasses: allowedTaskClasses,
+    allowedScopes: allowedScopes,
+    remoteEgressAllowed: remoteEgressAllowed,
+    allowedRetentionClasses: const <String>{'ephemeral'},
+    issuedAt: now.subtract(const Duration(minutes: 1)),
+    expiresAt: now.add(const Duration(minutes: 10)),
+  );
+
+  EducationModelRouteRequest request({
+    required EducationModelTaskClass taskClass,
+    required Set<EducationModelContextScope> scopes,
+    String learnerSubjectId = 'learner:1',
+  }) => EducationModelRouteRequest(
+    learnerSubjectId: learnerSubjectId,
+    taskClass: taskClass,
+    requiredCapabilities: const <EducationModelCapability>{
+      EducationModelCapability.text,
+    },
+    requestedContextScopes: scopes,
+    retentionClass: 'ephemeral',
+    requestedAt: now,
+    budget: budget,
+  );
+
   test('remote model is excluded when learner context may not leave local trust boundary', () {
-    final grant = EducationModelContextGrant(
+    final contextGrant = grant(
       grantId: 'grant:model:1',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.explainConcept,
+      },
       allowedScopes: const <EducationModelContextScope>{
         EducationModelContextScope.targetCompetency,
         EducationModelContextScope.currentLearnerInput,
       },
       remoteEgressAllowed: false,
-      allowedRetentionClasses: const <String>{'ephemeral'},
-      issuedAt: now.subtract(const Duration(minutes: 1)),
-      expiresAt: now.add(const Duration(minutes: 10)),
     );
 
     final decision = router.route(
-      request: EducationModelRouteRequest(
+      request: request(
         taskClass: EducationModelTaskClass.explainConcept,
-        requiredCapabilities: const <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
-        requestedContextScopes: const <EducationModelContextScope>{
+        scopes: const <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
           EducationModelContextScope.currentLearnerInput,
         },
-        retentionClass: 'ephemeral',
-        requestedAt: now,
-        budget: budget,
       ),
-      contextGrant: grant,
+      contextGrant: contextGrant,
       candidates: <EducationModelCandidate>[
         remoteCandidate(),
         localCandidate(),
@@ -99,15 +125,14 @@ void main() {
   });
 
   test('quality ranking happens only after privacy and budget hard filters', () {
-    final grant = EducationModelContextGrant(
+    final contextGrant = grant(
       grantId: 'grant:model:2',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.socraticTutor,
+      },
       allowedScopes: const <EducationModelContextScope>{
         EducationModelContextScope.targetCompetency,
       },
-      remoteEgressAllowed: true,
-      allowedRetentionClasses: const <String>{'ephemeral'},
-      issuedAt: now.subtract(const Duration(minutes: 1)),
-      expiresAt: now.add(const Duration(minutes: 10)),
     );
 
     final overBudgetRemote = EducationModelCandidate(
@@ -119,7 +144,9 @@ void main() {
       isLocal: false,
       admitted: true,
       healthy: true,
-      capabilities: const <EducationModelCapability>{EducationModelCapability.text},
+      capabilities: const <EducationModelCapability>{
+        EducationModelCapability.text,
+      },
       retentionClasses: const <String>{'ephemeral'},
       estimatedInputUnits: 1000,
       estimatedOutputUnits: 500,
@@ -130,19 +157,13 @@ void main() {
     );
 
     final decision = router.route(
-      request: EducationModelRouteRequest(
+      request: request(
         taskClass: EducationModelTaskClass.socraticTutor,
-        requiredCapabilities: const <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
-        requestedContextScopes: const <EducationModelContextScope>{
+        scopes: const <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
         },
-        retentionClass: 'ephemeral',
-        requestedAt: now,
-        budget: budget,
       ),
-      contextGrant: grant,
+      contextGrant: contextGrant,
       candidates: <EducationModelCandidate>[
         overBudgetRemote,
         localCandidate(quality: 0.7),
@@ -153,32 +174,76 @@ void main() {
   });
 
   test('router fails closed when requested context exceeds grant', () {
-    final grant = EducationModelContextGrant(
+    final contextGrant = grant(
       grantId: 'grant:model:3',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.storyboard,
+      },
       allowedScopes: const <EducationModelContextScope>{
         EducationModelContextScope.targetCompetency,
       },
-      remoteEgressAllowed: true,
-      allowedRetentionClasses: const <String>{'ephemeral'},
-      issuedAt: now.subtract(const Duration(minutes: 1)),
-      expiresAt: now.add(const Duration(minutes: 10)),
     );
 
     final decision = router.route(
-      request: EducationModelRouteRequest(
+      request: request(
         taskClass: EducationModelTaskClass.storyboard,
-        requiredCapabilities: const <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
-        requestedContextScopes: const <EducationModelContextScope>{
+        scopes: const <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
           EducationModelContextScope.storyCharacterProfile,
         },
-        retentionClass: 'ephemeral',
-        requestedAt: now,
-        budget: budget,
       ),
-      contextGrant: grant,
+      contextGrant: contextGrant,
+      candidates: <EducationModelCandidate>[localCandidate()],
+    );
+
+    expect(decision.allowed, isFalse);
+  });
+
+  test('context grant cannot be reused for a different learner', () {
+    final contextGrant = grant(
+      grantId: 'grant:model:4',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.explainConcept,
+      },
+      allowedScopes: const <EducationModelContextScope>{
+        EducationModelContextScope.targetCompetency,
+      },
+    );
+
+    final decision = router.route(
+      request: request(
+        learnerSubjectId: 'learner:2',
+        taskClass: EducationModelTaskClass.explainConcept,
+        scopes: const <EducationModelContextScope>{
+          EducationModelContextScope.targetCompetency,
+        },
+      ),
+      contextGrant: contextGrant,
+      candidates: <EducationModelCandidate>[localCandidate()],
+    );
+
+    expect(decision.allowed, isFalse);
+  });
+
+  test('context grant cannot be reused for a different pedagogical task', () {
+    final contextGrant = grant(
+      grantId: 'grant:model:5',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.explainConcept,
+      },
+      allowedScopes: const <EducationModelContextScope>{
+        EducationModelContextScope.targetCompetency,
+      },
+    );
+
+    final decision = router.route(
+      request: request(
+        taskClass: EducationModelTaskClass.storyboard,
+        scopes: const <EducationModelContextScope>{
+          EducationModelContextScope.targetCompetency,
+        },
+      ),
+      contextGrant: contextGrant,
       candidates: <EducationModelCandidate>[localCandidate()],
     );
 
@@ -188,6 +253,7 @@ void main() {
   test('usage receipt contains accounting metadata but not raw learner content', () {
     const receipt = EducationModelUsageReceipt(
       receiptId: 'receipt:model:1',
+      learnerSubjectId: 'learner:1',
       taskClass: EducationModelTaskClass.explainConcept,
       providerId: 'provider:local',
       modelId: 'model:local',
