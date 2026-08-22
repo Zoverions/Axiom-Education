@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-resource-intelligence.v1",
   "contract_id": "axiom.education.resource-intelligence",
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "domain": "education",
   "status": "draft-foundation-not-promoted-capability",
   "purpose": "Select among multiple pedagogical presentations of a competency using accessibility, trust, direct learner feedback, and demonstrated outcomes without optimizing for generic engagement.",
@@ -83,8 +83,18 @@
   "external_resource_boundary": {
     "youtube_is_generic_provider_not_platform_dependency": true,
     "provider_receives_full_learner_profile_by_default": false,
+    "discovery_request_contains_learner_identifier": false,
+    "provider_candidate_contains_trust_state": false,
+    "provider_may_self_promote_review_state": false,
+    "provider_identity_mismatch_fails_closed": true,
+    "axiom_admission_requires_review_evidence": true,
     "external_success_is_not_mastery": true,
     "provider_integration_uses_experience_provider_contract": "axiom.education.experience-provider"
+  },
+  "persistence_boundary": {
+    "resource_feedback_is_automatically_written_as_official_learner_event": false,
+    "existing_pinned_learner_memory_event_map_is_widened_by_this_contract": false,
+    "governed_feedback_persistence_requires_explicit_event_kind_owner_and_consent_admission": true
   },
   "privacy": {
     "retain_minimum_pedagogically_useful_evidence": true,
@@ -94,6 +104,7 @@
   "non_claims": [
     "A high recommendation score does not establish mastery, accreditation, or curriculum approval.",
     "A learner preference does not by itself authorize otherwise restricted content.",
-    "A popular resource is not necessarily an appropriate resource for a particular learner or moment."
+    "A popular resource is not necessarily an appropriate resource for a particular learner or moment.",
+    "Discovery by a provider does not make a resource trusted; review state is assigned only through an Axiom-side admission step."
   ]
 }
