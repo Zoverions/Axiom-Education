@@ -53,7 +53,8 @@ void main() {
   });
 
   test('runtime revision classes match contract exactly', () {
-    final expected = (contract['revision_types'] as List<dynamic>).cast<String>();
+    final expected = (contract['revision_types'] as List<dynamic>)
+        .cast<String>();
     final actual = PersonalInsightRevisionType.values
         .map((value) => value.wireName)
         .toList(growable: false);
@@ -67,10 +68,7 @@ void main() {
         .cast<Map<String, dynamic>>();
 
     expect(parents['repository'], 'Zoverions/AXIOM-MESH');
-    expect(
-      parents['source_sha'],
-      '057433be99fe0b2b7c5c6a1c34316e119f45b46b',
-    );
+    expect(parents['source_sha'], '057433be99fe0b2b7c5c6a1c34316e119f45b46b');
     expect(
       parents['adoption_status'],
       'documentation-readiness-only-no-runtime-authority',
@@ -98,10 +96,16 @@ void main() {
     final boundary =
         contract['mesh_inheritance_invariants'] as Map<String, dynamic>;
 
-    expect(boundary['education_profile_may_weaken_parent_vault_invariants'], isFalse);
+    expect(
+      boundary['education_profile_may_weaken_parent_vault_invariants'],
+      isFalse,
+    );
     expect(boundary['direct_external_vault_access'], isFalse);
     expect(boundary['local_companion_access_requires_mesh_lease'], isTrue);
-    expect(boundary['future_external_materialization_requires_context_capsule'], isTrue);
+    expect(
+      boundary['future_external_materialization_requires_context_capsule'],
+      isTrue,
+    );
     expect(boundary['context_capsule_grants_vault_access'], isFalse);
     expect(boundary['context_capsule_grants_execution_authority'], isFalse);
     expect(boundary['contract_presence_grants_runtime_authority'], isFalse);
@@ -111,10 +115,19 @@ void main() {
     final boundary =
         contract['model_materialization_boundary'] as Map<String, dynamic>;
 
-    expect(boundary['vault_grant_alone_authorizes_model_materialization'], isFalse);
+    expect(
+      boundary['vault_grant_alone_authorizes_model_materialization'],
+      isFalse,
+    );
     expect(boundary['separate_education_model_context_grant_required'], isTrue);
-    expect(boundary['remote_egress_requires_separate_model_context_authority'], isTrue);
-    expect(boundary['retention_requires_separate_model_context_authority'], isTrue);
+    expect(
+      boundary['remote_egress_requires_separate_model_context_authority'],
+      isTrue,
+    );
+    expect(
+      boundary['retention_requires_separate_model_context_authority'],
+      isTrue,
+    );
   });
 
   test('contract preserves learner agency and non-authority boundaries', () {
