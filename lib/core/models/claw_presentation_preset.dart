@@ -77,10 +77,7 @@ class ClawPresentationPresetResolver {
 
   Map<String, ClawExperiencePresentation> resolve({
     required Map<String, ClawExperiencePresentation> basePresentations,
-    required Map<
-      String,
-      Map<ClawPresentationPreset, ClawPresentationVariant>
-    >
+    required Map<String, Map<ClawPresentationPreset, ClawPresentationVariant>>
     variants,
     required ClawPresentationPreset preset,
   }) {
