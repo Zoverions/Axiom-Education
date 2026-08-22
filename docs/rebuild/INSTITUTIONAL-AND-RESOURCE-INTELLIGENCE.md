@@ -31,6 +31,19 @@ Guardian pacing and content-timing preferences can express requests such as:
 
 These preferences are governed inputs. They do not independently suppress required curriculum, override learner rights, override safeguarding obligations, or invent jurisdiction policy.
 
+A reusable `GuardianLearningPreferencePanel` now exposes these choices without presenting a direct curriculum-removal control.
+
+## Existing-school admission boundary
+
+The first roster admission service provides a generic boundary for existing SIS/LMS integrations. An external school system may supply an enrollment or role candidate, but the candidate remains untrusted until it is bound to a local actor with:
+
+- source-system evidence;
+- identity-binding evidence;
+- explicit local admission evidence;
+- a role compatible with the admitted subject kind.
+
+The resulting school role/enrollment projection is descriptive Education context only. It does not grant Mesh authority. A later interoperability adapter can map OneRoster, LTI, or another school-system format into this generic boundary without making the external platform the authority kernel or owner of the learner record.
+
 ## Content/readiness governance
 
 The first content/readiness resolver now accepts evidenced directives from:
@@ -134,6 +147,26 @@ discovered
 
 These states describe review provenance. They do not prove learner mastery or accreditation.
 
+## Curriculum assurance and the Ontario demonstration
+
+Curriculum/course assurance is now represented separately from resource trust. The assurance ladder is:
+
+```text
+unverified
+  -> source-aligned-demonstration
+  -> machine-audited
+  -> human-reviewed
+  -> institution-approved
+  -> jurisdiction-approved
+  -> accredited
+```
+
+The levels are deliberately non-transitive. Machine auditing does not imply qualified human review. Human review does not imply institutional approval. Jurisdiction approval does not silently imply accreditation or credit-bearing status.
+
+The current Ontario implementation defaults to `source-aligned-demonstration` unless an evidence-backed assurance record explicitly promotes a declared scope. Its default claim is therefore that it is designed to align as closely as practicable with identified published Ontario curriculum sources at the time of creation, while **not** claiming Ministry approval, school-board approval, qualified human review, accreditation, or Ontario credit-bearing status.
+
+A frozen demonstration retains its source and assurance metadata. A later verified capsule supersedes it rather than rewriting historical provenance.
+
 ## Policy boundary
 
 The recommender does not decide what a child is legally or developmentally permitted to access. The content/readiness policy layer resolves applicable evidenced inputs and passes the resulting eligibility/sequence decision into resource selection.
@@ -178,6 +211,8 @@ Cross-learner aggregation, population-level effectiveness claims, or public rati
 
 - shared institution, learning-group, relationship, role, and scoped-authority models;
 - guardian pacing/content-timing preferences with explicit non-authority invariants;
+- reusable guardian preference UI;
+- generic existing-school roster admission boundary;
 - content/readiness directive model and fail-closed conflict resolver;
 - generic resource metadata and trust states;
 - direct learner feedback and later outcome-observation models;
@@ -185,13 +220,14 @@ Cross-learner aggregation, population-level effectiveness claims, or public rati
 - privacy-minimized external resource discovery;
 - explicit Axiom-side resource review/admission;
 - reusable learner resource-feedback UI;
+- curriculum assurance model and explicit Ontario demonstration status;
 - contract tests and focused unit/widget tests for the above boundaries.
 
 ## Next implementation slices
 
 1. define and admit governed persistence for learner resource feedback/outcome evidence without weakening the pinned learner-memory profile;
-2. school/institution adapters for enrollment, assignments, reporting, and existing interoperability standards;
-3. reviewed video/OER discovery adapters using the generic catalog interface;
-4. parent/guardian dashboard controls that emit governed preferences rather than direct curriculum mutations;
-5. Claw Academy storyboard integration so panels can request an eligible resource, alternate explanation, game, simulation, or generated experience through the same interfaces;
-6. zero-assumption entry-assessment primitives and a broader competency graph beneath grade/course labels.
+2. implement concrete school-system interoperability mappings on top of the generic roster admission boundary;
+3. implement reviewed video/OER discovery adapters using the generic catalog interface;
+4. connect guardian preference UI to evidenced relationship and policy-issuance workflows;
+5. connect Claw Academy storyboard panels so they can request an eligible resource, alternate explanation, game, simulation, or generated experience through the same interfaces;
+6. build zero-assumption entry-assessment primitives and a broader competency graph beneath grade/course labels.
