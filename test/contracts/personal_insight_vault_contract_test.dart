@@ -61,6 +61,52 @@ void main() {
     expect(actual, equals(expected));
   });
 
+  test('contract pins the merged Mesh sovereign vault parents', () {
+    final parents = contract['mesh_parent_contracts'] as Map<String, dynamic>;
+    final pins = (parents['contracts'] as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+
+    expect(parents['repository'], 'Zoverions/AXIOM-MESH');
+    expect(
+      parents['source_sha'],
+      '057433be99fe0b2b7c5c6a1c34316e119f45b46b',
+    );
+    expect(
+      parents['adoption_status'],
+      'documentation-readiness-only-no-runtime-authority',
+    );
+    expect(
+      pins,
+      equals([
+        {
+          'id': 'axiom-sovereign-vault.v1',
+          'path': 'docs/architecture/contracts/sovereign-vault.v1.schema.json',
+          'sha256':
+              '02e062e6281e0ffd29920d6973cd0108daeb9644ce80313e31511699824ce6c2',
+        },
+        {
+          'id': 'axiom-context-capsule.v1',
+          'path': 'docs/architecture/contracts/context-capsule.v1.schema.json',
+          'sha256':
+              '31d2d1a2594b968407604466462cbf537d7490b4bdb9cf22002bd98717c24a17',
+        },
+      ]),
+    );
+  });
+
+  test('Education cannot weaken Mesh vault or context capsule authority', () {
+    final boundary =
+        contract['mesh_inheritance_invariants'] as Map<String, dynamic>;
+
+    expect(boundary['education_profile_may_weaken_parent_vault_invariants'], isFalse);
+    expect(boundary['direct_external_vault_access'], isFalse);
+    expect(boundary['local_companion_access_requires_mesh_lease'], isTrue);
+    expect(boundary['future_external_materialization_requires_context_capsule'], isTrue);
+    expect(boundary['context_capsule_grants_vault_access'], isFalse);
+    expect(boundary['context_capsule_grants_execution_authority'], isFalse);
+    expect(boundary['contract_presence_grants_runtime_authority'], isFalse);
+  });
+
   test('contract requires two-gate model materialization', () {
     final boundary =
         contract['model_materialization_boundary'] as Map<String, dynamic>;
