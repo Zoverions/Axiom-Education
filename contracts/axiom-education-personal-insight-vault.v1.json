@@ -3,6 +3,32 @@
   "version": 1,
   "status": "draft-foundation",
   "purpose": "Store and use consented, evidence-bound learner insight without turning psychological or health context into uncontrolled profiles, diagnosis-by-model, mastery, grades, credentials, public reputation, or commercial targeting.",
+  "mesh_parent_contracts": {
+    "repository": "Zoverions/AXIOM-MESH",
+    "source_sha": "057433be99fe0b2b7c5c6a1c34316e119f45b46b",
+    "adoption_status": "documentation-readiness-only-no-runtime-authority",
+    "contracts": [
+      {
+        "id": "axiom-sovereign-vault.v1",
+        "path": "docs/architecture/contracts/sovereign-vault.v1.schema.json",
+        "sha256": "02e062e6281e0ffd29920d6973cd0108daeb9644ce80313e31511699824ce6c2"
+      },
+      {
+        "id": "axiom-context-capsule.v1",
+        "path": "docs/architecture/contracts/context-capsule.v1.schema.json",
+        "sha256": "31d2d1a2594b968407604466462cbf537d7490b4bdb9cf22002bd98717c24a17"
+      }
+    ]
+  },
+  "mesh_inheritance_invariants": {
+    "education_profile_may_weaken_parent_vault_invariants": false,
+    "direct_external_vault_access": false,
+    "local_companion_access_requires_mesh_lease": true,
+    "future_external_materialization_requires_context_capsule": true,
+    "context_capsule_grants_vault_access": false,
+    "context_capsule_grants_execution_authority": false,
+    "contract_presence_grants_runtime_authority": false
+  },
   "sensitivity_classes": [
     "ordinary-preference",
     "educational-sensitive",
