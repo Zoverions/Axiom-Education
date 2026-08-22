@@ -6,7 +6,7 @@ Status: executable foundation; not a promoted production capability.
 
 Axiom Education needs one education substrate that can serve existing schools, families, Claw Academy, homeschool environments, post-secondary institutions, professional learning, and future experience shells.
 
-Claw Academy is therefore an experience layer, not the owner of classrooms, learners, guardians, teachers, principals, guidance counselors, assignments, assessment, reporting, or educational authority semantics.
+Claw Academy is therefore an experience layer, not the owner of classrooms, learners, guardians, teachers, principals, guidance counselors, assignments, assessment, reporting, social collaboration, model routing, or educational authority semantics.
 
 ## Shared institutional layer
 
@@ -149,7 +149,7 @@ These states describe review provenance. They do not prove learner mastery or ac
 
 ## Curriculum assurance and the Ontario demonstration
 
-Curriculum/course assurance is now represented separately from resource trust. The assurance ladder is:
+Curriculum/course assurance is represented separately from resource trust. The assurance ladder is:
 
 ```text
 unverified
@@ -167,29 +167,78 @@ The current Ontario implementation defaults to `source-aligned-demonstration` un
 
 A frozen demonstration retains its source and assurance metadata. A later verified capsule supersedes it rather than rewriting historical provenance.
 
+## Governed learning evidence
+
+The existing `axiom.education.learner-memory@1.1.0` profile is deliberately not widened to force learner resource feedback into educator-workflow event types that mean something else.
+
+A separate draft `axiom.education.learning-evidence` contract now defines learner-owned, minimized envelopes for:
+
+- resource feedback;
+- later outcome observations;
+- append-only corrections;
+- append-only retractions.
+
+The proposed memory kind is `education.learning-evidence`, but no new Mesh event admission is claimed. The Education layer must not report official persistence until the corresponding Mesh event vocabulary, ownership, consent, correction, portability, and provider behavior are explicitly admitted.
+
+Raw watch history, clickstream, advertising identifiers, provider account identifiers, and raw conversation transcripts are not required by the envelope.
+
+## Social collaboration and need-to-know privacy
+
+Education reuses AXIOM-MESH social/circle primitives rather than creating a second school-only social system.
+
+A class, assignment discussion, project team, peer-help space, tutoring session, office-hours space, study group, or learner-support space can project onto a governed social circle. Education adds stricter access semantics above that substrate.
+
+Circle membership, guardian status, educator status, principal status, counselor status, or institution membership does not automatically grant transcript access. Privileged reads require an exact, evidenced, purpose-bound, scope-bound, time-bounded grant.
+
+A grant for one assignment or class cannot be reused to browse unrelated learner conversations. Safeguarding-restricted reads require a separate governed break-glass path with explicit safeguarding authority, reason, evidence, expiry, and access receipt.
+
+Raw collaboration logs are not automatically learner records, mastery evidence, grades, disciplinary findings, or governance scores. Pedagogically material consequences should be projected separately through the governed learning-evidence path rather than promoting entire social transcripts.
+
+See `EDUCATION-SOCIAL-COLLABORATION-PRIVACY.md`.
+
+## Model integration and usage
+
+Education uses the AXIOM personal compute fabric for replaceable model/runtime selection. A model, runtime capsule, provider, or compute node is not part of the trusted education authority layer.
+
+The first Education task classes include concept explanation, Socratic tutoring, practice generation, draft practice evaluation, storyboards, game/simulation planning, resource summaries, translation, accessibility transformation, and collaboration assistance.
+
+Every request has an explicit time-bounded context grant. The model receives only the scopes needed for that task, such as a target competency, current learner input, minimized misconception summary, accessibility requirement, language preference, assignment context, resource context, or learner-selected story character profile.
+
+The default is not to send the full longitudinal learner profile, raw social history, guardian identity, institution identity, diagnosis, or unrelated conversations.
+
+Placement filters privacy, egress, jurisdiction, retention, content/readiness policy, model admission/health, capability, deadline, and budget before ranking by task-specific quality, reliability, latency, cost, or energy.
+
+Usage budgets can cap calls, input units, output units, monetary cost, and wall time. A fallback cannot silently cross an egress boundary or exceed the remaining budget.
+
+A minimized usage receipt records provider/model/runtime/node, context-scope identifiers, egress/retention class, units, cost, latency, and fallback reason without requiring raw prompts or learner responses. Funding authority remains separate from transcript authority.
+
+A model cannot create a final grade, credit, mastery decision with governance consequence, transcript entry, credential, accreditation claim, identity/authority grant, or public/social effect by itself.
+
+See `EDUCATION-MODEL-INTEGRATION.md`.
+
+## Competency graph beneath grade labels
+
+The new competency graph treats a grade/course as context rather than a complete learner model. Nodes represent competencies; reviewed crosswalks remain the separate mechanism for asserting relationships to official curriculum.
+
+Evidence can be unknown, attempted, emerging, or demonstrated. It is contextual and revisable rather than a permanent identity label.
+
+The entry diagnostic planner starts from the learner's requested target, walks unresolved prerequisites, skips sufficiently demonstrated prerequisites, and produces a bounded probe plan. It does not infer ability from age or enrollment and does not produce a grade-placement, credit, promotion, or mastery decision.
+
+Prerequisite cycles and missing graph endpoints fail closed.
+
+## Device-adaptive zero-assumption entry assessment
+
+Entry assessment probes declare exactly which interaction/device capabilities they require. Supported primitives include visual/audio output, touch/pointer/keyboard input, optional microphone/camera input, and haptics.
+
+The selector prefers lower-assumption probes when alternatives can address the same competency. Camera and microphone probes are skipped unless the capability is both available and authorized. Literacy, speech, camera, microphone, chronological age, grade, diagnosis, demographics, and previous school records are not assumed.
+
+A device failure, unsupported modality, or non-response is not automatically negative ability evidence. Raw camera/microphone recordings are not retained by default; minimum derived pedagogical evidence is preferred.
+
 ## Policy boundary
 
-The recommender does not decide what a child is legally or developmentally permitted to access. The content/readiness policy layer resolves applicable evidenced inputs and passes the resulting eligibility/sequence decision into resource selection.
+The recommender, collaboration layer, entry assessment, and model router do not decide what a child is legally or developmentally permitted to access. The content/readiness and authority layers resolve applicable evidenced inputs and pass bounded decisions onward.
 
 Denied resources, review-required content, resources below the required trust floor, or resources missing required accessibility features fail eligibility before ranking/presentation.
-
-## Persistence boundary
-
-Resource feedback and recommendation telemetry are **not** automatically written into the existing official learner-event stream.
-
-The current governed learner-memory profile has a pinned event vocabulary, event-to-memory-kind mapping, and ownership mapping. This slice deliberately does not widen those verified contracts implicitly or write a parallel local shadow record.
-
-Before feedback becomes durable learner-record evidence, a later Mesh-aligned change must explicitly define:
-
-- the admitted event type;
-- memory kind;
-- learner/actor ownership rule;
-- consent requirements;
-- correction/retraction semantics;
-- minimum retained content;
-- portability/export behavior.
-
-This keeps a useful UI signal from silently becoming surveillance or an unofficial second student record.
 
 ## Privacy boundary
 
@@ -203,9 +252,9 @@ resource B was reported helpful
 later independent evidence improved
 ```
 
-Raw watch history is not required to make that useful.
+Raw watch history is not required to make that useful. Raw social transcripts and model prompts are not required for usage accounting.
 
-Cross-learner aggregation, population-level effectiveness claims, or public ratings require separate privacy and governance work and are intentionally outside this slice.
+Cross-learner aggregation, population-level effectiveness claims, or public ratings require separate privacy and governance work and remain outside this slice.
 
 ## Implemented in this slice
 
@@ -221,13 +270,21 @@ Cross-learner aggregation, population-level effectiveness claims, or public rati
 - explicit Axiom-side resource review/admission;
 - reusable learner resource-feedback UI;
 - curriculum assurance model and explicit Ontario demonstration status;
-- contract tests and focused unit/widget tests for the above boundaries.
+- separate minimized learner-owned learning-evidence admission contract;
+- need-to-know Education collaboration spaces and access evaluator over Mesh social circles;
+- safeguarding-restricted break-glass access semantics with receipts;
+- zero-assumption competency graph and bounded diagnostic planning;
+- device/input-adaptive entry-assessment selection;
+- model task/context/budget/candidate routing over the Mesh personal compute fabric;
+- minimized model usage receipts and model-output authority prohibitions;
+- focused contract/unit/widget tests for these boundaries.
 
 ## Next implementation slices
 
-1. define and admit governed persistence for learner resource feedback/outcome evidence without weakening the pinned learner-memory profile;
+1. obtain explicit Mesh admission for learning-evidence event types without modifying the pinned educator-workflow profile;
 2. implement concrete school-system interoperability mappings on top of the generic roster admission boundary;
 3. implement reviewed video/OER discovery adapters using the generic catalog interface;
 4. connect guardian preference UI to evidenced relationship and policy-issuance workflows;
-5. connect Claw Academy storyboard panels so they can request an eligible resource, alternate explanation, game, simulation, or generated experience through the same interfaces;
-6. build zero-assumption entry-assessment primitives and a broader competency graph beneath grade/course labels.
+5. connect Claw Academy storyboard panels to resource intelligence, model routing, alternate explanations, games, simulations, and generated experiences;
+6. define durable competency-evidence projection after Mesh admission and portability semantics are ready;
+7. add concrete Education-to-Mesh social collaboration adapters only where private circle/read authority semantics are available and evidenced.
