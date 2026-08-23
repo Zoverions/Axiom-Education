@@ -6,10 +6,10 @@ class AxiomMeshCompatibilityProfile {
   static const currentProfileId =
       'axiom-education.mesh-0.12.0-dev.3-provider-v1';
   static const currentKernelVersion = '0.12.0-dev.3';
-  static const currentBaselineHead = 'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
+  static const currentBaselineHead = 'e816136db24196cd82f34ee1e0e8291af1ea155f';
   static const currentProviderHead = '2365bf5ed19e0da81288551b2bb4135a7094d02b';
   static const currentGatewayContractSourceHead =
-      'eb3614b3f8ccdd6c7f6367ceaaec5cc43c306534';
+      'e816136db24196cd82f34ee1e0e8291af1ea155f';
   static const currentGatewayContractCanonicalSha256 =
       '77d57f3f031ef0c8f777b0c77a4560fe3b9bacf8c14935ffc7a917b677544ddd';
   static const currentGatewayCompatibilityMode =
