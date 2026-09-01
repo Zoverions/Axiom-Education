@@ -54,26 +54,27 @@ void main() {
     budget: budget,
   );
 
-  EducationModelCandidate localCandidate({
-    int estimatedCostMicros = 0,
-  }) => EducationModelCandidate(
-    candidateId: 'candidate:local',
-    providerId: 'provider:local',
-    modelId: 'model:local',
-    runtimeId: 'runtime:test',
-    computeNodeId: 'node:personal',
-    isLocal: true,
-    admitted: true,
-    healthy: true,
-    capabilities: const <EducationModelCapability>{EducationModelCapability.text},
-    retentionClasses: const <String>{'ephemeral'},
-    estimatedInputUnits: 100,
-    estimatedOutputUnits: 100,
-    estimatedCostMicros: estimatedCostMicros,
-    estimatedLatency: const Duration(seconds: 1),
-    taskQualityScore: 0.8,
-    reliabilityScore: 0.9,
-  );
+  EducationModelCandidate localCandidate({int estimatedCostMicros = 0}) =>
+      EducationModelCandidate(
+        candidateId: 'candidate:local',
+        providerId: 'provider:local',
+        modelId: 'model:local',
+        runtimeId: 'runtime:test',
+        computeNodeId: 'node:personal',
+        isLocal: true,
+        admitted: true,
+        healthy: true,
+        capabilities: const <EducationModelCapability>{
+          EducationModelCapability.text,
+        },
+        retentionClasses: const <String>{'ephemeral'},
+        estimatedInputUnits: 100,
+        estimatedOutputUnits: 100,
+        estimatedCostMicros: estimatedCostMicros,
+        estimatedLatency: const Duration(seconds: 1),
+        taskQualityScore: 0.8,
+        reliabilityScore: 0.9,
+      );
 
   EducationModelCandidate remoteCandidate() => EducationModelCandidate(
     candidateId: 'candidate:remote',
@@ -84,7 +85,9 @@ void main() {
     isLocal: false,
     admitted: true,
     healthy: true,
-    capabilities: const <EducationModelCapability>{EducationModelCapability.text},
+    capabilities: const <EducationModelCapability>{
+      EducationModelCapability.text,
+    },
     retentionClasses: const <String>{'ephemeral'},
     estimatedInputUnits: 100,
     estimatedOutputUnits: 100,
@@ -163,70 +166,76 @@ void main() {
     expect(provider.calls, equals(0));
   });
 
-  test('undeclared materialized context fails before provider invocation', () async {
-    final provider = _RecordingProvider();
-    final executor = EducationModelExecutor(
-      providersById: <String, EducationModelInferenceProvider>{
-        'provider:local': provider,
-      },
-    );
+  test(
+    'undeclared materialized context fails before provider invocation',
+    () async {
+      final provider = _RecordingProvider();
+      final executor = EducationModelExecutor(
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local': provider,
+        },
+      );
 
-    final materialized = <EducationModelContextScope, String>{
-      ...context(),
-      EducationModelContextScope.storyCharacterProfile: 'Professor Zov',
-    };
+      final materialized = <EducationModelContextScope, String>{
+        ...context(),
+        EducationModelContextScope.storyCharacterProfile: 'Professor Zov',
+      };
 
-    final result = await executor.execute(
-      request: request(),
-      contextGrant: grant(),
-      candidates: <EducationModelCandidate>[localCandidate()],
-      materializedContext: materialized,
-    );
+      final result = await executor.execute(
+        request: request(),
+        contextGrant: grant(),
+        candidates: <EducationModelCandidate>[localCandidate()],
+        materializedContext: materialized,
+      );
 
-    expect(result.succeeded, isFalse);
-    expect(result.failureReason, contains('undeclared context scope'));
-    expect(provider.calls, equals(0));
-  });
+      expect(result.succeeded, isFalse);
+      expect(result.failureReason, contains('undeclared context scope'));
+      expect(provider.calls, equals(0));
+    },
+  );
 
-  test('successful route invokes only selected provider and returns minimized receipt', () async {
-    final provider = _RecordingProvider(
-      result: const EducationModelProviderResult(
-        outputText: 'What stayed the same when both numbers doubled?',
-        inputUnits: 48,
-        outputUnits: 12,
-        actualCostMicros: 0,
-        latency: Duration(milliseconds: 40),
-      ),
-    );
-    final executor = EducationModelExecutor(
-      providersById: <String, EducationModelInferenceProvider>{
-        'provider:local': provider,
-      },
-    );
+  test(
+    'successful route invokes only selected provider and returns minimized receipt',
+    () async {
+      final provider = _RecordingProvider(
+        result: const EducationModelProviderResult(
+          outputText: 'What stayed the same when both numbers doubled?',
+          inputUnits: 48,
+          outputUnits: 12,
+          actualCostMicros: 0,
+          latency: Duration(milliseconds: 40),
+        ),
+      );
+      final executor = EducationModelExecutor(
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local': provider,
+        },
+      );
 
-    final result = await executor.execute(
-      request: request(),
-      contextGrant: grant(),
-      candidates: <EducationModelCandidate>[localCandidate()],
-      materializedContext: context(),
-    );
+      final result = await executor.execute(
+        request: request(),
+        contextGrant: grant(),
+        candidates: <EducationModelCandidate>[localCandidate()],
+        materializedContext: context(),
+      );
 
-    expect(result.succeeded, isTrue);
-    expect(provider.calls, equals(1));
-    expect(provider.lastRequest!.candidate.candidateId, 'candidate:local');
-    expect(
-      result.outputText,
-      'What stayed the same when both numbers doubled?',
-    );
-    expect(result.usageReceipt, isNotNull);
-    expect(result.usageReceipt!.containsRawPrompt, isFalse);
-    expect(result.usageReceipt!.containsRawLearnerResponse, isFalse);
-    expect(result.usageReceipt!.establishesMastery, isFalse);
-    expect(
-      result.usageReceipt!.materializedContextScopes,
-      equals(request().requestedContextScopes),
-    );
-  });
+      expect(result.succeeded, isTrue);
+      expect(provider.calls, equals(1));
+      expect(provider.lastRequest!.candidate.candidateId, 'candidate:local');
+      expect(
+        result.outputText,
+        'What stayed the same when both numbers doubled?',
+      );
+      expect(result.usageReceipt, isNotNull);
+      expect(result.usageReceipt!.containsRawPrompt, isFalse);
+      expect(result.usageReceipt!.containsRawLearnerResponse, isFalse);
+      expect(result.usageReceipt!.establishesMastery, isFalse);
+      expect(
+        result.usageReceipt!.materializedContextScopes,
+        equals(request().requestedContextScopes),
+      );
+    },
+  );
 
   test('provider exception is explicit failure with no retry', () async {
     final provider = _RecordingProvider(throwOnInfer: true);
