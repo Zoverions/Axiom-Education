@@ -46,10 +46,9 @@ void main() {
 
     expect(socraticNodes, hasLength(1));
     final socratic = socraticNodes.single;
-    expect(
-      socratic.targetCompetencyIds,
-      const <String>{ClawFoundationsStoryArc.competencyId},
-    );
+    expect(socratic.targetCompetencyIds, const <String>{
+      ClawFoundationsStoryArc.competencyId,
+    });
     expect(socratic.fallbackNodeIds, contains('visual'));
 
     expect(
@@ -82,11 +81,7 @@ void main() {
               'from node',
               socratic.nodeId,
             )
-            .having(
-              (transition) => transition.toNodeId,
-              'to node',
-              'visual',
-            )
+            .having((transition) => transition.toNodeId, 'to node', 'visual')
             .having(
               (transition) => transition.trigger,
               'trigger',
