@@ -80,9 +80,10 @@ class EducationModelExecutor {
     EducationModelRouter router = const EducationModelRouter(),
     required Map<String, EducationModelInferenceProvider> providersById,
   }) : router = router,
-       providersById = Map<String, EducationModelInferenceProvider>.unmodifiable(
-         providersById,
-       );
+       providersById =
+           Map<String, EducationModelInferenceProvider>.unmodifiable(
+             providersById,
+           );
 
   Future<EducationModelExecutionResult> execute({
     required EducationModelRouteRequest request,
