@@ -77,10 +77,9 @@ class EducationModelExecutor {
   final Map<String, EducationModelInferenceProvider> providersById;
 
   EducationModelExecutor({
-    EducationModelRouter router = const EducationModelRouter(),
+    this.router = const EducationModelRouter(),
     required Map<String, EducationModelInferenceProvider> providersById,
-  }) : router = router,
-       providersById =
+  }) : providersById =
            Map<String, EducationModelInferenceProvider>.unmodifiable(
              providersById,
            );
@@ -106,9 +105,7 @@ class EducationModelExecutor {
       candidates: candidates,
     );
     if (!routeDecision.allowed || routeDecision.candidate == null) {
-      return EducationModelExecutionResult.failure(
-        routeDecision.reason ?? 'model-route-denied',
-      );
+      return EducationModelExecutionResult.failure(routeDecision.reason);
     }
 
     final candidate = routeDecision.candidate!;
