@@ -148,9 +148,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
         isLocal: true,
         admitted: true,
         healthy: true,
-        capabilities: <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
+        capabilities: <EducationModelCapability>{EducationModelCapability.text},
         retentionClasses: <String>{'ephemeral'},
         estimatedInputUnits: 128,
         estimatedOutputUnits: 64,
