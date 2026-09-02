@@ -78,10 +78,7 @@ class ClawFoundationsSocraticExecutionBinding {
 class ClawFoundationsPreviewScreen extends StatefulWidget {
   final ClawFoundationsSocraticExecutionBinding? socraticBinding;
 
-  const ClawFoundationsPreviewScreen({
-    super.key,
-    this.socraticBinding,
-  });
+  const ClawFoundationsPreviewScreen({super.key, this.socraticBinding});
 
   @override
   State<ClawFoundationsPreviewScreen> createState() =>
