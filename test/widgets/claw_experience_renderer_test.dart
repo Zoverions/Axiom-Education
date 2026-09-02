@@ -102,10 +102,9 @@ void main() {
 
     expect(requests, hasLength(1));
     expect(requests.single.nodeId, 'socratic');
-    expect(
-      requests.single.targetCompetencyIds,
-      const <String>{ClawFoundationsStoryArc.competencyId},
-    );
+    expect(requests.single.targetCompetencyIds, const <String>{
+      ClawFoundationsStoryArc.competencyId,
+    });
     expect(
       requests.single.learnerInput,
       'Both numbers doubled, but the amount stayed the same.',
