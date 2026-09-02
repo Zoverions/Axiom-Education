@@ -19,7 +19,6 @@ void main() {
     final requestedAt = DateTime.utc(2026, 9, 2, 12);
     final binding = _binding(
       executor: executor,
-      provider: provider,
       requestedAt: requestedAt,
       now: () => requestedAt,
     );
@@ -62,7 +61,6 @@ void main() {
     final requestedAt = DateTime.utc(2026, 9, 2, 12);
     final binding = _binding(
       executor: executor,
-      provider: provider,
       requestedAt: requestedAt,
       now: () => requestedAt.add(const Duration(minutes: 11)),
     );
@@ -99,7 +97,6 @@ void main() {
 
 ClawFoundationsSocraticExecutionBinding _binding({
   required EducationModelExecutor executor,
-  required _RecordingProvider provider,
   required DateTime requestedAt,
   required DateTime Function() now,
 }) {
