@@ -42,6 +42,7 @@ void main() {
       EducationModelContextScope.targetCompetency,
       EducationModelContextScope.currentLearnerInput,
     },
+    EducationModelBudget? routeBudget,
   }) => EducationModelRouteRequest(
     learnerSubjectId: learnerSubjectId,
     taskClass: EducationModelTaskClass.socraticTutor,
@@ -51,30 +52,32 @@ void main() {
     requestedContextScopes: scopes,
     retentionClass: 'ephemeral',
     requestedAt: now,
-    budget: budget,
+    budget: routeBudget ?? budget,
   );
 
-  EducationModelCandidate localCandidate({int estimatedCostMicros = 0}) =>
-      EducationModelCandidate(
-        candidateId: 'candidate:local',
-        providerId: 'provider:local',
-        modelId: 'model:local',
-        runtimeId: 'runtime:test',
-        computeNodeId: 'node:personal',
-        isLocal: true,
-        admitted: true,
-        healthy: true,
-        capabilities: const <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
-        retentionClasses: const <String>{'ephemeral'},
-        estimatedInputUnits: 100,
-        estimatedOutputUnits: 100,
-        estimatedCostMicros: estimatedCostMicros,
-        estimatedLatency: const Duration(seconds: 1),
-        taskQualityScore: 0.8,
-        reliabilityScore: 0.9,
-      );
+  EducationModelCandidate localCandidate({
+    int estimatedCostMicros = 0,
+    Duration estimatedLatency = const Duration(seconds: 1),
+  }) => EducationModelCandidate(
+    candidateId: 'candidate:local',
+    providerId: 'provider:local',
+    modelId: 'model:local',
+    runtimeId: 'runtime:test',
+    computeNodeId: 'node:personal',
+    isLocal: true,
+    admitted: true,
+    healthy: true,
+    capabilities: const <EducationModelCapability>{
+      EducationModelCapability.text,
+    },
+    retentionClasses: const <String>{'ephemeral'},
+    estimatedInputUnits: 100,
+    estimatedOutputUnits: 100,
+    estimatedCostMicros: estimatedCostMicros,
+    estimatedLatency: estimatedLatency,
+    taskQualityScore: 0.8,
+    reliabilityScore: 0.9,
+  );
 
   EducationModelCandidate remoteCandidate() => EducationModelCandidate(
     candidateId: 'candidate:remote',
@@ -237,6 +240,38 @@ void main() {
     },
   );
 
+  test('provider wall-time budget is enforced with no retry', () async {
+    const tightBudget = EducationModelBudget(
+      maxCalls: 1,
+      maxInputUnits: 1000,
+      maxOutputUnits: 500,
+      maxCostMicros: 100000,
+      maxWallTime: Duration(milliseconds: 20),
+    );
+    final provider = _RecordingProvider(
+      delay: const Duration(milliseconds: 100),
+    );
+    final executor = EducationModelExecutor(
+      providersById: <String, EducationModelInferenceProvider>{
+        'provider:local': provider,
+      },
+    );
+
+    final result = await executor.execute(
+      request: request(routeBudget: tightBudget),
+      contextGrant: grant(),
+      candidates: <EducationModelCandidate>[
+        localCandidate(estimatedLatency: const Duration(milliseconds: 1)),
+      ],
+      materializedContext: context(),
+    );
+
+    expect(result.succeeded, isFalse);
+    expect(result.failureReason, equals('provider-timeout'));
+    expect(provider.calls, equals(1));
+    expect(result.usageReceipt, isNull);
+  });
+
   test('provider exception is explicit failure with no retry', () async {
     final provider = _RecordingProvider(throwOnInfer: true);
     final executor = EducationModelExecutor(
@@ -264,6 +299,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
   EducationModelProviderRequest? lastRequest;
   final EducationModelProviderResult result;
   final bool throwOnInfer;
+  final Duration delay;
 
   _RecordingProvider({
     this.result = const EducationModelProviderResult(
@@ -274,6 +310,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
       latency: Duration(milliseconds: 10),
     ),
     this.throwOnInfer = false,
+    this.delay = Duration.zero,
   });
 
   @override
@@ -282,6 +319,9 @@ class _RecordingProvider implements EducationModelInferenceProvider {
   ) async {
     calls += 1;
     lastRequest = request;
+    if (delay > Duration.zero) {
+      await Future<void>.delayed(delay);
+    }
     if (throwOnInfer) {
       throw StateError('provider failed');
     }
