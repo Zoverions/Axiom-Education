@@ -18,13 +18,18 @@ class ClawFoundationsSocraticExecutionBinding {
   final EducationModelRouteRequest routeRequest;
   final EducationModelContextGrant contextGrant;
   final List<EducationModelCandidate> candidates;
+  final DateTime Function() now;
 
   ClawFoundationsSocraticExecutionBinding({
     required this.executor,
     required this.routeRequest,
     required this.contextGrant,
     required List<EducationModelCandidate> candidates,
-  }) : candidates = List<EducationModelCandidate>.unmodifiable(candidates);
+    DateTime Function()? now,
+  }) : candidates = List<EducationModelCandidate>.unmodifiable(candidates),
+       now = now ?? _currentUtc;
+
+  static DateTime _currentUtc() => DateTime.now().toUtc();
 
   Future<ClawSocraticResult> handle(ClawSocraticRequest request) async {
     final learnerInput = request.learnerInput.trim();
@@ -39,8 +44,19 @@ class ClawFoundationsSocraticExecutionBinding {
       return const ClawSocraticResult.failure('invalid-socratic-request');
     }
 
+    final invocationRequest = EducationModelRouteRequest(
+      learnerSubjectId: routeRequest.learnerSubjectId,
+      taskClass: routeRequest.taskClass,
+      requiredCapabilities: routeRequest.requiredCapabilities,
+      requestedContextScopes: routeRequest.requestedContextScopes,
+      retentionClass: routeRequest.retentionClass,
+      requestedAt: now().toUtc(),
+      budget: routeRequest.budget,
+      localOnly: routeRequest.localOnly,
+    );
+
     final execution = await executor.execute(
-      request: routeRequest,
+      request: invocationRequest,
       contextGrant: contextGrant,
       candidates: candidates,
       materializedContext: <EducationModelContextScope, String>{
