@@ -4,6 +4,7 @@ import 'package:ontarioedai/core/models/education_model_execution.dart';
 import 'package:ontarioedai/core/models/education_model_routing.dart';
 import 'package:ontarioedai/features/claw/claw_foundations_preview_screen.dart';
 import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
+import 'package:ontarioedai/widgets/claw_experience_renderer.dart';
 
 void main() {
   testWidgets('preview materializes only the bounded Socratic context', (
@@ -16,66 +17,11 @@ void main() {
       },
     );
     final requestedAt = DateTime.utc(2026, 9, 2, 12);
-    final binding = ClawFoundationsSocraticExecutionBinding(
+    final binding = _binding(
       executor: executor,
-      routeRequest: EducationModelRouteRequest(
-        learnerSubjectId: 'learner:test',
-        taskClass: EducationModelTaskClass.socraticTutor,
-        requiredCapabilities: const <EducationModelCapability>{
-          EducationModelCapability.text,
-        },
-        requestedContextScopes: const <EducationModelContextScope>{
-          EducationModelContextScope.targetCompetency,
-          EducationModelContextScope.currentLearnerInput,
-        },
-        retentionClass: 'ephemeral',
-        requestedAt: requestedAt,
-        budget: const EducationModelBudget(
-          maxCalls: 1,
-          maxInputUnits: 512,
-          maxOutputUnits: 128,
-          maxCostMicros: 0,
-          maxWallTime: Duration(seconds: 2),
-        ),
-        localOnly: true,
-      ),
-      contextGrant: EducationModelContextGrant(
-        grantId: 'grant:test:socratic',
-        learnerSubjectId: 'learner:test',
-        allowedTaskClasses: const <EducationModelTaskClass>{
-          EducationModelTaskClass.socraticTutor,
-        },
-        allowedScopes: const <EducationModelContextScope>{
-          EducationModelContextScope.targetCompetency,
-          EducationModelContextScope.currentLearnerInput,
-        },
-        remoteEgressAllowed: false,
-        allowedRetentionClasses: const <String>{'ephemeral'},
-        issuedAt: requestedAt.subtract(const Duration(minutes: 1)),
-        expiresAt: requestedAt.add(const Duration(minutes: 10)),
-      ),
-      candidates: const <EducationModelCandidate>[
-        EducationModelCandidate(
-          candidateId: 'candidate:local-test',
-          providerId: 'provider:local-test',
-          modelId: 'model:test',
-          runtimeId: 'runtime:test',
-          computeNodeId: 'device:test',
-          isLocal: true,
-          admitted: true,
-          healthy: true,
-          capabilities: <EducationModelCapability>{
-            EducationModelCapability.text,
-          },
-          retentionClasses: <String>{'ephemeral'},
-          estimatedInputUnits: 128,
-          estimatedOutputUnits: 64,
-          estimatedCostMicros: 0,
-          estimatedLatency: Duration(milliseconds: 50),
-          taskQualityScore: 0.8,
-          reliabilityScore: 0.9,
-        ),
-      ],
+      provider: provider,
+      requestedAt: requestedAt,
+      now: () => requestedAt,
     );
 
     await tester.pumpWidget(
@@ -106,6 +52,36 @@ void main() {
     );
   });
 
+  test('expired grant at invocation causes zero provider calls', () async {
+    final provider = _RecordingProvider();
+    final executor = EducationModelExecutor(
+      providersById: <String, EducationModelInferenceProvider>{
+        'provider:local-test': provider,
+      },
+    );
+    final requestedAt = DateTime.utc(2026, 9, 2, 12);
+    final binding = _binding(
+      executor: executor,
+      provider: provider,
+      requestedAt: requestedAt,
+      now: () => requestedAt.add(const Duration(minutes: 11)),
+    );
+
+    final result = await binding.handle(
+      ClawSocraticRequest(
+        nodeId: 'socratic',
+        targetCompetencyIds: const <String>{
+          ClawFoundationsStoryArc.competencyId,
+        },
+        learnerInput: 'Both fractions describe the same amount.',
+      ),
+    );
+
+    expect(result.succeeded, isFalse);
+    expect(result.failureReason, contains('expired or not yet active'));
+    expect(provider.calls, 0);
+  });
+
   testWidgets('preview keeps the model path unavailable without a binding', (
     tester,
   ) async {
@@ -119,6 +95,76 @@ void main() {
     expect(find.byKey(const ValueKey('claw-another-way')), findsOneWidget);
     expect(find.byKey(const ValueKey('claw-continue')), findsOneWidget);
   });
+}
+
+ClawFoundationsSocraticExecutionBinding _binding({
+  required EducationModelExecutor executor,
+  required _RecordingProvider provider,
+  required DateTime requestedAt,
+  required DateTime Function() now,
+}) {
+  return ClawFoundationsSocraticExecutionBinding(
+    executor: executor,
+    routeRequest: EducationModelRouteRequest(
+      learnerSubjectId: 'learner:test',
+      taskClass: EducationModelTaskClass.socraticTutor,
+      requiredCapabilities: const <EducationModelCapability>{
+        EducationModelCapability.text,
+      },
+      requestedContextScopes: const <EducationModelContextScope>{
+        EducationModelContextScope.targetCompetency,
+        EducationModelContextScope.currentLearnerInput,
+      },
+      retentionClass: 'ephemeral',
+      requestedAt: requestedAt,
+      budget: const EducationModelBudget(
+        maxCalls: 1,
+        maxInputUnits: 512,
+        maxOutputUnits: 128,
+        maxCostMicros: 0,
+        maxWallTime: Duration(seconds: 2),
+      ),
+      localOnly: true,
+    ),
+    contextGrant: EducationModelContextGrant(
+      grantId: 'grant:test:socratic',
+      learnerSubjectId: 'learner:test',
+      allowedTaskClasses: const <EducationModelTaskClass>{
+        EducationModelTaskClass.socraticTutor,
+      },
+      allowedScopes: const <EducationModelContextScope>{
+        EducationModelContextScope.targetCompetency,
+        EducationModelContextScope.currentLearnerInput,
+      },
+      remoteEgressAllowed: false,
+      allowedRetentionClasses: const <String>{'ephemeral'},
+      issuedAt: requestedAt.subtract(const Duration(minutes: 1)),
+      expiresAt: requestedAt.add(const Duration(minutes: 10)),
+    ),
+    candidates: const <EducationModelCandidate>[
+      EducationModelCandidate(
+        candidateId: 'candidate:local-test',
+        providerId: 'provider:local-test',
+        modelId: 'model:test',
+        runtimeId: 'runtime:test',
+        computeNodeId: 'device:test',
+        isLocal: true,
+        admitted: true,
+        healthy: true,
+        capabilities: <EducationModelCapability>{
+          EducationModelCapability.text,
+        },
+        retentionClasses: <String>{'ephemeral'},
+        estimatedInputUnits: 128,
+        estimatedOutputUnits: 64,
+        estimatedCostMicros: 0,
+        estimatedLatency: Duration(milliseconds: 50),
+        taskQualityScore: 0.8,
+        reliabilityScore: 0.9,
+      ),
+    ],
+    now: now,
+  );
 }
 
 class _RecordingProvider implements EducationModelInferenceProvider {
