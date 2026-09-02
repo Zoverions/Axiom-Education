@@ -5,11 +5,42 @@ import '../core/models/claw_experience_presentation.dart';
 
 typedef ClawEvidenceCandidateCallback =
     void Function(ClawLocalEvidenceCandidate candidate);
+typedef ClawSocraticHandler =
+    Future<ClawSocraticResult> Function(ClawSocraticRequest request);
+
+class ClawSocraticRequest {
+  final String nodeId;
+  final Set<String> targetCompetencyIds;
+  final String learnerInput;
+
+  ClawSocraticRequest({
+    required this.nodeId,
+    required Set<String> targetCompetencyIds,
+    required this.learnerInput,
+  }) : targetCompetencyIds = Set<String>.unmodifiable(targetCompetencyIds);
+}
+
+class ClawSocraticResult {
+  final String? instructionalText;
+  final String? failureReason;
+
+  const ClawSocraticResult.success(String text)
+    : instructionalText = text,
+      failureReason = null;
+
+  const ClawSocraticResult.failure(String reason)
+    : instructionalText = null,
+      failureReason = reason;
+
+  bool get succeeded =>
+      failureReason == null && instructionalText?.trim().isNotEmpty == true;
+}
 
 class ClawExperiencePlayer extends StatefulWidget {
   final ClawExperienceGraph graph;
   final Map<String, ClawExperiencePresentation> presentations;
   final ClawExperienceAvailability availability;
+  final ClawSocraticHandler? socraticHandler;
   final ClawEvidenceCandidateCallback? onEvidenceCandidate;
   final ValueChanged<String>? onNodeChanged;
 
@@ -18,6 +49,7 @@ class ClawExperiencePlayer extends StatefulWidget {
     required this.graph,
     required this.presentations,
     required this.availability,
+    this.socraticHandler,
     this.onEvidenceCandidate,
     this.onNodeChanged,
   });
@@ -28,9 +60,14 @@ class ClawExperiencePlayer extends StatefulWidget {
 
 class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
   static const _selector = ClawExperienceAdaptationSelector();
+  static const _socraticFailureMessage =
+      'Tutor unavailable. Showing the reviewed non-model explanation.';
 
   late String _currentNodeId;
   String? _statusMessage;
+  String _socraticInput = '';
+  String? _socraticInstructionalText;
+  bool _socraticLoading = false;
 
   @override
   void initState() {
@@ -45,6 +82,7 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
         !widget.graph.nodes.containsKey(_currentNodeId)) {
       _currentNodeId = widget.graph.entryNodeId;
       _statusMessage = null;
+      _resetSocraticState();
     }
   }
 
@@ -55,7 +93,13 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
         .toSet();
   }
 
-  void _transition(ClawTransitionTrigger trigger) {
+  void _resetSocraticState() {
+    _socraticInput = '';
+    _socraticInstructionalText = null;
+    _socraticLoading = false;
+  }
+
+  void _transition(ClawTransitionTrigger trigger, {String? statusMessage}) {
     final decision = _selector.eligibleTransitions(
       graph: widget.graph,
       currentNodeId: _currentNodeId,
@@ -65,7 +109,8 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
 
     if (decision.eligibleTransitions.isEmpty) {
       setState(() {
-        _statusMessage = 'That path is not available right now.';
+        _statusMessage =
+            statusMessage ?? 'That path is not available right now.';
       });
       return;
     }
@@ -73,7 +118,8 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
     final next = decision.eligibleTransitions.first.toNodeId;
     setState(() {
       _currentNodeId = next;
-      _statusMessage = null;
+      _statusMessage = statusMessage;
+      _resetSocraticState();
     });
     widget.onNodeChanged?.call(next);
   }
@@ -101,11 +147,72 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
     });
   }
 
+  Future<void> _submitSocratic() async {
+    final handler = widget.socraticHandler;
+    final learnerInput = _socraticInput.trim();
+    final node = widget.graph.nodes[_currentNodeId];
+    if (handler == null ||
+        learnerInput.isEmpty ||
+        node?.experienceType != ClawExperienceNodeType.aiSocraticDialogue ||
+        _socraticLoading) {
+      return;
+    }
+
+    final submittedNodeId = _currentNodeId;
+    setState(() {
+      _socraticLoading = true;
+      _socraticInstructionalText = null;
+    });
+
+    ClawSocraticResult result;
+    try {
+      result = await handler(
+        ClawSocraticRequest(
+          nodeId: submittedNodeId,
+          targetCompetencyIds: node!.targetCompetencyIds,
+          learnerInput: learnerInput,
+        ),
+      );
+    } catch (_) {
+      result = const ClawSocraticResult.failure('handler-failure');
+    }
+
+    if (!mounted || _currentNodeId != submittedNodeId) {
+      return;
+    }
+
+    if (!result.succeeded) {
+      _transition(
+        ClawTransitionTrigger.modelUnavailable,
+        statusMessage: _socraticFailureMessage,
+      );
+      return;
+    }
+
+    setState(() {
+      _socraticLoading = false;
+      _socraticInstructionalText = result.instructionalText!.trim();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final node = widget.graph.nodes[_currentNodeId]!;
     final presentation = widget.presentations[_currentNodeId];
     final triggers = _availableTriggers;
+    final learnerChoiceDecision = _selector.eligibleTransitions(
+      graph: widget.graph,
+      currentNodeId: _currentNodeId,
+      trigger: ClawTransitionTrigger.learnerChoice,
+      availability: widget.availability,
+    );
+    final socraticChoiceAvailable =
+        widget.socraticHandler != null &&
+        learnerChoiceDecision.eligibleTransitions.any(
+          (transition) =>
+              widget.graph.nodes[transition.toNodeId]?.experienceType ==
+              ClawExperienceNodeType.aiSocraticDialogue,
+        );
 
     return Semantics(
       container: true,
@@ -140,6 +247,27 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
                     ClawTransitionTrigger.learnerRequestsHumanHelp,
                   )
                 : null,
+            onSocraticChoice: socraticChoiceAvailable
+                ? () => _transition(ClawTransitionTrigger.learnerChoice)
+                : null,
+            onSocraticInputChanged:
+                node.experienceType == ClawExperienceNodeType.aiSocraticDialogue
+                ? (value) {
+                    setState(() {
+                      _socraticInput = value;
+                    });
+                  }
+                : null,
+            onSocraticSubmit:
+                node.experienceType ==
+                        ClawExperienceNodeType.aiSocraticDialogue &&
+                    widget.socraticHandler != null &&
+                    _socraticInput.trim().isNotEmpty &&
+                    !_socraticLoading
+                ? _submitSocratic
+                : null,
+            socraticLoading: _socraticLoading,
+            socraticInstructionalText: _socraticInstructionalText,
             onChoice: presentation?.choices.isNotEmpty == true
                 ? _handleChoice
                 : null,
@@ -156,6 +284,11 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
   final VoidCallback? onContinue;
   final VoidCallback? onAnotherWay;
   final VoidCallback? onHumanHelp;
+  final VoidCallback? onSocraticChoice;
+  final ValueChanged<String>? onSocraticInputChanged;
+  final VoidCallback? onSocraticSubmit;
+  final bool socraticLoading;
+  final String? socraticInstructionalText;
   final ValueChanged<ClawExperienceChoicePresentation>? onChoice;
 
   const ClawExperienceNodeRenderer({
@@ -165,6 +298,11 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
     this.onContinue,
     this.onAnotherWay,
     this.onHumanHelp,
+    this.onSocraticChoice,
+    this.onSocraticInputChanged,
+    this.onSocraticSubmit,
+    this.socraticLoading = false,
+    this.socraticInstructionalText,
     this.onChoice,
   });
 
@@ -173,6 +311,8 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final value = presentation;
+    final isSocratic =
+        node.experienceType == ClawExperienceNodeType.aiSocraticDialogue;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -243,6 +383,37 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
               const SizedBox(height: 14),
               Text(value!.supportingText!, style: theme.textTheme.bodySmall),
             ],
+            if (isSocratic) ...<Widget>[
+              const SizedBox(height: 18),
+              TextField(
+                key: const ValueKey('claw-socratic-input'),
+                enabled: !socraticLoading,
+                maxLength: 280,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: 'What do you notice?',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: onSocraticInputChanged,
+              ),
+              const SizedBox(height: 8),
+              FilledButton(
+                key: const ValueKey('claw-socratic-submit'),
+                onPressed: socraticLoading ? null : onSocraticSubmit,
+                child: Text(socraticLoading ? 'Thinking…' : 'Ask the tutor'),
+              ),
+              if (socraticInstructionalText != null) ...<Widget>[
+                const SizedBox(height: 16),
+                Semantics(
+                  liveRegion: true,
+                  label: 'Tutor response',
+                  child: Text(
+                    socraticInstructionalText!,
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                ),
+              ],
+            ],
             if (value?.choices.isNotEmpty == true) ...<Widget>[
               const SizedBox(height: 18),
               Wrap(
@@ -262,7 +433,8 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
             ],
             if (onContinue != null ||
                 onAnotherWay != null ||
-                onHumanHelp != null) ...<Widget>[
+                onHumanHelp != null ||
+                onSocraticChoice != null) ...<Widget>[
               const SizedBox(height: 20),
               Wrap(
                 spacing: 10,
@@ -274,6 +446,13 @@ class ClawExperienceNodeRenderer extends StatelessWidget {
                       onPressed: onContinue,
                       icon: const Icon(Icons.arrow_forward_rounded),
                       label: Text(value?.continueLabel ?? 'Continue'),
+                    ),
+                  if (onSocraticChoice != null)
+                    OutlinedButton.icon(
+                      key: const ValueKey('claw-socratic-choice'),
+                      onPressed: onSocraticChoice,
+                      icon: const Icon(Icons.smart_toy_outlined),
+                      label: const Text('Ask the tutor'),
                     ),
                   if (onAnotherWay != null)
                     OutlinedButton.icon(
