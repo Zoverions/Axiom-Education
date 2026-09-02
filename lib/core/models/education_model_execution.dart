@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'education_model_routing.dart';
 
 abstract class EducationModelInferenceProvider {
@@ -117,22 +119,35 @@ class EducationModelExecutor {
     }
 
     EducationModelProviderResult providerResult;
+    final stopwatch = Stopwatch()..start();
     try {
-      providerResult = await provider.infer(
-        EducationModelProviderRequest(
-          candidate: candidate,
-          learnerSubjectId: request.learnerSubjectId,
-          taskClass: request.taskClass,
-          materializedContext: materializedContext,
-          retentionClass: request.retentionClass,
-          budget: request.budget,
-        ),
-      );
+      providerResult = await provider
+          .infer(
+            EducationModelProviderRequest(
+              candidate: candidate,
+              learnerSubjectId: request.learnerSubjectId,
+              taskClass: request.taskClass,
+              materializedContext: materializedContext,
+              retentionClass: request.retentionClass,
+              budget: request.budget,
+            ),
+          )
+          .timeout(request.budget.maxWallTime);
+    } on TimeoutException {
+      stopwatch.stop();
+      return EducationModelExecutionResult.failure('provider-timeout');
     } catch (_) {
+      stopwatch.stop();
       return EducationModelExecutionResult.failure('provider-failure');
     }
+    stopwatch.stop();
+    final measuredLatency = stopwatch.elapsed;
 
-    if (!_providerResultWithinBudget(providerResult, request.budget)) {
+    if (!_providerResultWithinBudget(
+      providerResult,
+      request.budget,
+      measuredLatency,
+    )) {
       return EducationModelExecutionResult.failure('provider-budget-exceeded');
     }
     if (providerResult.outputText.trim().isEmpty) {
@@ -159,7 +174,7 @@ class EducationModelExecutor {
       inputUnits: providerResult.inputUnits,
       outputUnits: providerResult.outputUnits,
       actualCostMicros: providerResult.actualCostMicros,
-      latency: providerResult.latency,
+      latency: measuredLatency,
     );
 
     return EducationModelExecutionResult.success(
@@ -171,17 +186,20 @@ class EducationModelExecutor {
   bool _providerResultWithinBudget(
     EducationModelProviderResult result,
     EducationModelBudget budget,
+    Duration measuredLatency,
   ) {
     if (result.inputUnits < 0 ||
         result.outputUnits < 0 ||
         result.actualCostMicros < 0 ||
-        result.latency.isNegative) {
+        result.latency.isNegative ||
+        measuredLatency.isNegative) {
       return false;
     }
     if (result.inputUnits > budget.maxInputUnits ||
         result.outputUnits > budget.maxOutputUnits ||
         result.actualCostMicros > budget.maxCostMicros ||
-        result.latency > budget.maxWallTime) {
+        result.latency > budget.maxWallTime ||
+        measuredLatency > budget.maxWallTime) {
       return false;
     }
     return true;
