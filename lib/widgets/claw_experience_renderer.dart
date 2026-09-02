@@ -99,10 +99,7 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
     _socraticLoading = false;
   }
 
-  void _transition(
-    ClawTransitionTrigger trigger, {
-    String? statusMessage,
-  }) {
+  void _transition(ClawTransitionTrigger trigger, {String? statusMessage}) {
     final decision = _selector.eligibleTransitions(
       graph: widget.graph,
       currentNodeId: _currentNodeId,
@@ -112,7 +109,8 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
 
     if (decision.eligibleTransitions.isEmpty) {
       setState(() {
-        _statusMessage = statusMessage ?? 'That path is not available right now.';
+        _statusMessage =
+            statusMessage ?? 'That path is not available right now.';
       });
       return;
     }
@@ -252,8 +250,8 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
             onSocraticChoice: socraticChoiceAvailable
                 ? () => _transition(ClawTransitionTrigger.learnerChoice)
                 : null,
-            onSocraticInputChanged: node.experienceType ==
-                    ClawExperienceNodeType.aiSocraticDialogue
+            onSocraticInputChanged:
+                node.experienceType == ClawExperienceNodeType.aiSocraticDialogue
                 ? (value) {
                     setState(() {
                       _socraticInput = value;
@@ -261,7 +259,8 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
                   }
                 : null,
             onSocraticSubmit:
-                node.experienceType == ClawExperienceNodeType.aiSocraticDialogue &&
+                node.experienceType ==
+                        ClawExperienceNodeType.aiSocraticDialogue &&
                     widget.socraticHandler != null &&
                     _socraticInput.trim().isNotEmpty &&
                     !_socraticLoading
