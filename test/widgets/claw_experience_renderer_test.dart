@@ -241,6 +241,7 @@ Future<void> _enterSocraticNode(WidgetTester tester) async {
 Future<void> _tap(WidgetTester tester, ValueKey<String> key) async {
   final finder = find.byKey(key);
   await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
   await tester.tap(finder);
   await tester.pumpAndSettle();
 }
