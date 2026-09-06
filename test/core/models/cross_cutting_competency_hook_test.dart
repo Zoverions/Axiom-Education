@@ -38,15 +38,21 @@ void main() {
     hasNonGenerativePath: hasNonGenerativePath,
   );
 
-  test('valid evidence hook is metadata only and preserves non-generative path', () {
-    final value = hook();
+  test(
+    'valid evidence hook is metadata only and preserves non-generative path',
+    () {
+      final value = hook();
 
-    expect(() => validator.validate(hook: value, pack: pack()), returnsNormally);
-    expect(value.createsOfficialCurriculumCoverage, isFalse);
-    expect(value.createsLearnerEvidence, isFalse);
-    expect(value.createsAuthority, isFalse);
-    expect(value.persistsLearnerState, isFalse);
-  });
+      expect(
+        () => validator.validate(hook: value, pack: pack()),
+        returnsNormally,
+      );
+      expect(value.createsOfficialCurriculumCoverage, isFalse);
+      expect(value.createsLearnerEvidence, isFalse);
+      expect(value.createsAuthority, isFalse);
+      expect(value.persistsLearnerState, isFalse);
+    },
+  );
 
   test('introduce hook may omit verifier methods', () {
     final value = hook(
@@ -54,7 +60,10 @@ void main() {
       verifierMethods: const <CrossCuttingVerifierMethod>{},
     );
 
-    expect(() => validator.validate(hook: value, pack: pack()), returnsNormally);
+    expect(
+      () => validator.validate(hook: value, pack: pack()),
+      returnsNormally,
+    );
   });
 
   test('unknown competency fails closed', () {
@@ -96,9 +105,7 @@ void main() {
   test('AI as part of task does not waive the non-generative path', () {
     final value = hook(
       aiMode: CrossCuttingAiMode.partOfTask,
-      verifierMethods: const {
-        CrossCuttingVerifierMethod.modelAssistedCritique,
-      },
+      verifierMethods: const {CrossCuttingVerifierMethod.modelAssistedCritique},
       hasNonGenerativePath: false,
     );
 
