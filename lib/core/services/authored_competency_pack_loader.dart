@@ -17,8 +17,6 @@ class AuthoredCompetencyPackLoader {
         'Authored competency pack root must be an object.',
       );
     }
-    return AuthoredCompetencyPack.fromJson(
-      Map<String, Object?>.from(decoded),
-    );
+    return AuthoredCompetencyPack.fromJson(Map<String, Object?>.from(decoded));
   }
 }
