@@ -135,9 +135,7 @@ class AuthoredCompetencyPack {
           title is! String ||
           title.trim().isEmpty ||
           rawTags is! List<Object?>) {
-        throw const AuthoredCompetencyPackException(
-          'Invalid competency node.',
-        );
+        throw const AuthoredCompetencyPackException('Invalid competency node.');
       }
 
       final tags = <String>{};
@@ -191,10 +189,7 @@ class AuthoredCompetencyPack {
       name: name,
       authorship: authorship,
       jurisdictionalAuthority: jurisdictionalAuthority,
-      graph: CompetencyGraph(
-        nodes: nodes,
-        edges: const <CompetencyEdge>[],
-      ),
+      graph: CompetencyGraph(nodes: nodes, edges: const <CompetencyEdge>[]),
     );
   }
 
