@@ -130,23 +130,27 @@ void main() {
     );
   });
 
-  test('wrong family, authorship, or jurisdictional authority fails closed', () {
-    final wrongFamily = copy(canonicalFixture())..['family_id'] = 'other';
-    final wrongAuthorship = copy(canonicalFixture())..['authorship'] = 'ontario';
-    final wrongAuthority = copy(canonicalFixture())
-      ..['jurisdictional_authority'] = 'ontario';
+  test(
+    'wrong family, authorship, or jurisdictional authority fails closed',
+    () {
+      final wrongFamily = copy(canonicalFixture())..['family_id'] = 'other';
+      final wrongAuthorship = copy(canonicalFixture())
+        ..['authorship'] = 'ontario';
+      final wrongAuthority = copy(canonicalFixture())
+        ..['jurisdictional_authority'] = 'ontario';
 
-    for (final fixture in <Map<String, Object?>>[
-      wrongFamily,
-      wrongAuthorship,
-      wrongAuthority,
-    ]) {
-      expect(
-        () => AuthoredCompetencyPack.fromJson(fixture),
-        throwsA(isA<AuthoredCompetencyPackException>()),
-      );
-    }
-  });
+      for (final fixture in <Map<String, Object?>>[
+        wrongFamily,
+        wrongAuthorship,
+        wrongAuthority,
+      ]) {
+        expect(
+          () => AuthoredCompetencyPack.fromJson(fixture),
+          throwsA(isA<AuthoredCompetencyPackException>()),
+        );
+      }
+    },
+  );
 
   test('duplicate or malformed competency IDs fail closed', () {
     final duplicate = copy(canonicalFixture());
@@ -168,42 +172,50 @@ void main() {
     );
   });
 
-  test('family, authorship, and exactly one known dimension tag are required', () {
-    final missingFamily = copy(canonicalFixture());
-    final missingFamilyTags = ((missingFamily['nodes']! as List<Object?>).first!
-        as Map<String, Object?>)['tags']! as List<Object?>;
-    missingFamilyTags.remove('family:ai-native-computational-literacy');
+  test(
+    'family, authorship, and exactly one known dimension tag are required',
+    () {
+      final missingFamily = copy(canonicalFixture());
+      final missingFamilyTags =
+          ((missingFamily['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      missingFamilyTags.remove('family:ai-native-computational-literacy');
 
-    final missingAuthorship = copy(canonicalFixture());
-    final missingAuthorshipTags =
-        ((missingAuthorship['nodes']! as List<Object?>).first!
-            as Map<String, Object?>)['tags']! as List<Object?>;
-    missingAuthorshipTags.remove('authorship:axiom-extension');
+      final missingAuthorship = copy(canonicalFixture());
+      final missingAuthorshipTags =
+          ((missingAuthorship['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      missingAuthorshipTags.remove('authorship:axiom-extension');
 
-    final multipleDimensions = copy(canonicalFixture());
-    final multipleDimensionTags =
-        ((multipleDimensions['nodes']! as List<Object?>).first!
-            as Map<String, Object?>)['tags']! as List<Object?>;
-    multipleDimensionTags.add('dimension:systems');
+      final multipleDimensions = copy(canonicalFixture());
+      final multipleDimensionTags =
+          ((multipleDimensions['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      multipleDimensionTags.add('dimension:systems');
 
-    final unknownDimension = copy(canonicalFixture());
-    final unknownDimensionTags =
-        ((unknownDimension['nodes']! as List<Object?>).first!
-            as Map<String, Object?>)['tags']! as List<Object?>;
-    unknownDimensionTags[1] = 'dimension:prompting';
+      final unknownDimension = copy(canonicalFixture());
+      final unknownDimensionTags =
+          ((unknownDimension['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      unknownDimensionTags[1] = 'dimension:prompting';
 
-    for (final fixture in <Map<String, Object?>>[
-      missingFamily,
-      missingAuthorship,
-      multipleDimensions,
-      unknownDimension,
-    ]) {
-      expect(
-        () => AuthoredCompetencyPack.fromJson(fixture),
-        throwsA(isA<AuthoredCompetencyPackException>()),
-      );
-    }
-  });
+      for (final fixture in <Map<String, Object?>>[
+        missingFamily,
+        missingAuthorship,
+        multipleDimensions,
+        unknownDimension,
+      ]) {
+        expect(
+          () => AuthoredCompetencyPack.fromJson(fixture),
+          throwsA(isA<AuthoredCompetencyPackException>()),
+        );
+      }
+    },
+  );
 
   test('future edge definitions still obey existing graph endpoint checks', () {
     final fixture = copy(canonicalFixture());
