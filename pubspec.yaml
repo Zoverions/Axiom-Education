@@ -52,6 +52,7 @@ hooks:
 
 flutter:
   assets:
+    - assets/competencies/ai_native_computational_literacy.v1.json
     - assets/curriculum/ontario_curriculum_full.json
     - assets/curriculum/ontario_curriculum.sqlite
     - curriculum/content/mth1w/u1-number-systems.v1.json
