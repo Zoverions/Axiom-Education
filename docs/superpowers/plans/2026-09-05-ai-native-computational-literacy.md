@@ -2,65 +2,54 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add the approved cross-cutting Intent → Specification → Verification → Systems Understanding competency family, prove it in one deterministic MTH1W path and one AI-optional Claw path, and expose it without creating a second mastery, grading, persistence, or authority system.
+**Goal:** Add the approved Intent → Specification → Verification → Systems Understanding competency family, prove it in one deterministic MTH1W path and one AI-optional Claw path, and expose it without creating a second mastery, grading, persistence, or authority system.
 
-**Architecture:** Keep the current `CompetencyGraph`, `LearningEvidenceEnvelope`, deterministic MTH1W verifier, and governed Socratic Tutor boundaries authoritative. Add one versioned authored competency pack plus pure companion metadata/hook models, then layer contextual learner UI over existing subject experiences; no new Mesh capability or learner-record route is introduced.
+**Architecture:** Reuse the existing `CompetencyGraph`, `LearningEvidenceEnvelope`, deterministic `MathAnswerVerifier`, and governed Socratic Tutor boundaries. Add one versioned Axiom-authored competency pack plus pure companion metadata/hook models, then layer contextual learner UI over existing subject experiences; no new Mesh capability or learner-record route is introduced.
 
-**Tech Stack:** Dart 3.11.x, Flutter 3.41.1, Flutter/Riverpod, bundled JSON assets, existing Axiom Education competency/evidence models, existing deterministic MTH1W verifier, existing governed Socratic Tutor branch/PR #177, Python 3.12 repository verification, GitHub Actions.
+**Tech Stack:** Dart 3.11.x, Flutter 3.41.1, Flutter/Riverpod, bundled JSON assets, Python 3.12 repository verification, existing MTH1W deterministic verifier, existing governed Socratic Tutor PR #177, GitHub Actions.
 
 **Spec:** `docs/superpowers/specs/2026-09-05-ai-native-computational-literacy-design.md`
 
 ## Global Constraints
 
-- Canonical pack schema: `axiom-education-authored-competency-pack.v1`.
-- Canonical family ID: `axiom.education.competency.ai-native-computational-literacy`.
-- Canonical family version: `1.0.0`.
+- Pack schema: `axiom-education-authored-competency-pack.v1`.
+- Family ID: `axiom.education.competency.ai-native-computational-literacy`.
+- Family version: `1.0.0`.
 - Authorship: `axiom-extension`; jurisdictional authority: `none`.
-- Exactly 18 v1 competency nodes; v1 contains no prerequisite/support edges.
-- Existing competency states `unknown`, `attempted`, `emerging`, `demonstrated` remain primary and revisable.
-- Do not create an aggregate AI-literacy score, psychometric claim, grade, credit, transcript state, credential, curriculum status, or institutional eligibility.
-- Every core competency must retain a non-generative learning and evidence path.
-- Model output remains instructional data, never authority; it cannot promote a competency to consequential `demonstrated` state by itself.
+- Exactly 18 v1 competency nodes and zero edges.
+- Existing evidence states `unknown`, `attempted`, `emerging`, `demonstrated` remain primary and revisable.
+- No aggregate AI-literacy score, psychometric claim, grade, credit, transcript state, credential, curriculum status, or institutional eligibility.
+- Every core competency retains a non-generative learning and evidence path.
+- Model output remains instructional data, never authority.
 - Cross-cutting evidence remains independent from subject correctness and subject grade/credit state.
 - `CrossCuttingEvidenceMetadata` is in-memory only in v0: no persistence, export, new Gateway action, new Grid record kind, or Mesh capability.
-- Raw prompts, raw model output, essays, code, conversations, clickstream, prompt counts, timing, retry counts, typing behavior, engagement, and model-use frequency are not stored in cross-cutting metadata.
+- Raw prompts, model output, essays, code, conversations, clickstream, prompt counts, timing, retry counts, typing behavior, engagement, and model-use frequency are not stored in cross-cutting metadata.
 - Existing `LearningEvidenceEnvelope` correction/retraction semantics remain unchanged.
-- Public capability status is `experimental` until executable evidence and claim parity exist.
-- Toolchain stays pinned to Flutter `3.41.1`, Dart `3.11.x`, Python `3.12`, and the repository lockfiles.
-- Phase C must not recreate or cherry-pick the governed tutor implementation. It starts only from the exact merged successor of PR #177, or from PR #177 head while explicitly stacked on it.
+- Public capability status remains `experimental` until executable evidence and claim parity exist.
+- Toolchain stays pinned to Flutter `3.41.1`, Dart `3.11.x`, Python `3.12`, and repository lockfiles.
+- The Claw AI-optional task must consume PR #177 after it is exact-head green; do not recreate or cherry-pick its governed tutor implementation.
 
 ---
 
 ## File Structure
 
-### New files
+**Create**
 
-- `assets/competencies/ai_native_computational_literacy.v1.json` — canonical authored pack data; exactly 18 nodes, no edges.
-- `lib/core/models/authored_competency_pack.dart` — pure parser/validator and conversion to existing `CompetencyGraph`.
-- `lib/core/services/authored_competency_pack_loader.dart` — bounded `AssetBundle` I/O only; no education authority logic.
-- `lib/core/models/cross_cutting_learning_evidence.dart` — evidence-quality/verifier/AI-role vocabulary, metadata, in-memory wrapper, validator.
-- `lib/core/models/cross_cutting_competency_hook.dart` — activity-hook vocabulary and validation against the loaded authored pack.
-- `lib/widgets/cross_cutting_reasoning_card.dart` — reusable contextual learner-facing prompt with expandable canonical detail.
-- `lib/core/practice/mth1w_cross_cutting_verification.dart` — the deterministic MTH1W hook and bounded verification-method-choice model.
-- `test/core/models/authored_competency_pack_test.dart` — pack parsing and fail-closed mutation tests.
-- `test/core/services/authored_competency_pack_loader_test.dart` — bundled-asset loading test.
-- `test/core/models/cross_cutting_learning_evidence_test.dart` — metadata/evidence authority and privacy tests.
-- `test/core/models/cross_cutting_competency_hook_test.dart` — hook validation and non-generative-path tests.
-- `test/widgets/cross_cutting_reasoning_card_test.dart` — hybrid-visibility/accessibility tests.
-- `test/core/practice/mth1w_cross_cutting_verification_test.dart` — deterministic proof model tests.
+- `assets/competencies/ai_native_computational_literacy.v1.json` — canonical 18-node authored pack.
+- `lib/core/models/authored_competency_pack.dart` — pure v1 parser/validator and conversion to `CompetencyGraph`.
+- `lib/core/services/authored_competency_pack_loader.dart` — `AssetBundle` loading only.
+- `lib/core/models/cross_cutting_learning_evidence.dart` — evidence-quality/verifier/AI-role vocabulary and in-memory wrapper.
+- `lib/core/models/cross_cutting_competency_hook.dart` — activity-hook vocabulary and validation.
+- `lib/widgets/cross_cutting_reasoning_card.dart` — contextual prompt with expandable canonical detail.
+- `lib/core/practice/mth1w_cross_cutting_verification.dart` — deterministic MTH1W verifier-selection teaching model.
+- Corresponding focused tests under `test/core/models/`, `test/core/services/`, `test/core/practice/`, and `test/widgets/`.
 
-### Existing files modified
+**Modify**
 
 - `pubspec.yaml` — register the competency asset.
-- `lib/features/practice/mth1w_practice_screen.dart` — add the no-AI verification-method reasoning step without changing deterministic answer authority.
-- `test/features/practice/mth1w_practice_screen_test.dart` — prove the contextual flow, no persistence, and verifier failure semantics.
-- `lib/widgets/claw_experience_renderer.dart` — after PR #177, expose a post-response verification prompt without letting model output emit evidence.
-- `lib/features/claw/claw_foundations_preview_screen.dart` — provide the cross-cutting hook/detail and preserve non-model fallback.
-- `test/widgets/claw_experience_renderer_test.dart` — prove AI output remains instructional and verification reasoning remains available.
-- `test/features/claw/claw_foundations_preview_screen_test.dart` — prove optional-AI and no-provider paths.
-- `config/capabilities.json` — add `instruction.cross-cutting-computational-literacy` as `experimental` only after both proof slices exist.
-- `README.md` — describe the feature and explicit non-claims without calling it official curriculum or validated assessment.
-- `CHANGELOG.md` — record the experimental cross-cutting competency foundation.
+- `lib/features/practice/mth1w_practice_screen.dart` and its widget test — deterministic/no-AI proof.
+- After PR #177 dependency gate: `lib/widgets/claw_experience_renderer.dart`, `lib/features/claw/claw_foundations_preview_screen.dart`, and their tests — AI-optional proof.
+- `config/capabilities.json`, `README.md`, `CHANGELOG.md` — claim parity after both proofs exist.
 
 ---
 
@@ -75,91 +64,72 @@
 - Modify: `pubspec.yaml`
 
 **Interfaces:**
-- Consumes: existing `CompetencyNode`, `CompetencyEdge`, and `CompetencyGraph` from `lib/core/models/competency_graph.dart`.
-- Produces: `AuthoredCompetencyPack.fromJson(Map<String, Object?>)`, `AuthoredCompetencyPack.toGraph()`, `AuthoredCompetencyPack.containsCompetency(String)`, and `AuthoredCompetencyPackLoader.load(AssetBundle)`.
-- Constants: `AuthoredCompetencyPack.aiNativeFamilyId == 'axiom.education.competency.ai-native-computational-literacy'` and `AuthoredCompetencyPack.aiNativeAssetPath == 'assets/competencies/ai_native_computational_literacy.v1.json'`.
+- Consumes: `CompetencyNode` and `CompetencyGraph` from `competency_graph.dart`.
+- Produces: `AuthoredCompetencyPack.fromJson(Map<String, Object?>)`, `toGraph()`, `containsCompetency(String)`, and `AuthoredCompetencyPackLoader.load(AssetBundle)`.
 
-- [ ] **Step 1: Write the RED pack tests.**
-
-Create `test/core/models/authored_competency_pack_test.dart` with tests that assert the exact schema/family/version/authorship/authority, exactly 18 unique nodes, all three required tags, one valid dimension tag per node, zero edges, and conversion to the existing graph.
+- [ ] **Step 1: Write the failing canonical-pack test.**
 
 ```dart
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter_test/flutter_test.dart';
-import 'package:ontarioedai/core/models/authored_competency_pack.dart';
-
-void main() {
-  Map<String, Object?> fixture() =>
-      jsonDecode(File(AuthoredCompetencyPack.aiNativeAssetPath).readAsStringSync())
-          as Map<String, Object?>;
-
-  test('canonical pack contains exactly 18 Axiom-authored nodes and no edges', () {
-    final pack = AuthoredCompetencyPack.fromJson(fixture());
-
-    expect(pack.schema, 'axiom-education-authored-competency-pack.v1');
-    expect(pack.familyId, AuthoredCompetencyPack.aiNativeFamilyId);
-    expect(pack.familyVersion, '1.0.0');
-    expect(pack.authorship, 'axiom-extension');
-    expect(pack.jurisdictionalAuthority, 'none');
-    expect(pack.graph.nodes, hasLength(18));
-    expect(pack.graph.edges, isEmpty);
-  });
-}
+final pack = AuthoredCompetencyPack.fromJson(fixture());
+expect(pack.schema, 'axiom-education-authored-competency-pack.v1');
+expect(pack.familyId, AuthoredCompetencyPack.aiNativeFamilyId);
+expect(pack.familyVersion, '1.0.0');
+expect(pack.authorship, 'axiom-extension');
+expect(pack.jurisdictionalAuthority, 'none');
+expect(pack.graph.nodes, hasLength(18));
+expect(pack.graph.edges, isEmpty);
 ```
 
-Add mutation tests by cloning the decoded map and changing one field at a time. They must reject: unsupported schema/version, duplicate node ID, malformed non-`axiom:computational-literacy:` ID, missing/wrong family tag, zero or two dimension tags, unknown dimension tag, missing authorship tag, and a future edge with a missing endpoint.
+Add mutation tests for unsupported schema/version, duplicate IDs, malformed IDs, missing/wrong family tag, zero/two/unknown dimension tags, missing authorship tag, and non-empty v1 `edges`.
 
-- [ ] **Step 2: Run the targeted test and verify RED.**
-
-Run:
+- [ ] **Step 2: Run it and confirm RED.**
 
 ```bash
 flutter test test/core/models/authored_competency_pack_test.dart --reporter expanded
 ```
 
-Expected: compile failure because `authored_competency_pack.dart` and the asset do not exist.
+Expected: compile failure because the pack types and asset do not exist.
 
-- [ ] **Step 3: Add the canonical JSON asset.**
+- [ ] **Step 3: Add the canonical JSON asset with all 18 spec IDs.**
 
-Use this top-level shape and all 18 durable IDs from the spec:
+Every node uses this exact shape:
 
 ```json
 {
-  "schema": "axiom-education-authored-competency-pack.v1",
-  "family_id": "axiom.education.competency.ai-native-computational-literacy",
-  "family_version": "1.0.0",
-  "name": "AI-Native Computational Literacy",
-  "authorship": "axiom-extension",
-  "jurisdictional_authority": "none",
-  "nodes": [
-    {
-      "competency_id": "axiom:computational-literacy:intent:problem-framing",
-      "title": "Frame the actual problem",
-      "tags": [
-        "family:ai-native-computational-literacy",
-        "dimension:intent",
-        "authorship:axiom-extension"
-      ]
-    }
-  ],
-  "edges": []
+  "competency_id": "axiom:computational-literacy:intent:problem-framing",
+  "title": "Frame the actual problem",
+  "tags": [
+    "family:ai-native-computational-literacy",
+    "dimension:intent",
+    "authorship:axiom-extension"
+  ]
 }
 ```
 
-The full `nodes` array must contain the 4 Intent + 4 Specification + 5 Verification + 5 Systems Understanding IDs from the approved spec, with exactly one dimension tag and the same family/authorship tags on every node.
+The root contains the exact schema/family/version/authorship/authority fields from Global Constraints, all 18 approved IDs, and `"edges": []`.
 
-- [ ] **Step 4: Implement the minimal pure parser/validator.**
+- [ ] **Step 4: Implement the pure v1 parser.**
 
-`lib/core/models/authored_competency_pack.dart` must expose a focused immutable type and throw `AuthoredCompetencyPackException` on malformed input before constructing `CompetencyGraph`.
+Use this validation structure in `authored_competency_pack.dart`:
 
 ```dart
+class AuthoredCompetencyPackException implements Exception {
+  final String message;
+  const AuthoredCompetencyPackException(this.message);
+}
+
 class AuthoredCompetencyPack {
   static const aiNativeFamilyId =
       'axiom.education.competency.ai-native-computational-literacy';
   static const aiNativeAssetPath =
       'assets/competencies/ai_native_computational_literacy.v1.json';
+  static const _schema = 'axiom-education-authored-competency-pack.v1';
+  static const _dimensions = {
+    'dimension:intent',
+    'dimension:specification',
+    'dimension:verification',
+    'dimension:systems',
+  };
 
   final String schema;
   final String familyId;
@@ -169,9 +139,80 @@ class AuthoredCompetencyPack {
   final String jurisdictionalAuthority;
   final CompetencyGraph graph;
 
+  AuthoredCompetencyPack._({
+    required this.schema,
+    required this.familyId,
+    required this.familyVersion,
+    required this.name,
+    required this.authorship,
+    required this.jurisdictionalAuthority,
+    required this.graph,
+  });
+
   factory AuthoredCompetencyPack.fromJson(Map<String, Object?> json) {
-    // Parse only the v1 fields above; reject unknown schema/version semantics,
-    // invalid tags/IDs, duplicate IDs, and malformed edge definitions.
+    String requiredString(String key) {
+      final value = json[key];
+      if (value is! String || value.trim().isEmpty) {
+        throw AuthoredCompetencyPackException('$key must be a non-empty string.');
+      }
+      return value;
+    }
+
+    final schema = requiredString('schema');
+    final familyId = requiredString('family_id');
+    final version = requiredString('family_version');
+    final authorship = requiredString('authorship');
+    final authority = requiredString('jurisdictional_authority');
+    if (schema != _schema || familyId != aiNativeFamilyId ||
+        version != '1.0.0' || authorship != 'axiom-extension' ||
+        authority != 'none') {
+      throw const AuthoredCompetencyPackException('Unsupported authored competency pack identity.');
+    }
+
+    final rawNodes = json['nodes'];
+    final rawEdges = json['edges'];
+    if (rawNodes is! List || rawEdges is! List || rawEdges.isNotEmpty) {
+      throw const AuthoredCompetencyPackException('v1 requires a node list and zero edges.');
+    }
+
+    final seen = <String>{};
+    final nodes = <CompetencyNode>[];
+    for (final raw in rawNodes) {
+      if (raw is! Map) {
+        throw const AuthoredCompetencyPackException('Each node must be an object.');
+      }
+      final node = Map<String, Object?>.from(raw);
+      final id = node['competency_id'];
+      final title = node['title'];
+      final rawTags = node['tags'];
+      if (id is! String ||
+          !RegExp(r'^axiom:computational-literacy:[a-z-]+:[a-z-]+$').hasMatch(id) ||
+          !seen.add(id) || title is! String || title.trim().isEmpty || rawTags is! List) {
+        throw const AuthoredCompetencyPackException('Invalid competency node.');
+      }
+      final tags = rawTags.whereType<String>().toSet();
+      final dimensions = tags.intersection(_dimensions);
+      if (tags.length != rawTags.length ||
+          !tags.contains('family:ai-native-computational-literacy') ||
+          !tags.contains('authorship:axiom-extension') ||
+          dimensions.length != 1) {
+        throw const AuthoredCompetencyPackException('Invalid competency node tags.');
+      }
+      nodes.add(CompetencyNode(competencyId: id, title: title, tags: tags));
+    }
+    if (nodes.length != 18) {
+      throw const AuthoredCompetencyPackException('v1 requires exactly 18 competency nodes.');
+    }
+
+    return AuthoredCompetencyPack._(
+      schema: schema,
+      familyId: familyId,
+      familyVersion: version,
+      name: requiredString('name'),
+      authorship: authorship,
+      jurisdictionalAuthority: authority,
+      graph: CompetencyGraph(nodes: nodes, edges: const <CompetencyEdge>[]),
+    );
   }
 
   bool containsCompetency(String id) => graph.nodes.containsKey(id);
@@ -179,50 +220,19 @@ class AuthoredCompetencyPack {
 }
 ```
 
-Do not add a second graph class. Delegate endpoint/self-edge/prerequisite-cycle checks to the existing `CompetencyGraph` after pack-specific validation.
+- [ ] **Step 5: Register/load the asset and test the bundle path.**
 
-- [ ] **Step 5: Register and load the asset through a narrow service.**
+Add `assets/competencies/ai_native_computational_literacy.v1.json` to `flutter.assets`. `AuthoredCompetencyPackLoader.load(bundle)` loads that path, JSON-decodes it, rejects a non-object root, and calls `AuthoredCompetencyPack.fromJson`.
 
-Add to `pubspec.yaml`:
-
-```yaml
-flutter:
-  assets:
-    - assets/competencies/ai_native_computational_literacy.v1.json
-```
-
-Create `lib/core/services/authored_competency_pack_loader.dart`:
-
-```dart
-class AuthoredCompetencyPackLoader {
-  const AuthoredCompetencyPackLoader();
-
-  Future<AuthoredCompetencyPack> load(AssetBundle bundle) async {
-    final raw = await bundle.loadString(AuthoredCompetencyPack.aiNativeAssetPath);
-    final decoded = jsonDecode(raw);
-    if (decoded is! Map<String, Object?>) {
-      throw const AuthoredCompetencyPackException('Pack root must be an object.');
-    }
-    return AuthoredCompetencyPack.fromJson(decoded);
-  }
-}
-```
-
-- [ ] **Step 6: Add the asset-loader test.**
-
-Use `rootBundle` under `flutter_test` and assert the loaded pack has 18 nodes and zero edges.
-
-- [ ] **Step 7: Run focused and regression tests.**
-
-Run:
+- [ ] **Step 6: Run focused regressions.**
 
 ```bash
 flutter test test/core/models/authored_competency_pack_test.dart test/core/services/authored_competency_pack_loader_test.dart test/core/models/competency_graph_test.dart --reporter expanded
 ```
 
-Expected: PASS; existing competency graph semantics unchanged.
+Expected: PASS.
 
-- [ ] **Step 8: Commit.**
+- [ ] **Step 7: Commit.**
 
 ```bash
 git add assets/competencies/ai_native_computational_literacy.v1.json pubspec.yaml lib/core/models/authored_competency_pack.dart lib/core/services/authored_competency_pack_loader.dart test/core/models/authored_competency_pack_test.dart test/core/services/authored_competency_pack_loader_test.dart
@@ -241,26 +251,12 @@ git commit -m "feat: add AI-native competency pack"
 - Regression: `test/core/models/learning_evidence_test.dart`
 
 **Interfaces:**
-- Consumes: `LearningEvidenceEnvelope` and `AuthoredCompetencyPack`.
-- Produces: `CrossCuttingEvidenceQuality`, `CrossCuttingVerifierMethod`, `CrossCuttingAiRole`, `CrossCuttingEvidenceMetadata`, `CrossCuttingLearningEvidence`, `CrossCuttingActivityRole`, `CrossCuttingAiMode`, `CrossCuttingCompetencyHook`, `CrossCuttingEvidenceValidator`, and `CrossCuttingCompetencyHookValidator`.
+- Consumes: `LearningEvidenceEnvelope`, `AuthoredCompetencyPack`.
+- Produces the exact v1 evidence-quality/verifier/AI-role and activity-hook vocabularies from the spec.
 
-- [ ] **Step 1: Write RED evidence tests.**
-
-Create tests proving metadata binds to the exact base `evidenceId`, contains only the approved vocabularies, exposes no mastery/grade/persistence authority, and preserves the base envelope as the only learner evidence object.
+- [ ] **Step 1: Write failing evidence-companion tests.**
 
 ```dart
-final base = LearningEvidenceEnvelope(
-  evidenceId: 'evidence:verification:1',
-  recordType: LearningEvidenceRecordType.outcomeObservation,
-  learnerSubjectId: 'learner:1',
-  competencyId: 'axiom:computational-literacy:verification:method-selection',
-  consentContextId: 'consent:pedagogy:1',
-  occurredAt: DateTime.utc(2026, 9, 5),
-  confidenceBefore: 0.4,
-  confidenceAfter: 0.6,
-  evidenceRef: 'artifact:math-check:1',
-);
-
 final metadata = CrossCuttingEvidenceMetadata(
   evidenceId: base.evidenceId,
   qualities: const {CrossCuttingEvidenceQuality.independentApplication},
@@ -268,63 +264,47 @@ final metadata = CrossCuttingEvidenceMetadata(
   aiRole: CrossCuttingAiRole.absent,
   observationSource: 'mth1w-deterministic-practice',
 );
-
 final aggregate = CrossCuttingLearningEvidence(base: base, metadata: metadata);
 expect(aggregate.canPersistCrossCuttingMetadata, isFalse);
 expect(aggregate.createsMasteryState, isFalse);
 expect(aggregate.changesSubjectGrade, isFalse);
 ```
 
-Add negative tests for mismatched `evidenceId`, blank `observationSource`, empty qualities, empty verifier methods for an evidence observation, and any attempt to treat companion metadata as an admitted Mesh event.
+Negative tests: mismatched `evidenceId`, blank `observationSource`, empty qualities, and empty verifier methods must fail validation.
 
-- [ ] **Step 2: Run and verify RED.**
+- [ ] **Step 2: Run and confirm RED.**
 
 ```bash
 flutter test test/core/models/cross_cutting_learning_evidence_test.dart --reporter expanded
 ```
 
-Expected: compile failure because the types do not exist.
-
-- [ ] **Step 3: Implement the exact v1 enums and in-memory wrapper.**
+- [ ] **Step 3: Implement exact enums and immutable wrapper.**
 
 ```dart
 enum CrossCuttingEvidenceQuality {
-  recognized,
-  supportedApplication,
-  independentApplication,
-  robustApplication,
-  transferObserved,
+  recognized, supportedApplication, independentApplication,
+  robustApplication, transferObserved,
 }
 
 enum CrossCuttingVerifierMethod {
-  learnerReasoning,
-  deterministicCalculator,
-  symbolicSolver,
-  compilerOrTestRunner,
-  experimentOrMeasurement,
-  sourceOrProvenanceReview,
-  educatorReview,
-  peerReview,
-  modelAssistedCritique,
-  otherGovernedTool,
+  learnerReasoning, deterministicCalculator, symbolicSolver,
+  compilerOrTestRunner, experimentOrMeasurement,
+  sourceOrProvenanceReview, educatorReview, peerReview,
+  modelAssistedCritique, otherGovernedTool,
 }
 
 enum CrossCuttingAiRole {
-  absent,
-  optionalTool,
-  generatedCandidate,
-  critiqueAssistant,
-  socraticTutor,
+  absent, optionalTool, generatedCandidate, critiqueAssistant, socraticTutor,
 }
 ```
 
-`CrossCuttingEvidenceMetadata` must have only `evidenceId`, `qualities`, `verifierMethods`, `aiRole`, and `observationSource`. `CrossCuttingLearningEvidence` must hold one existing `LearningEvidenceEnvelope` plus one matching metadata object. It must expose fixed `false` getters for persistence/export/mastery/grade authority rather than introducing any write path.
+`CrossCuttingEvidenceMetadata` contains only `evidenceId`, `qualities`, `verifierMethods`, `aiRole`, and `observationSource`. `CrossCuttingLearningEvidence` holds one existing base envelope plus one matching metadata object and exposes fixed `false` getters for persistence, export, mastery creation, and subject-grade mutation.
 
-- [ ] **Step 4: Write RED hook tests.**
+- [ ] **Step 4: Write failing hook tests.**
 
-Tests must prove: unknown competency fails; blank prompt fails; `introduce` may have no verifier; `elicitEvidence` requires at least one verifier; every `elicitEvidence` hook requires `hasNonGenerativePath == true`; `aiMode == partOfTask` does not bypass that rule; hook construction does not create evidence/curriculum authority.
+Prove unknown competency fails; blank prompt fails; `introduce` may omit a verifier; `elicitEvidence` requires a verifier and `hasNonGenerativePath == true`; `aiMode == partOfTask` does not waive the non-generative rule.
 
-- [ ] **Step 5: Implement the pure hook types and validator.**
+- [ ] **Step 5: Implement the hook contract.**
 
 ```dart
 enum CrossCuttingActivityRole { introduce, practice, elicitEvidence }
@@ -337,19 +317,26 @@ class CrossCuttingCompetencyHook {
   final CrossCuttingAiMode aiMode;
   final Set<CrossCuttingVerifierMethod> verifierMethods;
   final bool hasNonGenerativePath;
-  // immutable constructor only
+  const CrossCuttingCompetencyHook({
+    required this.competencyId,
+    required this.role,
+    required this.learnerFacingPrompt,
+    required this.aiMode,
+    required this.verifierMethods,
+    required this.hasNonGenerativePath,
+  });
 }
 ```
 
-`CrossCuttingCompetencyHookValidator.validate(hook, pack)` must fail closed using `pack.containsCompetency(...)` and the exact rules above. It must not import curriculum-provider, learner-record, Gateway, or persistence code.
+The validator calls `pack.containsCompetency`, checks the exact rules above, and contains no curriculum-provider, Gateway, persistence, grade, or credential code.
 
-- [ ] **Step 6: Run focused and existing evidence tests.**
+- [ ] **Step 6: Run evidence/hook regressions.**
 
 ```bash
 flutter test test/core/models/cross_cutting_learning_evidence_test.dart test/core/models/cross_cutting_competency_hook_test.dart test/core/models/learning_evidence_test.dart --reporter expanded
 ```
 
-Expected: PASS; `LearningEvidenceEnvelope` remains byte-for-source unchanged unless a compile-only import adjustment is strictly required (prefer no modification).
+Expected: PASS; existing `LearningEvidenceEnvelope` semantics remain unchanged.
 
 - [ ] **Step 7: Commit.**
 
@@ -360,49 +347,36 @@ git commit -m "feat: add cross-cutting evidence metadata"
 
 ---
 
-### Task 3: Reusable hybrid-visibility reasoning card
+### Task 3: Hybrid-visibility reasoning card
 
 **Files:**
 - Create: `lib/widgets/cross_cutting_reasoning_card.dart`
 - Create: `test/widgets/cross_cutting_reasoning_card_test.dart`
 
 **Interfaces:**
-- Consumes: a validated `CrossCuttingCompetencyHook` plus explicit human-readable canonical `dimensionLabel` and `competencyLabel`; it does not load curriculum or evidence itself.
-- Produces: `CrossCuttingReasoningCard` with contextual prompt always visible and canonical detail behind an `ExpansionTile`.
+- Produces `CrossCuttingReasoningCard({learnerFacingPrompt, dimensionLabel, competencyLabel})`.
 
-- [ ] **Step 1: Write the RED widget test.**
+- [ ] **Step 1: Write the failing widget test.**
 
 ```dart
-await tester.pumpWidget(
-  MaterialApp(
-    home: Scaffold(
-      body: CrossCuttingReasoningCard(
-        learnerFacingPrompt: 'How could you check that this result must be correct?',
-        dimensionLabel: 'Verification',
-        competencyLabel: 'method selection',
-      ),
-    ),
-  ),
-);
-
 expect(find.text('How could you check that this result must be correct?'), findsOneWidget);
 expect(find.text('Reasoning details'), findsOneWidget);
 expect(find.textContaining('Verification → method selection'), findsNothing);
 ```
 
-Then tap `Reasoning details` and require the canonical label to appear. Add a semantics test that the contextual prompt remains readable at text scale and the expanded detail is not the only accessible label.
+Tap `Reasoning details`; then require `Verification → method selection`. Add a text-scaling/semantics assertion so contextual wording is never hidden behind canonical jargon.
 
-- [ ] **Step 2: Run and verify RED.**
+- [ ] **Step 2: Run and confirm RED.**
 
 ```bash
 flutter test test/widgets/cross_cutting_reasoning_card_test.dart --reporter expanded
 ```
 
-- [ ] **Step 3: Implement the minimal presentation widget.**
+- [ ] **Step 3: Implement a pure presentation widget.**
 
-The widget must contain no scoring, model, provider, evidence, curriculum, or persistence code. It should follow the existing cards/`ExpansionTile` pattern already used by MTH1W practice.
+Use the existing Card + `ExpansionTile` pattern. The widget contains no scoring, model, evidence, curriculum, or persistence logic.
 
-- [ ] **Step 4: Run the widget test and formatter.**
+- [ ] **Step 4: Run test and format check.**
 
 ```bash
 flutter test test/widgets/cross_cutting_reasoning_card_test.dart --reporter expanded
@@ -429,86 +403,55 @@ git commit -m "feat: add contextual reasoning card"
 - Modify: `test/features/practice/mth1w_practice_screen_test.dart`
 
 **Interfaces:**
-- Consumes: `CrossCuttingCompetencyHook`, `CrossCuttingVerifierMethod`, `MathAnswerVerifier`, and `CrossCuttingReasoningCard`.
-- Produces: `mth1wVerificationMethodHook`, `Mth1wVerificationChoice`, and `Mth1wVerificationChoicePolicy`.
 - Canonical competency: `axiom:computational-literacy:verification:method-selection`.
-- The existing `MathAnswerVerifier.verify(...)` remains the sole authority for correct/incorrect answers.
+- `MathAnswerVerifier.verify(...)` remains the only correct/incorrect authority.
 
-- [ ] **Step 1: Write RED pure-model tests for method selection.**
-
-Define three learner choices:
+- [ ] **Step 1: Write failing pure-model tests.**
 
 ```dart
 enum Mth1wVerificationChoice { exactCalculation, estimateOnly, modelOpinion }
+
+expect(const Mth1wVerificationChoicePolicy()
+    .isSufficient(Mth1wVerificationChoice.exactCalculation), isTrue);
+expect(const Mth1wVerificationChoicePolicy()
+    .isSufficient(Mth1wVerificationChoice.modelOpinion), isFalse);
 ```
 
-The policy must map only `exactCalculation` to `CrossCuttingVerifierMethod.deterministicCalculator` as sufficient for the exact-answer check. `estimateOnly` and `modelOpinion` remain educational alternatives but must never mark the math answer verified.
+Require the exported hook to be `elicitEvidence`, `aiMode: absent`, verifier `{deterministicCalculator}`, and `hasNonGenerativePath: true`.
 
-```dart
-expect(
-  const Mth1wVerificationChoicePolicy()
-      .isSufficient(Mth1wVerificationChoice.exactCalculation),
-  isTrue,
-);
-expect(
-  const Mth1wVerificationChoicePolicy()
-      .isSufficient(Mth1wVerificationChoice.modelOpinion),
-  isFalse,
-);
-```
-
-The exported hook must be `role: elicitEvidence`, `aiMode: absent`, verifier methods `{deterministicCalculator}`, and `hasNonGenerativePath: true`.
-
-- [ ] **Step 2: Run and verify RED.**
+- [ ] **Step 2: Run and confirm RED.**
 
 ```bash
 flutter test test/core/practice/mth1w_cross_cutting_verification_test.dart --reporter expanded
 ```
 
-- [ ] **Step 3: Implement the pure MTH1W verification-choice model.**
+- [ ] **Step 3: Implement the pure choice policy and hook.**
 
-Keep it separate from `MathAnswerVerifier`; it teaches verifier selection but does not alter answer checking.
+Only `exactCalculation` maps to a sufficient verifier for the exact-answer check. `estimateOnly` and `modelOpinion` are explanatory alternatives and never mark an answer verified.
 
-- [ ] **Step 4: Add RED widget assertions to the existing practice-screen test.**
+- [ ] **Step 4: Add failing MTH1W widget assertions.**
 
-Before the existing `Check answer` action can run, require the learner to answer the contextual question:
+Add a contextual prompt “How should we check an exact answer here?” with stable choices `mth1w-verifier-exact`, `mth1w-verifier-estimate`, and `mth1w-verifier-model`. Prove:
 
-> How should we check an exact answer here?
+- `Check answer` needs nonblank input **and** exact calculation;
+- estimate/model choices explain why they are insufficient for exact verification;
+- exact calculation enables the existing deterministic checker;
+- result status still comes only from `MathAnswerVerifier`;
+- session summary still says nothing is saved;
+- expanded detail shows `Verification → method selection`;
+- `verifier == null` remains unavailable even after selecting a method.
 
-Expose three `ChoiceChip` or radio choices with stable keys:
+- [ ] **Step 5: Implement ephemeral UI state.**
 
-- `mth1w-verifier-exact`
-- `mth1w-verifier-estimate`
-- `mth1w-verifier-model`
+Add `Mth1wVerificationChoice? _verificationChoice;`, reset it in `_clearResponse()`, and include the exact-calculation requirement in `canCheck`. Do not create `LearningEvidenceEnvelope` or persistence calls in this proof.
 
-The test must prove:
-
-1. `Check answer` is disabled until the answer is nonblank **and** `exactCalculation` is selected.
-2. Choosing `estimateOnly` shows a short explanation that estimation is useful but insufficient for an exact result.
-3. Choosing `modelOpinion` shows that model output is not an exact verifier.
-4. Choosing `exactCalculation` enables the existing deterministic check.
-5. Correct/incorrect result comes only from `MathAnswerVerifier`.
-6. Existing session summary still says nothing is saved to a learner record.
-7. The reasoning-card detail exposes `Verification → method selection` only when expanded.
-8. `verifier == null` still fails closed and does not treat the learner's method choice as correctness evidence.
-
-- [ ] **Step 5: Implement the minimal MTH1W UI change.**
-
-Add ephemeral state:
-
-```dart
-Mth1wVerificationChoice? _verificationChoice;
-```
-
-Reset it in `_clearResponse()`. Change `canCheck` to require the exact-calculation choice in addition to the current verifier/answer checks. Render `CrossCuttingReasoningCard` plus the bounded choices immediately before the Check button. Do not create `LearningEvidenceEnvelope`, `CrossCuttingEvidenceMetadata`, or any persistence call in this proof.
-
-- [ ] **Step 6: Run the deterministic proof tests and MTH1W regressions.**
+- [ ] **Step 6: Run deterministic proof regressions.**
 
 ```bash
 flutter test test/core/practice/mth1w_cross_cutting_verification_test.dart test/features/practice/mth1w_practice_screen_test.dart test/core/practice/math_answer_verifier_test.dart test/core/practice/math_practice_generator_test.dart --reporter expanded
 ```
 
-Expected: PASS. In particular, verifier-unavailable remains explicit and no AI dependency is introduced.
+Expected: PASS.
 
 - [ ] **Step 7: Commit.**
 
@@ -519,60 +462,42 @@ git commit -m "feat: teach verifier selection in MTH1W practice"
 
 ---
 
-### Task 5: AI-optional Claw proof, stacked only after governed tutor readiness
+### Task 5: AI-optional Claw proof after governed tutor readiness
 
-**Dependency gate:** PR #177 (`Governed Socratic Tutor v0`) currently supplies `EducationModelExecutor`, the `aiSocraticDialogue` node, bounded 280-character learner input, minimized usage receipts, and deterministic fallback. Before this task, resolve one of these states:
+**Dependency gate:** PR #177 supplies `EducationModelExecutor`, `aiSocraticDialogue`, bounded learner input, minimized usage receipts, and deterministic fallback. Start this task only after one of these exact states is true:
 
-1. **Preferred:** PR #177 has passed exact-head Linux/Android, Windows, and Apple checks and is merged; rebase the implementation branch onto that merged `main`.
-2. **Stacked:** if #177 remains unmerged but exact-head green and deliberately stackable, rebase this work onto its exact head and make the new PR base/dependency explicit.
+1. Preferred: PR #177 is exact-head green on Linux/Android, Windows, and Apple and has merged; rebase on current `main`.
+2. Deliberate stack: PR #177 is exact-head green but remains unmerged; base this work on `origin/feature/governed-socratic-tutor-v0-20260901` and state that dependency in the PR.
 
-Do not copy its implementation into this feature branch.
-
-**Files after the dependency gate:**
+**Files:**
 - Modify: `lib/widgets/claw_experience_renderer.dart`
 - Modify: `lib/features/claw/claw_foundations_preview_screen.dart`
 - Modify: `test/widgets/claw_experience_renderer_test.dart`
 - Modify: `test/features/claw/claw_foundations_preview_screen_test.dart`
 
-**Interfaces:**
-- Consumes: PR #177 `ClawSocraticRequest`, `ClawSocraticResult`, `ClawFoundationsSocraticExecutionBinding`, model-unavailable fallback, and `CrossCuttingReasoningCard`.
-- Produces: a post-response verification-method prompt bound to `axiom:computational-literacy:verification:method-selection` with `aiMode: optional`; no model response becomes evidence.
+- [ ] **Step 1: Write failing renderer tests.**
 
-- [ ] **Step 1: Add RED renderer tests for AI output interrogation.**
+After successful Socratic text appears, require “Before accepting it, how could you check the fraction claim?” and a stable `claw-socratic-verification` surface. Keep the existing `expect(evidence, isEmpty);` assertion before and after method selection. A model response cannot select itself as an authoritative verifier.
 
-Extend the existing successful Socratic test so that after instructional text appears, the learner also sees:
+- [ ] **Step 2: Write failing no-provider/failure tests.**
 
-> Before accepting it, how could you check the fraction claim?
+With no `socraticBinding`, the existing non-model route remains usable. On provider failure, deterministic fallback remains visible and no cross-cutting evidence/mastery callback is emitted automatically.
 
-Require a stable `claw-socratic-verification` container and choices that include exact arithmetic (`deterministicCalculator`) and model opinion. Verify that the model's own response cannot count as its own verifier.
+- [ ] **Step 3: Implement ephemeral post-response verification selection.**
 
-The test must keep the existing assertion:
+Reuse `CrossCuttingReasoningCard` and `CrossCuttingVerifierMethod`. Keep model text plain instructional content. Do not persist the method selection and do not pass it back into the model.
 
-```dart
-expect(evidence, isEmpty);
-```
+- [ ] **Step 4: Preserve the existing model-context boundary.**
 
-before and after the verification-method interaction.
+`ClawFoundationsSocraticExecutionBinding` continues to materialize only `targetCompetency` and `currentLearnerInput`. No new context scope or provider authority is added.
 
-- [ ] **Step 2: Add RED no-provider/failure tests.**
-
-When `socraticBinding == null`, the existing non-model Claw route must remain usable and the same canonical Verification competency must still have a non-generative path. When the handler fails and the player routes to the reviewed fallback, no cross-cutting evidence or mastery callback may be emitted automatically.
-
-- [ ] **Step 3: Implement the minimal renderer state.**
-
-Keep Socratic output as plain instructional text. Add an ephemeral `CrossCuttingVerifierMethod?` selection after successful model output. Reuse `CrossCuttingReasoningCard`; do not write the selection to learner storage. The generic renderer must still not import provider-routing internals.
-
-- [ ] **Step 4: Bind the screen to the canonical hook without widening context.**
-
-The screen may supply the validated hook/presentation metadata, but `ClawFoundationsSocraticExecutionBinding` must retain exactly the existing context scopes: `targetCompetency` and `currentLearnerInput`. Do not send the cross-cutting selection to the model in v0.
-
-- [ ] **Step 5: Run Claw and tutor regressions.**
+- [ ] **Step 5: Run Claw/tutor regressions.**
 
 ```bash
 flutter test test/widgets/claw_experience_renderer_test.dart test/features/claw/claw_foundations_preview_screen_test.dart test/core/models/education_model_execution_test.dart test/core/models/education_model_routing_test.dart --reporter expanded
 ```
 
-Expected: PASS; provider denial/failure retains deterministic fallback, model text emits no evidence, and no provider is activated by default.
+Expected: PASS; failure still routes to reviewed non-model content and no provider is activated by default.
 
 - [ ] **Step 6: Commit.**
 
@@ -583,81 +508,40 @@ git commit -m "feat: add verification reasoning to Socratic preview"
 
 ---
 
-### Task 6: Capability claim parity, privacy/authority regression gate, and exact-head verification
+### Task 6: Claim parity and exact-head verification
 
 **Files:**
 - Modify: `config/capabilities.json`
 - Modify: `README.md`
 - Modify: `CHANGELOG.md`
-- Modify: `test/core/models/cross_cutting_learning_evidence_test.dart` only to add any final authority-regression assertions discovered during integration.
-- Modify: `test/core/models/cross_cutting_competency_hook_test.dart` only to add final curriculum/non-generative-path regressions.
 
 **Interfaces:**
-- Produces public capability `instruction.cross-cutting-computational-literacy` with status `experimental` and exact evidence paths.
+- Adds `instruction.cross-cutting-computational-literacy` with status `experimental`.
 - Does not modify `contracts/axiom-education.v1.json`, AXIOM-MESH compatibility pins, learner-event actions, or credential contracts.
 
-- [ ] **Step 1: Add the capability entry only after Tasks 1–5 are executable.**
+- [ ] **Step 1: Add the capability entry only after both proofs exist.**
 
-Use wording no stronger than:
+Use this claim boundary:
 
 ```json
 {
   "id": "instruction.cross-cutting-computational-literacy",
   "family": "instruction",
   "status": "experimental",
-  "summary": "A versioned Axiom-authored cross-cutting competency family now represents Intent, Specification, Verification, and Systems Understanding through 18 non-jurisdictional competency nodes. One deterministic MTH1W proof and one optional governed-Socratic proof expose contextual verification reasoning without creating a new mastery, grade, learner-record, persistence, or model-authority path.",
-  "evidence": [
-    "assets/competencies/ai_native_computational_literacy.v1.json",
-    "lib/core/models/authored_competency_pack.dart",
-    "lib/core/models/cross_cutting_learning_evidence.dart",
-    "lib/core/models/cross_cutting_competency_hook.dart",
-    "lib/core/practice/mth1w_cross_cutting_verification.dart",
-    "lib/features/practice/mth1w_practice_screen.dart",
-    "lib/widgets/cross_cutting_reasoning_card.dart",
-    "test/core/models/authored_competency_pack_test.dart",
-    "test/core/models/cross_cutting_learning_evidence_test.dart",
-    "test/core/models/cross_cutting_competency_hook_test.dart",
-    "test/features/practice/mth1w_practice_screen_test.dart",
-    "test/widgets/claw_experience_renderer_test.dart"
-  ]
+  "summary": "A versioned Axiom-authored cross-cutting competency family represents Intent, Specification, Verification, and Systems Understanding through 18 non-jurisdictional competency nodes. One deterministic MTH1W proof and one optional governed-Socratic proof expose contextual verification reasoning without creating a new mastery, grade, learner-record, persistence, or model-authority path."
 }
 ```
 
-Keep explicit non-claims in README/CHANGELOG: not official Ontario curriculum, not validated psychometrics, no AI-literacy score, no model required, no automatic mastery/grade effect.
+Add exact implementation/test paths to `evidence`. README/CHANGELOG must explicitly say: not official Ontario curriculum, not validated psychometrics, no AI-literacy score, no model requirement, and no automatic mastery/grade effect.
 
-- [ ] **Step 2: Run the 24 fail-closed acceptance checks as targeted tests.**
+- [ ] **Step 2: Run the focused fail-closed matrix.**
 
-The focused suite must cover, at minimum:
-
-1. duplicate competency IDs rejected;
-2. malformed competency ID rejected;
-3. missing family tag rejected;
-4. wrong family tag rejected;
-5. missing authorship tag rejected;
-6. unknown dimension rejected;
-7. multiple dimensions rejected;
-8. unsupported pack schema/version rejected;
-9. absent future-edge endpoint rejected;
-10. prerequisite cycles still rejected by existing graph logic;
-11. hook unknown competency rejected;
-12. blank learner prompt rejected;
-13. evidence hook without verifier rejected;
-14. evidence hook without non-generative path rejected;
-15. AI-part-of-task does not waive non-generative demonstration;
-16. metadata/base `evidenceId` mismatch rejected;
-17. raw prompt/model-response fields are impossible in metadata because the type has no such fields;
-18. companion metadata exposes no persistence/export authority;
-19. companion metadata does not calculate/promote competency state;
-20. model output does not emit Claw evidence/mastery callbacks;
-21. cross-cutting MTH1W selection does not determine math correctness;
-22. missing deterministic verifier remains unavailable, not synthetic success;
-23. AI/provider absence leaves a valid non-generative path;
-24. official curriculum coverage is never inferred from an Axiom competency hook.
+The tests must cover all of these boundaries: duplicate/malformed IDs; missing/wrong family/authorship tags; zero/two/unknown dimensions; unsupported schema/version; non-empty v1 edges; unknown hook competency; blank hook prompt; evidence hook without verifier; evidence hook without non-generative path; AI-part-of-task cannot waive non-generative demonstration; evidence-ID mismatch; companion metadata has no raw-content fields or persistence/export authority; metadata cannot calculate/promote competency state; model output cannot emit Claw evidence/mastery; MTH1W method choice cannot determine math correctness; missing deterministic verifier remains unavailable; AI/provider absence retains a non-generative path; Axiom competency hooks never imply official curriculum coverage. Existing `CompetencyGraph` tests continue to cover missing edge endpoints and prerequisite cycles for graph infrastructure.
 
 Run:
 
 ```bash
-flutter test test/core/models/authored_competency_pack_test.dart test/core/models/cross_cutting_learning_evidence_test.dart test/core/models/cross_cutting_competency_hook_test.dart test/core/practice/mth1w_cross_cutting_verification_test.dart test/features/practice/mth1w_practice_screen_test.dart test/widgets/cross_cutting_reasoning_card_test.dart test/widgets/claw_experience_renderer_test.dart test/features/claw/claw_foundations_preview_screen_test.dart --reporter expanded
+flutter test test/core/models/authored_competency_pack_test.dart test/core/models/cross_cutting_learning_evidence_test.dart test/core/models/cross_cutting_competency_hook_test.dart test/core/practice/mth1w_cross_cutting_verification_test.dart test/features/practice/mth1w_practice_screen_test.dart test/widgets/cross_cutting_reasoning_card_test.dart test/widgets/claw_experience_renderer_test.dart test/features/claw/claw_foundations_preview_screen_test.dart test/core/models/competency_graph_test.dart --reporter expanded
 ```
 
 Expected: PASS.
@@ -669,20 +553,33 @@ python tools/check_capabilities.py
 python tools/verify.py
 ```
 
-Expected: `Axiom Education verification passed.` The canonical verifier also runs pinned dependency setup, complete Python tests, Dart formatting, Flutter analysis, and the complete Flutter test suite.
+Expected final line: `Axiom Education verification passed.`
 
 - [ ] **Step 4: Run exact-head platform CI.**
 
-Push the exact implementation head and require the repository's existing Linux/Android, Windows, and Apple workflow matrix to pass. Do not describe the feature as ready from an older green commit.
+Push the exact implementation head and require the repository's existing Linux/Android, Windows, and Apple workflows to pass on that same SHA. Do not reuse green evidence from an older commit.
 
-- [ ] **Step 5: Inspect the final diff against the execution base.**
+- [ ] **Step 5: Inspect the final diff against the correct base.**
+
+If PR #177 has merged:
 
 ```bash
-git diff --stat <execution-base>...HEAD
-git diff --name-only <execution-base>...HEAD
+BASE_REF=origin/main
+BASE_SHA=$(git rev-parse "$BASE_REF")
+git diff --stat "$BASE_SHA"...HEAD
+git diff --name-only "$BASE_SHA"...HEAD
 ```
 
-The changed-file set must be limited to the files in this plan plus any formatter-only changes inside those files. `contracts/axiom-education.v1.json`, AXIOM-MESH compatibility profiles, learner persistence routes, credential contracts, and unrelated curriculum content must be unchanged.
+If this work is deliberately stacked on the unmerged tutor branch:
+
+```bash
+BASE_REF=origin/feature/governed-socratic-tutor-v0-20260901
+BASE_SHA=$(git rev-parse "$BASE_REF")
+git diff --stat "$BASE_SHA"...HEAD
+git diff --name-only "$BASE_SHA"...HEAD
+```
+
+The changed-file set is limited to this plan's files plus formatter-only changes inside those files. `contracts/axiom-education.v1.json`, AXIOM-MESH compatibility profiles, learner persistence routes, credential contracts, and unrelated curriculum content remain unchanged.
 
 - [ ] **Step 6: Commit claim parity.**
 
@@ -693,39 +590,26 @@ git commit -m "docs: register experimental computational literacy capability"
 
 - [ ] **Step 7: Prepare the implementation PR.**
 
-The PR body must state:
-
-- exact implementation head SHA;
-- exact base SHA;
-- whether it is stacked on or follows merged PR #177;
-- exact green workflow runs;
-- 18-node/no-edge authored-pack boundary;
-- deterministic MTH1W proof;
-- optional Socratic proof and non-model fallback;
-- no persistence/export/new Mesh authority;
-- no official curriculum, psychometric, grade, credit, credential, or production-provider claim.
+Record exact implementation head SHA, exact base SHA, whether PR #177 is merged or stacked, exact green workflow run IDs, the 18-node/no-edge boundary, deterministic MTH1W proof, optional Socratic proof/fallback, and all non-claims above.
 
 ---
 
-## Execution Order and Landing Strategy
+## Landing Strategy
 
 1. Tasks 1–4 are independent of PR #177 and can be implemented/reviewed from the approved design base.
-2. Do not begin Task 5 until the PR #177 dependency gate is satisfied.
-3. If #177 is still not safely landable when Tasks 1–4 are green, open a first implementation PR containing only Tasks 1–4 and keep its claim limited to the deterministic/foundation slice. Do **not** add the final capability summary claiming both proofs.
-4. After #177 lands, rebase and execute Task 5, then Task 6, either as the continuation of an unmerged stack or as a second narrowly dependent PR.
-5. Branch cleanup and merges follow the repository's existing convergence policy; preserve superseded provenance rather than hiding dependency history.
+2. Task 5 waits for the explicit PR #177 dependency gate.
+3. If #177 is not safely landable when Tasks 1–4 are green, open a first implementation PR containing only Tasks 1–4. Its claim is limited to the competency foundation plus deterministic MTH1W proof; do not claim the AI-optional proof or add the final two-proof capability summary.
+4. After #177 lands, execute Task 5 and then Task 6 as either the continuation of an intentionally stacked branch or a second narrow PR.
 
 ## Final Success Criteria
 
-The feature is ready for review only when:
-
-- the canonical JSON pack loads to exactly 18 `CompetencyNode`s and zero edges;
-- all malformed-pack and hook/evidence negative tests fail closed;
-- no existing competency/evidence semantics are replaced;
-- MTH1W visibly teaches verifier selection while `MathAnswerVerifier` alone decides correctness;
-- Claw visibly teaches that a model answer must be checked while model output still creates no learner evidence;
-- both MTH1W and Claw retain valid no-AI paths;
-- no new learner-data persistence/export or Mesh authority exists;
-- capability wording is `experimental` and matches executable evidence;
-- `python tools/verify.py` passes on the exact head;
+- Canonical pack loads to exactly 18 `CompetencyNode`s and zero edges.
+- Malformed pack/hook/evidence inputs fail closed.
+- Existing competency/evidence semantics are not replaced.
+- MTH1W teaches verifier selection while `MathAnswerVerifier` alone decides correctness.
+- Claw teaches that a model answer must be checked while model output creates no learner evidence.
+- MTH1W and Claw retain valid no-AI paths.
+- No new learner-data persistence/export or Mesh authority exists.
+- Capability wording is `experimental` and matches executable evidence.
+- `python tools/verify.py` passes on the exact head.
 - Linux/Android, Windows, and Apple protected workflows pass on that same exact head.
