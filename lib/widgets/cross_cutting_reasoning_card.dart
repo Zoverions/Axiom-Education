@@ -44,7 +44,9 @@ class CrossCuttingReasoningCard extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     '$dimensionLabel → $competencyLabel',
-                    key: const ValueKey('cross-cutting-reasoning-canonical-label'),
+                    key: const ValueKey(
+                      'cross-cutting-reasoning-canonical-label',
+                    ),
                   ),
                 ),
               ],
