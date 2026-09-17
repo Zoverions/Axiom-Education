@@ -30,6 +30,8 @@ final CrossCuttingCompetencyHook mth1wVerificationMethodSelectionHook =
       role: CrossCuttingActivityRole.elicitEvidence,
       learnerFacingPrompt: 'How should we check an exact answer here?',
       aiMode: CrossCuttingAiMode.absent,
-      verifierMethods: const {CrossCuttingVerifierMethod.deterministicCalculator},
+      verifierMethods: const {
+        CrossCuttingVerifierMethod.deterministicCalculator,
+      },
       hasNonGenerativePath: true,
     );
