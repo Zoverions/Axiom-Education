@@ -36,12 +36,70 @@ void main() {
     );
   });
 
-  test('first arc has no remote model or external launch dependency', () {
+  test('optional Socratic node has an explicit non-model fallback', () {
+    final socraticNodes = ClawFoundationsStoryArc.graph.nodes.values
+        .where(
+          (node) =>
+              node.experienceType == ClawExperienceNodeType.aiSocraticDialogue,
+        )
+        .toList(growable: false);
+
+    expect(socraticNodes, hasLength(1));
+    final socratic = socraticNodes.single;
+    expect(socratic.targetCompetencyIds, const <String>{
+      ClawFoundationsStoryArc.competencyId,
+    });
+    expect(socratic.fallbackNodeIds, contains('visual'));
+
+    expect(
+      ClawFoundationsStoryArc.graph.transitions,
+      contains(
+        isA<ClawExperienceTransition>()
+            .having(
+              (transition) => transition.fromNodeId,
+              'from node',
+              'worked',
+            )
+            .having(
+              (transition) => transition.toNodeId,
+              'to node',
+              socratic.nodeId,
+            )
+            .having(
+              (transition) => transition.trigger,
+              'trigger',
+              ClawTransitionTrigger.learnerChoice,
+            ),
+      ),
+    );
+    expect(
+      ClawFoundationsStoryArc.graph.transitions,
+      contains(
+        isA<ClawExperienceTransition>()
+            .having(
+              (transition) => transition.fromNodeId,
+              'from node',
+              socratic.nodeId,
+            )
+            .having((transition) => transition.toNodeId, 'to node', 'visual')
+            .having(
+              (transition) => transition.trigger,
+              'trigger',
+              ClawTransitionTrigger.modelUnavailable,
+            ),
+      ),
+    );
+  });
+
+  test('model path is opt-in and unavailable by default', () {
+    expect(ClawFoundationsStoryArc.availability.modelAvailable, isFalse);
+  });
+
+  test('first arc has no external launch dependency', () {
     final types = ClawFoundationsStoryArc.graph.nodes.values
         .map((node) => node.experienceType)
         .toSet();
 
-    expect(types, isNot(contains(ClawExperienceNodeType.aiSocraticDialogue)));
     expect(types, isNot(contains(ClawExperienceNodeType.resourceLaunch)));
     expect(types, isNot(contains(ClawExperienceNodeType.videoLaunch)));
     expect(types, isNot(contains(ClawExperienceNodeType.simulationLaunch)));

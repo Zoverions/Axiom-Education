@@ -59,7 +59,7 @@ The currently runnable secondary surface includes:
 - learner cards that allow explanatory text to grow rather than intentionally truncating it, improving behavior under larger system text sizes;
 - fail-closed behavior when the practice configuration, item integrity, or verifier is unavailable.
 
-The foundations preview and source-mapped unit drafts do **not** use tutor inference or automatically write a learner record. They remain usable without AI. The repository now contains an experimental, host-injected AXIOM Gateway client and governed learner write/self-read runtime, but it has no default host binding, local learner-record fallback, production provider, or authority-expanding path. The authored nine-unit milestone is **not** a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or replacement for an authorized education provider. Each authored unit has a draft quiz and performance task, while reviewed complete-course assessment, production learner progress, delegated authority, pack activation, portfolio export, and classroom synchronization remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
+The source-mapped unit drafts remain AI-free, and the Claw foundations preview remains fully usable without AI. The preview now has an experimental Socratic path that is exposed only when a reviewed host explicitly injects a governed execution binding. That binding is limited to the exact learner, Socratic task, target competency, current learner input, allowed egress/retention, budget, and eligible provider set; it performs one bounded invocation, treats returned text as instructional content rather than authority, records minimized usage metadata, and falls back to the reviewed non-model explanation when execution is denied or unavailable. No model or provider is activated by default, and the Socratic path cannot create mastery, a grade, credit, credential, or learner-record write. The repository also contains an experimental, host-injected AXIOM Gateway client and governed learner write/self-read runtime, but it has no default host binding, local learner-record fallback, production provider, or authority-expanding path. The authored nine-unit milestone is **not** a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or replacement for an authorized education provider. Each authored unit has a draft quiz and performance task, while reviewed complete-course assessment, production learner progress, delegated authority, pack activation, portfolio export, and classroom synchronization remain experimental, disabled, specified, or adapter-required in [`config/capabilities.json`](config/capabilities.json).
 
 The source conflict and blocked completion claim are documented in the
 [MTH1W Source Audit](docs/curriculum/MTH1W-SOURCE-AUDIT.md) and enforced by
@@ -176,7 +176,8 @@ Presently:
 - curriculum-pack generation, digest verification, and external-key Ed25519 signing are experimental and do not authorize activation;
 - Ontario-derived records and Axiom Education extensions use visibly separate namespaces and official-recognition flags;
 - legacy `irt_*` values are exported only as visibly uncalibrated adaptation heuristics;
-- local tutor inference is disabled, fails closed, and no longer returns simulated logits output;
+- the governed Socratic execution seam is experimental and can call only an explicitly injected eligible provider after learner/task/context/privacy/egress/retention/budget hard filters; it creates no education authority and falls back to reviewed non-model instruction on denial or provider failure;
+- local Phi-3 tutor inference remains disabled, fails closed, and no longer returns simulated logits output; no model or provider is activated by default;
 - canvas observation is an explicitly experimental bounded classifier and no longer returns mock equations;
 - handwriting scoring no longer returns fixed synthetic scores when its model is missing;
 - the legacy UDP/TCP classroom mesh is disabled by default, AES-GCM protected when explicitly enabled for development, and is not a trusted authority path;
@@ -272,6 +273,7 @@ certify platform behavior.
 - [MTH1W coverage ledger](docs/curriculum/MTH1W-COVERAGE-LEDGER.md)
 - [Home learning guide](docs/home-learning/START-HERE.md)
 - [Course completion roadmap](docs/rebuild/COURSE-COMPLETION-ROADMAP.md)
+- [Education model integration](docs/rebuild/EDUCATION-MODEL-INTEGRATION.md)
 - [Curriculum Pack v1](docs/curriculum/CURRICULUM-PACK-V1.md)
 - [Repository rename record](docs/REPOSITORY-MIGRATION.md)
 - [Branch hygiene policy](docs/BRANCH-HYGIENE.md)
