@@ -95,6 +95,41 @@ void main() {
     expect(provider.calls, 0);
   });
 
+  test('unrelated source provenance causes zero provider calls', () async {
+    final provider = _RecordingProvider();
+    final executor = EducationModelExecutor(
+      providersById: <String, EducationModelInferenceProvider>{
+        'provider:local-test': provider,
+      },
+    );
+    final requestedAt = DateTime.utc(2026, 9, 2, 12);
+    final binding = _binding(
+      executor: executor,
+      requestedAt: requestedAt,
+      now: () => requestedAt,
+      provenance: const EducationModelResponseProvenance(
+        promptContractVersion: 'claw-socratic-prompt.v1',
+        curriculumPackDigest: 'sha256:curriculum-pack-test',
+        sourceExpectationIds: <String>{'math:unrelated'},
+        verifierState: 'not-required-instructional',
+      ),
+    );
+
+    final result = await binding.handle(
+      ClawSocraticRequest(
+        nodeId: 'socratic',
+        targetCompetencyIds: const <String>{
+          ClawFoundationsStoryArc.competencyId,
+        },
+        learnerInput: 'Both fractions describe the same amount.',
+      ),
+    );
+
+    expect(result.succeeded, isFalse);
+    expect(result.failureReason, equals('invalid-socratic-provenance'));
+    expect(provider.calls, 0);
+  });
+
   testWidgets('preview keeps the model path unavailable without a binding', (
     tester,
   ) async {
@@ -114,6 +149,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
   required EducationModelExecutor executor,
   required DateTime requestedAt,
   required DateTime Function() now,
+  EducationModelResponseProvenance? provenance,
 }) {
   return ClawFoundationsSocraticExecutionBinding(
     executor: executor,
@@ -174,12 +210,14 @@ ClawFoundationsSocraticExecutionBinding _binding({
         reliabilityScore: 0.9,
       ),
     ],
-    provenance: const EducationModelResponseProvenance(
-      promptContractVersion: 'claw-socratic-prompt.v1',
-      curriculumPackDigest: 'sha256:curriculum-pack-test',
-      sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
-      verifierState: 'not-required-instructional',
-    ),
+    provenance:
+        provenance ??
+        const EducationModelResponseProvenance(
+          promptContractVersion: 'claw-socratic-prompt.v1',
+          curriculumPackDigest: 'sha256:curriculum-pack-test',
+          sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
+          verifierState: 'not-required-instructional',
+        ),
     now: now,
   );
 }
