@@ -5,13 +5,15 @@ import 'package:ontarioedai/core/models/learning_evidence.dart';
 void main() {
   final now = DateTime.utc(2026, 9, 5, 18);
 
-  LearningEvidenceEnvelope baseEvidence({String evidenceId = 'evidence:1'}) =>
-      LearningEvidenceEnvelope(
+  LearningEvidenceEnvelope baseEvidence({
+    String evidenceId = 'evidence:1',
+    String competencyId =
+        'axiom:computational-literacy:verification:method-selection',
+  }) => LearningEvidenceEnvelope(
         evidenceId: evidenceId,
         recordType: LearningEvidenceRecordType.outcomeObservation,
         learnerSubjectId: 'learner:1',
-        competencyId:
-            'axiom:computational-literacy:verification:method-selection',
+        competencyId: competencyId,
         consentContextId: 'consent:pedagogy:1',
         occurredAt: now,
         confidenceBefore: 0.4,
@@ -65,16 +67,41 @@ void main() {
     );
   });
 
-  test('blank observation source fails closed', () {
+  test('unknown authored competency fails closed', () {
     final aggregate = CrossCuttingLearningEvidence(
-      base: baseEvidence(),
-      metadata: metadata(observationSource: '   '),
+      base: baseEvidence(
+        competencyId:
+            'axiom:computational-literacy:verification:unknown-competency',
+      ),
+      metadata: metadata(),
     );
 
     expect(
       () => const CrossCuttingEvidenceValidator().validate(aggregate),
       throwsA(isA<CrossCuttingEvidenceException>()),
     );
+  });
+
+  test('observation source must be a bounded governed identifier', () {
+    final invalidSources = <String>[
+      '   ',
+      'raw prompt: solve 2 + 2',
+      'unreviewed-source',
+      List<String>.filled(65, 'a').join(),
+    ];
+
+    for (final observationSource in invalidSources) {
+      final aggregate = CrossCuttingLearningEvidence(
+        base: baseEvidence(),
+        metadata: metadata(observationSource: observationSource),
+      );
+
+      expect(
+        () => const CrossCuttingEvidenceValidator().validate(aggregate),
+        throwsA(isA<CrossCuttingEvidenceException>()),
+        reason: 'Rejected source: $observationSource',
+      );
+    }
   });
 
   test('evidence quality is required', () {
