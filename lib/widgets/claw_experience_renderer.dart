@@ -57,11 +57,9 @@ class ClawSocraticResult {
   final ClawSocraticAuditMetadata? auditMetadata;
   final String? failureReason;
 
-  const ClawSocraticResult.success(
-    String text, {
-    required this.auditMetadata,
-  }) : instructionalText = text,
-       failureReason = null;
+  const ClawSocraticResult.success(String text, {required this.auditMetadata})
+    : instructionalText = text,
+      failureReason = null;
 
   const ClawSocraticResult.failure(String reason)
     : instructionalText = null,
