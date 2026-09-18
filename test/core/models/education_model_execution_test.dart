@@ -405,6 +405,43 @@ void main() {
   });
 
   test(
+    'blocking provider setup exhausting budget fails closed and cancels',
+    () async {
+      const tightBudget = EducationModelBudget(
+        maxCalls: 1,
+        maxInputUnits: 1000,
+        maxOutputUnits: 500,
+        maxCostMicros: 100000,
+        maxWallTime: Duration(milliseconds: 10),
+      );
+      final provider = _RecordingProvider(
+        synchronousDelay: const Duration(milliseconds: 25),
+      );
+      final executor = EducationModelExecutor(
+        now: () => now,
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local': provider,
+        },
+      );
+
+      final result = await executor.execute(
+        request: request(routeBudget: tightBudget),
+        contextGrant: grant(),
+        candidates: <EducationModelCandidate>[
+          localCandidate(estimatedLatency: const Duration(milliseconds: 1)),
+        ],
+        materializedContext: context(),
+        provenance: provenance,
+      );
+
+      expect(result.succeeded, isFalse);
+      expect(result.failureReason, equals('provider-timeout'));
+      expect(provider.calls, equals(1));
+      expect(provider.lastRequest!.cancellationToken.isCancelled, isTrue);
+    },
+  );
+
+  test(
     'provider-reported budget overrun cancels the provider contract',
     () async {
       const tightBudget = EducationModelBudget(
@@ -476,6 +513,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
   final EducationModelProviderResult result;
   final bool throwOnInfer;
   final Duration delay;
+  final Duration synchronousDelay;
 
   _RecordingProvider({
     this.result = const EducationModelProviderResult(
@@ -487,6 +525,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
     ),
     this.throwOnInfer = false,
     this.delay = Duration.zero,
+    this.synchronousDelay = Duration.zero,
   });
 
   @override
@@ -495,6 +534,12 @@ class _RecordingProvider implements EducationModelInferenceProvider {
   ) async {
     calls += 1;
     lastRequest = request;
+    if (synchronousDelay > Duration.zero) {
+      final blockingStopwatch = Stopwatch()..start();
+      while (blockingStopwatch.elapsed < synchronousDelay) {
+        // Simulates a provider violating the non-blocking invocation contract.
+      }
+    }
     if (delay > Duration.zero) {
       await Future<void>.delayed(delay);
     }
