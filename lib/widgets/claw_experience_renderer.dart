@@ -7,6 +7,38 @@ typedef ClawEvidenceCandidateCallback =
     void Function(ClawLocalEvidenceCandidate candidate);
 typedef ClawSocraticHandler =
     Future<ClawSocraticResult> Function(ClawSocraticRequest request);
+typedef ClawSocraticAuditCallback =
+    void Function(ClawSocraticAuditMetadata metadata);
+
+class ClawSocraticAuditMetadata {
+  final String usageReceiptId;
+  final String providerId;
+  final String modelArtifactDigest;
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
+
+  const ClawSocraticAuditMetadata({
+    required this.usageReceiptId,
+    required this.providerId,
+    required this.modelArtifactDigest,
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
+  });
+
+  bool get isComplete =>
+      usageReceiptId.trim().isNotEmpty &&
+      providerId.trim().isNotEmpty &&
+      modelArtifactDigest.trim().isNotEmpty &&
+      promptContractVersion.trim().isNotEmpty &&
+      curriculumPackDigest.trim().isNotEmpty &&
+      sourceExpectationIds.isNotEmpty &&
+      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
+      verifierState.trim().isNotEmpty;
+}
 
 class ClawSocraticRequest {
   final String nodeId;
@@ -22,18 +54,25 @@ class ClawSocraticRequest {
 
 class ClawSocraticResult {
   final String? instructionalText;
+  final ClawSocraticAuditMetadata? auditMetadata;
   final String? failureReason;
 
-  const ClawSocraticResult.success(String text)
-    : instructionalText = text,
-      failureReason = null;
+  const ClawSocraticResult.success(
+    String text, {
+    required ClawSocraticAuditMetadata auditMetadata,
+  }) : instructionalText = text,
+       auditMetadata = auditMetadata,
+       failureReason = null;
 
   const ClawSocraticResult.failure(String reason)
     : instructionalText = null,
+      auditMetadata = null,
       failureReason = reason;
 
   bool get succeeded =>
-      failureReason == null && instructionalText?.trim().isNotEmpty == true;
+      failureReason == null &&
+      instructionalText?.trim().isNotEmpty == true &&
+      auditMetadata?.isComplete == true;
 }
 
 class ClawExperiencePlayer extends StatefulWidget {
@@ -41,6 +80,7 @@ class ClawExperiencePlayer extends StatefulWidget {
   final Map<String, ClawExperiencePresentation> presentations;
   final ClawExperienceAvailability availability;
   final ClawSocraticHandler? socraticHandler;
+  final ClawSocraticAuditCallback? onSocraticAuditMetadata;
   final ClawEvidenceCandidateCallback? onEvidenceCandidate;
   final ValueChanged<String>? onNodeChanged;
 
@@ -50,6 +90,7 @@ class ClawExperiencePlayer extends StatefulWidget {
     required this.presentations,
     required this.availability,
     this.socraticHandler,
+    this.onSocraticAuditMetadata,
     this.onEvidenceCandidate,
     this.onNodeChanged,
   });
@@ -189,6 +230,7 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
       return;
     }
 
+    widget.onSocraticAuditMetadata?.call(result.auditMetadata!);
     setState(() {
       _socraticLoading = false;
       _socraticInstructionalText = result.instructionalText!.trim();
