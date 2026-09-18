@@ -31,7 +31,7 @@
 
 **Interfaces:**
 - Consumes: `EducationModelRouter`, `EducationModelRouteRequest`, `EducationModelContextGrant`, `EducationModelCandidate`, `EducationModelUsageReceipt`.
-- Produces: `EducationModelInferenceProvider`, `EducationModelExecutionRequest`, `EducationModelExecutionResult`, `EducationModelExecutor.execute(...)`.
+- Produces: `EducationModelInferenceProvider`, `EducationModelProviderRequest`, `EducationModelExecutionResult`, `EducationModelExecutor.execute(...)`.
 
 - [ ] **Step 1: Write failing tests** proving an expired/wrong-subject/ungranted/remote-denied/over-budget route makes zero provider calls; a successful route invokes exactly the selected candidate; undeclared materialized scopes fail before provider invocation; provider exceptions remain explicit failures; successful receipts contain no raw prompt/learner-response state and cannot establish mastery.
 - [ ] **Step 2: Run exact-head CI and verify RED** because `education_model_execution.dart` and its symbols do not yet exist.
