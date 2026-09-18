@@ -8,9 +8,7 @@ import '../../core/models/education_model_routing.dart';
 import '../../widgets/claw_experience_renderer.dart';
 import 'claw_foundations_story_arc.dart';
 
-
-class ClawFoundationsSocraticAuditMetadata
-    extends ClawSocraticAuditMetadata {
+class ClawFoundationsSocraticAuditMetadata extends ClawSocraticAuditMetadata {
   final String usageReceiptId;
   final String providerId;
   final String modelArtifactDigest;
