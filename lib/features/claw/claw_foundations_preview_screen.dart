@@ -8,6 +8,38 @@ import '../../core/models/education_model_routing.dart';
 import '../../widgets/claw_experience_renderer.dart';
 import 'claw_foundations_story_arc.dart';
 
+
+class ClawFoundationsSocraticAuditMetadata
+    extends ClawSocraticAuditMetadata {
+  final String usageReceiptId;
+  final String providerId;
+  final String modelArtifactDigest;
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
+
+  const ClawFoundationsSocraticAuditMetadata({
+    required this.usageReceiptId,
+    required this.providerId,
+    required this.modelArtifactDigest,
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
+  });
+
+  bool get isComplete =>
+      usageReceiptId.trim().isNotEmpty &&
+      providerId.trim().isNotEmpty &&
+      modelArtifactDigest.trim().isNotEmpty &&
+      promptContractVersion.trim().isNotEmpty &&
+      curriculumPackDigest.trim().isNotEmpty &&
+      sourceExpectationIds.isNotEmpty &&
+      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
+      verifierState.trim().isNotEmpty;
+}
+
 class ClawFoundationsSocraticExecutionBinding {
   static const _allowedScopes = <EducationModelContextScope>{
     EducationModelContextScope.targetCompetency,
@@ -85,7 +117,7 @@ class ClawFoundationsSocraticExecutionBinding {
       return const ClawSocraticResult.failure('empty-model-output');
     }
     final receipt = execution.usageReceipt!;
-    final auditMetadata = ClawSocraticAuditMetadata(
+    final auditMetadata = ClawFoundationsSocraticAuditMetadata(
       usageReceiptId: receipt.receiptId,
       providerId: receipt.providerId,
       modelArtifactDigest: receipt.modelArtifactDigest,
@@ -114,7 +146,8 @@ class ClawFoundationsSocraticExecutionBinding {
 
 class ClawFoundationsPreviewScreen extends StatefulWidget {
   final ClawFoundationsSocraticExecutionBinding? socraticBinding;
-  final ClawSocraticAuditCallback? onSocraticAuditMetadata;
+  final ValueChanged<ClawFoundationsSocraticAuditMetadata>?
+  onSocraticAuditMetadata;
 
   const ClawFoundationsPreviewScreen({
     super.key,
@@ -178,7 +211,15 @@ class _ClawFoundationsPreviewScreenState
                       presentations: resolvedPresentations,
                       availability: availability,
                       socraticHandler: widget.socraticBinding?.handle,
-                      onSocraticAuditMetadata: widget.onSocraticAuditMetadata,
+                      onSocraticAuditMetadata:
+                          widget.onSocraticAuditMetadata == null
+                          ? null
+                          : (metadata) {
+                              if (metadata
+                                  is ClawFoundationsSocraticAuditMetadata) {
+                                widget.onSocraticAuditMetadata!(metadata);
+                              }
+                            },
                       onEvidenceCandidate: (candidate) =>
                           _showEvidenceNotice(context, candidate),
                     ),
