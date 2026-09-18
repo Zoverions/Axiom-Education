@@ -6,15 +6,7 @@ import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
 import 'package:ontarioedai/widgets/claw_experience_renderer.dart';
 
 void main() {
-  const auditMetadata = ClawSocraticAuditMetadata(
-    usageReceiptId: 'usage:test',
-    providerId: 'provider:test',
-    modelArtifactDigest: 'sha256:model-test',
-    promptContractVersion: 'prompt:v1',
-    curriculumPackDigest: 'sha256:curriculum-test',
-    sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
-    verifierState: 'not-required-instructional',
-  );
+  const auditMetadata = _TestAuditMetadata();
 
   testWidgets(
     'learner can request another representation without target drift',
@@ -247,6 +239,10 @@ void main() {
     );
     expect(find.text('Learning target: competency:test'), findsOneWidget);
   });
+}
+
+class _TestAuditMetadata extends ClawSocraticAuditMetadata {
+  const _TestAuditMetadata();
 }
 
 Future<void> _enterSocraticNode(WidgetTester tester) async {
