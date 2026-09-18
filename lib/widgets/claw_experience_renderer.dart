@@ -10,34 +10,8 @@ typedef ClawSocraticHandler =
 typedef ClawSocraticAuditCallback =
     void Function(ClawSocraticAuditMetadata metadata);
 
-class ClawSocraticAuditMetadata {
-  final String usageReceiptId;
-  final String providerId;
-  final String modelArtifactDigest;
-  final String promptContractVersion;
-  final String curriculumPackDigest;
-  final Set<String> sourceExpectationIds;
-  final String verifierState;
-
-  const ClawSocraticAuditMetadata({
-    required this.usageReceiptId,
-    required this.providerId,
-    required this.modelArtifactDigest,
-    required this.promptContractVersion,
-    required this.curriculumPackDigest,
-    required this.sourceExpectationIds,
-    required this.verifierState,
-  });
-
-  bool get isComplete =>
-      usageReceiptId.trim().isNotEmpty &&
-      providerId.trim().isNotEmpty &&
-      modelArtifactDigest.trim().isNotEmpty &&
-      promptContractVersion.trim().isNotEmpty &&
-      curriculumPackDigest.trim().isNotEmpty &&
-      sourceExpectationIds.isNotEmpty &&
-      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
-      verifierState.trim().isNotEmpty;
+abstract class ClawSocraticAuditMetadata {
+  const ClawSocraticAuditMetadata();
 }
 
 class ClawSocraticRequest {
@@ -57,9 +31,12 @@ class ClawSocraticResult {
   final ClawSocraticAuditMetadata? auditMetadata;
   final String? failureReason;
 
-  const ClawSocraticResult.success(String text, {required this.auditMetadata})
-    : instructionalText = text,
-      failureReason = null;
+  const ClawSocraticResult.success(
+    String text, {
+    required ClawSocraticAuditMetadata auditMetadata,
+  }) : instructionalText = text,
+       auditMetadata = auditMetadata,
+       failureReason = null;
 
   const ClawSocraticResult.failure(String reason)
     : instructionalText = null,
@@ -69,7 +46,7 @@ class ClawSocraticResult {
   bool get succeeded =>
       failureReason == null &&
       instructionalText?.trim().isNotEmpty == true &&
-      auditMetadata?.isComplete == true;
+      auditMetadata != null;
 }
 
 class ClawExperiencePlayer extends StatefulWidget {
