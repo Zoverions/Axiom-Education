@@ -45,6 +45,15 @@ class EducationModelResponseProvenance {
       sourceExpectationIds.isNotEmpty &&
       sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
       verifierState.trim().isNotEmpty;
+
+  EducationModelResponseProvenance snapshot() {
+    return EducationModelResponseProvenance(
+      promptContractVersion: promptContractVersion,
+      curriculumPackDigest: curriculumPackDigest,
+      sourceExpectationIds: Set<String>.unmodifiable(sourceExpectationIds),
+      verifierState: verifierState,
+    );
+  }
 }
 
 class EducationModelProviderRequest {
@@ -160,8 +169,13 @@ class EducationModelExecutor {
     }
 
     final candidate = routeDecision.candidate!;
-    if (candidate.modelArtifactDigest.trim().isEmpty ||
-        !provenance.isComplete) {
+    final provenanceSnapshot = provenance.snapshot();
+    if (candidate.providerId.trim().isEmpty ||
+        candidate.modelId.trim().isEmpty ||
+        candidate.modelArtifactDigest.trim().isEmpty ||
+        candidate.runtimeId.trim().isEmpty ||
+        candidate.computeNodeId.trim().isEmpty ||
+        !provenanceSnapshot.isComplete) {
       return EducationModelExecutionResult.failure(
         'response-provenance-incomplete',
       );
@@ -179,25 +193,31 @@ class EducationModelExecutor {
     final deadlineAt = now().toUtc().add(request.budget.maxWallTime);
     final stopwatch = Stopwatch()..start();
     try {
-      providerResult = await provider
-          .infer(
-            EducationModelProviderRequest(
-              candidate: candidate,
-              learnerSubjectId: request.learnerSubjectId,
-              taskClass: request.taskClass,
-              materializedContext: materializedContext,
-              retentionClass: request.retentionClass,
-              budget: request.budget,
-              deadlineAt: deadlineAt,
-              cancellationToken: cancellationToken,
-            ),
-          )
-          .timeout(request.budget.maxWallTime);
+      final providerFuture = provider.infer(
+        EducationModelProviderRequest(
+          candidate: candidate,
+          learnerSubjectId: request.learnerSubjectId,
+          taskClass: request.taskClass,
+          materializedContext: materializedContext,
+          retentionClass: request.retentionClass,
+          budget: request.budget,
+          deadlineAt: deadlineAt,
+          cancellationToken: cancellationToken,
+        ),
+      );
+      final remainingWallTime = request.budget.maxWallTime - stopwatch.elapsed;
+      if (remainingWallTime <= Duration.zero) {
+        cancellationToken.cancel();
+        stopwatch.stop();
+        return EducationModelExecutionResult.failure('provider-timeout');
+      }
+      providerResult = await providerFuture.timeout(remainingWallTime);
     } on TimeoutException {
       cancellationToken.cancel();
       stopwatch.stop();
       return EducationModelExecutionResult.failure('provider-timeout');
     } catch (_) {
+      cancellationToken.cancel();
       stopwatch.stop();
       return EducationModelExecutionResult.failure('provider-failure');
     }
@@ -209,6 +229,7 @@ class EducationModelExecutor {
       request.budget,
       measuredLatency,
     )) {
+      cancellationToken.cancel();
       return EducationModelExecutionResult.failure('provider-budget-exceeded');
     }
     if (providerResult.outputText.trim().isEmpty) {
@@ -228,12 +249,10 @@ class EducationModelExecutor {
       modelArtifactDigest: candidate.modelArtifactDigest,
       runtimeId: candidate.runtimeId,
       computeNodeId: candidate.computeNodeId,
-      promptContractVersion: provenance.promptContractVersion,
-      curriculumPackDigest: provenance.curriculumPackDigest,
-      sourceExpectationIds: Set<String>.unmodifiable(
-        provenance.sourceExpectationIds,
-      ),
-      verifierState: provenance.verifierState,
+      promptContractVersion: provenanceSnapshot.promptContractVersion,
+      curriculumPackDigest: provenanceSnapshot.curriculumPackDigest,
+      sourceExpectationIds: provenanceSnapshot.sourceExpectationIds,
+      verifierState: provenanceSnapshot.verifierState,
       materializedContextScopes: Set<EducationModelContextScope>.unmodifiable(
         materializedContext.keys,
       ),
