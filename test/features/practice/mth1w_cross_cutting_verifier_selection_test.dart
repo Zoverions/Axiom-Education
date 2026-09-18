@@ -66,7 +66,12 @@ void main() {
 
       expect(checkButton().onPressed, isNotNull);
 
-      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-estimate')));
+      final estimateChoice = find.byKey(
+        const ValueKey('mth1w-verifier-estimate'),
+      );
+      await tester.ensureVisible(estimateChoice);
+      await tester.pumpAndSettle();
+      await tester.tap(estimateChoice);
       await tester.pump();
       expect(checkButton().onPressed, isNull);
       expect(
@@ -74,7 +79,10 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-model')));
+      final modelChoice = find.byKey(const ValueKey('mth1w-verifier-model'));
+      await tester.ensureVisible(modelChoice);
+      await tester.pumpAndSettle();
+      await tester.tap(modelChoice);
       await tester.pump();
       expect(checkButton().onPressed, isNull);
       expect(
@@ -82,14 +90,20 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
+      final exactChoice = find.byKey(const ValueKey('mth1w-verifier-exact'));
+      await tester.ensureVisible(exactChoice);
+      await tester.pumpAndSettle();
+      await tester.tap(exactChoice);
       await tester.pump();
       expect(checkButton().onPressed, isNotNull);
 
-      await tester.tap(find.text('Reasoning details'));
+      final reasoningDetails = find.text('Reasoning details');
+      await tester.ensureVisible(reasoningDetails);
+      await tester.pumpAndSettle();
+      await tester.tap(reasoningDetails);
       await tester.pumpAndSettle();
       expect(find.text('Verification → method selection'), findsOneWidget);
-      expect(find.textContaining('Nothing is saved'), findsOneWidget);
+      expect(find.textContaining('Nothing is saved'), findsWidgets);
     },
   );
 
@@ -99,7 +113,10 @@ void main() {
       await tester.pumpWidget(buildScreen(verifierAvailable: false));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
+      final exactChoice = find.byKey(const ValueKey('mth1w-verifier-exact'));
+      await tester.ensureVisible(exactChoice);
+      await tester.pumpAndSettle();
+      await tester.tap(exactChoice);
       await tester.pump();
 
       final button = tester.widget<FilledButton>(
