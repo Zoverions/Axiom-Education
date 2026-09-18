@@ -173,7 +173,7 @@ void main() {
   });
 
   test(
-    'family, authorship, and exactly one known dimension tag are required',
+    'exactly one canonical family, authorship, and dimension tag is required',
     () {
       final missingFamily = copy(canonicalFixture());
       final missingFamilyTags =
@@ -188,6 +188,20 @@ void main() {
                   as Map<String, Object?>)['tags']!
               as List<Object?>;
       missingAuthorshipTags.remove('authorship:axiom-extension');
+
+      final multipleFamilies = copy(canonicalFixture());
+      final multipleFamilyTags =
+          ((multipleFamilies['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      multipleFamilyTags.add('family:other');
+
+      final multipleAuthorships = copy(canonicalFixture());
+      final multipleAuthorshipTags =
+          ((multipleAuthorships['nodes']! as List<Object?>).first!
+                  as Map<String, Object?>)['tags']!
+              as List<Object?>;
+      multipleAuthorshipTags.add('authorship:other');
 
       final multipleDimensions = copy(canonicalFixture());
       final multipleDimensionTags =
@@ -206,6 +220,8 @@ void main() {
       for (final fixture in <Map<String, Object?>>[
         missingFamily,
         missingAuthorship,
+        multipleFamilies,
+        multipleAuthorships,
         multipleDimensions,
         unknownDimension,
       ]) {
