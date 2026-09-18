@@ -35,9 +35,9 @@ class ClawSocraticResult {
     String text, {
     // Keep the public success parameter non-null; `this.auditMetadata` would
     // inherit the nullable field type used by failure results.
-    // ignore: prefer_initializing_formals
     required ClawSocraticAuditMetadata auditMetadata,
   }) : instructionalText = text,
+       // ignore: prefer_initializing_formals
        auditMetadata = auditMetadata,
        failureReason = null;
 
