@@ -7,49 +7,65 @@ import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
 import 'package:ontarioedai/widgets/claw_experience_renderer.dart';
 
 void main() {
-  testWidgets('preview materializes only the bounded Socratic context', (
-    tester,
-  ) async {
-    final provider = _RecordingProvider();
-    final executor = EducationModelExecutor(
-      providersById: <String, EducationModelInferenceProvider>{
-        'provider:local-test': provider,
-      },
-    );
-    final requestedAt = DateTime.utc(2026, 9, 2, 12);
-    final binding = _binding(
-      executor: executor,
-      requestedAt: requestedAt,
-      now: () => requestedAt,
-    );
+  testWidgets(
+    'preview materializes bounded context and exposes audit metadata',
+    (tester) async {
+      final provider = _RecordingProvider();
+      final audits = <ClawFoundationsSocraticAuditMetadata>[];
+      final executor = EducationModelExecutor(
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local-test': provider,
+        },
+      );
+      final requestedAt = DateTime.utc(2026, 9, 2, 12);
+      final binding = _binding(
+        executor: executor,
+        requestedAt: requestedAt,
+        now: () => requestedAt,
+      );
 
-    await tester.pumpWidget(
-      MaterialApp(home: ClawFoundationsPreviewScreen(socraticBinding: binding)),
-    );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ClawFoundationsPreviewScreen(
+            socraticBinding: binding,
+            onSocraticAuditMetadata: audits.add,
+          ),
+        ),
+      );
 
-    await _tap(tester, const ValueKey('claw-continue'));
-    await _tap(tester, const ValueKey('claw-socratic-choice'));
-    await tester.enterText(
-      find.byKey(const ValueKey('claw-socratic-input')),
-      'The same amount is split into more equal pieces.',
-    );
-    await _tap(tester, const ValueKey('claw-socratic-submit'));
+      await _tap(tester, const ValueKey('claw-continue'));
+      await _tap(tester, const ValueKey('claw-socratic-choice'));
+      await tester.enterText(
+        find.byKey(const ValueKey('claw-socratic-input')),
+        'The same amount is split into more equal pieces.',
+      );
+      await _tap(tester, const ValueKey('claw-socratic-submit'));
 
-    expect(provider.calls, 1);
-    expect(
-      provider.lastRequest!.materializedContext,
-      const <EducationModelContextScope, String>{
-        EducationModelContextScope.targetCompetency:
-            ClawFoundationsStoryArc.competencyId,
-        EducationModelContextScope.currentLearnerInput:
-            'The same amount is split into more equal pieces.',
-      },
-    );
-    expect(
-      find.text('Can you name the factor used on both numbers?'),
-      findsOneWidget,
-    );
-  });
+      expect(provider.calls, 1);
+      expect(
+        provider.lastRequest!.materializedContext,
+        const <EducationModelContextScope, String>{
+          EducationModelContextScope.targetCompetency:
+              ClawFoundationsStoryArc.competencyId,
+          EducationModelContextScope.currentLearnerInput:
+              'The same amount is split into more equal pieces.',
+        },
+      );
+      expect(
+        find.text('Can you name the factor used on both numbers?'),
+        findsOneWidget,
+      );
+      expect(audits, hasLength(1));
+      expect(audits.single.providerId, 'provider:local-test');
+      expect(audits.single.modelArtifactDigest, 'sha256:model-test');
+      expect(audits.single.promptContractVersion, 'claw-socratic-prompt.v1');
+      expect(audits.single.curriculumPackDigest, 'sha256:curriculum-pack-test');
+      expect(audits.single.sourceExpectationIds, const <String>{
+        ClawFoundationsStoryArc.competencyId,
+      });
+      expect(audits.single.verifierState, 'not-required-instructional');
+    },
+  );
 
   test('expired grant at invocation causes zero provider calls', () async {
     final provider = _RecordingProvider();
@@ -80,6 +96,41 @@ void main() {
     expect(provider.calls, 0);
   });
 
+  test('unrelated source provenance causes zero provider calls', () async {
+    final provider = _RecordingProvider();
+    final executor = EducationModelExecutor(
+      providersById: <String, EducationModelInferenceProvider>{
+        'provider:local-test': provider,
+      },
+    );
+    final requestedAt = DateTime.utc(2026, 9, 2, 12);
+    final binding = _binding(
+      executor: executor,
+      requestedAt: requestedAt,
+      now: () => requestedAt,
+      provenance: const EducationModelResponseProvenance(
+        promptContractVersion: 'claw-socratic-prompt.v1',
+        curriculumPackDigest: 'sha256:curriculum-pack-test',
+        sourceExpectationIds: <String>{'math:unrelated'},
+        verifierState: 'not-required-instructional',
+      ),
+    );
+
+    final result = await binding.handle(
+      ClawSocraticRequest(
+        nodeId: 'socratic',
+        targetCompetencyIds: const <String>{
+          ClawFoundationsStoryArc.competencyId,
+        },
+        learnerInput: 'Both fractions describe the same amount.',
+      ),
+    );
+
+    expect(result.succeeded, isFalse);
+    expect(result.failureReason, equals('invalid-socratic-provenance'));
+    expect(provider.calls, 0);
+  });
+
   testWidgets('preview keeps the model path unavailable without a binding', (
     tester,
   ) async {
@@ -99,6 +150,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
   required EducationModelExecutor executor,
   required DateTime requestedAt,
   required DateTime Function() now,
+  EducationModelResponseProvenance? provenance,
 }) {
   return ClawFoundationsSocraticExecutionBinding(
     executor: executor,
@@ -143,6 +195,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
         candidateId: 'candidate:local-test',
         providerId: 'provider:local-test',
         modelId: 'model:test',
+        modelArtifactDigest: 'sha256:model-test',
         runtimeId: 'runtime:test',
         computeNodeId: 'device:test',
         isLocal: true,
@@ -158,6 +211,14 @@ ClawFoundationsSocraticExecutionBinding _binding({
         reliabilityScore: 0.9,
       ),
     ],
+    provenance:
+        provenance ??
+        const EducationModelResponseProvenance(
+          promptContractVersion: 'claw-socratic-prompt.v1',
+          curriculumPackDigest: 'sha256:curriculum-pack-test',
+          sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
+          verifierState: 'not-required-instructional',
+        ),
     now: now,
   );
 }

@@ -7,6 +7,12 @@ typedef ClawEvidenceCandidateCallback =
     void Function(ClawLocalEvidenceCandidate candidate);
 typedef ClawSocraticHandler =
     Future<ClawSocraticResult> Function(ClawSocraticRequest request);
+typedef ClawSocraticAuditCallback =
+    void Function(ClawSocraticAuditMetadata metadata);
+
+abstract class ClawSocraticAuditMetadata {
+  const ClawSocraticAuditMetadata();
+}
 
 class ClawSocraticRequest {
   final String nodeId;
@@ -22,18 +28,28 @@ class ClawSocraticRequest {
 
 class ClawSocraticResult {
   final String? instructionalText;
+  final ClawSocraticAuditMetadata? auditMetadata;
   final String? failureReason;
 
-  const ClawSocraticResult.success(String text)
-    : instructionalText = text,
-      failureReason = null;
+  const ClawSocraticResult.success(
+    String text, {
+    // Keep the public success parameter non-null; `this.auditMetadata` would
+    // inherit the nullable field type used by failure results.
+    required ClawSocraticAuditMetadata auditMetadata,
+  }) : instructionalText = text,
+       // ignore: prefer_initializing_formals
+       auditMetadata = auditMetadata,
+       failureReason = null;
 
   const ClawSocraticResult.failure(String reason)
     : instructionalText = null,
+      auditMetadata = null,
       failureReason = reason;
 
   bool get succeeded =>
-      failureReason == null && instructionalText?.trim().isNotEmpty == true;
+      failureReason == null &&
+      instructionalText?.trim().isNotEmpty == true &&
+      auditMetadata != null;
 }
 
 class ClawExperiencePlayer extends StatefulWidget {
@@ -41,6 +57,7 @@ class ClawExperiencePlayer extends StatefulWidget {
   final Map<String, ClawExperiencePresentation> presentations;
   final ClawExperienceAvailability availability;
   final ClawSocraticHandler? socraticHandler;
+  final ClawSocraticAuditCallback? onSocraticAuditMetadata;
   final ClawEvidenceCandidateCallback? onEvidenceCandidate;
   final ValueChanged<String>? onNodeChanged;
 
@@ -50,6 +67,7 @@ class ClawExperiencePlayer extends StatefulWidget {
     required this.presentations,
     required this.availability,
     this.socraticHandler,
+    this.onSocraticAuditMetadata,
     this.onEvidenceCandidate,
     this.onNodeChanged,
   });
@@ -189,6 +207,7 @@ class _ClawExperiencePlayerState extends State<ClawExperiencePlayer> {
       return;
     }
 
+    widget.onSocraticAuditMetadata?.call(result.auditMetadata!);
     setState(() {
       _socraticLoading = false;
       _socraticInstructionalText = result.instructionalText!.trim();

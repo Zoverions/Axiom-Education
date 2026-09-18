@@ -6,6 +6,8 @@ import 'package:ontarioedai/features/claw/claw_foundations_story_arc.dart';
 import 'package:ontarioedai/widgets/claw_experience_renderer.dart';
 
 void main() {
+  const auditMetadata = _TestAuditMetadata();
+
   testWidgets(
     'learner can request another representation without target drift',
     (tester) async {
@@ -67,6 +69,7 @@ void main() {
   ) async {
     final requests = <ClawSocraticRequest>[];
     final evidence = <ClawLocalEvidenceCandidate>[];
+    final audits = <ClawSocraticAuditMetadata>[];
 
     await tester.pumpWidget(
       MaterialApp(
@@ -82,8 +85,10 @@ void main() {
                 requests.add(request);
                 return const ClawSocraticResult.success(
                   'What changed when both parts were multiplied by 2?',
+                  auditMetadata: auditMetadata,
                 );
               },
+              onSocraticAuditMetadata: audits.add,
               onEvidenceCandidate: evidence.add,
             ),
           ),
@@ -114,6 +119,7 @@ void main() {
       findsOneWidget,
     );
     expect(evidence, isEmpty);
+    expect(audits, const <ClawSocraticAuditMetadata>[auditMetadata]);
   });
 
   testWidgets('empty Socratic input cannot invoke the handler', (tester) async {
@@ -131,7 +137,10 @@ void main() {
               ),
               socraticHandler: (request) async {
                 calls += 1;
-                return const ClawSocraticResult.success('unused');
+                return const ClawSocraticResult.success(
+                  'unused',
+                  auditMetadata: auditMetadata,
+                );
               },
             ),
           ),
@@ -230,6 +239,10 @@ void main() {
     );
     expect(find.text('Learning target: competency:test'), findsOneWidget);
   });
+}
+
+class _TestAuditMetadata extends ClawSocraticAuditMetadata {
+  const _TestAuditMetadata();
 }
 
 Future<void> _enterSocraticNode(WidgetTester tester) async {

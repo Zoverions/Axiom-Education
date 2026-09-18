@@ -73,6 +73,7 @@ class EducationModelCandidate {
   final String candidateId;
   final String providerId;
   final String modelId;
+  final String modelArtifactDigest;
   final String runtimeId;
   final String computeNodeId;
   final bool isLocal;
@@ -91,6 +92,7 @@ class EducationModelCandidate {
     required this.candidateId,
     required this.providerId,
     required this.modelId,
+    required this.modelArtifactDigest,
     required this.runtimeId,
     required this.computeNodeId,
     required this.isLocal,
@@ -254,8 +256,13 @@ class EducationModelUsageReceipt {
   final EducationModelTaskClass taskClass;
   final String providerId;
   final String modelId;
+  final String modelArtifactDigest;
   final String runtimeId;
   final String computeNodeId;
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
   final Set<EducationModelContextScope> materializedContextScopes;
   final String retentionClass;
   final bool remoteEgressOccurred;
@@ -271,8 +278,13 @@ class EducationModelUsageReceipt {
     required this.taskClass,
     required this.providerId,
     required this.modelId,
+    required this.modelArtifactDigest,
     required this.runtimeId,
     required this.computeNodeId,
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
     required this.materializedContextScopes,
     required this.retentionClass,
     required this.remoteEgressOccurred,
