@@ -45,6 +45,11 @@ class ClawFoundationsSocraticExecutionBinding {
         !_sameScopes(routeRequest.requestedContextScopes, _allowedScopes)) {
       return const ClawSocraticResult.failure('invalid-socratic-request');
     }
+    if (!provenance.sourceExpectationIds.contains(
+      ClawFoundationsStoryArc.competencyId,
+    )) {
+      return const ClawSocraticResult.failure('invalid-socratic-provenance');
+    }
 
     final invocationRequest = EducationModelRouteRequest(
       learnerSubjectId: routeRequest.learnerSubjectId,
