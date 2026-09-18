@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-08-20",
+  "verified_at": "2026-09-02",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -238,6 +238,25 @@
       "summary": "AXIOM Host remains a draft/non-production input while checkout-freshness foundations have merged upstream. Both remain non-authoritative for Education until an explicit reviewed adoption profile and executable evidence exist; the current runtime accepts only the reviewed relative Gateway requester and compatibility profile."
     },
     {
+      "id": "tutor.governed-socratic-execution",
+      "family": "ai",
+      "status": "experimental",
+      "summary": "A provider-neutral governed Socratic execution seam now hard-filters learner, task, context, privacy, egress, retention, budget, and provider eligibility before one bounded inference call. The Claw fractions preview can consume instructional-only output through an explicitly injected binding, records minimized usage metadata, creates no mastery, grade, credit, or credential authority, performs no silent provider substitution, and falls back to a reviewed non-model explanation when execution is denied or unavailable. No model or provider is activated by default.",
+      "evidence": [
+        "contracts/axiom-education-model-routing.v1.json",
+        "contracts/claw-academy-experience.v1.json",
+        "lib/core/models/education_model_routing.dart",
+        "lib/core/models/education_model_execution.dart",
+        "lib/features/claw/claw_foundations_story_arc.dart",
+        "lib/features/claw/claw_foundations_preview_screen.dart",
+        "lib/widgets/claw_experience_renderer.dart",
+        "test/core/models/education_model_routing_test.dart",
+        "test/core/models/education_model_execution_test.dart",
+        "test/features/claw/claw_foundations_preview_screen_test.dart",
+        "test/widgets/claw_experience_renderer_test.dart"
+      ]
+    },
+    {
       "id": "tutor.local-inference",
       "family": "ai",
       "status": "disabled",
@@ -338,6 +357,7 @@
   "non_claims": [
     "Axiom Education is not production-ready.",
     "No current model binding provides a complete local tutor.",
+    "The governed Socratic execution seam does not activate a model or provider by default and cannot create mastery, grades, credits, credentials, or learner-record authority.",
     "Ontario Elementary base source capture is complete for the current 16-source set, but human source review is 0/16 approved, licensing is 0/16 resolved, C2 intake eligibility is 0/16, and canonical C2 records remain 0; none of those later claims may be inferred from C1 capture.",
     "The current four-lesson Grade 9 Math Foundations Preview and the nine source-mapped authored unit drafts are not a complete MTH1W course, credit, grade, transcript, Ministry-approved resource, school enrolment, or school-equivalency path.",
     "The 110-hour MTH1W value is a planning envelope: authored primary lessons total 63.75 hours and leave 46.25 hours unallocated.",

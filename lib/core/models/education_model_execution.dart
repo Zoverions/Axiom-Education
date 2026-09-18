@@ -1,0 +1,307 @@
+import 'dart:async';
+
+import 'education_model_routing.dart';
+
+abstract class EducationModelInferenceProvider {
+  /// Implementations must return a Future without blocking the calling isolate.
+  /// Long-running setup and inference must run asynchronously or in an isolated
+  /// execution boundary. Implementations must stop provider-side work promptly
+  /// when the request cancellation token is cancelled and must not continue
+  /// past the request deadline.
+  Future<EducationModelProviderResult> infer(
+    EducationModelProviderRequest request,
+  );
+}
+
+class EducationModelCancellationToken {
+  bool _cancelled = false;
+  final Completer<void> _cancelledCompleter = Completer<void>();
+
+  bool get isCancelled => _cancelled;
+
+  Future<void> get whenCancelled => _cancelledCompleter.future;
+
+  void cancel() {
+    if (_cancelled) return;
+    _cancelled = true;
+    _cancelledCompleter.complete();
+  }
+}
+
+class EducationModelResponseProvenance {
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
+
+  const EducationModelResponseProvenance({
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
+  });
+
+  bool get isComplete =>
+      promptContractVersion.trim().isNotEmpty &&
+      curriculumPackDigest.trim().isNotEmpty &&
+      sourceExpectationIds.isNotEmpty &&
+      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
+      verifierState.trim().isNotEmpty;
+
+  EducationModelResponseProvenance snapshot() {
+    return EducationModelResponseProvenance(
+      promptContractVersion: promptContractVersion,
+      curriculumPackDigest: curriculumPackDigest,
+      sourceExpectationIds: Set<String>.unmodifiable(sourceExpectationIds),
+      verifierState: verifierState,
+    );
+  }
+}
+
+class EducationModelProviderRequest {
+  final EducationModelCandidate candidate;
+  final String learnerSubjectId;
+  final EducationModelTaskClass taskClass;
+  final Map<EducationModelContextScope, String> materializedContext;
+  final String retentionClass;
+  final EducationModelBudget budget;
+  final DateTime deadlineAt;
+  final EducationModelCancellationToken cancellationToken;
+
+  EducationModelProviderRequest({
+    required this.candidate,
+    required this.learnerSubjectId,
+    required this.taskClass,
+    required Map<EducationModelContextScope, String> materializedContext,
+    required this.retentionClass,
+    required this.budget,
+    required this.deadlineAt,
+    required this.cancellationToken,
+  }) : materializedContext =
+           Map<EducationModelContextScope, String>.unmodifiable(
+             materializedContext,
+           );
+}
+
+class EducationModelProviderResult {
+  final String outputText;
+  final int inputUnits;
+  final int outputUnits;
+  final int actualCostMicros;
+  final Duration latency;
+
+  const EducationModelProviderResult({
+    required this.outputText,
+    required this.inputUnits,
+    required this.outputUnits,
+    required this.actualCostMicros,
+    required this.latency,
+  });
+}
+
+class EducationModelExecutionResult {
+  final String? outputText;
+  final EducationModelUsageReceipt? usageReceipt;
+  final String? failureReason;
+
+  const EducationModelExecutionResult._({
+    this.outputText,
+    this.usageReceipt,
+    this.failureReason,
+  });
+
+  factory EducationModelExecutionResult.success({
+    required String outputText,
+    required EducationModelUsageReceipt usageReceipt,
+  }) {
+    return EducationModelExecutionResult._(
+      outputText: outputText,
+      usageReceipt: usageReceipt,
+    );
+  }
+
+  factory EducationModelExecutionResult.failure(String reason) {
+    return EducationModelExecutionResult._(failureReason: reason);
+  }
+
+  bool get succeeded =>
+      failureReason == null && outputText != null && usageReceipt != null;
+}
+
+class EducationModelExecutor {
+  final EducationModelRouter router;
+  final Map<String, EducationModelInferenceProvider> providersById;
+  final DateTime Function() now;
+
+  EducationModelExecutor({
+    this.router = const EducationModelRouter(),
+    required Map<String, EducationModelInferenceProvider> providersById,
+    DateTime Function()? now,
+  }) : now = now ?? _currentUtc,
+       providersById =
+           Map<String, EducationModelInferenceProvider>.unmodifiable(
+             providersById,
+           );
+
+  static DateTime _currentUtc() => DateTime.now().toUtc();
+
+  Future<EducationModelExecutionResult> execute({
+    required EducationModelRouteRequest request,
+    required EducationModelContextGrant contextGrant,
+    required List<EducationModelCandidate> candidates,
+    required Map<EducationModelContextScope, String> materializedContext,
+    required EducationModelResponseProvenance provenance,
+  }) async {
+    final undeclaredScopes = materializedContext.keys
+        .where((scope) => !request.requestedContextScopes.contains(scope))
+        .toList(growable: false);
+    if (undeclaredScopes.isNotEmpty) {
+      return EducationModelExecutionResult.failure(
+        'Materialized context contains an undeclared context scope.',
+      );
+    }
+
+    final routeDecision = router.route(
+      request: request,
+      contextGrant: contextGrant,
+      candidates: candidates,
+    );
+    if (!routeDecision.allowed || routeDecision.candidate == null) {
+      return EducationModelExecutionResult.failure(routeDecision.reason);
+    }
+
+    final candidate = routeDecision.candidate!;
+    final provenanceSnapshot = provenance.snapshot();
+    if (candidate.providerId.trim().isEmpty ||
+        candidate.modelId.trim().isEmpty ||
+        candidate.modelArtifactDigest.trim().isEmpty ||
+        candidate.runtimeId.trim().isEmpty ||
+        candidate.computeNodeId.trim().isEmpty ||
+        !provenanceSnapshot.isComplete) {
+      return EducationModelExecutionResult.failure(
+        'response-provenance-incomplete',
+      );
+    }
+
+    final provider = providersById[candidate.providerId];
+    if (provider == null) {
+      return EducationModelExecutionResult.failure(
+        'selected-provider-unavailable',
+      );
+    }
+    if (request.budget.maxWallTime <= Duration.zero) {
+      return EducationModelExecutionResult.failure('provider-timeout');
+    }
+
+    EducationModelProviderResult providerResult;
+    final cancellationToken = EducationModelCancellationToken();
+    final deadlineAt = now().toUtc().add(request.budget.maxWallTime);
+    final stopwatch = Stopwatch()..start();
+    try {
+      final providerFuture = provider.infer(
+        EducationModelProviderRequest(
+          candidate: candidate,
+          learnerSubjectId: request.learnerSubjectId,
+          taskClass: request.taskClass,
+          materializedContext: materializedContext,
+          retentionClass: request.retentionClass,
+          budget: request.budget,
+          deadlineAt: deadlineAt,
+          cancellationToken: cancellationToken,
+        ),
+      );
+      final remainingWallTime = request.budget.maxWallTime - stopwatch.elapsed;
+      if (remainingWallTime <= Duration.zero) {
+        cancellationToken.cancel();
+        stopwatch.stop();
+        return EducationModelExecutionResult.failure('provider-timeout');
+      }
+      providerResult = await providerFuture.timeout(remainingWallTime);
+    } on TimeoutException {
+      cancellationToken.cancel();
+      stopwatch.stop();
+      return EducationModelExecutionResult.failure('provider-timeout');
+    } catch (_) {
+      cancellationToken.cancel();
+      stopwatch.stop();
+      return EducationModelExecutionResult.failure('provider-failure');
+    }
+    stopwatch.stop();
+    final measuredLatency = stopwatch.elapsed;
+
+    if (!_providerResultWithinBudget(
+      providerResult,
+      request.budget,
+      measuredLatency,
+    )) {
+      cancellationToken.cancel();
+      return EducationModelExecutionResult.failure('provider-budget-exceeded');
+    }
+    if (providerResult.outputText.trim().isEmpty) {
+      return EducationModelExecutionResult.failure('provider-output-empty');
+    }
+
+    final usageReceipt = EducationModelUsageReceipt(
+      receiptId: _receiptId(
+        contextGrant: contextGrant,
+        candidate: candidate,
+        request: request,
+      ),
+      learnerSubjectId: request.learnerSubjectId,
+      taskClass: request.taskClass,
+      providerId: candidate.providerId,
+      modelId: candidate.modelId,
+      modelArtifactDigest: candidate.modelArtifactDigest,
+      runtimeId: candidate.runtimeId,
+      computeNodeId: candidate.computeNodeId,
+      promptContractVersion: provenanceSnapshot.promptContractVersion,
+      curriculumPackDigest: provenanceSnapshot.curriculumPackDigest,
+      sourceExpectationIds: provenanceSnapshot.sourceExpectationIds,
+      verifierState: provenanceSnapshot.verifierState,
+      materializedContextScopes: Set<EducationModelContextScope>.unmodifiable(
+        materializedContext.keys,
+      ),
+      retentionClass: request.retentionClass,
+      remoteEgressOccurred: !candidate.isLocal,
+      inputUnits: providerResult.inputUnits,
+      outputUnits: providerResult.outputUnits,
+      actualCostMicros: providerResult.actualCostMicros,
+      latency: measuredLatency,
+    );
+
+    return EducationModelExecutionResult.success(
+      outputText: providerResult.outputText,
+      usageReceipt: usageReceipt,
+    );
+  }
+
+  bool _providerResultWithinBudget(
+    EducationModelProviderResult result,
+    EducationModelBudget budget,
+    Duration measuredLatency,
+  ) {
+    if (result.inputUnits < 0 ||
+        result.outputUnits < 0 ||
+        result.actualCostMicros < 0 ||
+        result.latency.isNegative ||
+        measuredLatency.isNegative) {
+      return false;
+    }
+    if (result.inputUnits > budget.maxInputUnits ||
+        result.outputUnits > budget.maxOutputUnits ||
+        result.actualCostMicros > budget.maxCostMicros ||
+        result.latency > budget.maxWallTime ||
+        measuredLatency > budget.maxWallTime) {
+      return false;
+    }
+    return true;
+  }
+
+  String _receiptId({
+    required EducationModelContextGrant contextGrant,
+    required EducationModelCandidate candidate,
+    required EducationModelRouteRequest request,
+  }) {
+    return 'usage:${contextGrant.grantId}:${candidate.candidateId}:${request.requestedAt.toUtc().microsecondsSinceEpoch}';
+  }
+}

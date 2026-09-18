@@ -1,12 +1,157 @@
 import 'package:flutter/material.dart';
 
+import '../../core/models/claw_experience_graph.dart';
 import '../../core/models/claw_experience_presentation.dart';
 import '../../core/models/claw_presentation_preset.dart';
+import '../../core/models/education_model_execution.dart';
+import '../../core/models/education_model_routing.dart';
 import '../../widgets/claw_experience_renderer.dart';
 import 'claw_foundations_story_arc.dart';
 
+class ClawFoundationsSocraticAuditMetadata extends ClawSocraticAuditMetadata {
+  final String usageReceiptId;
+  final String providerId;
+  final String modelArtifactDigest;
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
+
+  const ClawFoundationsSocraticAuditMetadata({
+    required this.usageReceiptId,
+    required this.providerId,
+    required this.modelArtifactDigest,
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
+  });
+
+  bool get isComplete =>
+      usageReceiptId.trim().isNotEmpty &&
+      providerId.trim().isNotEmpty &&
+      modelArtifactDigest.trim().isNotEmpty &&
+      promptContractVersion.trim().isNotEmpty &&
+      curriculumPackDigest.trim().isNotEmpty &&
+      sourceExpectationIds.isNotEmpty &&
+      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
+      verifierState.trim().isNotEmpty;
+}
+
+class ClawFoundationsSocraticExecutionBinding {
+  static const _allowedScopes = <EducationModelContextScope>{
+    EducationModelContextScope.targetCompetency,
+    EducationModelContextScope.currentLearnerInput,
+  };
+
+  final EducationModelExecutor executor;
+  final EducationModelRouteRequest routeRequest;
+  final EducationModelContextGrant contextGrant;
+  final List<EducationModelCandidate> candidates;
+  final EducationModelResponseProvenance provenance;
+  final DateTime Function() now;
+
+  ClawFoundationsSocraticExecutionBinding({
+    required this.executor,
+    required this.routeRequest,
+    required this.contextGrant,
+    required List<EducationModelCandidate> candidates,
+    required this.provenance,
+    DateTime Function()? now,
+  }) : candidates = List<EducationModelCandidate>.unmodifiable(candidates),
+       now = now ?? _currentUtc;
+
+  static DateTime _currentUtc() => DateTime.now().toUtc();
+
+  Future<ClawSocraticResult> handle(ClawSocraticRequest request) async {
+    final learnerInput = request.learnerInput.trim();
+    if (request.nodeId != 'socratic' ||
+        learnerInput.isEmpty ||
+        learnerInput.length > 280 ||
+        !_sameStrings(request.targetCompetencyIds, const <String>{
+          ClawFoundationsStoryArc.competencyId,
+        }) ||
+        routeRequest.taskClass != EducationModelTaskClass.socraticTutor ||
+        !_sameScopes(routeRequest.requestedContextScopes, _allowedScopes)) {
+      return const ClawSocraticResult.failure('invalid-socratic-request');
+    }
+    if (!provenance.sourceExpectationIds.contains(
+      ClawFoundationsStoryArc.competencyId,
+    )) {
+      return const ClawSocraticResult.failure('invalid-socratic-provenance');
+    }
+
+    final invocationRequest = EducationModelRouteRequest(
+      learnerSubjectId: routeRequest.learnerSubjectId,
+      taskClass: routeRequest.taskClass,
+      requiredCapabilities: routeRequest.requiredCapabilities,
+      requestedContextScopes: routeRequest.requestedContextScopes,
+      retentionClass: routeRequest.retentionClass,
+      requestedAt: now().toUtc(),
+      budget: routeRequest.budget,
+      localOnly: routeRequest.localOnly,
+    );
+
+    final execution = await executor.execute(
+      request: invocationRequest,
+      contextGrant: contextGrant,
+      candidates: candidates,
+      materializedContext: <EducationModelContextScope, String>{
+        EducationModelContextScope.targetCompetency:
+            ClawFoundationsStoryArc.competencyId,
+        EducationModelContextScope.currentLearnerInput: learnerInput,
+      },
+      provenance: provenance,
+    );
+
+    if (!execution.succeeded) {
+      return ClawSocraticResult.failure(
+        execution.failureReason ?? 'model-execution-failed',
+      );
+    }
+
+    final output = execution.outputText?.trim();
+    if (output == null || output.isEmpty) {
+      return const ClawSocraticResult.failure('empty-model-output');
+    }
+    final receipt = execution.usageReceipt!;
+    final auditMetadata = ClawFoundationsSocraticAuditMetadata(
+      usageReceiptId: receipt.receiptId,
+      providerId: receipt.providerId,
+      modelArtifactDigest: receipt.modelArtifactDigest,
+      promptContractVersion: receipt.promptContractVersion,
+      curriculumPackDigest: receipt.curriculumPackDigest,
+      sourceExpectationIds: receipt.sourceExpectationIds,
+      verifierState: receipt.verifierState,
+    );
+    if (!auditMetadata.isComplete) {
+      return const ClawSocraticResult.failure('incomplete-socratic-audit');
+    }
+    return ClawSocraticResult.success(output, auditMetadata: auditMetadata);
+  }
+
+  static bool _sameStrings(Set<String> left, Set<String> right) {
+    return left.length == right.length && left.containsAll(right);
+  }
+
+  static bool _sameScopes(
+    Set<EducationModelContextScope> left,
+    Set<EducationModelContextScope> right,
+  ) {
+    return left.length == right.length && left.containsAll(right);
+  }
+}
+
 class ClawFoundationsPreviewScreen extends StatefulWidget {
-  const ClawFoundationsPreviewScreen({super.key});
+  final ClawFoundationsSocraticExecutionBinding? socraticBinding;
+  final ValueChanged<ClawFoundationsSocraticAuditMetadata>?
+  onSocraticAuditMetadata;
+
+  const ClawFoundationsPreviewScreen({
+    super.key,
+    this.socraticBinding,
+    this.onSocraticAuditMetadata,
+  });
 
   @override
   State<ClawFoundationsPreviewScreen> createState() =>
@@ -25,6 +170,14 @@ class _ClawFoundationsPreviewScreenState
       basePresentations: ClawFoundationsStoryArc.presentations,
       variants: ClawFoundationsStoryArc.presentationVariants,
       preset: _preset,
+    );
+    final baseAvailability = ClawFoundationsStoryArc.availability;
+    final availability = ClawExperienceAvailability(
+      deviceCapabilities: baseAvailability.deviceCapabilities,
+      accessibilityCapabilities: baseAvailability.accessibilityCapabilities,
+      deniedContentReadinessTags: baseAvailability.deniedContentReadinessTags,
+      modelAvailable: widget.socraticBinding != null,
+      humanHelpAvailable: baseAvailability.humanHelpAvailable,
     );
 
     return Scaffold(
@@ -54,7 +207,17 @@ class _ClawFoundationsPreviewScreenState
                       key: const ValueKey('claw-foundations-player'),
                       graph: ClawFoundationsStoryArc.graph,
                       presentations: resolvedPresentations,
-                      availability: ClawFoundationsStoryArc.availability,
+                      availability: availability,
+                      socraticHandler: widget.socraticBinding?.handle,
+                      onSocraticAuditMetadata:
+                          widget.onSocraticAuditMetadata == null
+                          ? null
+                          : (metadata) {
+                              if (metadata
+                                  is ClawFoundationsSocraticAuditMetadata) {
+                                widget.onSocraticAuditMetadata!(metadata);
+                              }
+                            },
                       onEvidenceCandidate: (candidate) =>
                           _showEvidenceNotice(context, candidate),
                     ),
