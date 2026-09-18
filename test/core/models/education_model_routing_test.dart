@@ -271,6 +271,10 @@ void main() {
         modelArtifactDigest: 'sha256:model-local-test',
         runtimeId: 'runtime:single-agent',
         computeNodeId: 'node:personal',
+        promptContractVersion: 'prompt:v1',
+        curriculumPackDigest: 'sha256:curriculum-pack-test',
+        sourceExpectationIds: <String>{'math:fractions:equivalence'},
+        verifierState: 'not-required-instructional',
         materializedContextScopes: <EducationModelContextScope>{
           EducationModelContextScope.targetCompetency,
         },
