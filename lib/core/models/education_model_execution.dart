@@ -189,6 +189,9 @@ class EducationModelExecutor {
         'selected-provider-unavailable',
       );
     }
+    if (request.budget.maxWallTime <= Duration.zero) {
+      return EducationModelExecutionResult.failure('provider-timeout');
+    }
 
     EducationModelProviderResult providerResult;
     final cancellationToken = EducationModelCancellationToken();
