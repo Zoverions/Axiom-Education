@@ -22,7 +22,7 @@ void main() {
       requestedAt: requestedAt,
       now: () => requestedAt,
     );
-    final audits = <ClawSocraticAuditMetadata>[];
+    final audits = <ClawFoundationsSocraticAuditMetadata>[];
 
     await tester.pumpWidget(
       MaterialApp(
