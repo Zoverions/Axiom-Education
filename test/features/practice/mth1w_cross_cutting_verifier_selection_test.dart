@@ -34,65 +34,82 @@ void main() {
     );
   }
 
-  testWidgets('teaches verifier selection without changing correctness authority', (
-    tester,
-  ) async {
-    await tester.pumpWidget(buildScreen());
-    await tester.pumpAndSettle();
+  testWidgets(
+    'teaches verifier selection without changing correctness authority',
+    (tester) async {
+      await tester.pumpWidget(buildScreen());
+      await tester.pumpAndSettle();
 
-    expect(find.text('How should we check an exact answer here?'), findsOneWidget);
-    expect(find.byKey(const ValueKey('mth1w-verifier-exact')), findsOneWidget);
-    expect(find.byKey(const ValueKey('mth1w-verifier-estimate')), findsOneWidget);
-    expect(find.byKey(const ValueKey('mth1w-verifier-model')), findsOneWidget);
+      expect(
+        find.text('How should we check an exact answer here?'),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('mth1w-verifier-exact')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('mth1w-verifier-estimate')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('mth1w-verifier-model')),
+        findsOneWidget,
+      );
 
-    await tester.enterText(find.byType(TextField), '1');
-    await tester.pump();
+      await tester.enterText(find.byType(TextField), '1');
+      await tester.pump();
 
-    FilledButton checkButton() => tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Check answer'),
-    );
+      FilledButton checkButton() => tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Check answer'),
+      );
 
-    expect(checkButton().onPressed, isNotNull);
+      expect(checkButton().onPressed, isNotNull);
 
-    await tester.tap(find.byKey(const ValueKey('mth1w-verifier-estimate')));
-    await tester.pump();
-    expect(checkButton().onPressed, isNull);
-    expect(
-      find.textContaining('cannot establish an exact answer'),
-      findsOneWidget,
-    );
+      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-estimate')));
+      await tester.pump();
+      expect(checkButton().onPressed, isNull);
+      expect(
+        find.textContaining('cannot establish an exact answer'),
+        findsOneWidget,
+      );
 
-    await tester.tap(find.byKey(const ValueKey('mth1w-verifier-model')));
-    await tester.pump();
-    expect(checkButton().onPressed, isNull);
-    expect(
-      find.textContaining('not an authoritative verifier'),
-      findsOneWidget,
-    );
+      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-model')));
+      await tester.pump();
+      expect(checkButton().onPressed, isNull);
+      expect(
+        find.textContaining('not an authoritative verifier'),
+        findsOneWidget,
+      );
 
-    await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
-    await tester.pump();
-    expect(checkButton().onPressed, isNotNull);
+      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
+      await tester.pump();
+      expect(checkButton().onPressed, isNotNull);
 
-    await tester.tap(find.text('Reasoning details'));
-    await tester.pumpAndSettle();
-    expect(find.text('Verification → method selection'), findsOneWidget);
-    expect(find.textContaining('Nothing is saved'), findsOneWidget);
-  });
+      await tester.tap(find.text('Reasoning details'));
+      await tester.pumpAndSettle();
+      expect(find.text('Verification → method selection'), findsOneWidget);
+      expect(find.textContaining('Nothing is saved'), findsOneWidget);
+    },
+  );
 
-  testWidgets('verifier absence still fails closed after exact method selection', (
-    tester,
-  ) async {
-    await tester.pumpWidget(buildScreen(verifierAvailable: false));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'verifier absence still fails closed after exact method selection',
+    (tester) async {
+      await tester.pumpWidget(buildScreen(verifierAvailable: false));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
-    await tester.pump();
+      await tester.tap(find.byKey(const ValueKey('mth1w-verifier-exact')));
+      await tester.pump();
 
-    final button = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Check answer'),
-    );
-    expect(button.onPressed, isNull);
-    expect(find.textContaining('Answer checking is unavailable'), findsWidgets);
-  });
+      final button = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Check answer'),
+      );
+      expect(button.onPressed, isNull);
+      expect(
+        find.textContaining('Answer checking is unavailable'),
+        findsWidgets,
+      );
+    },
+  );
 }
