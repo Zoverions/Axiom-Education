@@ -1,3 +1,4 @@
+import 'authored_competency_pack.dart';
 import 'learning_evidence.dart';
 
 enum CrossCuttingEvidenceQuality {
@@ -76,6 +77,14 @@ class CrossCuttingLearningEvidence {
 }
 
 class CrossCuttingEvidenceValidator {
+  static const _allowedObservationSources = <String>{
+    'mth1w-deterministic-practice',
+  };
+  static const _maxObservationSourceLength = 64;
+  static final RegExp _observationSourcePattern = RegExp(
+    r'^[a-z0-9]+(?:-[a-z0-9]+)*$',
+  );
+
   const CrossCuttingEvidenceValidator();
 
   void validate(CrossCuttingLearningEvidence evidence) {
@@ -88,9 +97,21 @@ class CrossCuttingEvidenceValidator {
         'Cross-cutting metadata must bind to the exact base evidence ID.',
       );
     }
-    if (metadata.observationSource.trim().isEmpty) {
+    if (!AuthoredCompetencyPack.isCanonicalAiNativeCompetencyId(
+      evidence.base.competencyId,
+    )) {
       throw const CrossCuttingEvidenceException(
-        'Cross-cutting evidence requires a bounded observation source.',
+        'Cross-cutting evidence requires a canonical authored competency.',
+      );
+    }
+
+    final observationSource = metadata.observationSource;
+    if (observationSource != observationSource.trim() ||
+        observationSource.length > _maxObservationSourceLength ||
+        !_observationSourcePattern.hasMatch(observationSource) ||
+        !_allowedObservationSources.contains(observationSource)) {
+      throw const CrossCuttingEvidenceException(
+        'Cross-cutting evidence requires a governed observation source ID.',
       );
     }
     if (metadata.qualities.isEmpty) {
