@@ -340,10 +340,7 @@ void main() {
     expect(result.failureReason, equals('provider-timeout'));
     expect(provider.calls, equals(1));
     expect(provider.lastRequest!.cancellationToken.isCancelled, isTrue);
-    expect(
-      provider.lastRequest!.deadlineAt,
-      now.add(tightBudget.maxWallTime),
-    );
+    expect(provider.lastRequest!.deadlineAt, now.add(tightBudget.maxWallTime));
     expect(result.usageReceipt, isNull);
   });
 
