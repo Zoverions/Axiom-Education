@@ -544,10 +544,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
       throw StateError('provider failed');
     }
     if (delay > Duration.zero) {
-      return Future<EducationModelProviderResult>.delayed(
-        delay,
-        () => result,
-      );
+      return Future<EducationModelProviderResult>.delayed(delay, () => result);
     }
     return Future<EducationModelProviderResult>.value(result);
   }
