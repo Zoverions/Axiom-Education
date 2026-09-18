@@ -64,6 +64,48 @@ void main() {
         ClawFoundationsStoryArc.competencyId,
       });
       expect(audits.single.verifierState, 'not-required-instructional');
+
+      expect(
+        find.byKey(const ValueKey('claw-socratic-verification')),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Before accepting it, how could you check the fraction claim?',
+        ),
+        findsOneWidget,
+      );
+
+      await _tap(
+        tester,
+        const ValueKey('claw-socratic-verifier-deterministic-calculator'),
+      );
+      expect(
+        find.text(
+          'Selected: deterministic calculation. This choice is temporary and creates no evidence, mastery, or grade state.',
+        ),
+        findsOneWidget,
+      );
+      expect(provider.calls, 1);
+      expect(
+        provider.lastRequest!.materializedContext.keys,
+        unorderedEquals(const <EducationModelContextScope>[
+          EducationModelContextScope.targetCompetency,
+          EducationModelContextScope.currentLearnerInput,
+        ]),
+      );
+
+      await _tap(
+        tester,
+        const ValueKey('claw-socratic-verifier-model-assisted-critique'),
+      );
+      expect(
+        find.text(
+          'Model critique may suggest a check, but the model cannot verify its own claim or create learner-state authority.',
+        ),
+        findsOneWidget,
+      );
+      expect(provider.calls, 1);
     },
   );
 
@@ -143,7 +185,59 @@ void main() {
     expect(find.byKey(const ValueKey('claw-socratic-choice')), findsNothing);
     expect(find.byKey(const ValueKey('claw-another-way')), findsOneWidget);
     expect(find.byKey(const ValueKey('claw-continue')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('claw-socratic-verification')),
+      findsNothing,
+    );
+
+    await _tap(tester, const ValueKey('claw-another-way'));
+    expect(find.text('Picture the same whole'), findsOneWidget);
   });
+
+  testWidgets(
+    'provider failure keeps reviewed fallback and does not expose verification',
+    (tester) async {
+      final provider = _RecordingProvider();
+      final executor = EducationModelExecutor(
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local-test': provider,
+        },
+      );
+      final requestedAt = DateTime.utc(2026, 9, 2, 12);
+      final binding = _binding(
+        executor: executor,
+        requestedAt: requestedAt,
+        now: () => requestedAt.add(const Duration(minutes: 11)),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ClawFoundationsPreviewScreen(socraticBinding: binding),
+        ),
+      );
+
+      await _tap(tester, const ValueKey('claw-continue'));
+      await _tap(tester, const ValueKey('claw-socratic-choice'));
+      await tester.enterText(
+        find.byKey(const ValueKey('claw-socratic-input')),
+        'I think both fractions are equal.',
+      );
+      await _tap(tester, const ValueKey('claw-socratic-submit'));
+
+      expect(provider.calls, 0);
+      expect(find.text('Picture the same whole'), findsOneWidget);
+      expect(
+        find.text(
+          'Tutor unavailable. Showing the reviewed non-model explanation.',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('claw-socratic-verification')),
+        findsNothing,
+      );
+    },
+  );
 }
 
 ClawFoundationsSocraticExecutionBinding _binding({
