@@ -30,7 +30,7 @@
 - Create: `test/core/models/education_model_execution_test.dart`
 
 **Interfaces:**
-- Consumes: `EducationModelRouter`, `EducationModelRouteRequest`, `EducationModelContextGrant`, `EducationModelCandidate`, `EducationModelUsageReceipt`.
+- Consumes: `EducationModelRouter`, `EducationModelRouteRequest`, `EducationModelContextGrant`, `EducationModelCandidate`, `EducationModelResponseProvenance`, `EducationModelUsageReceipt`.
 - Produces: `EducationModelInferenceProvider`, `EducationModelProviderRequest`, `EducationModelExecutionResult`, `EducationModelExecutor.execute(...)`.
 
 - [ ] **Step 1: Write failing tests** proving an expired/wrong-subject/ungranted/remote-denied/over-budget route makes zero provider calls; a successful route invokes exactly the selected candidate; undeclared materialized scopes fail before provider invocation; provider exceptions remain explicit failures; successful receipts contain no raw prompt/learner-response state and cannot establish mastery.
