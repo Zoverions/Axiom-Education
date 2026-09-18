@@ -19,6 +19,7 @@ void main() {
         candidateId: 'candidate:local',
         providerId: 'provider:local',
         modelId: 'model:local',
+        modelArtifactDigest: 'sha256:model-local-test',
         runtimeId: 'runtime:single-agent',
         computeNodeId: 'node:personal',
         isLocal: true,
@@ -42,6 +43,7 @@ void main() {
         candidateId: 'candidate:remote',
         providerId: 'provider:remote',
         modelId: 'model:remote',
+        modelArtifactDigest: 'sha256:model-remote-test',
         runtimeId: 'runtime:single-agent',
         computeNodeId: 'node:managed-api',
         isLocal: false,
@@ -144,6 +146,7 @@ void main() {
         candidateId: 'candidate:expensive',
         providerId: 'provider:remote',
         modelId: 'model:expensive',
+        modelArtifactDigest: 'sha256:model-expensive-test',
         runtimeId: 'runtime:single-agent',
         computeNodeId: 'node:managed-api',
         isLocal: false,
@@ -265,6 +268,7 @@ void main() {
         taskClass: EducationModelTaskClass.explainConcept,
         providerId: 'provider:local',
         modelId: 'model:local',
+        modelArtifactDigest: 'sha256:model-local-test',
         runtimeId: 'runtime:single-agent',
         computeNodeId: 'node:personal',
         materializedContextScopes: <EducationModelContextScope>{
@@ -281,6 +285,14 @@ void main() {
       expect(receipt.containsRawPrompt, isFalse);
       expect(receipt.containsRawLearnerResponse, isFalse);
       expect(receipt.establishesMastery, isFalse);
+      expect(receipt.modelArtifactDigest, 'sha256:model-local-test');
+      expect(receipt.promptContractVersion, 'prompt:v1');
+      expect(receipt.curriculumPackDigest, 'sha256:curriculum-pack-test');
+      expect(
+        receipt.sourceExpectationIds,
+        const <String>{'math:fractions:equivalence'},
+      );
+      expect(receipt.verifierState, 'not-required-instructional');
     },
   );
 
