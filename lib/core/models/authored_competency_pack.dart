@@ -147,11 +147,19 @@ class AuthoredCompetencyPack {
         }
       }
 
+      final familyTags = tags
+          .where((tag) => tag.startsWith('family:'))
+          .toSet();
+      final authorshipTags = tags
+          .where((tag) => tag.startsWith('authorship:'))
+          .toSet();
       final dimensionTags = tags
           .where((tag) => tag.startsWith('dimension:'))
           .toSet();
-      if (!tags.contains(_familyTag) ||
-          !tags.contains(_authorshipTag) ||
+      if (familyTags.length != 1 ||
+          familyTags.single != _familyTag ||
+          authorshipTags.length != 1 ||
+          authorshipTags.single != _authorshipTag ||
           dimensionTags.length != 1 ||
           !_dimensions.contains(dimensionTags.single)) {
         throw const AuthoredCompetencyPackException(
@@ -192,6 +200,9 @@ class AuthoredCompetencyPack {
       graph: CompetencyGraph(nodes: nodes, edges: const <CompetencyEdge>[]),
     );
   }
+
+  static bool isCanonicalAiNativeCompetencyId(String competencyId) =>
+      _expectedIds.contains(competencyId);
 
   bool containsCompetency(String competencyId) =>
       graph.nodes.containsKey(competencyId);
