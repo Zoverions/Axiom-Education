@@ -288,10 +288,9 @@ void main() {
       expect(receipt.modelArtifactDigest, 'sha256:model-local-test');
       expect(receipt.promptContractVersion, 'prompt:v1');
       expect(receipt.curriculumPackDigest, 'sha256:curriculum-pack-test');
-      expect(
-        receipt.sourceExpectationIds,
-        const <String>{'math:fractions:equivalence'},
-      );
+      expect(receipt.sourceExpectationIds, const <String>{
+        'math:fractions:equivalence',
+      });
       expect(receipt.verifierState, 'not-required-instructional');
     },
   );
