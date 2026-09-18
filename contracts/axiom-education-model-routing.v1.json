@@ -76,7 +76,8 @@
     "fallback_cannot_exceed_budget": true,
     "commercial_margin_may_expand_data_scope": false,
     "payer_or_budget_source_becomes_data_authority": false,
-    "payer_or_budget_source_becomes_pedagogical_authority": false
+    "payer_or_budget_source_becomes_pedagogical_authority": false,
+    "provider_cancellation_signal_required_on_timeout": true
   },
   "usage_receipt": {
     "records_exact_learner_subject": true,
