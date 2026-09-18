@@ -218,27 +218,27 @@ void main() {
     'incomplete response provenance fails before provider invocation',
     () async {
       final provider = _RecordingProvider();
-    final executor = EducationModelExecutor(
-      now: () => now,
-      providersById: <String, EducationModelInferenceProvider>{
-        'provider:local': provider,
-      },
-    );
+      final executor = EducationModelExecutor(
+        now: () => now,
+        providersById: <String, EducationModelInferenceProvider>{
+          'provider:local': provider,
+        },
+      );
 
-    const incompleteProvenance = EducationModelResponseProvenance(
-      promptContractVersion: 'claw-socratic-prompt.v1',
-      curriculumPackDigest: 'sha256:curriculum-pack-test',
-      sourceExpectationIds: <String>{},
-      verifierState: 'not-required-instructional',
-    );
+      const incompleteProvenance = EducationModelResponseProvenance(
+        promptContractVersion: 'claw-socratic-prompt.v1',
+        curriculumPackDigest: 'sha256:curriculum-pack-test',
+        sourceExpectationIds: <String>{},
+        verifierState: 'not-required-instructional',
+      );
 
-    final result = await executor.execute(
-      request: request(),
-      contextGrant: grant(),
-      candidates: <EducationModelCandidate>[localCandidate()],
-      materializedContext: context(),
-      provenance: incompleteProvenance,
-    );
+      final result = await executor.execute(
+        request: request(),
+        contextGrant: grant(),
+        candidates: <EducationModelCandidate>[localCandidate()],
+        materializedContext: context(),
+        provenance: incompleteProvenance,
+      );
 
       expect(result.succeeded, isFalse);
       expect(result.failureReason, equals('response-provenance-incomplete'));
