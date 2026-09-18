@@ -190,7 +190,7 @@ void main() {
       final provider = _RecordingProvider();
       final executor = EducationModelExecutor(
         now: () => now,
-      providersById: <String, EducationModelInferenceProvider>{
+        providersById: <String, EducationModelInferenceProvider>{
           'provider:local': provider,
         },
       );
@@ -258,7 +258,7 @@ void main() {
       );
       final executor = EducationModelExecutor(
         now: () => now,
-      providersById: <String, EducationModelInferenceProvider>{
+        providersById: <String, EducationModelInferenceProvider>{
           'provider:local': provider,
         },
       );
@@ -268,6 +268,7 @@ void main() {
         contextGrant: grant(),
         candidates: <EducationModelCandidate>[localCandidate()],
         materializedContext: context(),
+        provenance: provenance,
       );
 
       expect(result.succeeded, isTrue);
