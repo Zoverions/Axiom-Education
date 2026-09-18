@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/models/claw_experience_graph.dart';
 import '../../core/models/claw_experience_presentation.dart';
 import '../../core/models/claw_presentation_preset.dart';
+import '../../core/models/cross_cutting_learning_evidence.dart';
 import '../../core/models/education_model_execution.dart';
 import '../../core/models/education_model_routing.dart';
 import '../../widgets/claw_experience_renderer.dart';
+import '../../widgets/cross_cutting_reasoning_card.dart';
 import 'claw_foundations_story_arc.dart';
 
 class ClawFoundationsSocraticAuditMetadata extends ClawSocraticAuditMetadata {
@@ -163,6 +165,30 @@ class _ClawFoundationsPreviewScreenState
   static const _resolver = ClawPresentationPresetResolver();
 
   ClawPresentationPreset _preset = ClawPresentationPreset.explorer;
+  bool _showSocraticVerification = false;
+  CrossCuttingVerifierMethod? _selectedSocraticVerifier;
+
+  void _handleSocraticAuditMetadata(ClawSocraticAuditMetadata metadata) {
+    if (metadata is! ClawFoundationsSocraticAuditMetadata ||
+        !metadata.isComplete) {
+      return;
+    }
+    setState(() {
+      _showSocraticVerification = true;
+      _selectedSocraticVerifier = null;
+    });
+    widget.onSocraticAuditMetadata?.call(metadata);
+  }
+
+  void _handleNodeChanged(String _) {
+    if (!_showSocraticVerification && _selectedSocraticVerifier == null) {
+      return;
+    }
+    setState(() {
+      _showSocraticVerification = false;
+      _selectedSocraticVerifier = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,18 +235,22 @@ class _ClawFoundationsPreviewScreenState
                       presentations: resolvedPresentations,
                       availability: availability,
                       socraticHandler: widget.socraticBinding?.handle,
-                      onSocraticAuditMetadata:
-                          widget.onSocraticAuditMetadata == null
-                          ? null
-                          : (metadata) {
-                              if (metadata
-                                  is ClawFoundationsSocraticAuditMetadata) {
-                                widget.onSocraticAuditMetadata!(metadata);
-                              }
-                            },
+                      onSocraticAuditMetadata: _handleSocraticAuditMetadata,
+                      onNodeChanged: _handleNodeChanged,
                       onEvidenceCandidate: (candidate) =>
                           _showEvidenceNotice(context, candidate),
                     ),
+                    if (_showSocraticVerification) ...<Widget>[
+                      const SizedBox(height: 16),
+                      _SocraticVerificationCard(
+                        selected: _selectedSocraticVerifier,
+                        onSelected: (method) {
+                          setState(() {
+                            _selectedSocraticVerifier = method;
+                          });
+                        },
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -246,6 +276,98 @@ class _ClawFoundationsPreviewScreenState
           ),
         ),
       );
+  }
+}
+
+class _SocraticVerificationCard extends StatelessWidget {
+  static const _methods = <CrossCuttingVerifierMethod>[
+    CrossCuttingVerifierMethod.learnerReasoning,
+    CrossCuttingVerifierMethod.deterministicCalculator,
+    CrossCuttingVerifierMethod.educatorReview,
+    CrossCuttingVerifierMethod.modelAssistedCritique,
+  ];
+
+  final CrossCuttingVerifierMethod? selected;
+  final ValueChanged<CrossCuttingVerifierMethod> onSelected;
+
+  const _SocraticVerificationCard({
+    required this.selected,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      key: const ValueKey('claw-socratic-verification'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const CrossCuttingReasoningCard(
+          learnerFacingPrompt:
+              'Before accepting it, how could you check the fraction claim?',
+          dimensionLabel: 'Verification',
+          competencyLabel: 'method selection',
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: <Widget>[
+            for (final method in _methods)
+              ChoiceChip(
+                key: ValueKey('claw-socratic-verifier-${_keySuffix(method)}'),
+                label: Text(_label(method)),
+                selected: selected == method,
+                onSelected: (_) => onSelected(method),
+              ),
+          ],
+        ),
+        if (selected != null) ...<Widget>[
+          const SizedBox(height: 10),
+          Text(
+            _status(selected!),
+            key: const ValueKey('claw-socratic-verification-status'),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ],
+    );
+  }
+
+  static String _keySuffix(CrossCuttingVerifierMethod method) {
+    return switch (method) {
+      CrossCuttingVerifierMethod.learnerReasoning => 'learner-reasoning',
+      CrossCuttingVerifierMethod.deterministicCalculator =>
+        'deterministic-calculator',
+      CrossCuttingVerifierMethod.educatorReview => 'educator-review',
+      CrossCuttingVerifierMethod.modelAssistedCritique =>
+        'model-assisted-critique',
+      _ => throw StateError('Unsupported Claw Socratic verifier method.'),
+    };
+  }
+
+  static String _label(CrossCuttingVerifierMethod method) {
+    return switch (method) {
+      CrossCuttingVerifierMethod.learnerReasoning => 'Check the reasoning',
+      CrossCuttingVerifierMethod.deterministicCalculator =>
+        'Deterministic calculation',
+      CrossCuttingVerifierMethod.educatorReview => 'Educator review',
+      CrossCuttingVerifierMethod.modelAssistedCritique =>
+        'Model critique (not verification)',
+      _ => throw StateError('Unsupported Claw Socratic verifier method.'),
+    };
+  }
+
+  static String _status(CrossCuttingVerifierMethod method) {
+    if (method == CrossCuttingVerifierMethod.modelAssistedCritique) {
+      return 'Model critique may suggest a check, but the model cannot verify its own claim or create learner-state authority.';
+    }
+    if (method == CrossCuttingVerifierMethod.deterministicCalculator) {
+      return 'Selected: deterministic calculation. This choice is temporary and creates no evidence, mastery, or grade state.';
+    }
+    if (method == CrossCuttingVerifierMethod.educatorReview) {
+      return 'Selected: educator review. This choice is temporary and creates no evidence, mastery, or grade state.';
+    }
+    return 'Selected: learner reasoning. This choice is temporary and creates no evidence, mastery, or grade state.';
   }
 }
 
