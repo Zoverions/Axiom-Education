@@ -242,7 +242,18 @@ void main() {
 }
 
 class _TestAuditMetadata extends ClawSocraticAuditMetadata {
-  const _TestAuditMetadata();
+  const _TestAuditMetadata()
+    : super(
+        usageReceiptId: 'usage:test',
+        providerId: 'provider:test',
+        modelArtifactDigest: 'sha256:model-test',
+        promptContractVersion: 'claw-socratic-prompt.v1',
+        curriculumPackDigest: 'sha256:curriculum-pack-test',
+        sourceExpectationIds: const <String>{
+          ClawFoundationsStoryArc.competencyId,
+        },
+        verifierState: 'not-required-instructional',
+      );
 }
 
 Future<void> _enterSocraticNode(WidgetTester tester) async {
