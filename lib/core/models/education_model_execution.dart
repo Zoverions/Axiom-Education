@@ -4,7 +4,7 @@ import 'education_model_routing.dart';
 
 abstract class EducationModelInferenceProvider {
   /// Implementations must stop provider-side work promptly when the request
-  /// cancellation token is cancelled and must not continue past [deadlineAt].
+  /// cancellation token is cancelled and must not continue past the request deadline.
   Future<EducationModelProviderResult> infer(
     EducationModelProviderRequest request,
   );
