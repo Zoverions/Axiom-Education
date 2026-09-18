@@ -127,10 +127,7 @@ class ClawFoundationsSocraticExecutionBinding {
     if (!auditMetadata.isComplete) {
       return const ClawSocraticResult.failure('incomplete-socratic-audit');
     }
-    return ClawSocraticResult.success(
-      output,
-      auditMetadata: auditMetadata,
-    );
+    return ClawSocraticResult.success(output, auditMetadata: auditMetadata);
   }
 
   static bool _sameStrings(Set<String> left, Set<String> right) {
