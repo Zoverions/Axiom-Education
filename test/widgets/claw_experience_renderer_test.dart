@@ -12,9 +12,7 @@ void main() {
     modelArtifactDigest: 'sha256:model-test',
     promptContractVersion: 'prompt:v1',
     curriculumPackDigest: 'sha256:curriculum-test',
-    sourceExpectationIds: <String>{
-      ClawFoundationsStoryArc.competencyId,
-    },
+    sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
     verifierState: 'not-required-instructional',
   );
 
