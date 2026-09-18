@@ -11,7 +11,7 @@ void main() {
     tester,
   ) async {
     final provider = _RecordingProvider();
-    final auditMetadata = <ClawSocraticAuditMetadata>[];
+    final audits = <ClawSocraticAuditMetadata>[];
     final executor = EducationModelExecutor(
       providersById: <String, EducationModelInferenceProvider>{
         'provider:local-test': provider,
@@ -23,7 +23,6 @@ void main() {
       requestedAt: requestedAt,
       now: () => requestedAt,
     );
-    final audits = <ClawFoundationsSocraticAuditMetadata>[];
 
     await tester.pumpWidget(
       MaterialApp(
@@ -55,28 +54,6 @@ void main() {
     expect(
       find.text('Can you name the factor used on both numbers?'),
       findsOneWidget,
-    );
-    expect(auditMetadata, hasLength(1));
-    expect(auditMetadata.single.providerId, 'provider:local-test');
-    expect(
-      auditMetadata.single.modelArtifactDigest,
-      'sha256:model-local-test',
-    );
-    expect(
-      auditMetadata.single.promptContractVersion,
-      'claw-socratic-prompt.v1',
-    );
-    expect(
-      auditMetadata.single.curriculumPackDigest,
-      'sha256:mth1w-foundations-preview-test',
-    );
-    expect(
-      auditMetadata.single.sourceExpectationIds,
-      const <String>{ClawFoundationsStoryArc.competencyId},
-    );
-    expect(
-      auditMetadata.single.verifierState,
-      'not-required-instructional',
     );
     expect(audits, hasLength(1));
     expect(audits.single.providerId, 'provider:local-test');
