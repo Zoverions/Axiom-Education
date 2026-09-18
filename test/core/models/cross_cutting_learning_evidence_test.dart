@@ -10,16 +10,16 @@ void main() {
     String competencyId =
         'axiom:computational-literacy:verification:method-selection',
   }) => LearningEvidenceEnvelope(
-        evidenceId: evidenceId,
-        recordType: LearningEvidenceRecordType.outcomeObservation,
-        learnerSubjectId: 'learner:1',
-        competencyId: competencyId,
-        consentContextId: 'consent:pedagogy:1',
-        occurredAt: now,
-        confidenceBefore: 0.4,
-        confidenceAfter: 0.6,
-        evidenceRef: 'artifact:verification:1',
-      );
+    evidenceId: evidenceId,
+    recordType: LearningEvidenceRecordType.outcomeObservation,
+    learnerSubjectId: 'learner:1',
+    competencyId: competencyId,
+    consentContextId: 'consent:pedagogy:1',
+    occurredAt: now,
+    confidenceBefore: 0.4,
+    confidenceAfter: 0.6,
+    evidenceRef: 'artifact:verification:1',
+  );
 
   CrossCuttingEvidenceMetadata metadata({
     String evidenceId = 'evidence:1',
