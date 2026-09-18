@@ -3,9 +3,47 @@ import 'dart:async';
 import 'education_model_routing.dart';
 
 abstract class EducationModelInferenceProvider {
+  /// Implementations must stop provider-side work promptly when the request
+  /// cancellation token is cancelled and must not continue past [deadlineAt].
   Future<EducationModelProviderResult> infer(
     EducationModelProviderRequest request,
   );
+}
+
+class EducationModelCancellationToken {
+  bool _cancelled = false;
+  final Completer<void> _cancelledCompleter = Completer<void>();
+
+  bool get isCancelled => _cancelled;
+
+  Future<void> get whenCancelled => _cancelledCompleter.future;
+
+  void cancel() {
+    if (_cancelled) return;
+    _cancelled = true;
+    _cancelledCompleter.complete();
+  }
+}
+
+class EducationModelResponseProvenance {
+  final String promptContractVersion;
+  final String curriculumPackDigest;
+  final Set<String> sourceExpectationIds;
+  final String verifierState;
+
+  const EducationModelResponseProvenance({
+    required this.promptContractVersion,
+    required this.curriculumPackDigest,
+    required this.sourceExpectationIds,
+    required this.verifierState,
+  });
+
+  bool get isComplete =>
+      promptContractVersion.trim().isNotEmpty &&
+      curriculumPackDigest.trim().isNotEmpty &&
+      sourceExpectationIds.isNotEmpty &&
+      sourceExpectationIds.every((id) => id.trim().isNotEmpty) &&
+      verifierState.trim().isNotEmpty;
 }
 
 class EducationModelProviderRequest {
@@ -15,6 +53,8 @@ class EducationModelProviderRequest {
   final Map<EducationModelContextScope, String> materializedContext;
   final String retentionClass;
   final EducationModelBudget budget;
+  final DateTime deadlineAt;
+  final EducationModelCancellationToken cancellationToken;
 
   EducationModelProviderRequest({
     required this.candidate,
@@ -23,6 +63,8 @@ class EducationModelProviderRequest {
     required Map<EducationModelContextScope, String> materializedContext,
     required this.retentionClass,
     required this.budget,
+    required this.deadlineAt,
+    required this.cancellationToken,
   }) : materializedContext =
            Map<EducationModelContextScope, String>.unmodifiable(
              materializedContext,
@@ -77,20 +119,26 @@ class EducationModelExecutionResult {
 class EducationModelExecutor {
   final EducationModelRouter router;
   final Map<String, EducationModelInferenceProvider> providersById;
+  final DateTime Function() now;
 
   EducationModelExecutor({
     this.router = const EducationModelRouter(),
     required Map<String, EducationModelInferenceProvider> providersById,
-  }) : providersById =
+    DateTime Function()? now,
+  }) : now = now ?? _currentUtc,
+       providersById =
            Map<String, EducationModelInferenceProvider>.unmodifiable(
              providersById,
            );
+
+  static DateTime _currentUtc() => DateTime.now().toUtc();
 
   Future<EducationModelExecutionResult> execute({
     required EducationModelRouteRequest request,
     required EducationModelContextGrant contextGrant,
     required List<EducationModelCandidate> candidates,
     required Map<EducationModelContextScope, String> materializedContext,
+    required EducationModelResponseProvenance provenance,
   }) async {
     final undeclaredScopes = materializedContext.keys
         .where((scope) => !request.requestedContextScopes.contains(scope))
@@ -111,6 +159,12 @@ class EducationModelExecutor {
     }
 
     final candidate = routeDecision.candidate!;
+    if (candidate.modelArtifactDigest.trim().isEmpty || !provenance.isComplete) {
+      return EducationModelExecutionResult.failure(
+        'response-provenance-incomplete',
+      );
+    }
+
     final provider = providersById[candidate.providerId];
     if (provider == null) {
       return EducationModelExecutionResult.failure(
@@ -119,6 +173,8 @@ class EducationModelExecutor {
     }
 
     EducationModelProviderResult providerResult;
+    final cancellationToken = EducationModelCancellationToken();
+    final deadlineAt = now().toUtc().add(request.budget.maxWallTime);
     final stopwatch = Stopwatch()..start();
     try {
       providerResult = await provider
@@ -130,10 +186,13 @@ class EducationModelExecutor {
               materializedContext: materializedContext,
               retentionClass: request.retentionClass,
               budget: request.budget,
+              deadlineAt: deadlineAt,
+              cancellationToken: cancellationToken,
             ),
           )
           .timeout(request.budget.maxWallTime);
     } on TimeoutException {
+      cancellationToken.cancel();
       stopwatch.stop();
       return EducationModelExecutionResult.failure('provider-timeout');
     } catch (_) {
@@ -164,8 +223,15 @@ class EducationModelExecutor {
       taskClass: request.taskClass,
       providerId: candidate.providerId,
       modelId: candidate.modelId,
+      modelArtifactDigest: candidate.modelArtifactDigest,
       runtimeId: candidate.runtimeId,
       computeNodeId: candidate.computeNodeId,
+      promptContractVersion: provenance.promptContractVersion,
+      curriculumPackDigest: provenance.curriculumPackDigest,
+      sourceExpectationIds: Set<String>.unmodifiable(
+        provenance.sourceExpectationIds,
+      ),
+      verifierState: provenance.verifierState,
       materializedContextScopes: Set<EducationModelContextScope>.unmodifiable(
         materializedContext.keys,
       ),
