@@ -147,9 +147,7 @@ class AuthoredCompetencyPack {
         }
       }
 
-      final familyTags = tags
-          .where((tag) => tag.startsWith('family:'))
-          .toSet();
+      final familyTags = tags.where((tag) => tag.startsWith('family:')).toSet();
       final authorshipTags = tags
           .where((tag) => tag.startsWith('authorship:'))
           .toSet();
