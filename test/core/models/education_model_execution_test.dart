@@ -531,7 +531,7 @@ class _RecordingProvider implements EducationModelInferenceProvider {
   @override
   Future<EducationModelProviderResult> infer(
     EducationModelProviderRequest request,
-  ) async {
+  ) {
     calls += 1;
     lastRequest = request;
     if (synchronousDelay > Duration.zero) {
@@ -540,12 +540,15 @@ class _RecordingProvider implements EducationModelInferenceProvider {
         // Simulates a provider violating the non-blocking invocation contract.
       }
     }
-    if (delay > Duration.zero) {
-      await Future<void>.delayed(delay);
-    }
     if (throwOnInfer) {
       throw StateError('provider failed');
     }
-    return result;
+    if (delay > Duration.zero) {
+      return Future<EducationModelProviderResult>.delayed(
+        delay,
+        () => result,
+      );
+    }
+    return Future<EducationModelProviderResult>.value(result);
   }
 }
