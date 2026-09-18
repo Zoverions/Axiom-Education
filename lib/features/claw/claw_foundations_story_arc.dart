@@ -12,6 +12,8 @@ class ClawFoundationsStoryArc {
   static const retrievalStrategyId =
       'strategy:retrieval-with-feedback:fractions-equivalence';
   static const storyStrategyId = 'strategy:story:fractions-equivalence';
+  static const socraticStrategyId =
+      'strategy:socratic-dialogue:fractions-equivalence';
 
   static final graph = ClawExperienceGraph(
     graphId: 'claw:foundations:fractions-equivalence',
@@ -29,6 +31,13 @@ class ClawFoundationsStoryArc {
         targetCompetencyIds: <String>{competencyId},
         experienceType: ClawExperienceNodeType.workedExample,
         instructionalStrategyIds: <String>{workedExampleStrategyId},
+        fallbackNodeIds: <String>{'visual'},
+      ),
+      'socratic': const ClawExperienceNode(
+        nodeId: 'socratic',
+        targetCompetencyIds: <String>{competencyId},
+        experienceType: ClawExperienceNodeType.aiSocraticDialogue,
+        instructionalStrategyIds: <String>{socraticStrategyId},
         fallbackNodeIds: <String>{'visual'},
       ),
       'visual': const ClawExperienceNode(
@@ -71,10 +80,28 @@ class ClawFoundationsStoryArc {
         trigger: ClawTransitionTrigger.automatic,
       ),
       ClawExperienceTransition(
+        transitionId: 'worked-to-socratic',
+        fromNodeId: 'worked',
+        toNodeId: 'socratic',
+        trigger: ClawTransitionTrigger.learnerChoice,
+      ),
+      ClawExperienceTransition(
         transitionId: 'worked-to-visual',
         fromNodeId: 'worked',
         toNodeId: 'visual',
         trigger: ClawTransitionTrigger.learnerRequestsAnotherWay,
+      ),
+      ClawExperienceTransition(
+        transitionId: 'socratic-to-checkpoint',
+        fromNodeId: 'socratic',
+        toNodeId: 'checkpoint',
+        trigger: ClawTransitionTrigger.automatic,
+      ),
+      ClawExperienceTransition(
+        transitionId: 'socratic-to-visual-model-unavailable',
+        fromNodeId: 'socratic',
+        toNodeId: 'visual',
+        trigger: ClawTransitionTrigger.modelUnavailable,
       ),
       ClawExperienceTransition(
         transitionId: 'visual-to-checkpoint',
@@ -137,6 +164,19 @@ class ClawFoundationsStoryArc {
           'If this representation does not click, you can ask for another way '
           'without changing the competency you are working on.',
       continueLabel: 'Try a quick check',
+    ),
+    'socratic': ClawExperiencePresentation(
+      nodeId: 'socratic',
+      eyebrow: 'Optional Socratic tutor',
+      title: 'Explain what stayed the same',
+      body:
+          'In one or two sentences, explain why 1/2 and 2/4 represent the same '
+          'amount. A governed tutor may ask one follow-up question when an eligible '
+          'model route is available.',
+      supportingText:
+          'Tutor output is instructional content only. It creates no grade, mastery '
+          'result, credit, credential, or learner record.',
+      continueLabel: 'Continue to the check',
     ),
     'visual': ClawExperiencePresentation(
       nodeId: 'visual',
@@ -347,5 +387,6 @@ class ClawFoundationsStoryArc {
     visualStrategyId,
     retrievalStrategyId,
     storyStrategyId,
+    socraticStrategyId,
   };
 }

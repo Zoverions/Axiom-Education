@@ -79,6 +79,17 @@ claims.
   validates the supported toolchain, installs pinned Python and locked Dart
   dependencies, verifies capability claims, checks formatting and analysis,
   and runs the complete Python and Flutter test suites.
+- An experimental Axiom-authored cross-cutting computational-literacy
+  capability with exactly 18 non-jurisdictional Intent, Specification,
+  Verification, and Systems Understanding nodes and zero v1 edges. Its two
+  bounded executable proofs are deterministic MTH1W verifier selection and an
+  optional governed-Socratic Claw verification-reasoning path with a no-model
+  fallback. This capability is not official Ontario curriculum, is not
+  validated psychometrics, creates no AI-literacy score, has no model
+  requirement, and has no automatic mastery or grade effect. Model output does
+  not establish correctness or learner evidence, and `MathAnswerVerifier`
+  remains the sole correctness authority for the bounded MTH1W answer-checking
+  path.
 
 ### Fixed
 
