@@ -255,7 +255,8 @@ class _PracticeBody extends StatelessWidget {
     final methodIsSufficient = verificationPolicy.isSufficient(
       verificationChoice,
     );
-    final canCheck = verifierAvailable && answerHasContent && methodIsSufficient;
+    final canCheck =
+        verifierAvailable && answerHasContent && methodIsSufficient;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
