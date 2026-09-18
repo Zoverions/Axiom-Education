@@ -1,7 +1,7 @@
 {
   "schema": "axiom-education-capabilities.v1",
   "application_version": "0.5.0-dev.0",
-  "verified_at": "2026-09-02",
+  "verified_at": "2026-09-18",
   "product": {
     "name": "Axiom Education",
     "contract_id": "axiom.education",
@@ -149,6 +149,32 @@
         "test/core/providers/mth1w_unit_content_provider_test.dart",
         "test/features/learning/mth1w_draft_unit_screen_test.dart",
         "test/features/learning/mth1w_course_screen_test.dart"
+      ]
+    },
+    {
+      "id": "instruction.cross-cutting-computational-literacy",
+      "family": "instruction",
+      "status": "experimental",
+      "summary": "A versioned Axiom-authored cross-cutting competency family represents Intent, Specification, Verification, and Systems Understanding through 18 non-jurisdictional competency nodes. One deterministic MTH1W proof and one optional governed-Socratic proof expose contextual verification reasoning without creating a new mastery, grade, learner-record, persistence, or model-authority path.",
+      "evidence": [
+        "assets/competencies/ai_native_computational_literacy.v1.json",
+        "lib/core/models/authored_competency_pack.dart",
+        "lib/core/models/cross_cutting_learning_evidence.dart",
+        "lib/core/models/cross_cutting_competency_hook.dart",
+        "lib/core/practice/mth1w_cross_cutting_verification.dart",
+        "lib/features/practice/mth1w_practice_screen.dart",
+        "lib/widgets/cross_cutting_reasoning_card.dart",
+        "lib/widgets/claw_experience_renderer.dart",
+        "lib/features/claw/claw_foundations_preview_screen.dart",
+        "test/core/models/authored_competency_pack_test.dart",
+        "test/core/models/cross_cutting_learning_evidence_test.dart",
+        "test/core/models/cross_cutting_competency_hook_test.dart",
+        "test/core/practice/mth1w_cross_cutting_verification_test.dart",
+        "test/features/practice/mth1w_practice_screen_test.dart",
+        "test/widgets/cross_cutting_reasoning_card_test.dart",
+        "test/widgets/claw_experience_renderer_test.dart",
+        "test/features/claw/claw_foundations_preview_screen_test.dart",
+        "test/core/models/competency_graph_test.dart"
       ]
     },
     {

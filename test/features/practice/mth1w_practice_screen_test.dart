@@ -175,7 +175,10 @@ void main() {
     expect(find.text('Session summary'), findsOneWidget);
     expect(find.text('0 attempts • 0 questions correct'), findsOneWidget);
     expect(find.text('0 of 3 different questions checked'), findsOneWidget);
-    expect(find.textContaining('Nothing is saved'), findsOneWidget);
+    expect(
+      find.textContaining('Repeated checks of the same question'),
+      findsOneWidget,
+    );
 
     await tester.enterText(find.byType(TextField), 'not an answer');
     await tester.pump();

@@ -1,0 +1,101 @@
+{
+  "schema": "axiom-education-authored-competency-pack.v1",
+  "family_id": "axiom.education.competency.ai-native-computational-literacy",
+  "family_version": "1.0.0",
+  "name": "AI-Native Computational Literacy",
+  "authorship": "axiom-extension",
+  "jurisdictional_authority": "none",
+  "nodes": [
+    {
+      "competency_id": "axiom:computational-literacy:intent:problem-framing",
+      "title": "Frame the actual problem",
+      "tags": ["family:ai-native-computational-literacy", "dimension:intent", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:intent:goal-definition",
+      "title": "Define the desired outcome",
+      "tags": ["family:ai-native-computational-literacy", "dimension:intent", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:intent:constraint-recognition",
+      "title": "Recognize constraints",
+      "tags": ["family:ai-native-computational-literacy", "dimension:intent", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:intent:non-goal-recognition",
+      "title": "Recognize non-goals",
+      "tags": ["family:ai-native-computational-literacy", "dimension:intent", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:specification:requirements",
+      "title": "State requirements",
+      "tags": ["family:ai-native-computational-literacy", "dimension:specification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:specification:invariants",
+      "title": "State invariants",
+      "tags": ["family:ai-native-computational-literacy", "dimension:specification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:specification:examples-and-counterexamples",
+      "title": "Use examples and counterexamples",
+      "tags": ["family:ai-native-computational-literacy", "dimension:specification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:specification:edge-cases",
+      "title": "Identify edge cases",
+      "tags": ["family:ai-native-computational-literacy", "dimension:specification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:verification:method-selection",
+      "title": "Choose a verification method",
+      "tags": ["family:ai-native-computational-literacy", "dimension:verification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:verification:test-design",
+      "title": "Design a test",
+      "tags": ["family:ai-native-computational-literacy", "dimension:verification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:verification:source-and-evidence-checking",
+      "title": "Check sources and evidence",
+      "tags": ["family:ai-native-computational-literacy", "dimension:verification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:verification:adversarial-checking",
+      "title": "Check adversarially",
+      "tags": ["family:ai-native-computational-literacy", "dimension:verification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:verification:correction-and-retest",
+      "title": "Correct and retest",
+      "tags": ["family:ai-native-computational-literacy", "dimension:verification", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:systems:components-and-boundaries",
+      "title": "Identify components and boundaries",
+      "tags": ["family:ai-native-computational-literacy", "dimension:systems", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:systems:state-and-flow",
+      "title": "Trace state and flow",
+      "tags": ["family:ai-native-computational-literacy", "dimension:systems", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:systems:dependencies-and-causality",
+      "title": "Reason about dependencies and causality",
+      "tags": ["family:ai-native-computational-literacy", "dimension:systems", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:systems:failure-modes",
+      "title": "Anticipate failure modes",
+      "tags": ["family:ai-native-computational-literacy", "dimension:systems", "authorship:axiom-extension"]
+    },
+    {
+      "competency_id": "axiom:computational-literacy:systems:tradeoffs-and-effects",
+      "title": "Reason about trade-offs and effects",
+      "tags": ["family:ai-native-computational-literacy", "dimension:systems", "authorship:axiom-extension"]
+    }
+  ],
+  "edges": []
+}

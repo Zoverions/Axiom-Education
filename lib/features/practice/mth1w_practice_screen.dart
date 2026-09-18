@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/practice/math_answer_verifier.dart';
 import '../../core/practice/math_practice_generator.dart';
+import '../../core/practice/mth1w_cross_cutting_verification.dart';
 import '../../core/practice/mth1w_practice_provider.dart';
 import '../../core/practice/practice_item.dart';
 import '../../core/providers/curriculum_provider.dart';
+import '../../widgets/cross_cutting_reasoning_card.dart';
 
 class Mth1wPracticeScreen extends ConsumerStatefulWidget {
   const Mth1wPracticeScreen({
@@ -31,6 +33,8 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
   int _visibleHintCount = 0;
   int _sessionAttemptCount = 0;
   bool _answerHasContent = false;
+  Mth1wVerificationChoice _verificationChoice =
+      Mth1wVerificationChoice.exactCalculation;
   final Set<String> _checkedItemIds = <String>{};
   final Set<String> _correctItemIds = <String>{};
   VerificationResult? _result;
@@ -64,8 +68,21 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
     setState(() => _answerHasContent = hasContent);
   }
 
+  void _selectVerificationChoice(Mth1wVerificationChoice choice) {
+    if (choice == _verificationChoice) return;
+    setState(() {
+      _verificationChoice = choice;
+      _result = null;
+    });
+  }
+
   void _checkAnswer(PracticeItem item) {
     if (_answerController.text.trim().isEmpty) return;
+    if (!const Mth1wVerificationChoicePolicy().isSufficient(
+      _verificationChoice,
+    )) {
+      return;
+    }
 
     final verifier = widget.verifier;
     if (verifier == null) {
@@ -169,6 +186,8 @@ class _Mth1wPracticeScreenState extends ConsumerState<Mth1wPracticeScreen> {
                 distinctCorrectCount: _correctItemIds.length,
                 distinctItemCount: _checkedItemIds.length,
                 verifierAvailable: widget.verifier != null,
+                verificationChoice: _verificationChoice,
+                onVerificationChoiceChanged: _selectVerificationChoice,
                 onAnswerChanged: _onAnswerChanged,
                 onCheck: () => _checkAnswer(item),
                 onShowHint: () => _showNextHint(item),
@@ -201,6 +220,8 @@ class _PracticeBody extends StatelessWidget {
     required this.distinctCorrectCount,
     required this.distinctItemCount,
     required this.verifierAvailable,
+    required this.verificationChoice,
+    required this.onVerificationChoiceChanged,
     required this.onAnswerChanged,
     required this.onCheck,
     required this.onShowHint,
@@ -220,6 +241,8 @@ class _PracticeBody extends StatelessWidget {
   final int distinctCorrectCount;
   final int distinctItemCount;
   final bool verifierAvailable;
+  final Mth1wVerificationChoice verificationChoice;
+  final ValueChanged<Mth1wVerificationChoice> onVerificationChoiceChanged;
   final ValueChanged<String> onAnswerChanged;
   final VoidCallback onCheck;
   final VoidCallback onShowHint;
@@ -228,7 +251,12 @@ class _PracticeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final canCheck = verifierAvailable && answerHasContent;
+    const verificationPolicy = Mth1wVerificationChoicePolicy();
+    final methodIsSufficient = verificationPolicy.isSufficient(
+      verificationChoice,
+    );
+    final canCheck =
+        verifierAvailable && answerHasContent && methodIsSufficient;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
@@ -257,6 +285,58 @@ class _PracticeBody extends StatelessWidget {
                 _ExpectationCard(item: item, expectation: expectation),
                 const SizedBox(height: 12),
                 _QuestionCard(item: item),
+                const SizedBox(height: 12),
+                CrossCuttingReasoningCard(
+                  learnerFacingPrompt:
+                      mth1wVerificationMethodSelectionHook.learnerFacingPrompt,
+                  dimensionLabel: 'Verification',
+                  competencyLabel: 'method selection',
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ChoiceChip(
+                      key: const ValueKey('mth1w-verifier-exact'),
+                      label: const Text('Exact calculation'),
+                      selected:
+                          verificationChoice ==
+                          Mth1wVerificationChoice.exactCalculation,
+                      onSelected: (_) => onVerificationChoiceChanged(
+                        Mth1wVerificationChoice.exactCalculation,
+                      ),
+                    ),
+                    ChoiceChip(
+                      key: const ValueKey('mth1w-verifier-estimate'),
+                      label: const Text('Estimate'),
+                      selected:
+                          verificationChoice ==
+                          Mth1wVerificationChoice.estimateOnly,
+                      onSelected: (_) => onVerificationChoiceChanged(
+                        Mth1wVerificationChoice.estimateOnly,
+                      ),
+                    ),
+                    ChoiceChip(
+                      key: const ValueKey('mth1w-verifier-model'),
+                      label: const Text('Model opinion'),
+                      selected:
+                          verificationChoice ==
+                          Mth1wVerificationChoice.modelOpinion,
+                      onSelected: (_) => onVerificationChoiceChanged(
+                        Mth1wVerificationChoice.modelOpinion,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(verificationPolicy.explanation(verificationChoice)),
+                const SizedBox(height: 4),
+                Text(
+                  'Nothing is saved by this method-selection step, and it does '
+                  'not create a grade, mastery claim, or learner record.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: answerController,
