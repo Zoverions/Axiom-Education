@@ -214,9 +214,10 @@ void main() {
     },
   );
 
-
-  test('incomplete response provenance fails before provider invocation', () async {
-    final provider = _RecordingProvider();
+  test(
+    'incomplete response provenance fails before provider invocation',
+    () async {
+      final provider = _RecordingProvider();
     final executor = EducationModelExecutor(
       now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
@@ -239,10 +240,11 @@ void main() {
       provenance: incompleteProvenance,
     );
 
-    expect(result.succeeded, isFalse);
-    expect(result.failureReason, equals('response-provenance-incomplete'));
-    expect(provider.calls, equals(0));
-  });
+      expect(result.succeeded, isFalse);
+      expect(result.failureReason, equals('response-provenance-incomplete'));
+      expect(provider.calls, equals(0));
+    },
+  );
 
   test(
     'successful route invokes only selected provider and returns minimized receipt',
@@ -282,7 +284,10 @@ void main() {
       expect(result.usageReceipt!.containsRawPrompt, isFalse);
       expect(result.usageReceipt!.containsRawLearnerResponse, isFalse);
       expect(result.usageReceipt!.establishesMastery, isFalse);
-      expect(result.usageReceipt!.modelArtifactDigest, 'sha256:model-local-test');
+      expect(
+        result.usageReceipt!.modelArtifactDigest,
+        'sha256:model-local-test',
+      );
       expect(
         result.usageReceipt!.promptContractVersion,
         provenance.promptContractVersion,
