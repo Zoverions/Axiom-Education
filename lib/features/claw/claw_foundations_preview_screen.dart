@@ -18,6 +18,7 @@ class ClawFoundationsSocraticExecutionBinding {
   final EducationModelRouteRequest routeRequest;
   final EducationModelContextGrant contextGrant;
   final List<EducationModelCandidate> candidates;
+  final EducationModelResponseProvenance provenance;
   final DateTime Function() now;
 
   ClawFoundationsSocraticExecutionBinding({
@@ -25,6 +26,7 @@ class ClawFoundationsSocraticExecutionBinding {
     required this.routeRequest,
     required this.contextGrant,
     required List<EducationModelCandidate> candidates,
+    required this.provenance,
     DateTime Function()? now,
   }) : candidates = List<EducationModelCandidate>.unmodifiable(candidates),
        now = now ?? _currentUtc;
@@ -64,6 +66,7 @@ class ClawFoundationsSocraticExecutionBinding {
             ClawFoundationsStoryArc.competencyId,
         EducationModelContextScope.currentLearnerInput: learnerInput,
       },
+      provenance: provenance,
     );
 
     if (!execution.succeeded) {
@@ -76,7 +79,19 @@ class ClawFoundationsSocraticExecutionBinding {
     if (output == null || output.isEmpty) {
       return const ClawSocraticResult.failure('empty-model-output');
     }
-    return ClawSocraticResult.success(output);
+    final receipt = execution.usageReceipt!;
+    return ClawSocraticResult.success(
+      output,
+      auditMetadata: ClawSocraticAuditMetadata(
+        usageReceiptId: receipt.receiptId,
+        providerId: receipt.providerId,
+        modelArtifactDigest: receipt.modelArtifactDigest,
+        promptContractVersion: receipt.promptContractVersion,
+        curriculumPackDigest: receipt.curriculumPackDigest,
+        sourceExpectationIds: receipt.sourceExpectationIds,
+        verifierState: receipt.verifierState,
+      ),
+    );
   }
 
   static bool _sameStrings(Set<String> left, Set<String> right) {
@@ -93,8 +108,13 @@ class ClawFoundationsSocraticExecutionBinding {
 
 class ClawFoundationsPreviewScreen extends StatefulWidget {
   final ClawFoundationsSocraticExecutionBinding? socraticBinding;
+  final ClawSocraticAuditCallback? onSocraticAuditMetadata;
 
-  const ClawFoundationsPreviewScreen({super.key, this.socraticBinding});
+  const ClawFoundationsPreviewScreen({
+    super.key,
+    this.socraticBinding,
+    this.onSocraticAuditMetadata,
+  });
 
   @override
   State<ClawFoundationsPreviewScreen> createState() =>
@@ -152,6 +172,7 @@ class _ClawFoundationsPreviewScreenState
                       presentations: resolvedPresentations,
                       availability: availability,
                       socraticHandler: widget.socraticBinding?.handle,
+                      onSocraticAuditMetadata: widget.onSocraticAuditMetadata,
                       onEvidenceCandidate: (candidate) =>
                           _showEvidenceNotice(context, candidate),
                     ),
