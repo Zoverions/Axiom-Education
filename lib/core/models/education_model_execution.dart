@@ -3,9 +3,11 @@ import 'dart:async';
 import 'education_model_routing.dart';
 
 abstract class EducationModelInferenceProvider {
-  /// Implementations must stop provider-side work promptly when the request
-  /// cancellation token is cancelled and must not continue past the request
-  /// deadline.
+  /// Implementations must return a Future without blocking the calling isolate.
+  /// Long-running setup and inference must run asynchronously or in an isolated
+  /// execution boundary. Implementations must stop provider-side work promptly
+  /// when the request cancellation token is cancelled and must not continue
+  /// past the request deadline.
   Future<EducationModelProviderResult> infer(
     EducationModelProviderRequest request,
   );
