@@ -60,10 +60,9 @@ void main() {
     expect(audits.single.modelArtifactDigest, 'sha256:model-test');
     expect(audits.single.promptContractVersion, 'claw-socratic-prompt.v1');
     expect(audits.single.curriculumPackDigest, 'sha256:curriculum-pack-test');
-    expect(
-      audits.single.sourceExpectationIds,
-      const <String>{ClawFoundationsStoryArc.competencyId},
-    );
+    expect(audits.single.sourceExpectationIds, const <String>{
+      ClawFoundationsStoryArc.competencyId,
+    });
     expect(audits.single.verifierState, 'not-required-instructional');
   });
 
@@ -178,9 +177,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
     provenance: const EducationModelResponseProvenance(
       promptContractVersion: 'claw-socratic-prompt.v1',
       curriculumPackDigest: 'sha256:curriculum-pack-test',
-      sourceExpectationIds: <String>{
-        ClawFoundationsStoryArc.competencyId,
-      },
+      sourceExpectationIds: <String>{ClawFoundationsStoryArc.competencyId},
       verifierState: 'not-required-instructional',
     ),
     now: now,
