@@ -11,7 +11,7 @@ void main() {
     'preview materializes bounded context and exposes audit metadata',
     (tester) async {
       final provider = _RecordingProvider();
-      final audits = <ClawSocraticAuditMetadata>[];
+      final audits = <ClawFoundationsSocraticAuditMetadata>[];
       final executor = EducationModelExecutor(
         providersById: <String, EducationModelInferenceProvider>{
           'provider:local-test': provider,
