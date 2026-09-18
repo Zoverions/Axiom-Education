@@ -13,6 +13,13 @@ void main() {
     maxWallTime: Duration(seconds: 10),
   );
 
+  const provenance = EducationModelResponseProvenance(
+    promptContractVersion: 'claw-socratic-prompt.v1',
+    curriculumPackDigest: 'sha256:curriculum-pack-test',
+    sourceExpectationIds: <String>{'math:fractions:equivalence'},
+    verifierState: 'not-required-instructional',
+  );
+
   EducationModelContextGrant grant({
     String learnerSubjectId = 'learner:1',
     bool remoteEgressAllowed = false,
@@ -62,6 +69,7 @@ void main() {
     candidateId: 'candidate:local',
     providerId: 'provider:local',
     modelId: 'model:local',
+    modelArtifactDigest: 'sha256:model-local-test',
     runtimeId: 'runtime:test',
     computeNodeId: 'node:personal',
     isLocal: true,
@@ -83,6 +91,7 @@ void main() {
     candidateId: 'candidate:remote',
     providerId: 'provider:remote',
     modelId: 'model:remote',
+    modelArtifactDigest: 'sha256:model-remote-test',
     runtimeId: 'runtime:test',
     computeNodeId: 'node:remote',
     isLocal: false,
@@ -111,6 +120,7 @@ void main() {
   test('route denial causes zero provider calls', () async {
     final provider = _RecordingProvider();
     final executor = EducationModelExecutor(
+      now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
         'provider:local': provider,
       },
@@ -121,6 +131,7 @@ void main() {
       contextGrant: grant(learnerSubjectId: 'learner:1'),
       candidates: <EducationModelCandidate>[localCandidate()],
       materializedContext: context(),
+      provenance: provenance,
     );
 
     expect(result.succeeded, isFalse);
@@ -131,6 +142,7 @@ void main() {
   test('remote-egress denial causes zero provider calls', () async {
     final provider = _RecordingProvider();
     final executor = EducationModelExecutor(
+      now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
         'provider:remote': provider,
       },
@@ -141,6 +153,7 @@ void main() {
       contextGrant: grant(remoteEgressAllowed: false),
       candidates: <EducationModelCandidate>[remoteCandidate()],
       materializedContext: context(),
+      provenance: provenance,
     );
 
     expect(result.succeeded, isFalse);
@@ -151,6 +164,7 @@ void main() {
   test('over-budget candidate causes zero provider calls', () async {
     final provider = _RecordingProvider();
     final executor = EducationModelExecutor(
+      now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
         'provider:local': provider,
       },
@@ -163,6 +177,7 @@ void main() {
         localCandidate(estimatedCostMicros: 100001),
       ],
       materializedContext: context(),
+      provenance: provenance,
     );
 
     expect(result.succeeded, isFalse);
@@ -174,7 +189,8 @@ void main() {
     () async {
       final provider = _RecordingProvider();
       final executor = EducationModelExecutor(
-        providersById: <String, EducationModelInferenceProvider>{
+        now: () => now,
+      providersById: <String, EducationModelInferenceProvider>{
           'provider:local': provider,
         },
       );
@@ -189,6 +205,7 @@ void main() {
         contextGrant: grant(),
         candidates: <EducationModelCandidate>[localCandidate()],
         materializedContext: materialized,
+        provenance: provenance,
       );
 
       expect(result.succeeded, isFalse);
@@ -196,6 +213,36 @@ void main() {
       expect(provider.calls, equals(0));
     },
   );
+
+
+  test('incomplete response provenance fails before provider invocation', () async {
+    final provider = _RecordingProvider();
+    final executor = EducationModelExecutor(
+      now: () => now,
+      providersById: <String, EducationModelInferenceProvider>{
+        'provider:local': provider,
+      },
+    );
+
+    const incompleteProvenance = EducationModelResponseProvenance(
+      promptContractVersion: 'claw-socratic-prompt.v1',
+      curriculumPackDigest: 'sha256:curriculum-pack-test',
+      sourceExpectationIds: <String>{},
+      verifierState: 'not-required-instructional',
+    );
+
+    final result = await executor.execute(
+      request: request(),
+      contextGrant: grant(),
+      candidates: <EducationModelCandidate>[localCandidate()],
+      materializedContext: context(),
+      provenance: incompleteProvenance,
+    );
+
+    expect(result.succeeded, isFalse);
+    expect(result.failureReason, equals('response-provenance-incomplete'));
+    expect(provider.calls, equals(0));
+  });
 
   test(
     'successful route invokes only selected provider and returns minimized receipt',
@@ -210,7 +257,8 @@ void main() {
         ),
       );
       final executor = EducationModelExecutor(
-        providersById: <String, EducationModelInferenceProvider>{
+        now: () => now,
+      providersById: <String, EducationModelInferenceProvider>{
           'provider:local': provider,
         },
       );
@@ -233,6 +281,20 @@ void main() {
       expect(result.usageReceipt!.containsRawPrompt, isFalse);
       expect(result.usageReceipt!.containsRawLearnerResponse, isFalse);
       expect(result.usageReceipt!.establishesMastery, isFalse);
+      expect(result.usageReceipt!.modelArtifactDigest, 'sha256:model-local-test');
+      expect(
+        result.usageReceipt!.promptContractVersion,
+        provenance.promptContractVersion,
+      );
+      expect(
+        result.usageReceipt!.curriculumPackDigest,
+        provenance.curriculumPackDigest,
+      );
+      expect(
+        result.usageReceipt!.sourceExpectationIds,
+        provenance.sourceExpectationIds,
+      );
+      expect(result.usageReceipt!.verifierState, provenance.verifierState);
       expect(
         result.usageReceipt!.materializedContextScopes,
         equals(request().requestedContextScopes),
@@ -252,6 +314,7 @@ void main() {
       delay: const Duration(milliseconds: 100),
     );
     final executor = EducationModelExecutor(
+      now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
         'provider:local': provider,
       },
@@ -264,17 +327,24 @@ void main() {
         localCandidate(estimatedLatency: const Duration(milliseconds: 1)),
       ],
       materializedContext: context(),
+      provenance: provenance,
     );
 
     expect(result.succeeded, isFalse);
     expect(result.failureReason, equals('provider-timeout'));
     expect(provider.calls, equals(1));
+    expect(provider.lastRequest!.cancellationToken.isCancelled, isTrue);
+    expect(
+      provider.lastRequest!.deadlineAt,
+      now.add(tightBudget.maxWallTime),
+    );
     expect(result.usageReceipt, isNull);
   });
 
   test('provider exception is explicit failure with no retry', () async {
     final provider = _RecordingProvider(throwOnInfer: true);
     final executor = EducationModelExecutor(
+      now: () => now,
       providersById: <String, EducationModelInferenceProvider>{
         'provider:local': provider,
       },
@@ -285,6 +355,7 @@ void main() {
       contextGrant: grant(),
       candidates: <EducationModelCandidate>[localCandidate()],
       materializedContext: context(),
+      provenance: provenance,
     );
 
     expect(result.succeeded, isFalse);
