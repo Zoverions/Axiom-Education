@@ -22,9 +22,15 @@ void main() {
       requestedAt: requestedAt,
       now: () => requestedAt,
     );
+    final audits = <ClawSocraticAuditMetadata>[];
 
     await tester.pumpWidget(
-      MaterialApp(home: ClawFoundationsPreviewScreen(socraticBinding: binding)),
+      MaterialApp(
+        home: ClawFoundationsPreviewScreen(
+          socraticBinding: binding,
+          onSocraticAuditMetadata: audits.add,
+        ),
+      ),
     );
 
     await _tap(tester, const ValueKey('claw-continue'));
@@ -49,6 +55,16 @@ void main() {
       find.text('Can you name the factor used on both numbers?'),
       findsOneWidget,
     );
+    expect(audits, hasLength(1));
+    expect(audits.single.providerId, 'provider:local-test');
+    expect(audits.single.modelArtifactDigest, 'sha256:model-test');
+    expect(audits.single.promptContractVersion, 'claw-socratic-prompt.v1');
+    expect(audits.single.curriculumPackDigest, 'sha256:curriculum-pack-test');
+    expect(
+      audits.single.sourceExpectationIds,
+      const <String>{ClawFoundationsStoryArc.competencyId},
+    );
+    expect(audits.single.verifierState, 'not-required-instructional');
   });
 
   test('expired grant at invocation causes zero provider calls', () async {
@@ -143,6 +159,7 @@ ClawFoundationsSocraticExecutionBinding _binding({
         candidateId: 'candidate:local-test',
         providerId: 'provider:local-test',
         modelId: 'model:test',
+        modelArtifactDigest: 'sha256:model-test',
         runtimeId: 'runtime:test',
         computeNodeId: 'device:test',
         isLocal: true,
@@ -158,6 +175,14 @@ ClawFoundationsSocraticExecutionBinding _binding({
         reliabilityScore: 0.9,
       ),
     ],
+    provenance: const EducationModelResponseProvenance(
+      promptContractVersion: 'claw-socratic-prompt.v1',
+      curriculumPackDigest: 'sha256:curriculum-pack-test',
+      sourceExpectationIds: <String>{
+        ClawFoundationsStoryArc.competencyId,
+      },
+      verifierState: 'not-required-instructional',
+    ),
     now: now,
   );
 }
