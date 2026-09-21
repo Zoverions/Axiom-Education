@@ -16,12 +16,7 @@ void main() {
           FsrsDayScheduler.nextDifficulty(5.0, rating.grade),
       ];
 
-      const expected = <double>[
-        8.34176237,
-        6.66599536,
-        4.99022837,
-        3.31446137,
-      ];
+      const expected = <double>[8.34176237, 6.66599536, 4.99022837, 3.31446137];
 
       for (var index = 0; index < expected.length; index++) {
         expect(actual[index], closeTo(expected[index], 1e-8));
@@ -52,12 +47,7 @@ void main() {
     test('matches pinned forgetting-stability values', () {
       const difficulties = <double>[1.0, 2.0, 3.0, 4.0];
       const retrievabilities = <double>[0.9, 0.8, 0.7, 0.6];
-      const expected = <double>[
-        1.05253961,
-        1.18943295,
-        1.36808387,
-        1.58498896,
-      ];
+      const expected = <double>[1.05253961, 1.18943295, 1.36808387, 1.58498896];
 
       for (var index = 0; index < expected.length; index++) {
         final actual = FsrsDayScheduler.nextForgetStability(
@@ -113,24 +103,27 @@ void main() {
       expect(first.nextState!.lapses, second.nextState!.lapses);
     });
 
-    test('creates a bounded first state without touching correctness authority', () {
-      final result = FsrsDayScheduler.schedule(
-        rating: ReviewRating.good,
-        elapsedDays: 0,
-      );
+    test(
+      'creates a bounded first state without touching correctness authority',
+      () {
+        final result = FsrsDayScheduler.schedule(
+          rating: ReviewRating.good,
+          elapsedDays: 0,
+        );
 
-      expect(result.usedConservativeFallback, isFalse);
-      expect(result.interval, const Duration(days: 2));
-      expect(result.nextState, isNotNull);
-      expect(
-        result.nextState!.schemaVersion,
-        ReviewMemoryState.currentSchemaVersion,
-      );
-      expect(result.nextState!.stabilityDays, closeTo(2.3065, 1e-8));
-      expect(result.nextState!.difficulty, closeTo(2.11810397, 1e-8));
-      expect(result.nextState!.repetitions, 1);
-      expect(result.nextState!.lapses, 0);
-    });
+        expect(result.usedConservativeFallback, isFalse);
+        expect(result.interval, const Duration(days: 2));
+        expect(result.nextState, isNotNull);
+        expect(
+          result.nextState!.schemaVersion,
+          ReviewMemoryState.currentSchemaVersion,
+        );
+        expect(result.nextState!.stabilityDays, closeTo(2.3065, 1e-8));
+        expect(result.nextState!.difficulty, closeTo(2.11810397, 1e-8));
+        expect(result.nextState!.repetitions, 1);
+        expect(result.nextState!.lapses, 0);
+      },
+    );
 
     test('counts a lapse only after an existing state forgets', () {
       const state = ReviewMemoryState(
