@@ -53,7 +53,7 @@ void main() {
       }
     });
 
-    test('clips migrated legacy parameters to safe bounds', () {
+    test('clips migrated legacy parameters to safe lower bounds', () {
       final loaded = ReviewScheduler.loadVersionedState({
         'version': 0,
         'stabilityDays': 100000.0,
@@ -69,6 +69,56 @@ void main() {
       expect(loaded.state.difficulty, ReviewScheduler.minDifficulty);
       expect(loaded.state.repetitions, 0);
       expect(loaded.state.lapses, 0);
+    });
+
+    test('clips migrated legacy counters to a portable upper bound', () {
+      final loaded = ReviewScheduler.loadVersionedState({
+        'version': 0,
+        'stabilityDays': 1.0,
+        'difficulty': 5.0,
+        'repetitions': ReviewScheduler.maxReviewCount + 100,
+        'lapses': ReviewScheduler.maxReviewCount + 200,
+      });
+
+      expect(loaded.usedFallback, isFalse);
+      expect(loaded.migrated, isTrue);
+      expect(loaded.state.repetitions, ReviewScheduler.maxReviewCount);
+      expect(loaded.state.lapses, ReviewScheduler.maxReviewCount);
+    });
+
+    test('current state above the counter bound fails closed', () {
+      final result = ReviewScheduler.scheduleVersionedState(
+        rawState: {
+          'version': ReviewSchedulerState.currentVersion,
+          'stabilityDays': 2.0,
+          'difficulty': 5.0,
+          'repetitions': ReviewScheduler.maxReviewCount + 1,
+          'lapses': 0,
+        },
+        rating: ReviewRating.easy,
+      );
+
+      expect(result.usedFallback, isTrue);
+      expect(result.interval, ReviewScheduler.conservativeInterval);
+    });
+
+    test('valid counters saturate at the supported upper bound', () {
+      const state = ReviewSchedulerState(
+        stabilityDays: 2.0,
+        difficulty: 5.0,
+        repetitions: ReviewScheduler.maxReviewCount,
+        lapses: ReviewScheduler.maxReviewCount,
+      );
+
+      final result = ReviewScheduler.schedule(
+        state: state,
+        rating: ReviewRating.again,
+      );
+
+      expect(result.usedFallback, isFalse);
+      expect(result.state.repetitions, ReviewScheduler.maxReviewCount);
+      expect(result.state.lapses, ReviewScheduler.maxReviewCount);
+      expect(result.state.isValid, isTrue);
     });
 
     test('malformed state fails closed to a one-day review', () {
