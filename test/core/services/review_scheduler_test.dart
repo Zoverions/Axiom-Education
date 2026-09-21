@@ -35,7 +35,7 @@ void main() {
         difficulty: 5.0,
       );
 
-      final fixtures = <ReviewRating, (int, double, double, int)> {
+      final fixtures = <ReviewRating, (int, double, double, int)>{
         ReviewRating.again: (1, 0.7, 5.8, 1),
         ReviewRating.hard: (2, 2.4, 5.2, 0),
         ReviewRating.good: (5, 5.0, 4.85, 0),
