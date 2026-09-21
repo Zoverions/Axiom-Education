@@ -116,12 +116,28 @@ class ReviewScheduler {
     );
   }
 
+  /// Loads and schedules versioned state through the fail-closed path.
+  static ReviewScheduleResult scheduleVersionedState({
+    required Map<String, Object?> rawState,
+    required ReviewRating rating,
+  }) {
+    final loaded = loadVersionedState(rawState);
+    if (loaded.usedFallback) {
+      return const ReviewScheduleResult(
+        interval: conservativeInterval,
+        state: ReviewSchedulerState(),
+        usedFallback: true,
+      );
+    }
+    return schedule(state: loaded.state, rating: rating);
+  }
+
   /// Loads a versioned state object without performing persistence.
   ///
   /// Version 0 is a legacy synthetic fixture format used only to exercise the
   /// migration contract. Migrated numeric parameters are clipped to current
-  /// safe bounds. Malformed or unsupported state fails closed to the default
-  /// state and a one-day review interval when subsequently scheduled.
+  /// safe bounds. Malformed or unsupported state is marked as fallback so the
+  /// scheduling entry point returns the conservative one-day interval.
   static ReviewStateLoadResult loadVersionedState(Map<String, Object?> raw) {
     final version = _readInt(raw['version']);
     if (version == null) return _fallbackLoad();
@@ -192,7 +208,8 @@ class ReviewScheduler {
         migrated: false,
       );
 
-  static double? _readDouble(Object? value) => value is num ? value.toDouble() : null;
+  static double? _readDouble(Object? value) =>
+      value is num ? value.toDouble() : null;
 
   static int? _readInt(Object? value) => value is int ? value : null;
 }
