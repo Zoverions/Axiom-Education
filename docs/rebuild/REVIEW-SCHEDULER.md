@@ -18,7 +18,7 @@ It does **not**:
 - modify or bypass `MathAnswerVerifier`;
 - replace `AdaptiveEngine.nextReviewInterval(...)` in the current lesson UI yet.
 
-Invalid elapsed time, malformed state, or an unsupported state schema version fails closed to a one-day review interval and returns no next state. The caller therefore cannot silently persist a fabricated migration result.
+Invalid elapsed time, malformed state, or an unsupported state schema version fails closed to a one-day review interval and returns no next state. Creating the first scheduler state requires `elapsedDays == 0`; a nonzero elapsed value without prior state also fails closed rather than being silently ignored. The public forgetting-curve helper explicitly rejects negative elapsed time and non-finite or non-positive stability inputs. The caller therefore cannot silently persist a fabricated migration result or receive a misleading first-state schedule.
 
 ## Reference and claim boundary
 
