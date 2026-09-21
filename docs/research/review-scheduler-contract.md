@@ -10,9 +10,9 @@ This slice adds no network, credential, device, deployment, storage, persistence
 
 ## State and failure semantics
 
-Scheduler state is versioned. Version 1 carries bounded stability, difficulty, repetition, and lapse values. A synthetic version-0 shape exists only to exercise migration behavior in local tests. Migration clips numeric parameters to the current supported bounds. Malformed or unsupported state fails closed to the default state and a one-day review interval rather than silently widening the next review.
+Scheduler state is versioned. Version 1 carries bounded stability, difficulty, repetition, and lapse values. Stability and difficulty have explicit domain bounds; repetition and lapse counters saturate at `2147483647`, keeping serialized state within a signed 32-bit portable count range instead of allowing malformed inputs to grow without bound. A synthetic version-0 shape exists only to exercise migration behavior in local tests. Migration clips numeric parameters and counters to the current supported bounds. A current-version payload outside those bounds, malformed state, or an unsupported version fails closed to the default state and a one-day review interval rather than silently widening the next review.
 
-The deterministic v1 fixture set in `test/core/services/review_scheduler_test.dart` is the local regression contract for this slice. It is independently generated from the AXIOM-native formula and is not a claim of FSRS conformance.
+The deterministic v1 fixture set in `test/core/services/review_scheduler_test.dart` is the local regression contract for this slice. It includes migration clipping, out-of-range current-state rejection, and counter-saturation fixtures. It is independently generated from the AXIOM-native formula and is not a claim of FSRS conformance.
 
 ## External reference
 
