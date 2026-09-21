@@ -103,8 +103,10 @@ class ReviewScheduler {
 
     stability = stability.clamp(minStabilityDays, maxStabilityDays).toDouble();
     difficulty = difficulty.clamp(minDifficulty, maxDifficulty).toDouble();
-    final intervalDays =
-        stability.round().clamp(1, maxStabilityDays.toInt()).toInt();
+    final intervalDays = stability
+        .round()
+        .clamp(1, maxStabilityDays.toInt())
+        .toInt();
 
     return ReviewScheduleResult(
       interval: Duration(days: intervalDays),
@@ -169,8 +171,9 @@ class ReviewScheduler {
 
       return ReviewStateLoadResult(
         state: ReviewSchedulerState(
-          stabilityDays:
-              stability.clamp(minStabilityDays, maxStabilityDays).toDouble(),
+          stabilityDays: stability
+              .clamp(minStabilityDays, maxStabilityDays)
+              .toDouble(),
           difficulty: difficulty.clamp(minDifficulty, maxDifficulty).toDouble(),
           repetitions: max(0, repetitions),
           lapses: max(0, lapses),
@@ -204,10 +207,10 @@ class ReviewScheduler {
   }
 
   static ReviewStateLoadResult _fallbackLoad() => const ReviewStateLoadResult(
-        state: ReviewSchedulerState(),
-        usedFallback: true,
-        migrated: false,
-      );
+    state: ReviewSchedulerState(),
+    usedFallback: true,
+    migrated: false,
+  );
 
   static double? _readDouble(Object? value) =>
       value is num ? value.toDouble() : null;
