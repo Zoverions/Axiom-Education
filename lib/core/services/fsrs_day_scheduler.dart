@@ -135,16 +135,14 @@ class FsrsDayScheduler {
         nextStabilityValue = nextShortTermStability(s, grade);
       } else if (grade == ReviewRating.again.grade) {
         final stabilityAfterFail = nextForgetStability(d, s, retrievability);
-        final nextStabilityMin =
-            s / math.exp(_weights[17] * _weights[18]);
+        final nextStabilityMin = s / math.exp(_weights[17] * _weights[18]);
         nextStabilityValue = _clampDouble(
           _round8(nextStabilityMin),
           _stabilityMin,
           stabilityAfterFail,
         );
       } else {
-        nextStabilityValue =
-            nextRecallStability(d, s, retrievability, grade);
+        nextStabilityValue = nextRecallStability(d, s, retrievability, grade);
       }
 
       nextDifficultyValue = nextDifficulty(d, grade);
@@ -172,9 +170,7 @@ class FsrsDayScheduler {
   /// FSRS forgetting curve. Public for reference-vector regression tests.
   static double forgettingCurve(int elapsedDays, double stabilityDays) {
     final decay = -_weights[20];
-    final factor = _round8(
-      math.exp(math.log(0.9) / decay) - 1.0,
-    );
+    final factor = _round8(math.exp(math.log(0.9) / decay) - 1.0);
     final base = 1.0 + (factor * elapsedDays) / stabilityDays;
     return _round8(math.pow(base, decay).toDouble());
   }
@@ -186,16 +182,13 @@ class FsrsDayScheduler {
 
   /// Raw initial difficulty before the scheduling-state [1, 10] clamp.
   static double initDifficulty(int grade) {
-    return _round8(
-      _weights[4] - math.exp((grade - 1) * _weights[5]) + 1.0,
-    );
+    return _round8(_weights[4] - math.exp((grade - 1) * _weights[5]) + 1.0);
   }
 
   /// Difficulty update for an existing valid scheduling state.
   static double nextDifficulty(double difficulty, int grade) {
     final deltaDifficulty = -_weights[6] * (grade - 3);
-    final dampedDelta =
-        _round8((deltaDifficulty * (10.0 - difficulty)) / 9.0);
+    final dampedDelta = _round8((deltaDifficulty * (10.0 - difficulty)) / 9.0);
     final next = difficulty + dampedDelta;
     final reverted = _round8(
       _weights[7] * initDifficulty(ReviewRating.easy.grade) +
@@ -213,8 +206,7 @@ class FsrsDayScheduler {
   ) {
     final hardPenalty = grade == ReviewRating.hard.grade ? _weights[15] : 1.0;
     final easyBonus = grade == ReviewRating.easy.grade ? _weights[16] : 1.0;
-    final stabilityPower =
-        math.pow(stabilityDays, -_weights[9]).toDouble();
+    final stabilityPower = math.pow(stabilityDays, -_weights[9]).toDouble();
     final recallGrowth =
         math.exp(_weights[8]) *
         (11.0 - difficulty) *
@@ -243,9 +235,7 @@ class FsrsDayScheduler {
         math.pow(difficulty, -_weights[12]).toDouble() *
         (math.pow(stabilityDays + 1.0, _weights[13]).toDouble() - 1.0) *
         math.exp((1.0 - retrievability) * _weights[14]);
-    return _round8(
-      _clampDouble(next, _stabilityMin, _stabilityMax),
-    );
+    return _round8(_clampDouble(next, _stabilityMin, _stabilityMax));
   }
 
   /// Short-term stability update used when no whole day has elapsed.
@@ -268,12 +258,9 @@ class FsrsDayScheduler {
   /// Converts stability to a whole-day interval with fuzzing disabled.
   static int nextInterval(double stabilityDays) {
     final decay = -_weights[20];
-    final factor = _round8(
-      math.exp(math.log(0.9) / decay) - 1.0,
-    );
+    final factor = _round8(math.exp(math.log(0.9) / decay) - 1.0);
     final intervalModifier = _round8(
-      (math.pow(requestedRetention, 1.0 / decay).toDouble() - 1.0) /
-          factor,
+      (math.pow(requestedRetention, 1.0 / decay).toDouble() - 1.0) / factor,
     );
     final interval = (stabilityDays * intervalModifier).round();
     return math.min(math.max(1, interval), maximumIntervalDays);
