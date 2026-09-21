@@ -4,10 +4,31 @@ import 'package:ontarioedai/core/services/fsrs_day_scheduler.dart';
 void main() {
   group('FsrsDayScheduler upstream reference vectors', () {
     test('matches pinned FSRS-6 forgetting-curve values', () {
-      expect(FsrsDayScheduler.forgettingCurve(0, 1.0), 1.0);
-      expect(FsrsDayScheduler.forgettingCurve(1, 1.0), 0.9);
-      expect(FsrsDayScheduler.forgettingCurve(2, 1.0), 0.84588465);
-      expect(FsrsDayScheduler.forgettingCurve(3, 1.0), 0.8093881);
+      expect(FsrsDayScheduler.forgettingCurve(0, 1.0), closeTo(1.0, 1e-8));
+      expect(FsrsDayScheduler.forgettingCurve(1, 1.0), closeTo(0.9, 1e-8));
+      expect(
+        FsrsDayScheduler.forgettingCurve(2, 1.0),
+        closeTo(0.84588465, 1e-8),
+      );
+      expect(
+        FsrsDayScheduler.forgettingCurve(3, 1.0),
+        closeTo(0.8093881, 1e-8),
+      );
+    });
+
+    test('rejects invalid forgetting-curve inputs explicitly', () {
+      expect(
+        () => FsrsDayScheduler.forgettingCurve(-1, 1.0),
+        throwsArgumentError,
+      );
+      expect(
+        () => FsrsDayScheduler.forgettingCurve(1, 0.0),
+        throwsArgumentError,
+      );
+      expect(
+        () => FsrsDayScheduler.forgettingCurve(1, double.nan),
+        throwsArgumentError,
+      );
     });
 
     test('matches pinned next-difficulty values', () {
@@ -124,6 +145,21 @@ void main() {
         expect(result.nextState!.lapses, 0);
       },
     );
+
+    test('fails closed when elapsed time is supplied without prior state', () {
+      final result = FsrsDayScheduler.schedule(
+        rating: ReviewRating.good,
+        elapsedDays: 3,
+      );
+
+      expect(result.usedConservativeFallback, isTrue);
+      expect(result.interval, FsrsDayScheduler.conservativeInterval);
+      expect(result.nextState, isNull);
+      expect(
+        result.fallbackReason,
+        'elapsedDays must be zero without prior state',
+      );
+    });
 
     test('counts a lapse only after an existing state forgets', () {
       const state = ReviewMemoryState(
