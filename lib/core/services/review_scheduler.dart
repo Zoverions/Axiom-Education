@@ -28,7 +28,9 @@ class ReviewSchedulerState {
       difficulty >= ReviewScheduler.minDifficulty &&
       difficulty <= ReviewScheduler.maxDifficulty &&
       repetitions >= 0 &&
-      lapses >= 0;
+      repetitions <= ReviewScheduler.maxReviewCount &&
+      lapses >= 0 &&
+      lapses <= ReviewScheduler.maxReviewCount;
 }
 
 class ReviewScheduleResult {
@@ -68,6 +70,7 @@ class ReviewScheduler {
   static const double maxStabilityDays = 3650.0;
   static const double minDifficulty = 1.0;
   static const double maxDifficulty = 10.0;
+  static const int maxReviewCount = 2147483647;
 
   static ReviewScheduleResult schedule({
     required ReviewSchedulerState state,
@@ -89,7 +92,7 @@ class ReviewScheduler {
       case ReviewRating.again:
         stability = max(minStabilityDays, min(1.0, stability * 0.35));
         difficulty += 0.8;
-        lapses += 1;
+        lapses = min(maxReviewCount, lapses + 1);
       case ReviewRating.hard:
         stability *= 1.2;
         difficulty += 0.2;
@@ -113,7 +116,7 @@ class ReviewScheduler {
       state: ReviewSchedulerState(
         stabilityDays: stability,
         difficulty: difficulty,
-        repetitions: state.repetitions + 1,
+        repetitions: min(maxReviewCount, state.repetitions + 1),
         lapses: lapses,
       ),
     );
@@ -175,8 +178,8 @@ class ReviewScheduler {
               .clamp(minStabilityDays, maxStabilityDays)
               .toDouble(),
           difficulty: difficulty.clamp(minDifficulty, maxDifficulty).toDouble(),
-          repetitions: max(0, repetitions),
-          lapses: max(0, lapses),
+          repetitions: repetitions.clamp(0, maxReviewCount).toInt(),
+          lapses: lapses.clamp(0, maxReviewCount).toInt(),
         ),
         usedFallback: false,
         migrated: true,
