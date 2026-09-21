@@ -1,5 +1,7 @@
 import 'dart:math';
+
 import '../models/student_profile.dart';
+import 'review_scheduler.dart';
 
 class AdaptiveEngine {
   static double updateTheta({
@@ -36,5 +38,12 @@ class AdaptiveEngine {
 
   static Duration nextReviewInterval(int questionsAnswered, double factor) {
     return Duration(days: max(1, (questionsAnswered * factor).round()));
+  }
+
+  static ReviewScheduleResult scheduleReview({
+    required ReviewSchedulerState state,
+    required ReviewRating rating,
+  }) {
+    return ReviewScheduler.schedule(state: state, rating: rating);
   }
 }
