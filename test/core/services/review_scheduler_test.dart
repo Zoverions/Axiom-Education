@@ -30,10 +30,7 @@ void main() {
     });
 
     test('matches the bounded AXIOM v1 reference fixtures', () {
-      const state = ReviewSchedulerState(
-        stabilityDays: 2.0,
-        difficulty: 5.0,
-      );
+      const state = ReviewSchedulerState(stabilityDays: 2.0, difficulty: 5.0);
 
       final fixtures = <ReviewRating, (int, double, double, int)>{
         ReviewRating.again: (1, 0.7, 5.8, 1),
@@ -91,27 +88,27 @@ void main() {
       expect(result.state, isA<ReviewSchedulerState>());
     });
 
-    test('unsupported future state fails closed rather than widening interval', () {
-      final result = ReviewScheduler.scheduleVersionedState(
-        rawState: {
-          'version': 99,
-          'stabilityDays': 1000.0,
-          'difficulty': 1.0,
-          'repetitions': 100,
-          'lapses': 0,
-        },
-        rating: ReviewRating.easy,
-      );
+    test(
+      'unsupported future state fails closed rather than widening interval',
+      () {
+        final result = ReviewScheduler.scheduleVersionedState(
+          rawState: {
+            'version': 99,
+            'stabilityDays': 1000.0,
+            'difficulty': 1.0,
+            'repetitions': 100,
+            'lapses': 0,
+          },
+          rating: ReviewRating.easy,
+        );
 
-      expect(result.usedFallback, isTrue);
-      expect(result.interval, const Duration(days: 1));
-    });
+        expect(result.usedFallback, isTrue);
+        expect(result.interval, const Duration(days: 1));
+      },
+    );
 
     test('adaptive engine delegates to the pure scheduler boundary', () {
-      const state = ReviewSchedulerState(
-        stabilityDays: 2.0,
-        difficulty: 5.0,
-      );
+      const state = ReviewSchedulerState(stabilityDays: 2.0, difficulty: 5.0);
 
       final result = AdaptiveEngine.scheduleReview(
         state: state,
