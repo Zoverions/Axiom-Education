@@ -103,7 +103,8 @@ class ReviewScheduler {
 
     stability = stability.clamp(minStabilityDays, maxStabilityDays).toDouble();
     difficulty = difficulty.clamp(minDifficulty, maxDifficulty).toDouble();
-    final intervalDays = stability.round().clamp(1, maxStabilityDays.toInt());
+    final intervalDays =
+        stability.round().clamp(1, maxStabilityDays.toInt()).toInt();
 
     return ReviewScheduleResult(
       interval: Duration(days: intervalDays),
