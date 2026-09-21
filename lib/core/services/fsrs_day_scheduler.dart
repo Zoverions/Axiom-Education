@@ -111,6 +111,9 @@ class FsrsDayScheduler {
     if (elapsedDays < 0) {
       return _fallback('elapsedDays must be non-negative');
     }
+    if (currentState == null && elapsedDays != 0) {
+      return _fallback('elapsedDays must be zero without prior state');
+    }
 
     if (currentState != null) {
       final invalidReason = _stateInvalidReason(currentState);
@@ -169,6 +172,21 @@ class FsrsDayScheduler {
 
   /// FSRS forgetting curve. Public for reference-vector regression tests.
   static double forgettingCurve(int elapsedDays, double stabilityDays) {
+    if (elapsedDays < 0) {
+      throw ArgumentError.value(
+        elapsedDays,
+        'elapsedDays',
+        'must be non-negative',
+      );
+    }
+    if (!stabilityDays.isFinite || stabilityDays <= 0) {
+      throw ArgumentError.value(
+        stabilityDays,
+        'stabilityDays',
+        'must be finite and greater than zero',
+      );
+    }
+
     final decay = -_weights[20];
     final factor = _round8(math.exp(math.log(0.9) / decay) - 1.0);
     final base = 1.0 + (factor * elapsedDays) / stabilityDays;
