@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -13,6 +14,7 @@ from tools.mth1w_promotion_gate import (
     PromotionGateError,
     append_decision,
     build_decision,
+    canonical_digest,
     config_digest,
     current_content_digests,
     gate_plan,
@@ -147,11 +149,25 @@ class PromotionGateDecisionTest(unittest.TestCase):
                 rationale="   ",
             )
 
+    def test_canonical_digest_uses_repository_utf8_convention(self) -> None:
+        value = {"reviewer_name": "Élodie"}
+        expected = hashlib.sha256(
+            json.dumps(
+                value,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        self.assertEqual(canonical_digest(value), expected)
+
 
 class PromotionGateLedgerTest(unittest.TestCase):
     def setUp(self) -> None:
         self.config = load_config()
-        self.tmp = Path(tempfile.mkdtemp(prefix="mth1w-promotion-ledger-test-"))
+        self.tmpdir = tempfile.TemporaryDirectory(prefix="mth1w-promotion-ledger-test-")
+        self.addCleanup(self.tmpdir.cleanup)
+        self.tmp = Path(self.tmpdir.name)
         self.ledger_path = self.tmp / "promotion-ledger.json"
         init_ledger(self.config, self.ledger_path)
 
@@ -183,6 +199,22 @@ class PromotionGateLedgerTest(unittest.TestCase):
         self.assertEqual(
             payload["entries"][1]["previous_entry_digest"], first["entry_digest"]
         )
+
+    def test_unicode_decider_is_preserved_and_chain_verifies(self) -> None:
+        append_decision(
+            self.config,
+            build_decision(
+                self.config,
+                decision="hold",
+                decided_by="Élodie Reviewer",
+                rationale="reviewer appointments pending",
+            ),
+            self.ledger_path,
+        )
+        text = self.ledger_path.read_text(encoding="utf-8")
+        self.assertIn("Élodie Reviewer", text)
+        self.assertNotIn("\\u00c9lodie", text)
+        self.assertEqual(verify_ledger(self.config, self.ledger_path)["entries"], 1)
 
     def test_tampered_entry_rejected(self) -> None:
         append_decision(
