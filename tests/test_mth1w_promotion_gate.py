@@ -108,10 +108,12 @@ class PromotionGateDecisionTest(unittest.TestCase):
         self.assertEqual(record["decision"], "promote")
         self.assertEqual(record["review_evidence_digests"], sorted(digests))
 
-    def test_promote_rejects_evidence_from_unappointed_reviewer(self) -> None:
+    def test_promote_rejects_evidence_from_reviewer_appointed_to_different_type(self) -> None:
         config = self._assigned_config()
         digests, approved = self._approved_evidence(config)
-        approved[digests[0]]["reviewer_name"] = "not-the-appointed-reviewer"
+        # Keep the reviewer real and appointed, but only for a different review
+        # type. This proves appointment cannot be laundered across review types.
+        approved[digests[0]]["reviewer_name"] = config["reviewer_slots"][1]["reviewer"]["name"]
         with patch(
             "tools.mth1w_promotion_gate.index_approved_evidence",
             return_value=approved,
@@ -121,7 +123,7 @@ class PromotionGateDecisionTest(unittest.TestCase):
                     config,
                     decision="promote",
                     decided_by="gate-operator",
-                    rationale="mismatched reviewer must fail closed",
+                    rationale="cross-type appointed reviewer must fail closed",
                     evidence_digests=digests,
                 )
         self.assertIn("is not appointed", str(raised.exception))
