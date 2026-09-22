@@ -37,6 +37,13 @@ class PromotionGateConfigTest(unittest.TestCase):
         config = load_config()
         self.assertEqual(config["verification"]["verification_status"], "lab-grade-not-production")
 
+    def test_promotion_ledger_is_outside_review_evidence_directory(self) -> None:
+        config = load_config()
+        review_dir = Path(config["verification"]["review_evidence_dir"])
+        ledger_path = Path(config["ledger"]["ledger_path"])
+        self.assertNotEqual(ledger_path.parent, review_dir)
+        self.assertNotIn(review_dir, ledger_path.parents)
+
 
 class PromotionGateDecisionTest(unittest.TestCase):
     def setUp(self) -> None:
