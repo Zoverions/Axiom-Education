@@ -73,7 +73,12 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def canonical_digest(value: Any) -> str:
-    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -212,7 +217,10 @@ def init_ledger(config: dict[str, Any], path: Path | None = None) -> dict[str, A
 
 
 def write_ledger(ledger: dict[str, Any], path: Path) -> None:
-    path.write_text(json.dumps(ledger, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(ledger, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def load_ledger(config: dict[str, Any], path: Path | None = None) -> dict[str, Any]:
@@ -406,14 +414,20 @@ def main() -> int:
     args = build_parser().parse_args()
     config = load_config()
     if args.command == "verify-config":
-        print(json.dumps(verify_config(), indent=2, sort_keys=True))
+        print(json.dumps(verify_config(), indent=2, ensure_ascii=False, sort_keys=True))
     elif args.command == "init-ledger":
         ledger = init_ledger(config)
-        print(json.dumps({"initialized": str(ledger_path(config)), "genesis_at": ledger["genesis_at"]}, indent=2))
+        print(
+            json.dumps(
+                {"initialized": str(ledger_path(config)), "genesis_at": ledger["genesis_at"]},
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
     elif args.command == "verify-ledger":
-        print(json.dumps(verify_ledger(config), indent=2, sort_keys=True))
+        print(json.dumps(verify_ledger(config), indent=2, ensure_ascii=False, sort_keys=True))
     elif args.command == "plan":
-        print(json.dumps(gate_plan(config), indent=2, sort_keys=True))
+        print(json.dumps(gate_plan(config), indent=2, ensure_ascii=False, sort_keys=True))
     elif args.command == "append":
         record = build_decision(
             config,
@@ -422,7 +436,7 @@ def main() -> int:
             rationale=args.rationale,
             evidence_digests=list(args.evidence),
         )
-        print(json.dumps(append_decision(config, record), indent=2, sort_keys=True))
+        print(json.dumps(append_decision(config, record), indent=2, ensure_ascii=False, sort_keys=True))
     return 0
 
 
