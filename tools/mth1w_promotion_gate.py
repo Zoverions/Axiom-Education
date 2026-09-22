@@ -279,13 +279,35 @@ def build_decision(
     if decision == "promote":
         unassigned = [slot["slot_id"] for slot in config["reviewer_slots"] if slot["appointment_status"] != "assigned"]
         require(not unassigned, f"promote blocked: reviewer slots unassigned: {unassigned}")
+        required_types = set(config["required_review_types"])
+        appointed_by_type: dict[str, set[str]] = {}
+        for slot in config["reviewer_slots"]:
+            if slot["review_type"] not in required_types:
+                continue
+            reviewer_name = str((slot.get("reviewer") or {}).get("name", "")).strip()
+            require(
+                reviewer_name,
+                f"promote blocked: assigned slot {slot['slot_id']} has no reviewer name",
+            )
+            appointed_by_type.setdefault(slot["review_type"], set()).add(reviewer_name)
+
         approved = index_approved_evidence(config)
         supplied = evidence_digests or []
         require(supplied, "promote requires review evidence digests")
         for digest in supplied:
             require(digest in approved, f"evidence digest is not verified approved review evidence: {digest}")
+            review_type = approved[digest]["review_type"]
+            reviewer_name = approved[digest]["reviewer_name"]
+            require(
+                review_type in required_types,
+                f"promote blocked: supplied evidence has non-required review type: {review_type}",
+            )
+            require(
+                reviewer_name in appointed_by_type.get(review_type, set()),
+                f"promote blocked: evidence reviewer {reviewer_name or '<missing>'} is not appointed for review type {review_type}",
+            )
         covered = {approved[d]["review_type"] for d in supplied}
-        missing = set(config["required_review_types"]) - covered
+        missing = required_types - covered
         require(not missing, f"promote blocked: missing approved review types: {sorted(missing)}")
         reviewers = {approved[d]["reviewer_name"] for d in supplied if approved[d]["reviewer_name"]}
         require(

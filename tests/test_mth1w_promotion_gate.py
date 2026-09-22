@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.mth1w_promotion_gate import (
     PromotionGateError,
@@ -49,6 +51,26 @@ class PromotionGateDecisionTest(unittest.TestCase):
     def setUp(self) -> None:
         self.config = load_config()
 
+    def _assigned_config(self) -> dict:
+        config = copy.deepcopy(self.config)
+        for slot in config["reviewer_slots"]:
+            slot["appointment_status"] = "assigned"
+            slot["reviewer"] = {"name": f"appointed-{slot['review_type']}"}
+        return config
+
+    def _approved_evidence(self, config: dict) -> tuple[list[str], dict[str, dict[str, str]]]:
+        digests: list[str] = []
+        approved: dict[str, dict[str, str]] = {}
+        for index, slot in enumerate(config["reviewer_slots"], start=1):
+            digest = f"{index:064x}"
+            digests.append(digest)
+            approved[digest] = {
+                "review_id": f"review-{index}",
+                "review_type": slot["review_type"],
+                "reviewer_name": slot["reviewer"]["name"],
+            }
+        return digests, approved
+
     def test_build_hold_decision_is_schema_valid(self) -> None:
         record = build_decision(
             self.config,
@@ -68,6 +90,43 @@ class PromotionGateDecisionTest(unittest.TestCase):
                 rationale="attempting promote without appointed reviewers",
             )
         self.assertIn("unassigned", str(raised.exception))
+
+    def test_promote_accepts_only_matching_appointed_reviewer_evidence(self) -> None:
+        config = self._assigned_config()
+        digests, approved = self._approved_evidence(config)
+        with patch(
+            "tools.mth1w_promotion_gate.index_approved_evidence",
+            return_value=approved,
+        ):
+            record = build_decision(
+                config,
+                decision="promote",
+                decided_by="gate-operator",
+                rationale="all appointed reviewers approved exact content",
+                evidence_digests=digests,
+            )
+        self.assertEqual(record["decision"], "promote")
+        self.assertEqual(record["review_evidence_digests"], sorted(digests))
+
+    def test_promote_rejects_evidence_from_reviewer_appointed_to_different_type(self) -> None:
+        config = self._assigned_config()
+        digests, approved = self._approved_evidence(config)
+        # Keep the reviewer real and appointed, but only for a different review
+        # type. This proves appointment cannot be laundered across review types.
+        approved[digests[0]]["reviewer_name"] = config["reviewer_slots"][1]["reviewer"]["name"]
+        with patch(
+            "tools.mth1w_promotion_gate.index_approved_evidence",
+            return_value=approved,
+        ):
+            with self.assertRaises(PromotionGateError) as raised:
+                build_decision(
+                    config,
+                    decision="promote",
+                    decided_by="gate-operator",
+                    rationale="cross-type appointed reviewer must fail closed",
+                    evidence_digests=digests,
+                )
+        self.assertIn("is not appointed", str(raised.exception))
 
     def test_decision_rejects_bad_evidence_digest(self) -> None:
         with self.assertRaises(PromotionGateError):
