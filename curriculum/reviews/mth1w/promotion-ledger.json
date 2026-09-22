@@ -1,8 +1,0 @@
-{
-  "entries": [],
-  "gate_config_digest": "28f6d3d8babe392bac47f35777bf1b3b115b3b89166ee35247561a329950a27f",
-  "gate_id": "mth1w-promotion-gate",
-  "gate_version": "1",
-  "genesis_at": "2026-09-22T11:58:02Z",
-  "schema": "axiom-education-mth1w-promotion-ledger.v1"
-}
