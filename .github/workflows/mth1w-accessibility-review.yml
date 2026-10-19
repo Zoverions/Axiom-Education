@@ -65,7 +65,7 @@ jobs:
           python -m unittest tests.test_mth1w_accessibility_review_templates -v
 
       - name: Upload short-lived accessibility review plan
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: mth1w-accessibility-review-plan-${{ github.sha }}
           path: /tmp/mth1w-accessibility-review-plan.json
@@ -73,7 +73,7 @@ jobs:
           retention-days: 7
 
       - name: Upload short-lived accessibility reviewer templates
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: mth1w-accessibility-review-templates-${{ github.sha }}
           path: /tmp/mth1w-accessibility-review-templates
