@@ -58,6 +58,6 @@ Where a legacy document conflicts with any of the above, the above wins.
    research classifications in `CLAW-LEGACY-SALVAGE.md` and
    `CLAW-LEGACY-FEATURE-MATRIX.md`, and only as documented, reviewed work —
    never by silent inheritance.
-3. This PR is **draft** and exists for review of the archaeology artifacts. It
-   does not activate capabilities, change production status, or alter deployed
-   behavior. Do not mark ready for review without an explicit review decision.
+3. The archaeology artifacts are review evidence only. They do not activate
+   capabilities, change production status, alter deployed behavior, or become
+   current Claw canon without a separate explicit, source-grounded decision.
