@@ -116,7 +116,7 @@ jobs:
           rm -f /tmp/axiom-education-ontario-private.pem /tmp/axiom-education-ontario-public.pem
 
   flutter:
-    name: Flutter analyze, test, and Android smoke build
+    name: Flutter analyze, test, Android build, and clean install
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -174,6 +174,88 @@ jobs:
           test -n "$apksigner"
           "$apksigner" verify --verbose "$apk"
 
+      - name: Exercise clean Android install and reinstall recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=build/app/outputs/flutter-apk/app-debug.apk
+          package_id=com.zoverions.ontarioedai
+          avd_name=axiom-education-api-35
+          system_image="system-images;android-35;google_apis;x86_64"
+          sdkmanager="$(command -v sdkmanager)"
+          avdmanager="$(command -v avdmanager)"
+          adb="$(command -v adb)"
+
+          "$sdkmanager" "emulator" "$system_image"
+          emulator="$(command -v emulator)"
+          test -e /dev/kvm
+          sudo chmod 0666 /dev/kvm
+          echo no | "$avdmanager" create avd \
+            --force \
+            --name "$avd_name" \
+            --package "$system_image" \
+            --device pixel_2
+
+          emulator_log="$RUNNER_TEMP/axiom-education-emulator.log"
+          "$emulator" -avd "$avd_name" \
+            -no-window \
+            -noaudio \
+            -no-boot-anim \
+            -no-snapshot \
+            -gpu swiftshader_indirect \
+            -camera-back none \
+            -camera-front none \
+            >"$emulator_log" 2>&1 &
+
+          cleanup() {
+            "$adb" emu kill >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          "$adb" wait-for-device
+          deadline=$((SECONDS + 300))
+          while true; do
+            booted="$("$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+            if [[ "$booted" == "1" ]]; then
+              break
+            fi
+            if (( SECONDS >= deadline )); then
+              cat "$emulator_log"
+              exit 1
+            fi
+            sleep 5
+          done
+
+          device_api="$("$adb" shell getprop ro.build.version.sdk | tr -d '\r')"
+          test "$device_api" = "35"
+
+          install_and_launch() {
+            local install_log launch_log launcher
+            install_log="$(mktemp "$RUNNER_TEMP/axiom-education-install.XXXXXX")"
+            launch_log="$(mktemp "$RUNNER_TEMP/axiom-education-launch.XXXXXX")"
+            "$adb" install --no-streaming "$apk" | tee "$install_log"
+            grep -Fx "Success" "$install_log"
+            "$adb" shell pm path "$package_id" | grep -F "package:"
+            launcher="$("$adb" shell cmd package resolve-activity \
+              --brief \
+              -a android.intent.action.MAIN \
+              -c android.intent.category.LAUNCHER \
+              "$package_id" | tr -d '\r' | tail -n 1)"
+            [[ "$launcher" == "$package_id/"* ]]
+            "$adb" shell am start -W -n "$launcher" | tee "$launch_log"
+            grep -F "Status: ok" "$launch_log"
+            sleep 3
+            test -n "$("$adb" shell pidof "$package_id" | tr -d '\r')"
+          }
+
+          install_and_launch
+          "$adb" uninstall "$package_id" | grep -Fx "Success"
+          if "$adb" shell pm path "$package_id" | grep -q "^package:"; then
+            echo "Package remained installed after uninstall" >&2
+            exit 1
+          fi
+          install_and_launch
+
       - name: Write exact-head Android development-preview evidence
         shell: bash
         env:
@@ -220,12 +302,19 @@ jobs:
                   "size_bytes": apk.stat().st_size,
                   "build_profile": "debug",
                   "signature_verification": "apksigner-verified",
-                  "install_verification": "not-run",
+                                    "install_verification": (
+                      "android-emulator-api-35-clean-install-and-reinstall-passed"
+                  ),
+                  "upgrade_verification": (
+                      "not-run-no-prior-installable-release"
+                  ),
               },
               "release_ready": False,
               "claim_boundary": (
-                  "Development preview only. This evidence does not prove a clean "
-                  "install, upgrade, production signing, store readiness, or release readiness."
+                  "Development preview only. This evidence proves an API-35 emulator clean "
+                  "install and uninstall/reinstall recovery for these exact APK bytes. It "
+                  "does not prove upgrade compatibility, production signing, store readiness, "
+                  "physical-device behavior, or release readiness."
               ),
           }
 
