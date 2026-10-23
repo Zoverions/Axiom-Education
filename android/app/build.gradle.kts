@@ -14,6 +14,30 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+val releaseSigningRequiredKeys =
+    listOf("keyAlias", "keyPassword", "storeFile", "storePassword")
+val releaseStorePath = keystoreProperties.getProperty("storeFile")?.trim()
+val releaseStoreFile =
+    releaseStorePath?.takeIf { it.isNotEmpty() }?.let { file(it) }
+val releaseSigningReady =
+    keystorePropertiesFile.isFile &&
+        releaseSigningRequiredKeys.all { key ->
+            keystoreProperties.getProperty(key)?.isNotBlank() == true
+        } &&
+        releaseStoreFile?.isFile == true
+val releaseTaskRequested =
+    gradle.startParameter.taskNames.any { taskName ->
+        taskName.contains("release", ignoreCase = true)
+    }
+
+if (releaseTaskRequested && !releaseSigningReady) {
+    throw GradleException(
+        "Android release signing requires complete, non-blank keyAlias, keyPassword, " +
+            "storeFile, and storePassword values in android/key.properties, and storeFile " +
+            "must resolve to an existing keystore. No fallback signing key is allowed.",
+    )
+}
+
 android {
     namespace = "com.zoverions.ontarioedai"
     compileSdk = flutter.compileSdkVersion
@@ -39,17 +63,19 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String? ?: ""
-            keyPassword = keystoreProperties["keyPassword"] as String? ?: ""
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: file("dummy.jks")
-            storePassword = keystoreProperties["storePassword"] as String? ?: ""
+        if (releaseSigningReady) {
+            create("release") {
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storeFile = requireNotNull(releaseStoreFile)
+                storePassword = keystoreProperties.getProperty("storePassword")
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfigs.findByName("release")?.let { signingConfig = it }
         }
     }
 }
