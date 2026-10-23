@@ -108,7 +108,9 @@ For an Android installation smoke build:
 flutter build apk --debug
 ```
 
-The APK is written to `build/app/outputs/flutter-apk/app-debug.apk`. The protected GitHub workflow also builds this APK and publishes it as a short-lived workflow artifact after formatting, analysis, and tests pass.
+The APK is written to `build/app/outputs/flutter-apk/app-debug.apk`. The protected GitHub workflow also builds this APK after formatting, analysis, and tests pass. Its 30-day development-preview artifact includes the APK, a SHA-256 checksum, and an exact-head evidence document recording the source commit, version, workflow run, artifact size, digest, build profile, and signature-verification result.
+
+This artifact is a development preview, not a production release. The workflow verifies the APK's build-time signature and binds its bytes to the exact source head, but it does not exercise a clean device install or upgrade, use a production signing identity, establish store readiness, or make the application production-ready. Those gates remain required before any release can be described as ready to install.
 
 Desktop runs require the corresponding Flutter desktop toolchain to be enabled. For example:
 
