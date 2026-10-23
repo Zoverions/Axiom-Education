@@ -182,12 +182,15 @@ jobs:
           package_id=com.zoverions.ontarioedai
           avd_name=axiom-education-api-35
           system_image="system-images;android-35;google_apis;x86_64"
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-}}"
+          test -n "$sdk_root"
           sdkmanager="$(command -v sdkmanager)"
           avdmanager="$(command -v avdmanager)"
           adb="$(command -v adb)"
 
           "$sdkmanager" "emulator" "$system_image"
-          emulator="$(command -v emulator)"
+          emulator="$sdk_root/emulator/emulator"
+          test -x "$emulator"
           test -e /dev/kvm
           sudo chmod 0666 /dev/kvm
           echo no | "$avdmanager" create avd \
@@ -302,7 +305,7 @@ jobs:
                   "size_bytes": apk.stat().st_size,
                   "build_profile": "debug",
                   "signature_verification": "apksigner-verified",
-                                    "install_verification": (
+                  "install_verification": (
                       "android-emulator-api-35-clean-install-and-reinstall-passed"
                   ),
                   "upgrade_verification": (
