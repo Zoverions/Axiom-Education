@@ -197,11 +197,15 @@ jobs:
           test -x "$emulator"
           test -e /dev/kvm
           sudo chmod 0666 /dev/kvm
+          avd_home="$RUNNER_TEMP/android-avd"
+          mkdir -p "$avd_home"
+          export ANDROID_AVD_HOME="$avd_home"
           echo no | "$avdmanager" create avd \
             --force \
             --name "$avd_name" \
             --package "$system_image" \
             --device pixel_2
+          "$emulator" -list-avds | grep -Fx "$avd_name"
 
           emulator_log="$RUNNER_TEMP/axiom-education-emulator.log"
           "$emulator" -avd "$avd_name" \
