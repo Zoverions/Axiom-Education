@@ -280,9 +280,20 @@ jobs:
               "$package_id" | tr -d '\r' | tail -n 1)"
             [[ "$launcher" == "$package_id/"* ]]
             "$adb" shell am start -W -n "$launcher" | tee "$launch_log"
-            grep -F "Status: ok" "$launch_log"
-            sleep 3
-            test -n "$("$adb" shell pidof "$package_id" | tr -d '\r')"
+            launch_deadline=$((SECONDS + 30))
+            while true; do
+              app_pid="$("$adb" shell pidof "$package_id" | tr -d '\r')"
+              if [[ -n "$app_pid" ]]; then
+                break
+              fi
+              if (( SECONDS >= launch_deadline )); then
+                echo "Application process did not start within 30 seconds" >&2
+                cat "$launch_log"
+                "$adb" shell dumpsys activity activities | tail -n 200
+                exit 1
+              fi
+              sleep 2
+            done
           }
 
           install_and_launch
