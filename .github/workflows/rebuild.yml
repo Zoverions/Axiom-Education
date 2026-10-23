@@ -192,7 +192,7 @@ jobs:
 
           apk = Path("build/app/outputs/flutter-apk/app-debug.apk")
           pubspec = Path("pubspec.yaml").read_text(encoding="utf-8")
-          version_match = re.search(r"^version:\\s*(\\S+)\\s*$", pubspec, re.MULTILINE)
+          version_match = re.search(r"^version:\s*(\S+)\s*$", pubspec, re.MULTILINE)
           if version_match is None:
               raise SystemExit("pubspec.yaml has no version")
 
