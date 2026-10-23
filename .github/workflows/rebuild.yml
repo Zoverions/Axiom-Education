@@ -213,20 +213,46 @@ jobs:
             -camera-back none \
             -camera-front none \
             >"$emulator_log" 2>&1 &
+          emulator_pid=$!
 
           cleanup() {
             "$adb" emu kill >/dev/null 2>&1 || true
+            kill "$emulator_pid" >/dev/null 2>&1 || true
           }
           trap cleanup EXIT
 
-          "$adb" wait-for-device
-          deadline=$((SECONDS + 300))
+          device_deadline=$((SECONDS + 180))
           while true; do
-            booted="$("$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+            device_state="$("$adb" get-state 2>/dev/null || true)"
+            if [[ "$device_state" == "device" ]]; then
+              break
+            fi
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Android emulator exited before registering with adb" >&2
+              cat "$emulator_log"
+              exit 1
+            fi
+            if (( SECONDS >= device_deadline )); then
+              echo "Android emulator did not register with adb within 180 seconds" >&2
+              cat "$emulator_log"
+              exit 1
+            fi
+            sleep 5
+          done
+
+          boot_deadline=$((SECONDS + 180))
+          while true; do
+            booted="$("$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)"
             if [[ "$booted" == "1" ]]; then
               break
             fi
-            if (( SECONDS >= deadline )); then
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Android emulator exited before completing boot" >&2
+              cat "$emulator_log"
+              exit 1
+            fi
+            if (( SECONDS >= boot_deadline )); then
+              echo "Android emulator did not complete boot within 180 seconds" >&2
               cat "$emulator_log"
               exit 1
             fi
