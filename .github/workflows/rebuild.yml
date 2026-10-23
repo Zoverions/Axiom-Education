@@ -163,10 +163,80 @@ jobs:
       - name: Build Android debug APK
         run: flutter build apk --debug --no-pub
 
-      - name: Upload Android debug APK
+      - name: Verify Android development-preview APK signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=build/app/outputs/flutter-apk/app-debug.apk
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-}}"
+          test -n "$sdk_root"
+          apksigner="$(find "$sdk_root/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -n "$apksigner"
+          "$apksigner" verify --verbose "$apk"
+
+      - name: Write exact-head Android development-preview evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_dir=build/app/outputs/flutter-apk
+          (
+            cd "$artifact_dir"
+            sha256sum app-debug.apk > app-debug.apk.sha256
+          )
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          apk = Path("build/app/outputs/flutter-apk/app-debug.apk")
+          pubspec = Path("pubspec.yaml").read_text(encoding="utf-8")
+          version_match = re.search(r"^version:\\s*(\\S+)\\s*$", pubspec, re.MULTILINE)
+          if version_match is None:
+              raise SystemExit("pubspec.yaml has no version")
+
+          source_sha = os.environ["GITHUB_SHA"]
+          if re.fullmatch(r"[0-9a-f]{40}", source_sha) is None:
+              raise SystemExit("GITHUB_SHA is not a full lowercase commit SHA")
+
+          evidence = {
+              "schema": "axiom.education.android-preview-evidence.v1",
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "source_sha": source_sha,
+              "version": version_match.group(1),
+              "workflow": os.environ["GITHUB_WORKFLOW"],
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "artifact": {
+                  "name": apk.name,
+                  "sha256": hashlib.sha256(apk.read_bytes()).hexdigest(),
+                  "size_bytes": apk.stat().st_size,
+                  "build_profile": "debug",
+                  "signature_verification": "apksigner-verified",
+                  "install_verification": "not-run",
+              },
+              "release_ready": False,
+              "claim_boundary": (
+                  "Development preview only. This evidence does not prove a clean "
+                  "install, upgrade, production signing, store readiness, or release readiness."
+              ),
+          }
+
+          output = apk.with_name("app-debug.evidence.json")
+          output.write_text(
+              json.dumps(evidence, indent=2, sort_keys=True) + "\\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Upload Android development-preview artifact and evidence
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: axiom-education-android-debug-${{ github.sha }}
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: |
+            build/app/outputs/flutter-apk/app-debug.apk
+            build/app/outputs/flutter-apk/app-debug.apk.sha256
+            build/app/outputs/flutter-apk/app-debug.evidence.json
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 30
