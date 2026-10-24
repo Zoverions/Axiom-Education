@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - architecture/jurisdiction-context-2026-08-10
       - feature/ontario-elementary-discovery-gates-20260811
       - feature/ontario-elementary-source-lock-20260811
       - feature/curriculum-standard-record-v2-20260811
@@ -12,12 +11,14 @@ on:
       - feature/ontario-elementary-readiness-monitoring-20260811
     paths:
       - 'contracts/axiom-education-jurisdiction.v1.json'
+      - 'contracts/axiom-education-standards-context-binding.v1.json'
       - 'contracts/axiom-education-experience-provider.v1.json'
       - 'curriculum/ontario-elementary/**'
       - 'schemas/curriculum-source-lock.v1.schema.json'
       - 'schemas/curriculum-standard-record.v2.schema.json'
       - 'requirements-dev.txt'
       - 'tools/jurisdiction_context.py'
+      - 'tools/standards_context_binding.py'
       - 'tools/check_ontario_elementary_discovery.py'
       - 'tools/curriculum_source_discovery.py'
       - 'tools/curriculum_source_additions.py'
@@ -32,6 +33,7 @@ on:
       - 'tools/ontario_hpe_grade1_c2_proof.py'
       - 'tools/json_schema_validation.py'
       - 'tests/test_jurisdiction_context.py'
+      - 'tests/test_standards_context_binding.py'
       - 'tests/test_ontario_elementary_discovery.py'
       - 'tests/test_curriculum_source_discovery.py'
       - 'tests/test_curriculum_source_additions.py'
@@ -73,6 +75,7 @@ jobs:
       - name: Validate architecture JSON
         run: |
           python -m json.tool contracts/axiom-education-jurisdiction.v1.json >/dev/null
+          python -m json.tool contracts/axiom-education-standards-context-binding.v1.json >/dev/null
           python -m json.tool contracts/axiom-education-experience-provider.v1.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery.v0.json >/dev/null
           python -m json.tool curriculum/ontario-elementary/source-discovery-amendments.v1.json >/dev/null
@@ -120,6 +123,7 @@ jobs:
       - name: Run jurisdiction, discovery, source, C2, monitoring, and readiness tests
         run: |
           python -m unittest tests.test_jurisdiction_context -v
+          python -m unittest tests.test_standards_context_binding -v
           python -m unittest tests.test_ontario_elementary_discovery -v
           python -m unittest tests.test_curriculum_source_discovery -v
           python -m unittest tests.test_curriculum_source_additions -v
