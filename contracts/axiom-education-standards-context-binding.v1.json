@@ -1,0 +1,74 @@
+{
+  "schema": "axiom-education-standards-context-binding.v1",
+  "contract_id": "axiom.education.standards-context-binding",
+  "contract_version": "1.0.0",
+  "domain": "education",
+  "purpose": "Bind an official learner-event standards projection to the complete deterministic jurisdiction resolution without changing the pinned axiom.education v1 contract.",
+  "compatibility": {
+    "axiom_education_v1_contract_unchanged": true,
+    "axiom_education_v1_contract_sha256": "a20e191a05308ef85bdc1cc74bfa0d54b98a176818f8030a172b4c3709a28fa2",
+    "learner_event_action": "education.learner.event.append",
+    "existing_event_selected_pack_field": "active_pack_manifest_sha256",
+    "existing_event_payload_digest_field": "payload_digest",
+    "breaking_change_required": false
+  },
+  "resolution_evidence": {
+    "schema": "axiom-education-jurisdiction-resolution.v1",
+    "resolution_digest_required": true,
+    "ordered_multi_layer_context_required": true,
+    "minimum_claim_assurance": "A2",
+    "layer_pack_manifest_digests_required": true,
+    "layer_claim_evidence_digests_required": true,
+    "single_selected_pack_may_replace_full_context": false
+  },
+  "event_projection": {
+    "schema": "axiom-education-event-standards-projection.v1",
+    "projection_digest_required": true,
+    "required_fields": [
+      "subject_id",
+      "resolution_digest",
+      "resolution_as_of",
+      "context_pack_manifest_sha256s",
+      "selected_pack_manifest_sha256",
+      "course_code",
+      "expectation_ids",
+      "crosswalk_manifest_sha256",
+      "crosswalk_verification_digest"
+    ],
+    "selected_pack_must_exist_in_context": true,
+    "context_pack_order_must_match_resolution": true,
+    "expectation_ids_must_be_sorted_unique": true,
+    "verified_crosswalk_evidence_required": true,
+    "projection_must_be_bound_by_event_payload_digest": true,
+    "existing_event_selected_pack_must_equal_projection_selected_pack": true,
+    "one_pack_projection_represents_full_jurisdiction_context": false
+  },
+  "claim_rules": {
+    "official_curriculum_claim_requires_resolution": true,
+    "official_curriculum_claim_requires_verified_crosswalk": true,
+    "official_curriculum_claim_requires_event_projection": true,
+    "unmapped_activity_may_remain_enrichment": true,
+    "enrichment_may_claim_official_curriculum_coverage": false,
+    "provider_success_proves_mastery": false
+  },
+  "history": {
+    "jurisdiction_change_rewrites_prior_event_binding": false,
+    "pack_supersession_rewrites_prior_event_binding": false,
+    "historical_event_retains_resolution_digest": true,
+    "historical_event_retains_ordered_context_pack_digests": true,
+    "historical_event_retains_selected_pack_digest": true
+  },
+  "privacy": {
+    "raw_residency_in_projection": false,
+    "raw_citizenship_in_projection": false,
+    "raw_guardianship_evidence_in_projection": false,
+    "projection_contains_only_minimized_standards_context": true
+  },
+  "non_claims": [
+    "projection-does-not-verify-source-authenticity",
+    "projection-does-not-verify-crosswalk-by-itself",
+    "projection-does-not-prove-learner-mastery",
+    "single-selected-pack-does-not-represent-full-jurisdiction-stack",
+    "binding-does-not-enable-an-education-action-without-authority-consent-and-policy"
+  ]
+}
