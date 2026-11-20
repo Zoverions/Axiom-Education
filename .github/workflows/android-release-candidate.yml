@@ -1,0 +1,187 @@
+name: Axiom Education Android Release Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Exact current main commit to build
+        required: true
+        type: string
+      expected_version:
+        description: Exact non-development pubspec version
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axiom-education-android-release-candidate
+  cancel-in-progress: false
+
+jobs:
+  android-release-candidate:
+    name: Build exact-head production-signed Android candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out the requested exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.source_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require the exact current main commit and coherent release metadata
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          EXPECTED_VERSION: ${{ inputs.expected_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          git fetch --no-tags origin main
+          test "$(git rev-parse FETCH_HEAD)" = "$SOURCE_SHA"
+          python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          expected = os.environ["EXPECTED_VERSION"]
+          if re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?", expected) is None:
+              raise SystemExit("expected_version is not canonical semantic versioning")
+          if "-dev" in expected:
+              raise SystemExit("development versions cannot be built as release candidates")
+
+          pubspec = Path("pubspec.yaml").read_text(encoding="utf-8")
+          match = re.search(r"^version:\s*(\S+)\s*$", pubspec, re.MULTILINE)
+          if match is None or match.group(1) != expected:
+              raise SystemExit("pubspec version does not match expected_version")
+
+          changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
+          if re.search(rf"^##\s+{re.escape(expected)}(?:\s|$)", changelog, re.MULTILINE) is None:
+              raise SystemExit("CHANGELOG.md has no exact release heading")
+          PY
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: '3.41.1'
+          channel: stable
+          cache: true
+
+      - name: Verify the exact source before signing
+        run: python tools/verify.py
+
+      - name: Build and verify the production-signed candidate
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          EXPECTED_VERSION: ${{ inputs.expected_version }}
+          AXIOM_ANDROID_KEYSTORE_BASE64: ${{ secrets.AXIOM_ANDROID_KEYSTORE_BASE64 }}
+          AXIOM_ANDROID_KEY_ALIAS: ${{ secrets.AXIOM_ANDROID_KEY_ALIAS }}
+          AXIOM_ANDROID_KEY_PASSWORD: ${{ secrets.AXIOM_ANDROID_KEY_PASSWORD }}
+          AXIOM_ANDROID_STORE_PASSWORD: ${{ secrets.AXIOM_ANDROID_STORE_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            AXIOM_ANDROID_KEYSTORE_BASE64 \
+            AXIOM_ANDROID_KEY_ALIAS \
+            AXIOM_ANDROID_KEY_PASSWORD \
+            AXIOM_ANDROID_STORE_PASSWORD; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "Required Android release-signing secret is unavailable" >&2
+              exit 1
+            fi
+          done
+
+          keystore="$RUNNER_TEMP/axiom-education-release.jks"
+          properties=android/key.properties
+          cleanup() {
+            rm -f "$properties" "$keystore"
+          }
+          trap cleanup EXIT
+
+          umask 077
+          printf '%s' "$AXIOM_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          test -s "$keystore"
+          {
+            printf 'storeFile=%s\n' "$keystore"
+            printf 'storePassword=%s\n' "$AXIOM_ANDROID_STORE_PASSWORD"
+            printf 'keyAlias=%s\n' "$AXIOM_ANDROID_KEY_ALIAS"
+            printf 'keyPassword=%s\n' "$AXIOM_ANDROID_KEY_PASSWORD"
+          } > "$properties"
+
+          flutter build apk --release --no-pub
+          apk=build/app/outputs/flutter-apk/app-release.apk
+          test -s "$apk"
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-}}"
+          test -n "$sdk_root"
+          apksigner="$(find "$sdk_root/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -x "$apksigner"
+          "$apksigner" verify --verbose "$apk"
+
+          (
+            cd "$(dirname "$apk")"
+            sha256sum "$(basename "$apk")" > app-release.apk.sha256
+          )
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          apk = Path("build/app/outputs/flutter-apk/app-release.apk")
+          evidence = {
+              "schema": "axiom.education.android-release-candidate-evidence.v1",
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "source_sha": os.environ["SOURCE_SHA"],
+              "workflow_sha": os.environ["GITHUB_SHA"],
+              "version": os.environ["EXPECTED_VERSION"],
+              "workflow": os.environ["GITHUB_WORKFLOW"],
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "artifact": {
+                  "name": apk.name,
+                  "sha256": hashlib.sha256(apk.read_bytes()).hexdigest(),
+                  "size_bytes": apk.stat().st_size,
+                  "build_profile": "release",
+                  "signature_verification": "apksigner-verified",
+                  "install_verification": "not-run",
+                  "upgrade_verification": "not-run",
+              },
+              "release_ready": False,
+              "claim_boundary": (
+                  "Production signing and exact-byte verification do not prove installation, "
+                  "upgrade compatibility, store readiness, physical-device behavior, or release readiness."
+              ),
+          }
+          apk.with_name("app-release.evidence.json").write_text(
+              json.dumps(evidence, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Confirm no signing material survived the build step
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e android/key.properties
+          test ! -e "$RUNNER_TEMP/axiom-education-release.jks"
+
+      - name: Upload the exact signed candidate and non-secret evidence
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: axiom-education-android-release-${{ inputs.source_sha }}
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/app-release.apk.sha256
+            build/app/outputs/flutter-apk/app-release.evidence.json
+          if-no-files-found: error
+          retention-days: 30
