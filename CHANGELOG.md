@@ -103,6 +103,11 @@ claims.
 
 ### Changed
 
+- Added a manual, exact-main Android release-candidate workflow that fails
+  closed without authorized signing inputs, removes temporary keystore
+  material after the build, verifies the signed APK, and explicitly withholds
+  release-ready claims until install and upgrade or rollback evidence exists.
+
 - The four current lessons and practice generators are now labelled **Grade 9
   Math Foundations Preview** with derived local topic references. Full MTH1W,
   credit, grade, transcript, Ministry-approval, and school-equivalency claims

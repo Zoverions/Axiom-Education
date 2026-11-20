@@ -112,6 +112,15 @@ The APK is written to `build/app/outputs/flutter-apk/app-debug.apk`. The protect
 
 The workflow boots a fresh Android API 35 emulator, installs and launches the exact APK, uninstalls it, confirms removal, then reinstalls and launches the same bytes to exercise clean installation and reinstall recovery. This remains a development preview, not a production release: no prior installable release exists for a supported upgrade test, and the workflow does not prove production signing, store readiness, physical-device behavior, or production release readiness. Those gates remain required before any release can be described as ready to install.
 
+The manual `Axiom Education Android Release Candidate` workflow is the bounded
+next step after this preview. It requires an exact current `main` commit, an
+exact non-development version with a matching changelog heading, and all four
+authorized Android signing inputs. It keeps credentials in runner-temporary
+files, removes them after the build, verifies the signed APK with `apksigner`,
+and uploads only the APK, checksum, and non-secret evidence. Its evidence stays
+`release_ready: false` until the exact bytes also pass the separately reviewed
+install, upgrade or rollback, release-publication, and supported-platform gates.
+
 Desktop runs require the corresponding Flutter desktop toolchain to be enabled. For example:
 
 ```bash
