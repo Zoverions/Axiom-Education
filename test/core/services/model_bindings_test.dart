@@ -24,21 +24,24 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Phi3MiniModel', () {
-    test('production initialization remains disabled without an adapter', () async {
-      final model = Phi3MiniModel();
+    test(
+      'production initialization remains disabled without an adapter',
+      () async {
+        final model = Phi3MiniModel();
 
-      await expectLater(
-        model.initModel(),
-        throwsA(
-          isA<ModelUnavailableException>().having(
-            (error) => error.capability,
-            'capability',
-            'tutor.local-inference',
+        await expectLater(
+          model.initModel(),
+          throwsA(
+            isA<ModelUnavailableException>().having(
+              (error) => error.capability,
+              'capability',
+              'tutor.local-inference',
+            ),
           ),
-        ),
-      );
-      expect(model.isInitialized, isFalse);
-    });
+        );
+        expect(model.isInitialized, isFalse);
+      },
+    );
 
     test(
       'initModel surfaces initialization failure and remains unavailable',
