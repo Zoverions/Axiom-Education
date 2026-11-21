@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ontarioedai/core/services/model_bindings.dart';
-import 'package:onnxruntime/onnxruntime.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-class MockOrtSession extends Fake implements OrtSession {
+class MockLocalTutorSession extends Fake implements LocalTutorSession {
   bool releaseCalled = false;
 
   @override
@@ -25,6 +24,22 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Phi3MiniModel', () {
+    test('production initialization remains disabled without an adapter', () async {
+      final model = Phi3MiniModel();
+
+      await expectLater(
+        model.initModel(),
+        throwsA(
+          isA<ModelUnavailableException>().having(
+            (error) => error.capability,
+            'capability',
+            'tutor.local-inference',
+          ),
+        ),
+      );
+      expect(model.isInitialized, isFalse);
+    });
+
     test(
       'initModel surfaces initialization failure and remains unavailable',
       () async {
@@ -44,7 +59,7 @@ void main() {
 
     test('dispose releases an injected session and resets state', () async {
       final model = Phi3MiniModel();
-      final mockSession = MockOrtSession();
+      final mockSession = MockLocalTutorSession();
 
       await model.initModel(testSessionLoader: () async => mockSession);
       expect(model.isInitialized, isTrue);
